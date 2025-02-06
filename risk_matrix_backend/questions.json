@@ -1,0 +1,88 @@
+{
+    "version": "1.0",
+    "languages": {
+      "pt": {
+        "titulo": "Questionário de Avaliação de Riscos",
+        "descricao": "Por favor, responda às seguintes perguntas para ajudar na avaliação da matriz de riscos.",
+        "perguntas": [
+          {
+            "id": 1,
+            "pergunta": "Em uma escala de 0 a 5, quão provável é que esse risco ocorra?",
+            "entrada": {
+              "tipo": "number",
+              "min": 0,
+              "max": 5
+            }
+          },
+          {
+            "id": 2,
+            "pergunta": "Em uma escala de 0 a 5, qual é o impacto potencial se o risco ocorrer?",
+            "entrada": {
+              "tipo": "number",
+              "min": 0,
+              "max": 5
+            }
+          },
+          {
+            "id": 3,
+            "pergunta": "Forneça uma breve descrição do risco.",
+            "entrada": {
+              "tipo": "text"
+            }
+          },
+          {
+            "id": 4,
+            "pergunta": "Qual a probabilidade (em porcentagem) de que as medidas de mitigação reduzam esse risco?",
+            "entrada": {
+              "tipo": "number",
+              "min": 0,
+              "max": 100,
+              "unidade": "%"
+            }
+          }
+        ]
+      },
+      "en": {
+        "title": "Risk Assessment Questionnaire",
+        "description": "Please answer the following questions to help evaluate the risk matrix.",
+        "questions": [
+          {
+            "id": 1,
+            "question": "On a scale from 0 to 5, how likely is it that this risk will occur?",
+            "input": {
+              "type": "number",
+              "min": 0,
+              "max": 5
+            }
+          },
+          {
+            "id": 2,
+            "question": "On a scale from 0 to 5, what is the potential impact if the risk occurs?",
+            "input": {
+              "type": "number",
+              "min": 0,
+              "max": 5
+            }
+          },
+          {
+            "id": 3,
+            "question": "Provide a brief description of the risk.",
+            "input": {
+              "type": "text"
+            }
+          },
+          {
+            "id": 4,
+            "question": "What is the likelihood (in percentage) that risk mitigation measures will reduce this risk?",
+            "input": {
+              "type": "number",
+              "min": 0,
+              "max": 100,
+              "unit": "%"
+            }
+          }
+        ]
+      }
+    }
+  }
+  
