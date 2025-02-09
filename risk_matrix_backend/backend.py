@@ -16,26 +16,46 @@ def calculate_risk():
         return jsonify({'error': 'Nenhum dado enviado.'}), 400
 
     try:
-        # Converte os valores recebidos para float
-        probabilidade = float(data.get('probabilidade', 0))
-        impacto = float(data.get('impacto', 0))
+        # Calcula o risco geral
+        overall_prob = float(data.get("probabilidade", 0))
+        overall_impact = float(data.get("impacto", 0))
     except (ValueError, TypeError):
-        return jsonify({'error': 'Valores inválidos.'}), 400
+        return jsonify({'error': 'Valores inválidos para o risco geral.'}), 400
 
-    # Calcula o risco como o produto da probabilidade pelo impacto
-    risco = probabilidade * impacto
-
-    # Classifica o risco com base no valor calculado
-    if risco < 5:
-        classificacao = 'Baixo'
-    elif risco < 15:
-        classificacao = 'Médio'
+    overall_risk = overall_prob * overall_impact
+    if overall_risk < 5:
+        overall_class = 'Baixo'
+    elif overall_risk < 15:
+        overall_class = 'Médio'
     else:
-        classificacao = 'Alto'
+        overall_class = 'Alto'
+
+    # Calcula o risco para cada categoria, se fornecida
+    categories_input = data.get("categorias", {})
+    categories_results = {}
+
+    for category, values in categories_input.items():
+        try:
+            cat_prob = float(values.get("probabilidade", 0))
+            cat_impact = float(values.get("impacto", 0))
+        except (ValueError, TypeError):
+            cat_prob, cat_impact = 0, 0
+        cat_risk = cat_prob * cat_impact
+        if cat_risk < 5:
+            cat_class = 'Baixo'
+        elif cat_risk < 15:
+            cat_class = 'Médio'
+        else:
+            cat_class = 'Alto'
+        categories_results[category] = {
+            "risco": cat_risk,
+            "classificacao": cat_class
+        }
 
     return jsonify({
-        'risco': risco,
-        'classificacao': classificacao
+        "risco_geral": overall_risk,
+        "classificacao_geral": overall_class,
+        "categorias": categories_results
     })
 
 @app.route('/api/questions', methods=['GET'])
