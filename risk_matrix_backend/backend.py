@@ -3,9 +3,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS to allow requests from your frontend
+CORS(app)  # Permite requisições do frontend
 
-# Load the questions from the external JSON file when the app starts
+# Carrega as perguntas do ficheiro externo questions.json quando a aplicação inicia
 with open('questions.json', encoding='utf-8') as f:
     questions_data = json.load(f)
 
@@ -16,16 +16,16 @@ def calculate_risk():
         return jsonify({'error': 'Nenhum dado enviado.'}), 400
 
     try:
-        # Convert the received values to floats
+        # Converte os valores recebidos para float
         probabilidade = float(data.get('probabilidade', 0))
         impacto = float(data.get('impacto', 0))
     except (ValueError, TypeError):
         return jsonify({'error': 'Valores inválidos.'}), 400
 
-    # Calculate risk as the product of probability and impact
+    # Calcula o risco como o produto da probabilidade pelo impacto
     risco = probabilidade * impacto
 
-    # Classify risk based on the calculated value
+    # Classifica o risco com base no valor calculado
     if risco < 5:
         classificacao = 'Baixo'
     elif risco < 15:

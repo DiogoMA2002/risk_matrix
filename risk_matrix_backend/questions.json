@@ -1,88 +1,170 @@
 {
-    "version": "1.0",
-    "languages": {
-      "pt": {
-        "titulo": "Questionário de Avaliação de Riscos",
-        "descricao": "Por favor, responda às seguintes perguntas para ajudar na avaliação da matriz de riscos.",
-        "perguntas": [
-          {
-            "id": 1,
-            "pergunta": "Em uma escala de 0 a 5, quão provável é que esse risco ocorra?",
-            "entrada": {
+  "version": "1.2",
+  "lingua": "pt-PT",
+  "titulo": "Questionário para Matriz de Risco",
+  "descricao": "Este questionário visa avaliar o nível de risco na organização, considerando os aspetos de probabilidade, impacto, tempo de recuperação, e os diversos fatores (humanos, externos, materiais, tecnológicos, RGPD e localização dos serviços/dados).",
+  "secoes": [
+    {
+      "id": 1,
+      "titulo": "Conceito Geral",
+      "perguntas": [
+        {
+          "id": 1,
+          "texto": "Qual a probabilidade de um risco ocorrer? (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        },
+        {
+          "id": 2,
+          "texto": "Qual o impacto esperado caso o risco se concretize? (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        },
+        {
+          "id": 3,
+          "texto": "Qual é o tempo lógico (em horas) para um serviço voltar a funcionar em caso de falha?",
+          "tipo": "number",
+          "min": 0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "titulo": "Fatores Humanos",
+      "perguntas": [
+        {
+          "id": 1,
+          "texto": "Avalie o risco associado a fatores humanos internos. (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        },
+        {
+          "id": 2,
+          "texto": "Avalie o risco associado a fatores humanos externos. (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "titulo": "Riscos Externos",
+      "perguntas": [
+        {
+          "id": 1,
+          "texto": "Qual o nível de risco proveniente de fatores externos (fora da empresa)? (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "titulo": "Fatores Materiais e Infraestrutura",
+      "subdivisoes": [
+        {
+          "id": 1,
+          "titulo": "Fábrica",
+          "perguntas": [
+            {
+              "id": 1,
+              "texto": "Qual o nível de risco associado aos equipamentos e instalações da fábrica? (0 a 5)",
               "tipo": "number",
               "min": 0,
               "max": 5
             }
-          },
-          {
-            "id": 2,
-            "pergunta": "Em uma escala de 0 a 5, qual é o impacto potencial se o risco ocorrer?",
-            "entrada": {
+          ]
+        },
+        {
+          "id": 2,
+          "titulo": "Informática",
+          "perguntas": [
+            {
+              "id": 1,
+              "texto": "Qual o nível de risco associado aos sistemas informáticos e dados? (0 a 5)",
               "tipo": "number",
               "min": 0,
               "max": 5
             }
-          },
-          {
-            "id": 3,
-            "pergunta": "Forneça uma breve descrição do risco.",
-            "entrada": {
-              "tipo": "text"
-            }
-          },
-          {
-            "id": 4,
-            "pergunta": "Qual a probabilidade (em porcentagem) de que as medidas de mitigação reduzam esse risco?",
-            "entrada": {
+          ]
+        },
+        {
+          "id": 3,
+          "titulo": "Controlo de Vídeo",
+          "perguntas": [
+            {
+              "id": 1,
+              "texto": "Qual o nível de risco associado aos sistemas de controlo de vídeo? (0 a 5)",
               "tipo": "number",
               "min": 0,
-              "max": 100,
-              "unidade": "%"
-            }
-          }
-        ]
-      },
-      "en": {
-        "title": "Risk Assessment Questionnaire",
-        "description": "Please answer the following questions to help evaluate the risk matrix.",
-        "questions": [
-          {
-            "id": 1,
-            "question": "On a scale from 0 to 5, how likely is it that this risk will occur?",
-            "input": {
-              "type": "number",
-              "min": 0,
               "max": 5
             }
-          },
-          {
-            "id": 2,
-            "question": "On a scale from 0 to 5, what is the potential impact if the risk occurs?",
-            "input": {
-              "type": "number",
-              "min": 0,
-              "max": 5
-            }
-          },
-          {
-            "id": 3,
-            "question": "Provide a brief description of the risk.",
-            "input": {
-              "type": "text"
-            }
-          },
-          {
-            "id": 4,
-            "question": "What is the likelihood (in percentage) that risk mitigation measures will reduce this risk?",
-            "input": {
-              "type": "number",
-              "min": 0,
-              "max": 100,
-              "unit": "%"
-            }
-          }
-        ]
-      }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "titulo": "Fatores Tecnológicos",
+      "perguntas": [
+        {
+          "id": 1,
+          "texto": "Avalie o risco associado aos softwares de rede. (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        },
+        {
+          "id": 2,
+          "texto": "Avalie o risco associado ao hardware específico (ex.: tipo de câmara). (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "titulo": "RGPD e Informação Armazenada",
+      "perguntas": [
+        {
+          "id": 1,
+          "texto": "Qual o nível de risco relacionado com a proteção dos dados e o cumprimento do RGPD? (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "titulo": "Localização de Serviços e Dados",
+      "perguntas": [
+        {
+          "id": 1,
+          "texto": "Onde são armazenados os serviços/dados?",
+          "tipo": "opcao",
+          "opcoes": ["Servidor Local", "Servidor Externo", "Cloud"]
+        },
+        {
+          "id": 2,
+          "texto": "Qual o risco associado à localização dos serviços/dados? (0 a 5)",
+          "tipo": "number",
+          "min": 0,
+          "max": 5
+        },
+        {
+          "id": 3,
+          "texto": "Existe redundância geográfica para os serviços críticos? (Sim/Não)",
+          "tipo": "opcao",
+          "opcoes": ["Sim", "Não"]
+        }
+      ]
     }
-  }
-  
+  ]
+}
