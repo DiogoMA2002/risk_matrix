@@ -129,5 +129,10 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
 
 .venv
