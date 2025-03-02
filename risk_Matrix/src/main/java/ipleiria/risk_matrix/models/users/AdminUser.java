@@ -2,8 +2,9 @@ package ipleiria.risk_matrix.models.users;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "admin_users")
+public class AdminUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,11 +18,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    // Role Enum (Admin, Super Admin, etc.)
     @Enumerated(EnumType.STRING)
     private Role role;
 
     // Constructors
-    public User() {}
+    public AdminUser() {}
 
     // Getters and Setters
     public Long getId() { return id; }
