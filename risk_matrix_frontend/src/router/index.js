@@ -1,12 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../components/home.vue'
-import QuestionsPage from '../components/questions.vue'
-import ReportPage from '../components/report.vue'
+import HomePage from '../components/HomePage.vue'
+import AdminDashboard from '../components/AdminDashboard.vue';
+import QuestionarioPage from "../components/QuestionarioPage.vue"; // Importa a nova página
+
+
 
 const routes = [
-  { path: '/', name: 'HomePage', component: HomePage },
-  { path: '/questions', name: 'QuestionsPage', component: QuestionsPage },
-  { path: '/report', name: 'ReportPage', component: ReportPage }
+  { path: '/', component: HomePage },
+  { path: '/admin', component: AdminDashboard },
+  { path: "/questionario", component: QuestionarioPage } // Define a nova rota
+
 ]
 
 const router = createRouter({
