@@ -155,7 +155,7 @@ export default {
   name: 'RequirementsPage',
   methods: {
     accept() {
-      this.$router.push('/questionario');
+      this.$router.push('/category');
     }
   }
 }
