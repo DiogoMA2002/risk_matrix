@@ -1,4 +1,6 @@
 package ipleiria.risk_matrix.models.questions;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,6 +17,11 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private QuestionCategory category;
 
+    @ManyToOne
+    @JoinColumn(name = "questionnaire_id") // Cria uma chave estrangeira na tabela Question
+    @JsonBackReference
+    private Questionnaire questionnaire;
+
     // Constructors
     public Question() {}
 
@@ -27,4 +34,13 @@ public class Question {
 
     public QuestionCategory getCategory() { return category; }
     public void setCategory(QuestionCategory category) { this.category = category; }
+
+
+    public Questionnaire getQuestionnaire() {
+        return questionnaire;
+    }
+
+    public void setQuestionnaire(Questionnaire questionnaire) {
+        this.questionnaire = questionnaire;
+    }
 }
