@@ -17,6 +17,9 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private QuestionCategory category;
 
+    @Column(nullable = false)
+    private String userEmail;
+
     @ManyToOne
     @JoinColumn(name = "questionnaire_id") // Cria uma chave estrangeira na tabela Question
     @JsonBackReference
@@ -43,4 +46,13 @@ public class Question {
     public void setQuestionnaire(Questionnaire questionnaire) {
         this.questionnaire = questionnaire;
     }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
 }
+
