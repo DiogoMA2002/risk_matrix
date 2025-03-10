@@ -1,5 +1,8 @@
 package ipleiria.risk_matrix.service;
-import ipleiria.risk_matrix.models.sugestions.Suggestion;
+import ipleiria.risk_matrix.dto.SuggestionDTO;
+import ipleiria.risk_matrix.models.questions.Question;
+import ipleiria.risk_matrix.models.sugestions.Suggestions;
+import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.SuggestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,32 +14,21 @@ import java.util.Optional;
 public class SuggestionService {
 
     @Autowired
+    private QuestionRepository questionRepository;
+
+    @Autowired
     private SuggestionRepository suggestionRepository;
 
     // Criar uma nova sugestão
-    public Suggestion submitSuggestion(Suggestion suggestion) {
-        suggestion.setSubmittedAt(LocalDateTime.now());
-        return suggestionRepository.save(suggestion);
-    }
+    public SuggestionDTO addSuggestionToQuestion(Long questionId, SuggestionDTO suggestionDTO) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Pergunta não encontrada"));
 
-    // Buscar todas as sugestões não revisadas
-    public List<Suggestion> getPendingSuggestions() {
-        return suggestionRepository.findByReviewedFalse();
-    }
+        Suggestions suggestion = new Suggestions();
+        suggestion.setSuggestionText(suggestionDTO.getSuggestionText());
+        suggestion.setQuestion(question);
 
-    // Buscar todas as sugestões revisadas
-    public List<Suggestion> getReviewedSuggestions() {
-        return suggestionRepository.findByReviewedTrue();
-    }
-
-    // Marcar sugestão como revisada
-    public void reviewSuggestion(Long id) {
-        Optional<Suggestion> suggestion = suggestionRepository.findById(id);
-        if (suggestion.isPresent()) {
-            suggestion.get().setReviewed(true);
-            suggestionRepository.save(suggestion.get());
-        } else {
-            throw new RuntimeException("Sugestão não encontrada!");
-        }
+        suggestionRepository.save(suggestion);
+        return new SuggestionDTO(suggestion);
     }
 }

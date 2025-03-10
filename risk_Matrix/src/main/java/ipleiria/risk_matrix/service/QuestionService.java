@@ -1,4 +1,5 @@
 package ipleiria.risk_matrix.service;
+import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.repository.QuestionRepository;
@@ -6,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -24,6 +26,15 @@ public class QuestionService {
     // Buscar todas as perguntas
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
+    }
+
+    // Buscar todas as perguntas com sugestões
+    public List<QuestionDTO> getAllQuestionsWithSuggestion() {
+        return questionRepository.findAll()
+                .stream()
+                .map(QuestionDTO::new)
+                .collect(Collectors.toList());
+
     }
 
     // Buscar perguntas por categoria

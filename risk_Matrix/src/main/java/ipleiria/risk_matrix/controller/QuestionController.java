@@ -1,4 +1,5 @@
 package ipleiria.risk_matrix.controller;
+import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.service.QuestionService;
@@ -26,6 +27,12 @@ public class QuestionController {
     public List<Question> getAllQuestions() {
         return questionService.getAllQuestions();
     }
+
+    @GetMapping("/all/suggestions")
+    public List<QuestionDTO> getAllQuestionsWithSuggestion() {
+        return questionService.getAllQuestionsWithSuggestion();
+    }
+
 
     // Obter perguntas por categoria
     @GetMapping("/category/{category}")
