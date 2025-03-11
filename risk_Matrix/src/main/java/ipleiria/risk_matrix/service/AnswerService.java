@@ -1,8 +1,11 @@
 package ipleiria.risk_matrix.service;
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.models.answers.Answer;
-import ipleiria.risk_matrix.models.answers.RiskLevel;
+import ipleiria.risk_matrix.models.answers.Impact;
+import ipleiria.risk_matrix.models.answers.Probability;
+import ipleiria.risk_matrix.models.answers.Serverity;
 import ipleiria.risk_matrix.models.questions.Question;
+import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,35 +23,74 @@ public class AnswerService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    // Criar uma resposta
-    public Answer submitAnswer(Long questionId, String userResponse) {
-        Optional<Question> question = questionRepository.findById(questionId);
-        if (question.isEmpty()) {
-            throw new RuntimeException("Pergunta não encontrada!");
-        }
-
-        // Lógica para calcular o nível de risco
-        RiskLevel calculatedRisk = calculateRiskLevel(userResponse);
-
-        Answer answer = new Answer();
-        answer.setQuestion(question.get());
-        answer.setUserResponse(userResponse);
-        answer.setCalculatedRisk(calculatedRisk);
-
-        return answerRepository.save(answer);
-    }
-
-    public AnswerDTO addAnswerToQuestion(Long questionId, String answerText) {
+    public AnswerDTO createAnswer(Long questionId, String userResponse) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
 
         Answer answer = new Answer();
-        answer.setUserResponse(answerText);
         answer.setQuestion(question);
+        answer.setUserResponse(userResponse);
+
+        // 🔥 Get total suggestions through answers
+        int totalSuggestions = question.getAnswers().stream()
+                .flatMap(a -> a.getSuggestions().stream())
+                .collect(Collectors.toList()).size();
+
+        Probability probability = calculateProbability(userResponse, totalSuggestions);
+        Impact impact = calculateImpact(question.getCategory(), totalSuggestions);
+
+        answer.setProbability(probability);
+        answer.setImpact(impact);
+        answer.setServerity(calculateSeverity(impact, probability));
 
         answerRepository.save(answer);
+
+        // ✅ Add answer to question list
+        question.getAnswers().add(answer);
+
         return new AnswerDTO(answer);
     }
+
+    private Probability calculateProbability(String userResponse, int totalSuggestions) {
+        if ("yes".equalsIgnoreCase(userResponse) && totalSuggestions == 0) {
+            return Probability.LOW;
+        } else if ("yes".equalsIgnoreCase(userResponse) && totalSuggestions > 0) {
+            return Probability.MEDIUM;
+        } else if ("no".equalsIgnoreCase(userResponse)) {
+            return Probability.HIGH;
+        } else if ("partially".equalsIgnoreCase(userResponse)) {
+            return Probability.MEDIUM;
+        }
+        return Probability.LOW;
+    }
+
+    private Impact calculateImpact(QuestionCategory category, int totalSuggestions) {
+        switch (category) {
+            case Risco_de_Autenticacao:
+            case Seguranca_de_Email:
+            case Risco_da_Rede_Interna:
+                return totalSuggestions > 0 ? Impact.HIGH : Impact.MEDIUM;
+            case Risco_de_Plataforma_da_Empresa:
+            case Risco_de_Infraestrutura_de_Informação_Externa:
+            case Risco_de_Infraestrutura_de_Informação_Interna:
+                return totalSuggestions > 0 ? Impact.MEDIUM : Impact.LOW;
+            default:
+                return Impact.LOW;
+        }
+    }
+
+    private Serverity calculateSeverity(Impact impact, Probability probability) {
+        if (impact == Impact.HIGH && probability == Probability.HIGH) {
+            return Serverity.CRITICAL;
+        } else if (impact == Impact.HIGH || probability == Probability.HIGH) {
+            return Serverity.HIGH;
+        } else if (impact == Impact.MEDIUM || probability == Probability.MEDIUM) {
+            return Serverity.MEDIUM;
+        }
+        return Serverity.LOW;
+    }
+
+
 
     public List<AnswerDTO> getAnswersByQuestion(Long questionId) {
         return answerRepository.findByQuestionId(questionId)
@@ -62,18 +104,5 @@ public class AnswerService {
         return answerRepository.findAll();
     }
 
-    // Buscar respostas por nível de risco
-    public List<Answer> getAnswersByRiskLevel(RiskLevel riskLevel) {
-        return answerRepository.findByCalculatedRisk(riskLevel);
-    }
 
-    // Lógica para calcular risco (exemplo básico)
-    private RiskLevel calculateRiskLevel(String response) {
-        switch (response.toLowerCase()) {
-            case "sim": return RiskLevel.LOW;
-            case "parcialmente": return RiskLevel.MEDIUM;
-            case "não": return RiskLevel.HIGH;
-            default: return RiskLevel.CRITICAL;
-        }
-    }
 }

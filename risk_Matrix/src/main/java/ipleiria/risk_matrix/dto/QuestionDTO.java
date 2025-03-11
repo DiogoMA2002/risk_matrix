@@ -21,9 +21,11 @@ public class QuestionDTO {
         this.id = question.getId();
         this.questionText = question.getQuestionText();
         this.category = question.getCategory().name();
-        this.answers = question.getAnswers().stream()
-                .map(AnswerDTO::new)
-                .collect(Collectors.toList());
+        if (question.getAnswers() != null) {
+            this.answers = question.getAnswers().stream()
+                    .map(AnswerDTO::new)
+                    .collect(Collectors.toList());
+        }
     }
 
     // Getters e Setters
