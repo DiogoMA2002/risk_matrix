@@ -1,5 +1,5 @@
 package ipleiria.risk_matrix.models.answers;
 
-public enum Serverity {
+public enum Severity {
     LOW, MEDIUM, HIGH, CRITICAL;
 }

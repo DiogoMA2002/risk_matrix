@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.answers.Impact;
 import ipleiria.risk_matrix.models.answers.Probability;
-import ipleiria.risk_matrix.models.answers.Serverity;
-import ipleiria.risk_matrix.models.sugestions.Suggestions;
+import ipleiria.risk_matrix.models.answers.Severity;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @JsonPropertyOrder({
         "id",
@@ -17,17 +15,17 @@ import java.util.stream.Collectors;
         "impact",
         "probability",
         "serverity",
-        "suggestions"
 })
 public class AnswerDTO {
 
     private Long id;
+    private Long questionId;
+    private String questionText;
     private String userResponse;
     private Impact impact;
     private Probability probability;
-    private Serverity serverity;
+    private Severity severity;
     private String email;
-    private List<SuggestionDTO> suggestions;
 
     // ✅ Default constructor (needed for Jackson)
     public AnswerDTO() {}
@@ -35,16 +33,13 @@ public class AnswerDTO {
     // ✅ Constructor for output
     public AnswerDTO(Answer answer) {
         this.id = answer.getId();
+        this.questionId = answer.getQuestionId();
+        this.questionText = answer.getQuestionText();
         this.userResponse = answer.getUserResponse();
         this.impact = answer.getImpact();
         this.probability = answer.getProbability();
-        this.serverity = answer.getServerity();
+        this.severity = answer.getServerity();
         this.email = answer.getEmail();
-        if (answer.getSuggestions() != null) {
-            this.suggestions = answer.getSuggestions().stream()
-                    .map(SuggestionDTO::new)
-                    .collect(Collectors.toList());
-        }
     }
 
     // ✅ Constructor for input (Deserialization)
@@ -61,23 +56,62 @@ public class AnswerDTO {
     }
 
     // ✅ Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    public String getUserResponse() { return userResponse; }
-    public void setUserResponse(String userResponse) { this.userResponse = userResponse; }
+    public Long getId() {
+        return id;
+    }
 
-    public Impact getImpact() { return impact; }
-    public void setImpact(Impact impact) { this.impact = impact; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Probability getProbability() { return probability; }
-    public void setProbability(Probability probability) { this.probability = probability; }
+    public Long getQuestionId() {
+        return questionId;
+    }
 
-    public Serverity getServerity() { return serverity; }
-    public void setServerity(Serverity serverity) { this.serverity = serverity; }
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
+    }
 
-    public List<SuggestionDTO> getSuggestions() { return suggestions; }
-    public void setSuggestions(List<SuggestionDTO> suggestions) { this.suggestions = suggestions; }
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
+    public String getUserResponse() {
+        return userResponse;
+    }
+
+    public void setUserResponse(String userResponse) {
+        this.userResponse = userResponse;
+    }
+
+    public Impact getImpact() {
+        return impact;
+    }
+
+    public void setImpact(Impact impact) {
+        this.impact = impact;
+    }
+
+    public Probability getProbability() {
+        return probability;
+    }
+
+    public void setProbability(Probability probability) {
+        this.probability = probability;
+    }
+
+    public Severity getServerity() {
+        return severity;
+    }
+
+    public void setServerity(Severity severity) {
+        this.severity = severity;
+    }
 
     public String getEmail() {
         return email;
@@ -86,4 +120,6 @@ public class AnswerDTO {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
 }

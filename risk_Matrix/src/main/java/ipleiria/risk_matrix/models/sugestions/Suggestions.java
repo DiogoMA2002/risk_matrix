@@ -2,6 +2,7 @@ package ipleiria.risk_matrix.models.sugestions;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questions.Question;
+import ipleiria.risk_matrix.models.questions.QuestionOption;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,9 +21,9 @@ public class Suggestions {
     private String suggestionText;
 
     @ManyToOne
-    @JoinColumn(name="answer_id", nullable = false)
+    @JoinColumn(name="question_id", nullable = false)
     @JsonBackReference
-    private Answer answer;
+    private QuestionOption option;
 
     // Constructors
     public Suggestions() {
@@ -46,11 +47,11 @@ public class Suggestions {
         this.suggestionText = suggestionText;
     }
 
-    public Answer getAnswer() {
-        return answer;
+    public QuestionOption getOption() {
+        return option;
     }
 
-    public void setAnswer(Answer answer) {
-        this.answer = answer;
+    public void setOption(QuestionOption option) {
+        this.option = option;
     }
 }

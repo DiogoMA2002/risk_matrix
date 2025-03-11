@@ -3,6 +3,7 @@ import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.service.QuestionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,8 @@ public class QuestionController {
 
     // Criar uma nova pergunta
     @PostMapping("/create")
-    public Question createQuestion(@RequestBody Question question) {
-        return questionService.createQuestion(question);
+    public QuestionDTO createQuestion(@RequestBody @Valid QuestionDTO questionDTO) {
+        return questionService.createQuestion(questionDTO);
     }
 
     // Obter todas as perguntas

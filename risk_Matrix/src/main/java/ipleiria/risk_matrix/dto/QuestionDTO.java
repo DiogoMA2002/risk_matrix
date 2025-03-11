@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 public class QuestionDTO {
 
     private Long id;
+    private Long questionnaireId; // ✅ New field for association
     private String questionText;
     private String category;
-    private List<AnswerDTO> answers;
-
+    private List<QuestionOptionDTO> options;
 
 
     // 🔥 Construtor padrão vazio (para Jackson)
@@ -19,13 +19,12 @@ public class QuestionDTO {
 
     public QuestionDTO(Question question) {
         this.id = question.getId();
+        this.questionnaireId = question.getQuestionnaire().getId();
         this.questionText = question.getQuestionText();
         this.category = question.getCategory().name();
-        if (question.getAnswers() != null) {
-            this.answers = question.getAnswers().stream()
-                    .map(AnswerDTO::new)
-                    .collect(Collectors.toList());
-        }
+        this.options = question.getOptions().stream()
+                .map(QuestionOptionDTO::new)
+                .collect(Collectors.toList());
     }
 
     // Getters e Setters
@@ -53,11 +52,19 @@ public class QuestionDTO {
         this.category = category;
     }
 
-    public void setAnswers(List<AnswerDTO> answers) {
-        this.answers = answers;
+    public List<QuestionOptionDTO> getOptions() {
+        return options;
     }
 
-    public List<AnswerDTO> getAnswers() {
-        return answers;
+    public void setOptions(List<QuestionOptionDTO> options) {
+        this.options = options;
+    }
+
+    public Long getQuestionnaireId() {
+        return questionnaireId;
+    }
+
+    public void setQuestionnaireId(Long questionnaireId) {
+        this.questionnaireId = questionnaireId;
     }
 }

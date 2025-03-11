@@ -16,14 +16,15 @@ import java.util.Optional;
 public class SuggestionService {
 
     @Autowired
-    private AnswerRepository answerRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     private SuggestionRepository suggestionRepository;
 
+    /*
     // Criar uma nova sugestão
-    public SuggestionDTO addSuggestionToAnswer(Long answerId, SuggestionDTO suggestionDTO) {
-        Answer answer = answerRepository.findById(answerId)
+    public SuggestionDTO addSuggestionToQuestion(Long questionID, SuggestionDTO suggestionDTO) {
+        Question question = questionRepository.findById(questionID)
                 .orElseThrow(() -> new RuntimeException("Answer not found"));
 
         Suggestions suggestion = new Suggestions();
@@ -41,4 +42,6 @@ public class SuggestionService {
                 .map(SuggestionDTO::new)
                 .toList();
     }
+
+     */
 }

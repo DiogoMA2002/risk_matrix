@@ -29,9 +29,9 @@ public class Question {
     @JsonBackReference
     private Questionnaire questionnaire;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Answer> answers = new ArrayList<>();
+    private List<QuestionOption> options = new ArrayList<>();
 
 
 
@@ -57,13 +57,12 @@ public class Question {
         this.questionnaire = questionnaire;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<QuestionOption> getOptions() {
+        return options;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setOptions(List<QuestionOption> options) {
+        this.options = options;
     }
-
 }
 

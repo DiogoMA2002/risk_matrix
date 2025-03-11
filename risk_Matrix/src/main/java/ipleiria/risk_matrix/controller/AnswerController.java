@@ -25,13 +25,18 @@ public class AnswerController {
     }
 
 
-    @PostMapping("/add/{questionId}")
-    public AnswerDTO createAnswer(@PathVariable Long questionId, @RequestBody @Valid AnswerDTO answerDTO) {
-        return answerService.createAnswer(questionId, answerDTO);
+    @PostMapping("/submit")
+    public AnswerDTO createAnswer(@RequestBody AnswerDTO answerDTO) {
+        return answerService.submitAnswer(answerDTO);
     }
 
     @GetMapping("/by-question/{questionId}")
     public List<AnswerDTO> getAnswersByQuestion(@PathVariable Long questionId) {
         return answerService.getAnswersByQuestion(questionId);
+    }
+
+    @GetMapping("/by-email/{email}")
+    public List<AnswerDTO> getAnswersByEmail(@PathVariable String email) {
+        return answerService.getAnswersByEmail(email);
     }
 }

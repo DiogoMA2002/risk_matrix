@@ -1,8 +1,12 @@
 package ipleiria.risk_matrix.service;
 import ipleiria.risk_matrix.dto.QuestionDTO;
+import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
+import ipleiria.risk_matrix.models.questions.QuestionOption;
+import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import ipleiria.risk_matrix.repository.QuestionRepository;
+import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -15,12 +19,46 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private QuestionnaireRepository questionnaireRepository;
+
     // Criar uma nova pergunta
-    public Question createQuestion(Question question) {
-        if (questionRepository.existsByQuestionText(question.getQuestionText())) {
-            throw new RuntimeException("Pergunta já existe!");
+    public QuestionDTO createQuestion(QuestionDTO questionDTO) {
+        Questionnaire questionnaire = questionnaireRepository.findById(questionDTO.getQuestionnaireId())
+                .orElseThrow(() -> new RuntimeException("Questionnaire not found"));
+        Question question = new Question();
+        question.setQuestionText(questionDTO.getQuestionText());
+        question.setQuestionnaire(questionnaire); // ✅ Associate with Questionnaire
+        try {
+            question.setCategory(QuestionCategory.valueOf(questionDTO.getCategory()));
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid category: " + questionDTO.getCategory());
         }
-        return questionRepository.save(question);
+
+        List<QuestionOption> options = questionDTO.getOptions().stream().map(optionDTO -> {
+            QuestionOption option = new QuestionOption();
+            option.setQuestion(question);
+            option.setOptionText(optionDTO.getOptionText());
+            option.setImpact(optionDTO.getImpact());
+            option.setProbability(optionDTO.getProbability());
+
+            // ✅ Add suggestions
+            List<Suggestions> suggestions = optionDTO.getSuggestions().stream().map(suggestionDTO -> {
+                Suggestions suggestion = new Suggestions();
+                suggestion.setOption(option);
+                suggestion.setSuggestionText(suggestionDTO.getSuggestionText());
+                return suggestion;
+            }).toList();
+
+            option.setSuggestions(suggestions);
+
+            return option;
+        }).toList();
+
+        question.setOptions(options);
+
+        questionRepository.save(question);
+        return new QuestionDTO(question);
     }
 
     // Buscar todas as perguntas

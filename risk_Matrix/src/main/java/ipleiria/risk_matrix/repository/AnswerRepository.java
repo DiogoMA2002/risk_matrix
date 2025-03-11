@@ -12,4 +12,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     // Busca respostas por pergunta
     List<Answer> findByQuestionId(Long questionId);
 
+    List<Answer> findByEmail(String email);
+
+
 }

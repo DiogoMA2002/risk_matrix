@@ -13,7 +13,7 @@ public class SuggestionController {
 
     @Autowired
     private SuggestionService suggestionService;
-
+    /*
     @PostMapping("/add/{answerId}")
     public SuggestionDTO addSuggestion(@PathVariable Long answerId, @RequestBody SuggestionDTO suggestionDTO) {
         return suggestionService.addSuggestionToAnswer(answerId, suggestionDTO);
@@ -23,4 +23,6 @@ public class SuggestionController {
     public List<SuggestionDTO> getSuggestionsByAnswer(@PathVariable Long answerId) {
         return suggestionService.getSuggestionsByAnswer(answerId);
     }
+
+     */
 }

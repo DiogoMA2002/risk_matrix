@@ -1,7 +1,5 @@
 package ipleiria.risk_matrix.models.answers;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import jakarta.persistence.*;
 
@@ -16,29 +14,27 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "question_id", nullable = false)
-    @JsonBackReference
-    private Question question;
+    @Column(nullable = false)
+    private Long questionId;
 
     @Column(nullable = false)
-    private String userResponse; // Ex: Sim, Não, Parcialmente
+    private String questionText;
+
+    @Column(nullable = false)
+    private String userResponse;
 
     @Enumerated(EnumType.STRING)
-    private Impact impact; // Impacto
+    private Impact impact;
 
     @Enumerated(EnumType.STRING)
     private Probability probability;
 
     @Enumerated(EnumType.STRING)
-    private Serverity serverity;
-
-    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Suggestions> suggestions = new ArrayList<>();
+    private Severity severity;
 
     @Column(nullable = false)
     private String email;
+
 
     // Constructors
     public Answer() {}
@@ -47,44 +43,26 @@ public class Answer {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Question getQuestion() { return question; }
-    public void setQuestion(Question question) { this.question = question; }
+    public Long getQuestionId() { return questionId; }
+    public void setQuestionId(Long questionId) { this.questionId = questionId; }
+
+    public String getQuestionText() { return questionText; }
+    public void setQuestionText(String questionText) { this.questionText = questionText; }
 
     public String getUserResponse() { return userResponse; }
     public void setUserResponse(String userResponse) { this.userResponse = userResponse; }
 
-    public Impact getImpact() {
-        return impact;
-    }
+    public Impact getImpact() { return impact; }
+    public void setImpact(Impact impact) { this.impact = impact; }
 
-    public void setImpact(Impact impact) {
-        this.impact = impact;
-    }
+    public Probability getProbability() { return probability; }
+    public void setProbability(Probability probability) { this.probability = probability; }
 
-    public Probability getProbability() {
-        return probability;
-    }
-
-    public void setProbability(Probability probability) {
-        this.probability = probability;
-    }
-
-    public List<Suggestions> getSuggestions() {
-        return suggestions;
-    }
-
-    public void setSuggestions(List<Suggestions> suggestions) {
-        this.suggestions = suggestions;
-    }
-
-    public Serverity getServerity() {
-        return serverity;
-    }
-
-    public void setServerity(Serverity serverity) {
-        this.serverity = serverity;
-    }
+    public Severity getServerity() { return severity; }
+    public void setServerity(Severity severity) { this.severity = severity; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+
 }
