@@ -33,6 +33,7 @@ public class AnswerService {
         answer.setUserResponse(answerDTO.getUserResponse());
         answer.setImpact(answerDTO.getImpact());
         answer.setProbability(answerDTO.getProbability());
+        answer.setEmail(answerDTO.getEmail()); // ✅ Store email in Answer
 
         // ✅ Calculate severity using the matrix logic
         Serverity severity = calculateSeverity(answer.getImpact(), answer.getProbability());

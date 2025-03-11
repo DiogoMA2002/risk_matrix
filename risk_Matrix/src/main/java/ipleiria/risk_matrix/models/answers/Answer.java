@@ -37,6 +37,8 @@ public class Answer {
     @JsonManagedReference
     private List<Suggestions> suggestions = new ArrayList<>();
 
+    @Column(nullable = false)
+    private String email;
 
     // Constructors
     public Answer() {}
@@ -82,4 +84,7 @@ public class Answer {
     public void setServerity(Serverity serverity) {
         this.serverity = serverity;
     }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 }

@@ -26,6 +26,7 @@ public class AnswerDTO {
     private Impact impact;
     private Probability probability;
     private Serverity serverity;
+    private String email;
     private List<SuggestionDTO> suggestions;
 
     // ✅ Default constructor (needed for Jackson)
@@ -38,7 +39,7 @@ public class AnswerDTO {
         this.impact = answer.getImpact();
         this.probability = answer.getProbability();
         this.serverity = answer.getServerity();
-
+        this.email = answer.getEmail();
         if (answer.getSuggestions() != null) {
             this.suggestions = answer.getSuggestions().stream()
                     .map(SuggestionDTO::new)
@@ -51,7 +52,9 @@ public class AnswerDTO {
     public AnswerDTO(
             @JsonProperty("userResponse") String userResponse,
             @JsonProperty("impact") Impact impact,
-            @JsonProperty("probability") Probability probability) {
+            @JsonProperty("probability") Probability probability,
+            @JsonProperty("email") String email) {
+        this.email = email;
         this.userResponse = userResponse;
         this.impact = impact;
         this.probability = probability;
@@ -75,4 +78,12 @@ public class AnswerDTO {
 
     public List<SuggestionDTO> getSuggestions() { return suggestions; }
     public void setSuggestions(List<SuggestionDTO> suggestions) { this.suggestions = suggestions; }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

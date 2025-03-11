@@ -3,6 +3,7 @@ import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.answers.Impact;
 import ipleiria.risk_matrix.service.AnswerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AnswerController {
 
 
     @PostMapping("/add/{questionId}")
-    public AnswerDTO createAnswer(@PathVariable Long questionId, @RequestBody AnswerDTO answerDTO) {
+    public AnswerDTO createAnswer(@PathVariable Long questionId, @RequestBody @Valid AnswerDTO answerDTO) {
         return answerService.createAnswer(questionId, answerDTO);
     }
 
