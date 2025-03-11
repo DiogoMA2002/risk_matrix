@@ -151,6 +151,7 @@ export default {
     name: 'RiskMatrixInfo',
     methods: {
         proceed() {
+            localStorage.setItem('completedRiskInfo', 'true');
             this.$router.push('/requirements');
         }
     }

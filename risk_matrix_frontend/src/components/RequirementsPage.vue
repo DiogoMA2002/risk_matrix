@@ -155,6 +155,7 @@ export default {
   name: 'RequirementsPage',
   methods: {
     accept() {
+      localStorage.setItem('completedRequirements', 'true');
       this.$router.push('/category');
     }
   }
