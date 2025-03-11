@@ -25,6 +25,7 @@ public class Suggestions {
     @JsonBackReference
     private QuestionOption option;
 
+
     // Constructors
     public Suggestions() {
     }
@@ -54,4 +55,6 @@ public class Suggestions {
     public void setOption(QuestionOption option) {
         this.option = option;
     }
+
+
 }

@@ -36,6 +36,7 @@ public class Answer {
     private String email;
 
 
+
     // Constructors
     public Answer() {}
 
@@ -58,11 +59,12 @@ public class Answer {
     public Probability getProbability() { return probability; }
     public void setProbability(Probability probability) { this.probability = probability; }
 
-    public Severity getServerity() { return severity; }
-    public void setServerity(Severity severity) { this.severity = severity; }
+    public Severity getSeverity() { return severity; }
+    public void setSeverity(Severity severity) { this.severity = severity; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
 
 
 }

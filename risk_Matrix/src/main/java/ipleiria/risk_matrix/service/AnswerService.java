@@ -3,10 +3,13 @@ import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionOption;
+import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +27,6 @@ public class AnswerService {
         Question question = questionRepository.findById(answerDTO.getQuestionId())
                 .orElseThrow(() -> new RuntimeException("Question not found"));
 
-        // ✅ Find the selected option
         QuestionOption selectedOption = question.getOptions().stream()
                 .filter(option -> option.getOptionText().equals(answerDTO.getUserResponse()))
                 .findFirst()
@@ -36,17 +38,44 @@ public class AnswerService {
         answer.setUserResponse(answerDTO.getUserResponse());
         answer.setImpact(selectedOption.getImpact());
         answer.setProbability(selectedOption.getProbability());
-        answer.setServerity(selectedOption.getSeverity());
+        answer.setSeverity(selectedOption.getSeverity());
         answer.setEmail(answerDTO.getEmail());
 
         answerRepository.save(answer);
-        return new AnswerDTO(answer);
+
+        // ✅ Return suggestions from the selected option
+        return new AnswerDTO(answer, selectedOption.getSuggestions());
+    }
+
+    public List<AnswerDTO> getAnswersByEmail(String email) {
+        return answerRepository.findByEmail(email).stream()
+                .map(answer -> {
+                    // ✅ Get suggestions from QuestionOption
+                    List<Suggestions> suggestions = questionRepository.findById(answer.getQuestionId())
+                            .flatMap(question -> question.getOptions().stream()
+                                    .filter(option -> option.getOptionText().equals(answer.getUserResponse()))
+                                    .findFirst())
+                            .map(QuestionOption::getSuggestions)
+                            .orElse(new ArrayList<>());
+
+                    return new AnswerDTO(answer, suggestions);
+                })
+                .toList();
     }
 
     public List<AnswerDTO> getAnswersByQuestion(Long questionId) {
-        return answerRepository.findByQuestionId(questionId)
-                .stream()
-                .map(AnswerDTO::new)
+        return answerRepository.findByQuestionId(questionId).stream()
+                .map(answer -> {
+                    // ✅ Get suggestions from QuestionOption
+                    List<Suggestions> suggestions = questionRepository.findById(answer.getQuestionId())
+                            .flatMap(question -> question.getOptions().stream()
+                                    .filter(option -> option.getOptionText().equals(answer.getUserResponse()))
+                                    .findFirst())
+                            .map(QuestionOption::getSuggestions)
+                            .orElse(new ArrayList<>());
+
+                    return new AnswerDTO(answer, suggestions);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -54,12 +83,5 @@ public class AnswerService {
     public List<Answer> getAllAnswers() {
         return answerRepository.findAll();
     }
-
-    public List<AnswerDTO> getAnswersByEmail(String email) {
-        return answerRepository.findByEmail(email).stream()
-                .map(AnswerDTO::new)
-                .toList();
-    }
-
 
 }

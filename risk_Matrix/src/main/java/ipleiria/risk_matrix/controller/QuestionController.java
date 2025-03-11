@@ -18,9 +18,11 @@ public class QuestionController {
     private QuestionService questionService;
 
     // Criar uma nova pergunta
-    @PostMapping("/create")
-    public QuestionDTO createQuestion(@RequestBody @Valid QuestionDTO questionDTO) {
-        return questionService.createQuestion(questionDTO);
+    @PostMapping("/add/{questionnaireId}")
+    public QuestionDTO addQuestionToQuestionnaire(
+            @PathVariable Long questionnaireId,
+            @RequestBody QuestionDTO questionDTO) {
+        return questionService.createQuestion(questionnaireId, questionDTO);
     }
 
     // Obter todas as perguntas

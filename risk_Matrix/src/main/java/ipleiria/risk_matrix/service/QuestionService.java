@@ -22,19 +22,23 @@ public class QuestionService {
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
 
+
+
     // Criar uma nova pergunta
-    public QuestionDTO createQuestion(QuestionDTO questionDTO) {
-        Questionnaire questionnaire = questionnaireRepository.findById(questionDTO.getQuestionnaireId())
+    public QuestionDTO createQuestion(Long questionnaireId, QuestionDTO questionDTO) {
+        Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
                 .orElseThrow(() -> new RuntimeException("Questionnaire not found"));
+
         Question question = new Question();
         question.setQuestionText(questionDTO.getQuestionText());
-        question.setQuestionnaire(questionnaire); // ✅ Associate with Questionnaire
         try {
             question.setCategory(QuestionCategory.valueOf(questionDTO.getCategory()));
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid category: " + questionDTO.getCategory());
         }
+        question.setQuestionnaire(questionnaire);
 
+        // ✅ Create options if available
         List<QuestionOption> options = questionDTO.getOptions().stream().map(optionDTO -> {
             QuestionOption option = new QuestionOption();
             option.setQuestion(question);
@@ -42,13 +46,15 @@ public class QuestionService {
             option.setImpact(optionDTO.getImpact());
             option.setProbability(optionDTO.getProbability());
 
-            // ✅ Add suggestions
-            List<Suggestions> suggestions = optionDTO.getSuggestions().stream().map(suggestionDTO -> {
-                Suggestions suggestion = new Suggestions();
-                suggestion.setOption(option);
-                suggestion.setSuggestionText(suggestionDTO.getSuggestionText());
-                return suggestion;
-            }).toList();
+            // ✅ Add suggestions to options
+            List<Suggestions> suggestions = optionDTO.getSuggestions().stream()
+                    .map(suggestionDTO -> {
+                        Suggestions suggestion = new Suggestions();
+                        suggestion.setSuggestionText(suggestionDTO.getSuggestionText());
+                        suggestion.setOption(option); // ✅ Link to QuestionOption
+                        return suggestion;
+                    })
+                    .toList();
 
             option.setSuggestions(suggestions);
 
@@ -56,10 +62,11 @@ public class QuestionService {
         }).toList();
 
         question.setOptions(options);
-
         questionRepository.save(question);
+
         return new QuestionDTO(question);
     }
+
 
     // Buscar todas as perguntas
     public List<Question> getAllQuestions() {

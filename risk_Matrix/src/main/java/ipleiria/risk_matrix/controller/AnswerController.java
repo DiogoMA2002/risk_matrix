@@ -26,7 +26,7 @@ public class AnswerController {
 
 
     @PostMapping("/submit")
-    public AnswerDTO createAnswer(@RequestBody AnswerDTO answerDTO) {
+    public AnswerDTO submitAnswer(@RequestBody AnswerDTO answerDTO) {
         return answerService.submitAnswer(answerDTO);
     }
 
