@@ -25,8 +25,8 @@ public class AnswerController {
 
 
     @PostMapping("/add/{questionId}")
-    public AnswerDTO createAnswer(@PathVariable Long questionId, @RequestBody String userResponse) {
-        return answerService.createAnswer(questionId, userResponse);
+    public AnswerDTO createAnswer(@PathVariable Long questionId, @RequestBody AnswerDTO answerDTO) {
+        return answerService.createAnswer(questionId, answerDTO);
     }
 
     @GetMapping("/by-question/{questionId}")

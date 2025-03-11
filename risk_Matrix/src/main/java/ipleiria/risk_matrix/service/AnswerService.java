@@ -23,71 +23,46 @@ public class AnswerService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public AnswerDTO createAnswer(Long questionId, String userResponse) {
+    // ✅ Create Answer based on input data
+    public AnswerDTO createAnswer(Long questionId, AnswerDTO answerDTO) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
 
         Answer answer = new Answer();
         answer.setQuestion(question);
-        answer.setUserResponse(userResponse);
+        answer.setUserResponse(answerDTO.getUserResponse());
+        answer.setImpact(answerDTO.getImpact());
+        answer.setProbability(answerDTO.getProbability());
 
-        // 🔥 Get total suggestions through answers
-        int totalSuggestions = question.getAnswers().stream()
-                .flatMap(a -> a.getSuggestions().stream())
-                .collect(Collectors.toList()).size();
-
-        Probability probability = calculateProbability(userResponse, totalSuggestions);
-        Impact impact = calculateImpact(question.getCategory(), totalSuggestions);
-
-        answer.setProbability(probability);
-        answer.setImpact(impact);
-        answer.setServerity(calculateSeverity(impact, probability));
+        // ✅ Calculate severity using the matrix logic
+        Serverity severity = calculateSeverity(answer.getImpact(), answer.getProbability());
+        answer.setServerity(severity);
 
         answerRepository.save(answer);
 
-        // ✅ Add answer to question list
+        // ✅ Add the answer to the question list
         question.getAnswers().add(answer);
 
         return new AnswerDTO(answer);
     }
 
-    private Probability calculateProbability(String userResponse, int totalSuggestions) {
-        if ("yes".equalsIgnoreCase(userResponse) && totalSuggestions == 0) {
-            return Probability.LOW;
-        } else if ("yes".equalsIgnoreCase(userResponse) && totalSuggestions > 0) {
-            return Probability.MEDIUM;
-        } else if ("no".equalsIgnoreCase(userResponse)) {
-            return Probability.HIGH;
-        } else if ("partially".equalsIgnoreCase(userResponse)) {
-            return Probability.MEDIUM;
-        }
-        return Probability.LOW;
-    }
-
-    private Impact calculateImpact(QuestionCategory category, int totalSuggestions) {
-        switch (category) {
-            case Risco_de_Autenticacao:
-            case Seguranca_de_Email:
-            case Risco_da_Rede_Interna:
-                return totalSuggestions > 0 ? Impact.HIGH : Impact.MEDIUM;
-            case Risco_de_Plataforma_da_Empresa:
-            case Risco_de_Infraestrutura_de_Informação_Externa:
-            case Risco_de_Infraestrutura_de_Informação_Interna:
-                return totalSuggestions > 0 ? Impact.MEDIUM : Impact.LOW;
-            default:
-                return Impact.LOW;
-        }
-    }
-
     private Serverity calculateSeverity(Impact impact, Probability probability) {
-        if (impact == Impact.HIGH && probability == Probability.HIGH) {
-            return Serverity.CRITICAL;
-        } else if (impact == Impact.HIGH || probability == Probability.HIGH) {
-            return Serverity.HIGH;
-        } else if (impact == Impact.MEDIUM || probability == Probability.MEDIUM) {
-            return Serverity.MEDIUM;
-        }
-        return Serverity.LOW;
+        return switch (impact) {
+            case HIGH -> switch (probability) {
+                case HIGH -> Serverity.CRITICAL; // Special case for high-high = Critical
+                case MEDIUM -> Serverity.HIGH;
+                case LOW -> Serverity.MEDIUM;
+            };
+            case MEDIUM -> switch (probability) {
+                case HIGH -> Serverity.HIGH;
+                case MEDIUM -> Serverity.MEDIUM;
+                case LOW -> Serverity.LOW;
+            };
+            case LOW -> switch (probability) {
+                case HIGH -> Serverity.MEDIUM;
+                case MEDIUM, LOW -> Serverity.LOW;
+            };
+        };
     }
 
 
