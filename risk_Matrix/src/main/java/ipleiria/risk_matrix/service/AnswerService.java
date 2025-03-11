@@ -1,4 +1,5 @@
 package ipleiria.risk_matrix.service;
+import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.answers.RiskLevel;
 import ipleiria.risk_matrix.models.questions.Question;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AnswerService {
@@ -34,6 +36,25 @@ public class AnswerService {
         answer.setCalculatedRisk(calculatedRisk);
 
         return answerRepository.save(answer);
+    }
+
+    public AnswerDTO addAnswerToQuestion(Long questionId, String answerText) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Question not found"));
+
+        Answer answer = new Answer();
+        answer.setUserResponse(answerText);
+        answer.setQuestion(question);
+
+        answerRepository.save(answer);
+        return new AnswerDTO(answer);
+    }
+
+    public List<AnswerDTO> getAnswersByQuestion(Long questionId) {
+        return answerRepository.findByQuestionId(questionId)
+                .stream()
+                .map(AnswerDTO::new)
+                .collect(Collectors.toList());
     }
 
     // Buscar todas as respostas

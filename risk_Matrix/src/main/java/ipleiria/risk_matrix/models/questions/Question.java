@@ -1,9 +1,11 @@
 package ipleiria.risk_matrix.models.questions;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import jakarta.persistence.*;
+import jdk.jshell.SourceCodeAnalysis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +24,14 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private QuestionCategory category;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Suggestions> suggestions = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "questionnaire_id") // Cria uma chave estrangeira na tabela Question
     @JsonBackReference
     private Questionnaire questionnaire;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Answer> answers = new ArrayList<>();
+
 
     // Constructors
     public Question() {}
@@ -53,12 +55,13 @@ public class Question {
         this.questionnaire = questionnaire;
     }
 
-    public List<Suggestions> getSuggestions() {
-        return suggestions;
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
-    public void setSuggestions(List<Suggestions> suggestions) {
-        this.suggestions = suggestions;
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
+
 }
 

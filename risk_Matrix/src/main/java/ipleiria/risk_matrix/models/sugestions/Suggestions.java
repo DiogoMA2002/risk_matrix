@@ -1,5 +1,6 @@
 package ipleiria.risk_matrix.models.sugestions;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questions.Question;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,16 +20,22 @@ public class Suggestions {
     private String suggestionText;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", nullable = false)
+    @JoinColumn(name="answer_id", nullable = false)
     @JsonBackReference
-    private Question question;
+    private Answer answer;
 
     // Constructors
-    public Suggestions() {}
+    public Suggestions() {
+    }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 
     public String getSuggestionText() {
@@ -39,11 +46,11 @@ public class Suggestions {
         this.suggestionText = suggestionText;
     }
 
-    public Question getQuestion() {
-        return question;
+    public Answer getAnswer() {
+        return answer;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
     }
 }

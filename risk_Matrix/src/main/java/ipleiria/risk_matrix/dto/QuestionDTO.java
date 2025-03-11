@@ -10,7 +10,8 @@ public class QuestionDTO {
     private Long id;
     private String questionText;
     private String category;
-    private List<SuggestionDTO> suggestions;
+    private List<AnswerDTO> answers;
+
 
 
     // 🔥 Construtor padrão vazio (para Jackson)
@@ -20,8 +21,8 @@ public class QuestionDTO {
         this.id = question.getId();
         this.questionText = question.getQuestionText();
         this.category = question.getCategory().name();
-        this.suggestions = question.getSuggestions().stream()
-                .map(SuggestionDTO::new)
+        this.answers = question.getAnswers().stream()
+                .map(AnswerDTO::new)
                 .collect(Collectors.toList());
     }
 
@@ -50,11 +51,11 @@ public class QuestionDTO {
         this.category = category;
     }
 
-    public List<SuggestionDTO> getSuggestions() {
-        return suggestions;
+    public void setAnswers(List<AnswerDTO> answers) {
+        this.answers = answers;
     }
 
-    public void setSuggestions(List<SuggestionDTO> suggestions) {
-        this.suggestions = suggestions;
+    public List<AnswerDTO> getAnswers() {
+        return answers;
     }
 }

@@ -1,4 +1,5 @@
 package ipleiria.risk_matrix.controller;
+import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.answers.RiskLevel;
 import ipleiria.risk_matrix.service.AnswerService;
@@ -37,5 +38,15 @@ public class AnswerController {
     @GetMapping("/risk/{riskLevel}")
     public List<Answer> getAnswersByRiskLevel(@PathVariable RiskLevel riskLevel) {
         return answerService.getAnswersByRiskLevel(riskLevel);
+    }
+
+    @PostMapping("/add/{questionId}")
+    public AnswerDTO addAnswer(@PathVariable Long questionId, @RequestBody String answerText) {
+        return answerService.addAnswerToQuestion(questionId, answerText);
+    }
+
+    @GetMapping("/by-question/{questionId}")
+    public List<AnswerDTO> getAnswersByQuestion(@PathVariable Long questionId) {
+        return answerService.getAnswersByQuestion(questionId);
     }
 }

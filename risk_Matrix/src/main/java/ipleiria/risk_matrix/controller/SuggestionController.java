@@ -14,9 +14,13 @@ public class SuggestionController {
     @Autowired
     private SuggestionService suggestionService;
 
-    // Criar uma nova sugestão associada a uma questão
-    @PostMapping("/add/{questionId}")
-    public SuggestionDTO addSuggestion(@PathVariable Long questionId, @RequestBody SuggestionDTO suggestionDTO) {
-        return suggestionService.addSuggestionToQuestion(questionId, suggestionDTO);
+    @PostMapping("/add/{answerId}")
+    public SuggestionDTO addSuggestion(@PathVariable Long answerId, @RequestBody SuggestionDTO suggestionDTO) {
+        return suggestionService.addSuggestionToAnswer(answerId, suggestionDTO);
+    }
+
+    @GetMapping("/by-answer/{answerId}")
+    public List<SuggestionDTO> getSuggestionsByAnswer(@PathVariable Long answerId) {
+        return suggestionService.getSuggestionsByAnswer(answerId);
     }
 }

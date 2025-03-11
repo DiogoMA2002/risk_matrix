@@ -1,6 +1,12 @@
 package ipleiria.risk_matrix.models.answers;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
+import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "answers")
@@ -20,6 +26,11 @@ public class Answer {
     @Enumerated(EnumType.STRING)
     private RiskLevel calculatedRisk; // Resultado da avaliação
 
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Suggestions> suggestions = new ArrayList<>();
+
+
     // Constructors
     public Answer() {}
 
@@ -35,4 +46,12 @@ public class Answer {
 
     public RiskLevel getCalculatedRisk() { return calculatedRisk; }
     public void setCalculatedRisk(RiskLevel calculatedRisk) { this.calculatedRisk = calculatedRisk; }
+
+    public List<Suggestions> getSuggestions() {
+        return suggestions;
+    }
+
+    public void setSuggestions(List<Suggestions> suggestions) {
+        this.suggestions = suggestions;
+    }
 }

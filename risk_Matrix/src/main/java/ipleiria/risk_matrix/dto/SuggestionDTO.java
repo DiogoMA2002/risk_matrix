@@ -21,4 +21,12 @@ public class SuggestionDTO {
     public String getSuggestionText() {
         return suggestionText;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSuggestionText(String suggestionText) {
+        this.suggestionText = suggestionText;
+    }
 }
