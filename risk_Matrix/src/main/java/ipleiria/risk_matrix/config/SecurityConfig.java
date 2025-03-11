@@ -13,7 +13,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Correct way to disable CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**", "/questions/**", "/suggestions/**", "/answers/**").permitAll() // Allow these endpoints
+                        .requestMatchers("/admin/**", "/questions/**", "/suggestions/**", "/answers/**", "/questionnaires/**").permitAll() // Allow these endpoints
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults()); // ✅ Correct way to enable Basic Authentication

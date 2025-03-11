@@ -1,15 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../components/HomePage.vue'
-import AdminDashboard from '../components/AdminDashboard.vue';
-import QuestionarioPage from "../components/QuestionarioPage.vue"; // Importa a nova página
-
-
+import RiskMatrixInfo from '../components/RiskMatrixInfo.vue'
+import RequirementsPage from '../components/RequirementsPage.vue'
+import QuestionarioPage from '../components/QuestionarioPage.vue'
+import AdminDashboard from '../components/AdminDashboard.vue'
+import HomePage from '@/components/HomePage.vue'
+import CategoryList from '../components/CategoryList.vue'
 
 const routes = [
   { path: '/', component: HomePage },
-  { path: '/admin', component: AdminDashboard },
-  { path: "/questionario", component: QuestionarioPage } // Define a nova rota
-
+  { path: '/risk-info', component: RiskMatrixInfo },
+  { path: '/requirements', component: RequirementsPage },
+  {
+    path: '/questions/:category',
+    name: 'Questionary',
+    component: QuestionarioPage
+  },
+    { path: '/admin', component: AdminDashboard },
+  { path: '/category', component: CategoryList }
 ]
 
 const router = createRouter({
