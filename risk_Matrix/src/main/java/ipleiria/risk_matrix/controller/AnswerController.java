@@ -1,15 +1,11 @@
 package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.models.answers.Answer;
-import ipleiria.risk_matrix.models.answers.Impact;
 import ipleiria.risk_matrix.service.AnswerService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/answers")
@@ -20,10 +16,9 @@ public class AnswerController {
 
     // Obter todas as respostas
     @GetMapping("/all")
-    public List<Answer> getAllAnswers() {
-        return answerService.getAllAnswers();
+    public List<AnswerDTO> getAllAnswers() {
+        return answerService.getAllAnswers(); // ✅ Agora os tipos estão alinhados
     }
-
 
     @PostMapping("/submit")
     public AnswerDTO submitAnswer(@RequestBody AnswerDTO answerDTO) {
@@ -35,6 +30,7 @@ public class AnswerController {
         return answerService.getAnswersByQuestion(questionId);
     }
 
+    // ✅ Get all answers by user email
     @GetMapping("/by-email/{email}")
     public List<AnswerDTO> getAnswersByEmail(@PathVariable String email) {
         return answerService.getAnswersByEmail(email);

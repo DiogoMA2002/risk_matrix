@@ -1,4 +1,4 @@
-package ipleiria.risk_matrix.models.answers;
+package ipleiria.risk_matrix.models.questions;
 
 public enum Severity {
     LOW, MEDIUM, HIGH, CRITICAL;

@@ -1,5 +1,8 @@
 package ipleiria.risk_matrix.models.answers;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import ipleiria.risk_matrix.models.questions.Impact;
+import ipleiria.risk_matrix.models.questions.Probability;
+import ipleiria.risk_matrix.models.questions.QuestionOption;
+import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import jakarta.persistence.*;
 
@@ -35,10 +38,19 @@ public class Answer {
     @Column(nullable = false)
     private String email;
 
-
+    @Transient
+    private List<Suggestions> suggestions = new ArrayList<>();
 
     // Constructors
     public Answer() {}
+
+    public void setSuggestionsFromOption(QuestionOption option) {
+        this.suggestions = option != null ? option.getSuggestions() : new ArrayList<>();
+    }
+
+    public List<Suggestions> getSuggestions() {
+        return suggestions;
+    }
 
     // Getters and Setters
     public Long getId() { return id; }

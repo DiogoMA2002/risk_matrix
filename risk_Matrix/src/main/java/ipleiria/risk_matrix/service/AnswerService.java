@@ -47,26 +47,41 @@ public class AnswerService {
         return new AnswerDTO(answer, selectedOption.getSuggestions());
     }
 
+    // ✅ Get Answers by Email
     public List<AnswerDTO> getAnswersByEmail(String email) {
         return answerRepository.findByEmail(email).stream()
                 .map(answer -> {
-                    // ✅ Get suggestions from QuestionOption
-                    List<Suggestions> suggestions = questionRepository.findById(answer.getQuestionId())
-                            .flatMap(question -> question.getOptions().stream()
-                                    .filter(option -> option.getOptionText().equals(answer.getUserResponse()))
-                                    .findFirst())
-                            .map(QuestionOption::getSuggestions)
-                            .orElse(new ArrayList<>());
-
+                    List<Suggestions> suggestions = getSuggestionsFromOption(answer);
                     return new AnswerDTO(answer, suggestions);
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
 
+    // ✅ Get Answers by Question ID
     public List<AnswerDTO> getAnswersByQuestion(Long questionId) {
         return answerRepository.findByQuestionId(questionId).stream()
                 .map(answer -> {
-                    // ✅ Get suggestions from QuestionOption
+                    List<Suggestions> suggestions = getSuggestionsFromOption(answer);
+                    return new AnswerDTO(answer, suggestions);
+                })
+                .collect(Collectors.toList());
+    }
+
+    // ✅ Utility Method - Get Suggestions from Option
+    private List<Suggestions> getSuggestionsFromOption(Answer answer) {
+        return questionRepository.findById(answer.getQuestionId())
+                .flatMap(question -> question.getOptions().stream()
+                        .filter(option -> option.getOptionText().equals(answer.getUserResponse()))
+                        .findFirst())
+                .map(QuestionOption::getSuggestions)
+                .orElse(new ArrayList<>());
+    }
+
+    // ✅ Get All Answers
+    public List<AnswerDTO> getAllAnswers() {
+        return answerRepository.findAll().stream()
+                .map(answer -> {
+                    // ✅ Obter sugestões dinamicamente da opção selecionada
                     List<Suggestions> suggestions = questionRepository.findById(answer.getQuestionId())
                             .flatMap(question -> question.getOptions().stream()
                                     .filter(option -> option.getOptionText().equals(answer.getUserResponse()))
@@ -77,11 +92,6 @@ public class AnswerService {
                     return new AnswerDTO(answer, suggestions);
                 })
                 .collect(Collectors.toList());
-    }
-
-    // Buscar todas as respostas
-    public List<Answer> getAllAnswers() {
-        return answerRepository.findAll();
     }
 
 }

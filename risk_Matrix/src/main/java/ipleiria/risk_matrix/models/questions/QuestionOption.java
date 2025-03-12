@@ -2,9 +2,6 @@ package ipleiria.risk_matrix.models.questions;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import ipleiria.risk_matrix.models.answers.Impact;
-import ipleiria.risk_matrix.models.answers.Probability;
-import ipleiria.risk_matrix.models.answers.Severity;
 import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import jakarta.persistence.*;
 

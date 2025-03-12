@@ -1,12 +1,13 @@
 package ipleiria.risk_matrix.dto;
 
 import ipleiria.risk_matrix.models.answers.Answer;
-import ipleiria.risk_matrix.models.answers.Impact;
-import ipleiria.risk_matrix.models.answers.Probability;
-import ipleiria.risk_matrix.models.answers.Severity;
+import ipleiria.risk_matrix.models.questions.Impact;
+import ipleiria.risk_matrix.models.questions.Probability;
+import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.models.sugestions.Suggestions;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AnswerDTO {
 
@@ -35,7 +36,7 @@ public class AnswerDTO {
         // ✅ Map suggestions from the selected option
         this.suggestions = optionSuggestions.stream()
                 .map(SuggestionDTO::new)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public Long getId() { return id; }

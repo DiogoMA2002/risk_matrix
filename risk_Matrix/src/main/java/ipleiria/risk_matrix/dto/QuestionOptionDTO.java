@@ -2,9 +2,9 @@ package ipleiria.risk_matrix.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ipleiria.risk_matrix.models.answers.Impact;
-import ipleiria.risk_matrix.models.answers.Probability;
-import ipleiria.risk_matrix.models.answers.Severity;
+import ipleiria.risk_matrix.models.questions.Impact;
+import ipleiria.risk_matrix.models.questions.Probability;
+import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.models.questions.QuestionOption;
 
 import java.util.List;
