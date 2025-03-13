@@ -33,8 +33,6 @@ public class Question {
     @JsonManagedReference
     private List<QuestionOption> options = new ArrayList<>();
 
-
-
     // Constructors
     public Question() {}
 
