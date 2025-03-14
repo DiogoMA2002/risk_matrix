@@ -3,7 +3,6 @@ import ipleiria.risk_matrix.models.questions.Impact;
 import ipleiria.risk_matrix.models.questions.Probability;
 import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.models.questions.Severity;
-import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -38,19 +37,8 @@ public class Answer {
     @Column(nullable = false)
     private String email;
 
-    @Transient
-    private List<Suggestions> suggestions = new ArrayList<>();
-
     // Constructors
     public Answer() {}
-
-    public void setSuggestionsFromOption(QuestionOption option) {
-        this.suggestions = option != null ? option.getSuggestions() : new ArrayList<>();
-    }
-
-    public List<Suggestions> getSuggestions() {
-        return suggestions;
-    }
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -76,7 +64,5 @@ public class Answer {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-
-
 
 }

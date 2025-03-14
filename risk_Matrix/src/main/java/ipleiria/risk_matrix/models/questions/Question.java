@@ -1,11 +1,8 @@
 package ipleiria.risk_matrix.models.questions;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
-import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import jakarta.persistence.*;
-import jdk.jshell.SourceCodeAnalysis;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,7 +15,6 @@ public class QuestionOptionDTO {
     private Impact impact;
     private Probability probability;
     private Severity severity;
-    private List<SuggestionDTO> suggestions;
 
     public QuestionOptionDTO() {}
 
@@ -23,13 +22,11 @@ public class QuestionOptionDTO {
     public QuestionOptionDTO(
             @JsonProperty("optionText") String optionText,
             @JsonProperty("impact") Impact impact,
-            @JsonProperty("probability") Probability probability,
-            @JsonProperty("suggestions") List<SuggestionDTO> suggestions
+            @JsonProperty("probability") Probability probability
     ) {
         this.optionText = optionText;
         this.impact = impact;
         this.probability = probability;
-        this.suggestions = suggestions;
     }
 
     public QuestionOptionDTO(QuestionOption option) {
@@ -37,10 +34,7 @@ public class QuestionOptionDTO {
         this.impact = option.getImpact();
         this.probability = option.getProbability();
         this.severity = option.getSeverity();
-        this.suggestions = option.getSuggestions().stream()
-                .map(SuggestionDTO::new)
-                .toList();
-    }
+        }
 
     public String getOptionText() {
         return optionText;
@@ -74,11 +68,4 @@ public class QuestionOptionDTO {
         this.severity = severity;
     }
 
-    public List<SuggestionDTO> getSuggestions() {
-        return suggestions;
-    }
-
-    public void setSuggestions(List<SuggestionDTO> suggestions) {
-        this.suggestions = suggestions;
-    }
 }

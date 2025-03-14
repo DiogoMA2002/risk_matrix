@@ -4,7 +4,6 @@ import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.models.questions.QuestionOption;
-import ipleiria.risk_matrix.models.sugestions.Suggestions;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,19 +44,6 @@ public class QuestionService {
             option.setOptionText(optionDTO.getOptionText());
             option.setImpact(optionDTO.getImpact());
             option.setProbability(optionDTO.getProbability());
-
-            // ✅ Add suggestions to options
-            List<Suggestions> suggestions = optionDTO.getSuggestions().stream()
-                    .map(suggestionDTO -> {
-                        Suggestions suggestion = new Suggestions();
-                        suggestion.setSuggestionText(suggestionDTO.getSuggestionText());
-                        suggestion.setOption(option); // ✅ Link to QuestionOption
-                        return suggestion;
-                    })
-                    .toList();
-
-            option.setSuggestions(suggestions);
-
             return option;
         }).toList();
 
