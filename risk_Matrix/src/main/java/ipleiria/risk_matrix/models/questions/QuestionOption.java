@@ -20,15 +20,16 @@ public class QuestionOption {
     private String optionText;
 
     @Enumerated(EnumType.STRING)
-    private Impact impact;
+    @Column(nullable = false)
+    private OptionLevelType optionType;  // IMPACT or PROBABILITY
 
     @Enumerated(EnumType.STRING)
-    private Probability probability;
+    @Column(nullable = false)
+    private OptionLevel optionLevel; // LOW, MEDIUM, HIGH
 
-    @Transient
-    private Severity severity;
 
-    public QuestionOption() {}
+    public QuestionOption() {
+    }
 
     public Long getId() {
         return id;
@@ -54,43 +55,19 @@ public class QuestionOption {
         this.optionText = optionText;
     }
 
-    public Impact getImpact() {
-        return impact;
+    public OptionLevelType getOptionType() {
+        return optionType;
     }
 
-    public void setImpact(Impact impact) {
-        this.impact = impact;
+    public void setOptionType(OptionLevelType optionType) {
+        this.optionType = optionType;
     }
 
-    public Probability getProbability() {
-        return probability;
+    public OptionLevel getOptionLevel() {
+        return optionLevel;
     }
 
-    public void setProbability(Probability probability) {
-        this.probability = probability;
-    }
-
-    public void setSeverity(Severity severity) {
-        this.severity = severity;
-    }
-
-    // ✅ Calculate severity based on matrix
-    public Severity getSeverity() {
-        return switch (impact) {
-            case HIGH -> switch (probability) {
-                case HIGH -> Severity.CRITICAL; // Special case for high-high = Critical
-                case MEDIUM -> Severity.HIGH;
-                case LOW -> Severity.MEDIUM;
-            };
-            case MEDIUM -> switch (probability) {
-                case HIGH -> Severity.HIGH;
-                case MEDIUM -> Severity.MEDIUM;
-                case LOW -> Severity.LOW;
-            };
-            case LOW -> switch (probability) {
-                case HIGH -> Severity.MEDIUM;
-                case MEDIUM, LOW -> Severity.LOW;
-            };
-        };
+    public void setOptionLevel(OptionLevel optionLevel) {
+        this.optionLevel = optionLevel;
     }
 }

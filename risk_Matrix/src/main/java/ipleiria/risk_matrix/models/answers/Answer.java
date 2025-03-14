@@ -1,12 +1,8 @@
 package ipleiria.risk_matrix.models.answers;
-import ipleiria.risk_matrix.models.questions.Impact;
-import ipleiria.risk_matrix.models.questions.Probability;
-import ipleiria.risk_matrix.models.questions.QuestionOption;
+import ipleiria.risk_matrix.models.questions.OptionLevel;
+import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.models.questions.Severity;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "answers")
@@ -25,14 +21,13 @@ public class Answer {
     @Column(nullable = false)
     private String userResponse;
 
+    // Indicate which type of question (Impact or Probability)
     @Enumerated(EnumType.STRING)
-    private Impact impact;
+    private OptionLevelType questionType;
 
+    // The user’s chosen level (LOW, MEDIUM, HIGH)
     @Enumerated(EnumType.STRING)
-    private Probability probability;
-
-    @Enumerated(EnumType.STRING)
-    private Severity severity;
+    private OptionLevel chosenLevel;
 
     @Column(nullable = false)
     private String email;
@@ -53,16 +48,23 @@ public class Answer {
     public String getUserResponse() { return userResponse; }
     public void setUserResponse(String userResponse) { this.userResponse = userResponse; }
 
-    public Impact getImpact() { return impact; }
-    public void setImpact(Impact impact) { this.impact = impact; }
-
-    public Probability getProbability() { return probability; }
-    public void setProbability(Probability probability) { this.probability = probability; }
-
-    public Severity getSeverity() { return severity; }
-    public void setSeverity(Severity severity) { this.severity = severity; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
+    public OptionLevelType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(OptionLevelType questionType) {
+        this.questionType = questionType;
+    }
+
+    public OptionLevel getChosenLevel() {
+        return chosenLevel;
+    }
+
+    public void setChosenLevel(OptionLevel chosenLevel) {
+        this.chosenLevel = chosenLevel;
+    }
 }

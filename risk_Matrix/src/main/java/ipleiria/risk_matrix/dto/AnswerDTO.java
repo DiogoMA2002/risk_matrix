@@ -1,9 +1,8 @@
 package ipleiria.risk_matrix.dto;
 
 import ipleiria.risk_matrix.models.answers.Answer;
-import ipleiria.risk_matrix.models.questions.Impact;
-import ipleiria.risk_matrix.models.questions.Probability;
-import ipleiria.risk_matrix.models.questions.Severity;
+import ipleiria.risk_matrix.models.questions.OptionLevel;
+import ipleiria.risk_matrix.models.questions.OptionLevelType;
 
 public class AnswerDTO {
 
@@ -11,9 +10,9 @@ public class AnswerDTO {
     private Long questionId;
     private String questionText;
     private String userResponse;
-    private Impact impact;
-    private Probability probability;
-    private Severity severity;
+
+    private OptionLevelType questionType; // IMPACT or PROBABILITY
+    private OptionLevel chosenLevel;      // LOW, MEDIUM, HIGH
     private String email;
 
     public AnswerDTO() {}
@@ -23,12 +22,12 @@ public class AnswerDTO {
         this.questionId = answer.getQuestionId();
         this.questionText = answer.getQuestionText();
         this.userResponse = answer.getUserResponse();
-        this.impact = answer.getImpact();
-        this.probability = answer.getProbability();
-        this.severity = answer.getSeverity();
+        this.questionType = answer.getQuestionType();
+        this.chosenLevel = answer.getChosenLevel();
         this.email = answer.getEmail();
     }
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -41,15 +40,12 @@ public class AnswerDTO {
     public String getUserResponse() { return userResponse; }
     public void setUserResponse(String userResponse) { this.userResponse = userResponse; }
 
-    public Impact getImpact() { return impact; }
-    public void setImpact(Impact impact) { this.impact = impact; }
+    public OptionLevelType getQuestionType() { return questionType; }
+    public void setQuestionType(OptionLevelType questionType) { this.questionType = questionType; }
 
-    public Probability getProbability() { return probability; }
-    public void setProbability(Probability probability) { this.probability = probability; }
-
-    public Severity getSeverity() { return severity; }
-    public void setSeverity(Severity severity) { this.severity = severity; }
+    public OptionLevel getChosenLevel() { return chosenLevel; }
+    public void setChosenLevel(OptionLevel chosenLevel) { this.chosenLevel = chosenLevel; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-   }
+}

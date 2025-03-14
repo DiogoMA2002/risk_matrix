@@ -1,5 +1,6 @@
 package ipleiria.risk_matrix.models.questions;
 
-public enum Impact {
+public enum OptionLevel {
     LOW, MEDIUM, HIGH;
+
 }

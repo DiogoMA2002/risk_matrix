@@ -1,5 +1,6 @@
 package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.dto.AnswerDTO;
+import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,9 @@ public class AnswerController {
     @GetMapping("/by-email/{email}")
     public List<AnswerDTO> getAnswersByEmail(@PathVariable String email) {
         return answerService.getAnswersByEmail(email);
+    }
+    @GetMapping("/by-email-with-severity/{email}")
+    public UserAnswersDTO getUserAnswersWithSeverity(@PathVariable String email) {
+        return answerService.getUserAnswersWithSeverities(email);
     }
 }
