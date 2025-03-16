@@ -55,4 +55,26 @@ public class QuestionnaireService {
         }
         questionnaireRepository.deleteById(id);
     }
+
+    public Questionnaire importQuestionnaire(Questionnaire incoming) {
+        // 1. Nullify the top-level ID (so we always create a new questionnaire)
+        incoming.setId(null);
+
+        // 2. For each question, nullify IDs and set the questionnaire reference
+        if (incoming.getQuestions() != null) {
+            for (Question q : incoming.getQuestions()) {
+                q.setId(null);
+                q.setQuestionnaire(incoming);
+
+                // 3. For each option, nullify IDs
+                if (q.getOptions() != null) {
+                    q.getOptions().forEach(opt -> opt.setId(null));
+                }
+            }
+        }
+
+        // 4. Save via your existing repository logic
+        return questionnaireRepository.save(incoming);
+    }
+
 }
