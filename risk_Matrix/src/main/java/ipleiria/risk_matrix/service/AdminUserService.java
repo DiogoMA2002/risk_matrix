@@ -1,4 +1,7 @@
 package ipleiria.risk_matrix.service;
+
+import ipleiria.risk_matrix.exceptions.exception.EmailAlreadyExistsException;
+import ipleiria.risk_matrix.exceptions.exception.UsernameAlreadyExistsException;
 import ipleiria.risk_matrix.models.users.AdminUser;
 import ipleiria.risk_matrix.repository.AdminUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +19,10 @@ public class AdminUserService {
     // Criar um novo administrador
     public AdminUser createAdmin(AdminUser adminUser) {
         if (adminUserRepository.existsByUsername(adminUser.getUsername())) {
-            throw new RuntimeException("Username já existe!");
+            throw new UsernameAlreadyExistsException("O nome de usuário já existe!");
         }
         if (adminUserRepository.existsByEmail(adminUser.getEmail())) {
-            throw new RuntimeException("Email já existe!");
+            throw new EmailAlreadyExistsException("O email já existe!");
         }
         return adminUserRepository.save(adminUser);
     }

@@ -2,6 +2,9 @@ package ipleiria.risk_matrix.service;
 
 import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.dto.QuestionOptionDTO;
+import ipleiria.risk_matrix.exceptions.exception.InvalidCategoryException;
+import ipleiria.risk_matrix.exceptions.exception.QuestionNotFoundException;
+import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
@@ -27,16 +30,19 @@ public class QuestionService {
     // Create a new question
     public QuestionDTO createQuestion(Long questionnaireId, QuestionDTO questionDTO) {
         Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
-                .orElseThrow(() -> new RuntimeException("Questionnaire not found"));
+                .orElseThrow(() -> new QuestionnaireNotFoundException(
+                        "Questionnaire not found for ID: " + questionnaireId
+                ));
 
         // Build Question entity
         Question question = new Question();
         question.setQuestionText(questionDTO.getQuestionText());
 
+        // Validate category
         try {
             question.setCategory(QuestionCategory.valueOf(questionDTO.getCategory()));
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Invalid category: " + questionDTO.getCategory());
+            throw new InvalidCategoryException("Invalid category: " + questionDTO.getCategory());
         }
 
         question.setQuestionnaire(questionnaire);
@@ -56,7 +62,7 @@ public class QuestionService {
         QuestionOption option = new QuestionOption();
         option.setQuestion(question);
         option.setOptionText(optionDTO.getOptionText());
-        // The new fields instead of impact/probability:
+        // Instead of separate impact/probability:
         option.setOptionType(optionDTO.getOptionType());    // IMPACT or PROBABILITY
         option.setOptionLevel(optionDTO.getOptionLevel());  // LOW, MEDIUM, HIGH
         return option;
@@ -87,6 +93,10 @@ public class QuestionService {
 
     // Delete a question
     public void deleteQuestion(Long id) {
+        // Optionally, you can check if it exists first:
+        if (!questionRepository.existsById(id)) {
+            throw new QuestionNotFoundException("Question not found for ID: " + id);
+        }
         questionRepository.deleteById(id);
     }
 }

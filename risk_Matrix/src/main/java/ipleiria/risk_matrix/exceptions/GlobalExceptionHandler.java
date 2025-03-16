@@ -30,7 +30,49 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(status.value(), status, ex.getMessage());
         return new ResponseEntity<>(errorResponse, status);
     }
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), status, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, status);
+    }
 
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), status, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, status);
+    }
+    @ExceptionHandler(QuestionnaireNotFoundException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleQuestionnaireNotFound(QuestionnaireNotFoundException ex) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), status, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, status);
+    }
 
+    @ExceptionHandler(InvalidCategoryException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleInvalidCategory(InvalidCategoryException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), status, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, status);
+    }
 
+    @ExceptionHandler(QuestionNotFoundException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleQuestionNotFound(QuestionNotFoundException ex) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), status, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, status);
+    }
+    @ExceptionHandler(FeedbackTooLongException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleFeedbackTooLongException(FeedbackTooLongException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST; // or HttpStatus.UNPROCESSABLE_ENTITY (422)
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), status, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, status);
+    }
 }

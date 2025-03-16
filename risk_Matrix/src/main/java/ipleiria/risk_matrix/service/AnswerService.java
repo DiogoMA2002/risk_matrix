@@ -28,13 +28,13 @@ public class AnswerService {
 
     // Create (submit) an answer
     public AnswerDTO submitAnswer(AnswerDTO answerDTO) {
-        // Find the question
+        // 1. Find the question
         Question question = questionRepository.findById(answerDTO.getQuestionId())
                 .orElseThrow(() -> new NotFoundException(
-                        "Invalid response: " + answerDTO.getUserResponse()
+                        "Question not found for ID: " + answerDTO.getQuestionId()
                 ));
 
-        // Find the matching option by userResponse text
+        // 2. Find the matching option by userResponse text
         QuestionOption selectedOption = question.getOptions().stream()
                 .filter(option -> option.getOptionText().equals(answerDTO.getUserResponse()))
                 .findFirst()
@@ -42,7 +42,7 @@ public class AnswerService {
                         "Invalid response: " + answerDTO.getUserResponse()
                 ));
 
-        // Build the Answer entity
+        // 3. Build and save the Answer entity
         Answer answer = new Answer();
         answer.setQuestionId(question.getId());
         answer.setQuestionText(question.getQuestionText());
@@ -52,6 +52,7 @@ public class AnswerService {
         // Instead of separate impact/probability, we store type & level
         answer.setQuestionType(selectedOption.getOptionType());    // IMPACT or PROBABILITY
         answer.setChosenLevel(selectedOption.getOptionLevel());    // LOW, MEDIUM, HIGH
+
         answerRepository.save(answer);
         return new AnswerDTO(answer);
     }
@@ -76,6 +77,8 @@ public class AnswerService {
                 .map(AnswerDTO::new)
                 .collect(Collectors.toList());
     }
+
+    // Submit multiple answers at once
     public List<AnswerDTO> submitMultipleAnswers(List<AnswerDTO> answers) {
         List<AnswerDTO> result = new ArrayList<>();
         for (AnswerDTO answerDTO : answers) {
@@ -86,6 +89,7 @@ public class AnswerService {
         return result;
     }
 
+    // Get answers by email + compute severities
     public UserAnswersDTO getUserAnswersWithSeverities(String email) {
         // 1. Get all answers for this user
         List<AnswerDTO> answers = getAnswersByEmail(email);
@@ -94,9 +98,10 @@ public class AnswerService {
         //    (We load each question by questionId to find the category)
         Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
         for (AnswerDTO ans : answers) {
-            // Load the question to get its category
             Question question = questionRepository.findById(ans.getQuestionId())
-                    .orElseThrow(() -> new RuntimeException("Question not found"));
+                    .orElseThrow(() -> new NotFoundException(
+                            "Question not found for ID: " + ans.getQuestionId()
+                    ));
 
             String categoryName = question.getCategory().name();
             answersByCategory
@@ -104,8 +109,7 @@ public class AnswerService {
                     .add(ans);
         }
 
-        // 3. For each category, compute the final severity
-        //    by finding median IMPACT and median PROBABILITY
+        // 3. For each category, compute final severity
         Map<String, Severity> severitiesByCategory = new HashMap<>();
 
         for (Map.Entry<String, List<AnswerDTO>> entry : answersByCategory.entrySet()) {
@@ -140,31 +144,33 @@ public class AnswerService {
 
         return dto;
     }
+
+    // Get all answers for all users + compute severities
     public List<UserAnswersDTO> getAllAnswersWithSeverityAndEmail() {
-        // 1. Get all answers from the repository
+        // 1. Get all answers
         List<AnswerDTO> allAnswers = getAllAnswers();
 
-        // 2. Group answers by user email
+        // 2. Group by user email
         Map<String, List<AnswerDTO>> answersGroupedByEmail = allAnswers.stream()
                 .collect(Collectors.groupingBy(AnswerDTO::getEmail));
 
         List<UserAnswersDTO> result = new ArrayList<>();
 
-        // 3. Process each group (each user)
+        // 3. For each user, group by category + compute severity
         for (Map.Entry<String, List<AnswerDTO>> entry : answersGroupedByEmail.entrySet()) {
             String email = entry.getKey();
             List<AnswerDTO> userAnswers = entry.getValue();
 
-            // Group the user's answers by question category.
             Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
             for (AnswerDTO ans : userAnswers) {
                 Question question = questionRepository.findById(ans.getQuestionId())
-                        .orElseThrow(() -> new RuntimeException("Question not found for ID: " + ans.getQuestionId()));
+                        .orElseThrow(() -> new NotFoundException(
+                                "Question not found for ID: " + ans.getQuestionId()
+                        ));
                 String categoryName = question.getCategory().name();
                 answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
             }
 
-            // For each category, compute the final severity (median impact/probability)
             Map<String, Severity> severitiesByCategory = new HashMap<>();
             for (Map.Entry<String, List<AnswerDTO>> catEntry : answersByCategory.entrySet()) {
                 String category = catEntry.getKey();
@@ -199,6 +205,7 @@ public class AnswerService {
         return result;
     }
 
+    // Helper: compute median of a list of levels
     private OptionLevel medianLevel(List<OptionLevel> levels) {
         if (levels == null || levels.isEmpty()) {
             return null; // or handle "no data" scenario
@@ -223,6 +230,7 @@ public class AnswerService {
         }
     }
 
+    // Helper: convert OptionLevel -> int
     private int levelToInt(OptionLevel level) {
         return switch (level) {
             case LOW -> 1;
@@ -231,6 +239,7 @@ public class AnswerService {
         };
     }
 
+    // Helper: convert int -> OptionLevel
     private OptionLevel intToLevel(int val) {
         return switch (val) {
             case 1 -> OptionLevel.LOW;
@@ -240,6 +249,7 @@ public class AnswerService {
         };
     }
 
+    // Helper: cross IMPACT x PROBABILITY -> Severity
     private Severity computeSeverity(OptionLevel impact, OptionLevel probability) {
         // If either is null, default to something
         if (impact == null || probability == null) {
@@ -263,5 +273,4 @@ public class AnswerService {
             };
         };
     }
-
 }
