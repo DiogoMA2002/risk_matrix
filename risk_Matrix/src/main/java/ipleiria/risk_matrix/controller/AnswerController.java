@@ -40,4 +40,13 @@ public class AnswerController {
     public UserAnswersDTO getUserAnswersWithSeverity(@PathVariable String email) {
         return answerService.getUserAnswersWithSeverities(email);
     }
+    @GetMapping("/get-all-email")
+    public List<UserAnswersDTO> getAllAnswersWithSeverityAndEmail() {
+        return answerService.getAllAnswersWithSeverityAndEmail();
+    }
+    @PostMapping("/submit-multiple")
+    public List<AnswerDTO> submitMultipleAnswers(@RequestBody List<AnswerDTO> answers) {
+        return answerService.submitMultipleAnswers(answers);
+    }
+
 }

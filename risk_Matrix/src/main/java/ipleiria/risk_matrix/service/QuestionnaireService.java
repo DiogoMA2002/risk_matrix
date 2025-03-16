@@ -43,4 +43,7 @@ public class QuestionnaireService {
         return questionRepository.save(question);
     }
 
+    public void deleteQuestionnaire(Long id) {
+        questionnaireRepository.deleteById(id);
+    }
 }

@@ -76,6 +76,16 @@ public class AnswerService {
                 .map(AnswerDTO::new)
                 .collect(Collectors.toList());
     }
+    public List<AnswerDTO> submitMultipleAnswers(List<AnswerDTO> answers) {
+        List<AnswerDTO> result = new ArrayList<>();
+        for (AnswerDTO answerDTO : answers) {
+            // Reuse your single-answer logic
+            AnswerDTO saved = submitAnswer(answerDTO);
+            result.add(saved);
+        }
+        return result;
+    }
+
     public UserAnswersDTO getUserAnswersWithSeverities(String email) {
         // 1. Get all answers for this user
         List<AnswerDTO> answers = getAnswersByEmail(email);
@@ -129,6 +139,64 @@ public class AnswerService {
         dto.setSeveritiesByCategory(severitiesByCategory);
 
         return dto;
+    }
+    public List<UserAnswersDTO> getAllAnswersWithSeverityAndEmail() {
+        // 1. Get all answers from the repository
+        List<AnswerDTO> allAnswers = getAllAnswers();
+
+        // 2. Group answers by user email
+        Map<String, List<AnswerDTO>> answersGroupedByEmail = allAnswers.stream()
+                .collect(Collectors.groupingBy(AnswerDTO::getEmail));
+
+        List<UserAnswersDTO> result = new ArrayList<>();
+
+        // 3. Process each group (each user)
+        for (Map.Entry<String, List<AnswerDTO>> entry : answersGroupedByEmail.entrySet()) {
+            String email = entry.getKey();
+            List<AnswerDTO> userAnswers = entry.getValue();
+
+            // Group the user's answers by question category.
+            Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
+            for (AnswerDTO ans : userAnswers) {
+                Question question = questionRepository.findById(ans.getQuestionId())
+                        .orElseThrow(() -> new RuntimeException("Question not found for ID: " + ans.getQuestionId()));
+                String categoryName = question.getCategory().name();
+                answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
+            }
+
+            // For each category, compute the final severity (median impact/probability)
+            Map<String, Severity> severitiesByCategory = new HashMap<>();
+            for (Map.Entry<String, List<AnswerDTO>> catEntry : answersByCategory.entrySet()) {
+                String category = catEntry.getKey();
+                List<AnswerDTO> catAnswers = catEntry.getValue();
+
+                // Collect and compute median IMPACT
+                List<OptionLevel> impactLevels = catAnswers.stream()
+                        .filter(a -> a.getQuestionType() == OptionLevelType.IMPACT)
+                        .map(AnswerDTO::getChosenLevel)
+                        .collect(Collectors.toList());
+                OptionLevel medianImpact = medianLevel(impactLevels);
+
+                // Collect and compute median PROBABILITY
+                List<OptionLevel> probabilityLevels = catAnswers.stream()
+                        .filter(a -> a.getQuestionType() == OptionLevelType.PROBABILITY)
+                        .map(AnswerDTO::getChosenLevel)
+                        .collect(Collectors.toList());
+                OptionLevel medianProbability = medianLevel(probabilityLevels);
+
+                Severity finalSeverity = computeSeverity(medianImpact, medianProbability);
+                severitiesByCategory.put(category, finalSeverity);
+            }
+
+            // Build the DTO for this email
+            UserAnswersDTO dto = new UserAnswersDTO();
+            dto.setEmail(email);
+            dto.setAnswers(userAnswers);
+            dto.setSeveritiesByCategory(severitiesByCategory);
+            result.add(dto);
+        }
+
+        return result;
     }
 
     private OptionLevel medianLevel(List<OptionLevel> levels) {
@@ -195,4 +263,5 @@ public class AnswerService {
             };
         };
     }
+
 }

@@ -39,5 +39,10 @@ public class QuestionnaireController {
     public Question addQuestionToQuestionnaire(@PathVariable Long id, @RequestBody Question question) {
         return questionnaireService.addQuestionToQuestionnaire(id, question);
     }
+    // Deletar uma pergunta por ID
+    @DeleteMapping("/delete/{id}")
+    public void deleteQuestionnaire(@PathVariable Long id) {
+        questionnaireService.deleteQuestionnaire(id);
+    }
 
 }

@@ -38,44 +38,23 @@
               </p>
             </div>
             
+            <!-- Loop over options provided by backend -->
             <div class="pl-11 space-y-3">
-              <label class="block p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+              <label
+                v-for="option in question.options"
+                :key="option.optionText"
+                class="block p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer"
+              >
                 <div class="flex items-center">
                   <input
                     type="radio"
                     :name="'question_' + question.id"
-                    value="Sim"
+                    :value="option.optionText"
                     v-model="answers[question.id]"
                     class="mr-3 h-4 w-4 text-blue-600"
                     @change="saveAnswers"
                   />
-                  <span>Sim</span>
-                </div>
-              </label>
-              <label class="block p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
-                <div class="flex items-center">
-                  <input
-                    type="radio"
-                    :name="'question_' + question.id"
-                    value="Não"
-                    v-model="answers[question.id]"
-                    class="mr-3 h-4 w-4 text-blue-600"
-                    @change="saveAnswers"
-                  />
-                  <span>Não</span>
-                </div>
-              </label>
-              <label class="block p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
-                <div class="flex items-center">
-                  <input
-                    type="radio"
-                    :name="'question_' + question.id"
-                    value="Parcialmente"
-                    v-model="answers[question.id]"
-                    class="mr-3 h-4 w-4 text-blue-600"
-                    @change="saveAnswers"
-                  />
-                  <span>Parcialmente</span>
+                  <span>{{ option.optionText }}</span>
                 </div>
               </label>
             </div>
@@ -121,15 +100,13 @@
     </div>
 
     <!-- Floating help button -->
-    <!-- Help Button -->
     <div class="fixed bottom-6 right-6">
       <button @click="goToFeedbackForm" class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
              viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M8.228 9c.549-1.165 2.03-2 3.772-2
-               2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006
-               2.907-.542.104-.994.54-.994 1.093m0 3h.01M21
+               2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21
                12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
@@ -162,12 +139,8 @@ export default {
         this.questions = response.data;
       } catch (error) {
         console.error("Erro ao buscar perguntas:", error);
-        // Fallback para teste
-        this.questions = [
-          { id: 1, questionText: "A empresa possui uma política de segurança implementada?" },
-          { id: 2, questionText: "Os colaboradores recebem formação regular em segurança informática?" },
-          { id: 3, questionText: "Existem controlos de acesso adequados implementados nos sistemas?" }
-        ];
+        // Em caso de erro, não use placeholders – apenas limpe a lista
+        this.questions = [];
       }
     },
     loadAnswersFromLocalStorage(category) {
@@ -183,7 +156,6 @@ export default {
       localStorage.setItem("allAnswers", JSON.stringify(allAnswers));
     },
     goToFeedbackForm() {
-      // Redirect to the feedback form page
       this.$router.push('/feedback-form');
     }
   }

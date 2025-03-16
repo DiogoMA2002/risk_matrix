@@ -20,7 +20,7 @@
       <!-- Top Grid: Create Questionnaire and Add Question -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        <!-- Formulário para Criar Novo Questionário -->
+        <!-- Create Questionnaire Form -->
         <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6">
           <h2 class="text-xl font-semibold mb-4 text-blue-800 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none"
@@ -56,7 +56,7 @@
           </div>
         </div>
         
-        <!-- Formulário para Adicionar Nova Questão -->
+        <!-- Add New Question Form -->
         <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6">
           <h2 class="text-xl font-semibold mb-4 text-blue-800 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none"
@@ -68,7 +68,7 @@
           </h2>
           <div class="space-y-4">
             
-            <!-- Texto da Questão -->
+            <!-- Question Text -->
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Texto da Questão</label>
               <input
@@ -79,7 +79,7 @@
               />
             </div>
 
-            <!-- Categoria -->
+            <!-- Category -->
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
               <select
@@ -93,7 +93,7 @@
               </select>
             </div>
 
-            <!-- Associar a um Questionário Existente -->
+            <!-- Associate to an Existing Questionnaire -->
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Questionário</label>
               <select
@@ -111,11 +111,9 @@
               </select>
             </div>
 
-            <!-- Lista Dinâmica de Options -->
+            <!-- Dynamic Options List -->
             <div class="mt-6">
               <h3 class="text-lg font-semibold mb-2 text-gray-800">Opções da Questão</h3>
-
-              <!-- Repetir cada Option -->
               <div
                 v-for="(option, index) in newOptions"
                 :key="index"
@@ -134,31 +132,29 @@
                     />
                   </div>
 
-                  <!-- Impact -->
+                  <!-- Option Type -->
                   <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700">Impacto</label>
+                    <label class="block text-sm font-medium text-gray-700">Tipo da Opção</label>
                     <select
-                      v-model="option.impact"
+                      v-model="option.optionType"
                       class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                     >
-                      <option v-for="imp in impactOptions" :key="imp" :value="imp">{{ imp }}</option>
+                      <option v-for="type in optionTypes" :key="type" :value="type">{{ type }}</option>
                     </select>
                   </div>
 
-                  <!-- Probability -->
+                  <!-- Option Level -->
                   <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700">Probabilidade</label>
+                    <label class="block text-sm font-medium text-gray-700">Nível</label>
                     <select
-                      v-model="option.probability"
+                      v-model="option.optionLevel"
                       class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                     >
-                      <option v-for="prob in probabilityOptions" :key="prob" :value="prob">
-                        {{ prob }}
-                      </option>
+                      <option v-for="level in optionLevels" :key="level" :value="level">{{ level }}</option>
                     </select>
                   </div>
 
-                  <!-- Remove Option Button (if more than 1) -->
+                  <!-- Remove Option Button -->
                   <div>
                     <button
                       v-if="newOptions.length > 1"
@@ -171,8 +167,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Add Another Option Button -->
               <button
                 type="button"
                 class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
@@ -182,7 +176,7 @@
               </button>
             </div>
 
-            <!-- Botão para Enviar Nova Questão -->
+            <!-- Submit New Question Button -->
             <div class="pt-4">
               <button
                 @click="addQuestion"
@@ -205,7 +199,7 @@
       <!-- Bottom Grid: Existing Questions and User Feedback -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
         
-        <!-- Lista de Questões Existentes -->
+        <!-- Existing Questions List -->
         <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6">
           <h2 class="text-xl font-semibold mb-4 text-blue-800 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none"
@@ -229,7 +223,8 @@
                     {{ formatCategoryName(question.category) }}
                   </span>
                 </div>
-                <div class="flex">
+                <div class="flex space-x-2">
+                  <!-- Edit button (not implemented) -->
                   <button class="p-2 text-gray-500 hover:text-blue-600 transition-colors" title="Editar">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
                          viewBox="0 0 24 24" stroke="currentColor">
@@ -239,7 +234,8 @@
                                a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                   </button>
-                  <button class="p-2 text-gray-500 hover:text-red-600 transition-colors" title="Excluir">
+                  <!-- Delete Question Button -->
+                  <button @click="deleteQuestion(question.id)" class="p-2 text-gray-500 hover:text-red-600 transition-colors" title="Excluir">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
                          viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" 
@@ -267,7 +263,7 @@
           </div>
         </div>
         
-        <!-- Nova Zona: Feedback dos Usuários -->
+        <!-- User Feedback Section -->
         <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6">
           <h2 class="text-xl font-semibold mb-4 text-blue-800 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -280,7 +276,7 @@
             Feedback dos Utilizadores
           </h2>
           
-          <!-- Seção de Filtro -->
+          <!-- Feedback Filter -->
           <div class="mb-4 flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0">
             <div class="flex-1">
               <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Email</label>
@@ -312,7 +308,7 @@
             </div>
           </div>
           
-          <!-- Lista de Feedback (scrollável) -->
+          <!-- Feedback List -->
           <div class="max-h-64 overflow-y-auto">
             <div v-if="feedbacks.length > 0">
               <ul class="divide-y divide-gray-200">
@@ -333,13 +329,115 @@
         
       </div>
       
+      <!-- Questionnaires Section -->
+      <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mt-8">
+        <h2 class="text-xl font-semibold mb-4 text-blue-800 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          Questionários Existentes
+        </h2>
+        <div v-if="questionnaires.length > 0">
+          <ul class="divide-y divide-gray-200">
+            <li v-for="questionnaire in questionnaires" :key="questionnaire.id" class="py-3 flex flex-col">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="font-medium">{{ questionnaire.title }}</p>
+                </div>
+                <div class="flex space-x-2">
+                  <button @click="toggleQuestions(questionnaire)" class="p-2 text-gray-500 hover:text-blue-600 transition-colors" title="Ver Perguntas">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                  </button>
+                  <button @click="deleteQuestionnaire(questionnaire.id)" class="p-2 text-gray-500 hover:text-red-600 transition-colors" title="Excluir Questionário">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0
+                            01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0
+                            00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div v-if="visibleQuestions[questionnaire.id]">
+                <ul class="mt-2 ml-4 border-l border-gray-300 pl-4">
+                  <li v-for="q in visibleQuestions[questionnaire.id]" :key="q.id" class="py-1">
+                    {{ q.questionText }}
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div v-else class="py-8 text-center">
+          <p class="text-gray-500">Nenhum questionário encontrado.</p>
+        </div>
+      </div>
+      
+      <!-- User Answers Section -->
+      <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mt-8">
+        <h2 class="text-xl font-semibold mb-4 text-blue-800 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M5 13l4 4L19 7" />
+          </svg>
+          Respostas dos Usuários
+        </h2>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Email</label>
+          <input 
+            v-model="userAnswersEmail" 
+            type="email" 
+            placeholder="Digite o email" 
+            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300" 
+          />
+        </div>
+        <div class="flex space-x-4 mb-4">
+          <button 
+            @click="fetchUserAnswersByEmail" 
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
+          >
+            Buscar por Email
+          </button>
+          <button 
+            @click="fetchAllUserAnswers" 
+            class="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all duration-300"
+          >
+            Ver Todas as Respostas
+          </button>
+        </div>
+        <div v-if="userAnswers.length > 0">
+          <ul class="divide-y divide-gray-200">
+            <li v-for="ua in userAnswers" :key="ua.email" class="py-3">
+              <p class="font-medium">Email: {{ ua.email }}</p>
+              <div v-for="(severity, category) in ua.severitiesByCategory" :key="category" class="ml-4">
+                <span class="text-sm text-blue-600">{{ formatCategoryName(category) }}: {{ severity }}</span>
+              </div>
+              <ul class="mt-2 ml-4 border-l border-gray-300 pl-4">
+                <li v-for="answer in ua.answers" :key="answer.questionId" class="py-1">
+                  {{ answer.questionText }} - {{ answer.userResponse }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div v-else class="py-4 text-center text-gray-500">
+          Nenhuma resposta encontrada.
+        </div>
+      </div>
+      
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
 export default {
   name: "AdminDashboard",
   data() {
@@ -348,11 +446,17 @@ export default {
       newQuestion: "",
       selectedCategory: "",
       categories: [
-        "AUTHENTICATION_RISK",
-        "DATA_STORAGE_RISK",
-        "EMAIL_SECURITY",
-        "NETWORK_SECURITY",
-        "INFRASTRUCTURE_SECURITY"
+        "Risco_de_Autenticacao",
+        "Seguranca_de_Email",
+        "Risco_de_Plataforma_da_Empresa",
+        "Risco_de_Armazenamento_de_Dados",
+        "Risco_da_Rede_Interna",
+        "Risco_de_Infraestrutura_de_Informação_Externa",
+        "Risco_de_Infraestrutura_de_Informação_Interna",
+        "Risco_de_Ataques",
+        "Riscos_de_Material",
+        "Riscos_Tecnológicos",
+        "Riscos_Externos"
       ],
       feedbacks: [],
       filterEmail: "",
@@ -363,25 +467,38 @@ export default {
       newQuestionnaireTitle: "",
       questionnaires: [],
       selectedQuestionnaire: "",
-
+      
       /* Dynamic list of options for the new question */
       newOptions: [
         {
           optionText: "",
-          impact: "LOW",
-          probability: "LOW"
+          optionType: "IMPACT",
+          optionLevel: "LOW"
         }
       ],
+      optionTypes: ["IMPACT", "PROBABILITY"],
+      optionLevels: ["LOW", "MEDIUM", "HIGH"],
 
-      /* Impact/Probability enums */
-      impactOptions: ["LOW", "MEDIUM", "HIGH"],
-      probabilityOptions: ["LOW", "MEDIUM", "HIGH"]
+      // For toggling visible questions inside a questionnaire
+      visibleQuestions: {},
+
+      // For user answers
+      userAnswersEmail: "",
+      userAnswers: []
     };
   },
   created() {
     this.fetchQuestions();
     this.fetchFeedback();
-    this.fetchQuestionnaires();
+    this.fetchQuestionnaires().then(() => {
+      // Preserve selected questionnaire if previously saved; otherwise auto-select first.
+      const savedId = localStorage.getItem("selectedQuestionnaire");
+      if (savedId) {
+        this.selectQuestionnaire(savedId);
+      } else if (this.questionnaires.length > 0) {
+        this.selectQuestionnaire(this.questionnaires[0].id);
+      }
+    });
   },
   methods: {
     async fetchQuestions() {
@@ -444,8 +561,8 @@ export default {
     addOption() {
       this.newOptions.push({
         optionText: "",
-        impact: "LOW",
-        probability: "LOW"
+        optionType: "IMPACT",
+        optionLevel: "LOW"
       });
     },
     removeOption(index) {
@@ -467,7 +584,7 @@ export default {
         this.newQuestion = "";
         this.selectedCategory = "";
         this.selectedQuestionnaire = "";
-        this.newOptions = [{ optionText: "", impact: "LOW", probability: "LOW" }];
+        this.newOptions = [{ optionText: "", optionType: "IMPACT", optionLevel: "LOW" }];
         this.fetchQuestions();
       } catch (error) {
         console.error("Erro ao adicionar questão:", error);
@@ -484,6 +601,100 @@ export default {
       if (type === "SUGGESTION") return "Sugestão";
       if (type === "HELP") return "Ajuda";
       return type;
+    },
+    async deleteQuestionnaire(id) {
+      if (!confirm("Tem certeza que deseja excluir este questionário?")) return;
+      try {
+        await axios.delete(`/api/questionnaires/delete/${id}`, { validateStatus: _status => _status < 500 });
+        this.fetchQuestionnaires();
+        this.$delete(this.visibleQuestions, id);
+      } catch (error) {
+        console.error("Erro ao excluir questionário:", error);
+        alert("Falha ao excluir questionário. Tente novamente.");
+      }
+    },
+    // New: Delete a question by ID using the appropriate endpoint.
+    async deleteQuestion(id) {
+      if (!confirm("Tem certeza que deseja excluir esta questão?")) return;
+      try {
+        await axios.delete(`/api/questions/delete/${id}`);
+        this.fetchQuestions();
+      } catch (error) {
+        console.error("Erro ao excluir questão:", error);
+        alert("Falha ao excluir questão. Tente novamente.");
+      }
+    },
+    async toggleQuestions(questionnaire) {
+      if (this.visibleQuestions[questionnaire.id]) {
+        this.$delete(this.visibleQuestions, questionnaire.id);
+      } else {
+        try {
+          // eslint-disable-next-line no-unused-vars
+          const response = await axios.get(`/api/questionnaires/${questionnaire.id}/questions`, { validateStatus: _status => true });
+          if (response.status === 401) {
+            alert("Você não está autorizado a ver as perguntas deste questionário.");
+          } else {
+            this.$set(this.visibleQuestions, questionnaire.id, response.data);
+          }
+        } catch (error) {
+          console.error("Erro ao buscar perguntas do questionário:", error);
+          alert("Falha ao carregar as perguntas. Tente novamente.");
+        }
+      }
+    },
+    async fetchUserAnswersByEmail() {
+      if (!this.userAnswersEmail) {
+        alert("Por favor, insira um email para filtrar.");
+        return;
+      }
+      this.isLoading = true;
+      try {
+        // eslint-disable-next-line no-unused-vars
+        const response = await axios.get(`/api/answers/by-email-with-severity/${this.userAnswersEmail}`, { validateStatus: _status => true });
+        if (response.status === 401) {
+          alert("Você não está autorizado.");
+        } else {
+          // Wrap the returned object in an array
+          this.userAnswers = [response.data];
+        }
+      } catch (error) {
+        console.error("Erro ao buscar respostas por email:", error);
+        alert("Falha ao buscar respostas.");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async fetchAllUserAnswers() {
+      this.isLoading = true;
+      try {
+        // eslint-disable-next-line no-unused-vars
+        const response = await axios.get(`/api/answers/get-all-email`, { validateStatus: _status => true });
+        if (response.status === 401) {
+          alert("Você não está autorizado.");
+        } else {
+          this.userAnswers = response.data;
+        }
+      } catch (error) {
+        console.error("Erro ao buscar todas as respostas:", error);
+        alert("Falha ao buscar respostas.");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    // Updated submitAllAnswers: call the correct endpoint and include questionId in the body.
+
+    goToFeedbackForm() {
+      this.$router.push('/feedback-form');
+    },
+    async selectQuestionnaire(id) {
+      try {
+        const response = await axios.get(`/api/questionnaires/${id}`);
+        this.selectedQuestionnaire = response.data;
+        localStorage.setItem("selectedQuestionnaire", id);
+      } catch (error) {
+        console.error("Erro ao buscar questionário:", error);
+        this.selectedQuestionnaire = null;
+      }
     }
   }
 };
