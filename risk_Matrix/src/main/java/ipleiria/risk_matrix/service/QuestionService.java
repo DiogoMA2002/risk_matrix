@@ -6,9 +6,7 @@ import ipleiria.risk_matrix.exceptions.exception.InvalidCategoryException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionNotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
-import ipleiria.risk_matrix.models.questions.Question;
-import ipleiria.risk_matrix.models.questions.QuestionCategory;
-import ipleiria.risk_matrix.models.questions.QuestionOption;
+import ipleiria.risk_matrix.models.questions.*;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +27,17 @@ public class QuestionService {
 
     // Create a new question
     public QuestionDTO createQuestion(Long questionnaireId, QuestionDTO questionDTO) {
+        // 1. Load the Questionnaire
         Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
                 .orElseThrow(() -> new QuestionnaireNotFoundException(
                         "Questionnaire not found for ID: " + questionnaireId
                 ));
 
-        // Build Question entity
+        // 2. Build a brand-new Question entity
         Question question = new Question();
         question.setQuestionText(questionDTO.getQuestionText());
 
-        // Validate category
+        // 3. Validate category
         try {
             question.setCategory(QuestionCategory.valueOf(questionDTO.getCategory()));
         } catch (IllegalArgumentException e) {
@@ -47,16 +46,33 @@ public class QuestionService {
 
         question.setQuestionnaire(questionnaire);
 
-        // Convert incoming DTO options to entities
+        // 4. Convert incoming DTO options to entities
         List<QuestionOption> options = questionDTO.getOptions().stream()
                 .map(optionDTO -> mapToQuestionOption(optionDTO, question))
                 .collect(Collectors.toList());
 
+        // 5. Automatically add "Não Aplicável" if not present
+        boolean hasNaoAplicavel = options.stream()
+                .anyMatch(opt -> "Não Aplicável".equalsIgnoreCase(opt.getOptionText()));
+
+        if (!hasNaoAplicavel) {
+            QuestionOption naoAplicavel = new QuestionOption();
+            naoAplicavel.setOptionText("Não Aplicável");
+            naoAplicavel.setOptionType(OptionLevelType.IMPACT); // or whatever type
+            naoAplicavel.setOptionLevel(OptionLevel.LOW);       // or any default
+            naoAplicavel.setQuestion(question);
+            options.add(naoAplicavel);
+        }
+
+        // 6. Attach options to the new question
         question.setOptions(options);
+
+        // 7. Save the new question
         questionRepository.save(question);
 
         return new QuestionDTO(question);
     }
+
 
     private QuestionOption mapToQuestionOption(QuestionOptionDTO optionDTO, Question question) {
         QuestionOption option = new QuestionOption();
