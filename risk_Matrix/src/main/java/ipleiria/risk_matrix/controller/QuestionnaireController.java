@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ipleiria.risk_matrix.dto.QuestionnaireDTO;
 import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
+import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
+import ipleiria.risk_matrix.models.questions.QuestionCategory;
+import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import ipleiria.risk_matrix.service.QuestionnaireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +26,8 @@ public class QuestionnaireController {
 
     @Autowired
     private QuestionnaireService questionnaireService;
-
+    @Autowired
+    private QuestionnaireRepository questionnaireRepository;
     @PostMapping("/create")
     public Questionnaire createQuestionnaire(@RequestBody Questionnaire questionnaire) {
         return questionnaireService.createQuestionnaire(questionnaire);
@@ -39,6 +43,22 @@ public class QuestionnaireController {
     @GetMapping("/{id}")
     public Optional<Questionnaire> getQuestionnaireById(@PathVariable Long id) {
         return questionnaireService.getQuestionnaireById(id);
+    }
+    @GetMapping("/{questionnaireId}/category/{category}")
+    public List<Question> getQuestionsByQuestionnaireAndCategory(
+            @PathVariable Long questionnaireId,
+            @PathVariable QuestionCategory category
+    ) {
+        // 1) Load the questionnaire
+        Questionnaire q = questionnaireRepository.findById(questionnaireId)
+                .orElseThrow(() -> new QuestionnaireNotFoundException(
+                        "Questionnaire not found for ID: " + questionnaireId
+                ));
+
+        // 2) Filter the questions in that questionnaire by the given category
+        return q.getQuestions().stream()
+                .filter(question -> question.getCategory() == category)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/{id}/add-question")

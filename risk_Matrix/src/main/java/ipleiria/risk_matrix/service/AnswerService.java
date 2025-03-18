@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static ipleiria.risk_matrix.utils.RiskUtils.computeSeverity;
+import static ipleiria.risk_matrix.utils.RiskUtils.medianLevel;
+
 @Service
 public class AnswerService {
 
@@ -212,72 +215,6 @@ public class AnswerService {
         return result;
     }
 
-    // Helper: compute median of a list of levels
-    private OptionLevel medianLevel(List<OptionLevel> levels) {
-        if (levels == null || levels.isEmpty()) {
-            return null; // or handle "no data" scenario
-        }
 
-        // Convert LOW=1, MEDIUM=2, HIGH=3
-        List<Integer> numeric = levels.stream()
-                .map(this::levelToInt)
-                .sorted()
-                .collect(Collectors.toList());
 
-        int size = numeric.size();
-        if (size % 2 == 1) {
-            // Odd
-            return intToLevel(numeric.get(size / 2));
-        } else {
-            // Even
-            int left = numeric.get(size / 2 - 1);
-            int right = numeric.get(size / 2);
-            int avg = (left + right) / 2;
-            return intToLevel(avg);
-        }
-    }
-
-    // Helper: convert OptionLevel -> int
-    private int levelToInt(OptionLevel level) {
-        return switch (level) {
-            case LOW -> 1;
-            case MEDIUM -> 2;
-            case HIGH -> 3;
-        };
-    }
-
-    // Helper: convert int -> OptionLevel
-    private OptionLevel intToLevel(int val) {
-        return switch (val) {
-            case 1 -> OptionLevel.LOW;
-            case 2 -> OptionLevel.MEDIUM;
-            case 3 -> OptionLevel.HIGH;
-            default -> null;
-        };
-    }
-
-    // Helper: cross IMPACT x PROBABILITY -> Severity
-    private Severity computeSeverity(OptionLevel impact, OptionLevel probability) {
-        // If either is null, default to something
-        if (impact == null || probability == null) {
-            return Severity.LOW; // or handle differently
-        }
-
-        return switch (impact) {
-            case HIGH -> switch (probability) {
-                case HIGH -> Severity.CRITICAL;
-                case MEDIUM -> Severity.HIGH;
-                case LOW -> Severity.MEDIUM;
-            };
-            case MEDIUM -> switch (probability) {
-                case HIGH -> Severity.HIGH;
-                case MEDIUM -> Severity.MEDIUM;
-                case LOW -> Severity.LOW;
-            };
-            case LOW -> switch (probability) {
-                case HIGH -> Severity.MEDIUM;
-                case MEDIUM, LOW -> Severity.LOW;
-            };
-        };
-    }
 }

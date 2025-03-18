@@ -2,7 +2,10 @@ package ipleiria.risk_matrix.service;
 
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
+import ipleiria.risk_matrix.models.questions.OptionLevel;
+import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.models.questions.Question;
+import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static ipleiria.risk_matrix.utils.QuestionUtils.ensureNaoAplicavelOption;
 
 @Service
 public class QuestionnaireService {
@@ -57,10 +62,10 @@ public class QuestionnaireService {
     }
 
     public Questionnaire importQuestionnaire(Questionnaire incoming) {
-        // 1. Nullify the top-level ID (so we always create a new questionnaire)
+        // 1. Nullify the top-level ID
         incoming.setId(null);
 
-        // 2. For each question, nullify IDs and set the questionnaire reference
+        // 2. For each question, nullify IDs, set references
         if (incoming.getQuestions() != null) {
             for (Question q : incoming.getQuestions()) {
                 q.setId(null);
@@ -70,11 +75,16 @@ public class QuestionnaireService {
                 if (q.getOptions() != null) {
                     q.getOptions().forEach(opt -> opt.setId(null));
                 }
+
+                // 4. Ensure "Não Aplicável" is present
+                ensureNaoAplicavelOption(q);
             }
         }
 
-        // 4. Save via your existing repository logic
+        // 5. Save
         return questionnaireRepository.save(incoming);
     }
+
+
 
 }

@@ -11,8 +11,12 @@ const routes = [
   { path: '/', component: HomePage },
   { path: '/risk-info', component: RiskMatrixInfo },
   { path: '/requirements', component: RequirementsPage },
-  { path: '/questions/:category', name: 'Questionary', component: QuestionarioPage },
-  { path: '/admin', component: AdminDashboard },
+  {
+    path: '/questions/:questionnaireId/:category',
+    name: 'Questionary',
+    component: QuestionarioPage
+  },
+    { path: '/admin', component: AdminDashboard },
   { path: '/category', component: CategoryList },
   { path: '/feedback-form', component: FeedbackForm } // New route for feedback form
 ]

@@ -539,17 +539,27 @@ export default {
     async deleteQuestionnaire(id) {
       if (!confirm("Tem certeza que deseja excluir este questionário?")) return;
       try {
-        // use validateStatus to avoid throwing an error on a 204
-        await axios.delete(`/api/questionnaires/delete/${id}`, {
+        // We allow any status < 500 to avoid throwing an Axios error
+        const response = await axios.delete(`/api/questionnaires/delete/${id}`, {
           validateStatus: status => status < 500
         });
-        this.fetchQuestionnaires();
-        this.$delete(this.visibleQuestions, id);
+
+        // Now we manually check the response code
+        if (response.status === 204 || response.status === 200) {
+          // Treat as success
+          this.fetchQuestionnaires();
+          this.$delete(this.visibleQuestions, id);
+        } else {
+          // Some other 2xx or 4xx code we consider "fail"
+          console.error("Erro ao excluir questionário. Status:", response.status);
+          alert("Falha ao excluir questionário. Tente novamente.");
+        }
       } catch (error) {
         console.error("Erro ao excluir questionário:", error);
         alert("Falha ao excluir questionário. Tente novamente.");
       }
-    },
+    }
+    ,
     async exportQuestionnaire(questionnaireId) {
       try {
         const response = await axios.get(`/api/questionnaires/${questionnaireId}/export`, {

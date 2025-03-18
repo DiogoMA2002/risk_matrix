@@ -44,7 +44,7 @@
                                1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h2 class="text-xl font-semibold text-blue-600 text-center">{{ cat }}</h2>
+                  <h2 class="text-xl font-semibold text-blue-600 text-center">{{ formatCategoryName(cat) }}</h2>
                   <p class="mt-2 text-gray-500 text-center text-sm">Clique para ver as perguntas</p>
                   <div class="mt-4 flex justify-center">
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -147,12 +147,13 @@ export default {
   },
   computed: {
     categories() {
-      if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
-        const cats = this.selectedQuestionnaire.questions.map(q => q.category);
-        return [...new Set(cats)];
-      }
-      return [];
-    }
+  if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
+    const cats = this.selectedQuestionnaire.questions.map(q => q.category);
+    return [...new Set(cats)];
+  }
+  return [];
+}
+
   },
   async created() {
     await this.fetchQuestionnaires();
@@ -176,6 +177,11 @@ export default {
         ];
       }
     },
+    formatCategoryName(rawEnum) {
+      // Example: "Risco_de_Autenticacao" -> "Risco de Autenticacao"
+      return rawEnum.replace(/_/g, ' ');
+    },
+    
     async selectQuestionnaire(id) {
       try {
         const response = await axios.get(`/api/questionnaires/${id}`);
@@ -186,12 +192,11 @@ export default {
       }
     },
     goToCategory(category) {
-      // Navigate to the Questionary page with both category and questionnaireId
-      this.$router.push({
-        name: 'Questionary',
-        params: { category, questionnaireId: this.selectedQuestionnaire.id }
-      });
-    },
+  this.$router.push({
+    name: 'Questionary',
+    params: { category, questionnaireId: this.selectedQuestionnaire.id }
+  });
+},
 
     // Updated to do a single multi-answer request
     async submitAllAnswers() {
@@ -203,7 +208,7 @@ export default {
         // 2. Build an array of AnswerDTO objects
         //    Here we don't have user emails, so you might add an "email" field from your store or a form
         const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
-
+        console.log("User email:", userEmail);
         for (const category in allAnswers) {
           const categoryAnswers = allAnswers[category]; // e.g. { "10": "aaaa", "11": "bbb" }
           for (const questionId in categoryAnswers) {
