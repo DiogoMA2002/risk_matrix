@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-100 font-sans">
+  <div class="h-screen overflow-y-auto bg-gradient-to-br from-blue-600 to-indigo-100 font-sans">
     <div class="container mx-auto px-4 py-6">
       <!-- Header with back button -->
       <div class="flex items-center mb-6">
