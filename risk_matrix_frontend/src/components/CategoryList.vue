@@ -3,14 +3,10 @@
     <div class="container mx-auto px-4 py-6">
       <!-- Header with back button -->
       <div class="flex items-center mb-6">
-        <button
-          @click="$router.go(-1)"
-          class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-               viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" d="M15 19l-7-7 7-7" />
+        <button @click="$router.go(-1)"
+          class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         <div class="text-white">
@@ -30,16 +26,12 @@
             <div v-else>
               <!-- Categories extracted from the selected questionnaire -->
               <div v-if="categories.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                <div
-                  v-for="cat in categories"
-                  :key="cat"
-                  @click="goToCategory(cat)"
-                  class="cursor-pointer bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition-all duration-300 hover:shadow-xl hover:bg-blue-50 hover:-translate-y-1"
-                >
+                <div v-for="cat in categories" :key="cat" @click="goToCategory(cat)"
+                  class="cursor-pointer bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 flex flex-col items-center justify-center transition-all duration-300 hover:shadow-xl hover:bg-blue-50 hover:-translate-y-1">
                   <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8.228 9c.549-1.165 2.03-2 3.772-2
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2
                                2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994
                                1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -47,11 +39,12 @@
                   <h2 class="text-xl font-semibold text-blue-600 text-center">{{ formatCategoryName(cat) }}</h2>
                   <p class="mt-2 text-gray-500 text-center text-sm">Clique para ver as perguntas</p>
                   <div class="mt-4 flex justify-center">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span
+                      class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                       Iniciar
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              stroke-width="2" d="M9 5l7 7-7 7" />
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                       </svg>
                     </span>
                   </div>
@@ -62,58 +55,52 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Buttons: Submit, Export, and Import -->
           <div class="mt-8 flex justify-center space-x-4">
-            <button
-              @click="submitAllAnswers"
-              class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 flex items-center"
-            >
+            <button @click="submitAllAnswers"
+              class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 flex items-center">
               <span>Enviar Todas as Respostas</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
               </svg>
             </button>
 
-            <button
-              @click="exportToJSON"
-              class="px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 flex items-center"
-            >
+            <button @click="exportToJSON"
+              class="px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 flex items-center">
               <span>Exportar Progresso</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M8 12l4 4 4-4M12 4v12" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M8 12l4 4 4-4M12 4v12" />
               </svg>
             </button>
 
-            <button
-              @click="triggerImport"
-              class="px-6 py-3 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-700 transition-all duration-300 flex items-center"
-            >
+            <button @click="triggerImport"
+              class="px-6 py-3 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-700 transition-all duration-300 flex items-center">
               <span>Importar Progresso</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" d="M12 4v12m0 0l-4-4m4 4l4-4M20 12a8 8 0 11-16 0 8 8 0 0116 0z" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 4v12m0 0l-4-4m4 4l4-4M20 12a8 8 0 11-16 0 8 8 0 0116 0z" />
               </svg>
             </button>
             <!-- Hidden file input for importing -->
-            <input type="file" ref="importFile" accept="application/json" style="display: none" @change="importFromJSON" />
+            <input type="file" ref="importFile" accept="application/json" style="display: none"
+              @change="importFromJSON" />
           </div>
         </div>
-        
+
         <!-- Sidebar: List of Questionnaires -->
         <div class="w-full md:w-1/4 md:pl-4 mt-6 md:mt-0">
           <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-4">
             <h3 class="text-lg font-semibold text-blue-800 mb-4">Questionários</h3>
             <ul class="divide-y divide-gray-200">
-              <li
-                v-for="qnr in questionnaires"
-                :key="qnr.id"
+              <li v-for="qnr in questionnaires" :key="qnr.id"
                 class="py-2 cursor-pointer hover:bg-blue-50 transition-colors rounded px-2"
                 :class="{ 'bg-blue-100': selectedQuestionnaire && qnr.id === selectedQuestionnaire.id }"
-                @click="selectQuestionnaire(qnr.id)"
-              >
+                @click="selectQuestionnaire(qnr.id)">
                 {{ qnr.title }}
               </li>
             </ul>
@@ -125,17 +112,20 @@
       <div class="max-w-3xl mx-auto mt-10 px-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">1</div>
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">1
+            </div>
             <div class="ml-2 text-white">Informações</div>
           </div>
           <div class="w-16 h-1 bg-blue-400"></div>
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">2</div>
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">2
+            </div>
             <div class="ml-2 text-white">Requisitos</div>
           </div>
           <div class="w-16 h-1 bg-blue-400"></div>
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">3</div>
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">3
+            </div>
             <div class="ml-2 text-white">Questionário</div>
           </div>
         </div>
@@ -143,13 +133,12 @@
 
       <!-- Floating Help Button -->
       <div class="fixed bottom-6 right-6">
-        <button @click="goToFeedbackForm" class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
-               viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M8.228 9c.549-1.165 2.03-2 3.772-2
-                 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006
-                 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21
+        <button @click="goToFeedbackForm"
+          class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2
+                 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907
+                 -.542.104-.994.54-.994 1.093m0 3h.01M21
                  12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </button>
@@ -219,15 +208,17 @@ export default {
         params: { category, questionnaireId: this.selectedQuestionnaire.id }
       });
     },
-    // Submit all answers from localStorage to the backend
+    // Submit all answers from localStorage to the backend,
+    // ask for confirmation, clear localStorage, and redirect if confirmed.
     async submitAllAnswers() {
+      const confirmed = window.confirm(
+        "Tem certeza que deseja enviar todas as respostas? Após enviar, o progresso salvo será limpo e você será redirecionado à página principal."
+      );
+      if (!confirmed) return;
       try {
-        // 1. Load allAnswers from localStorage
         const allAnswers = JSON.parse(localStorage.getItem("allAnswers")) || {};
         const payload = [];
-        // 2. Build an array of AnswerDTO objects
         const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
-        console.log("User email:", userEmail);
         for (const category in allAnswers) {
           const categoryAnswers = allAnswers[category];
           for (const questionId in categoryAnswers) {
@@ -243,16 +234,28 @@ export default {
           alert("Nenhuma resposta para enviar!");
           return;
         }
-        // 3. POST them in a single request to your new /submit-multiple endpoint
         await axios.post("/api/answers/submit-multiple", payload);
         alert("Todas as respostas foram enviadas com sucesso!");
+        // Clear local storage after successful submission
+        localStorage.removeItem("allAnswers");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("completedRiskInfo");
+        localStorage.removeItem("completedRequirements");
+
+        // Redirect to the main page (change '/' to your desired route)
+        this.$router.push("/");
       } catch (error) {
         console.error("Erro ao enviar respostas:", error);
         alert("Ocorreu um erro ao enviar as respostas.");
       }
     },
-    // Export allAnswers from localStorage as a JSON file
+    // Export allAnswers from localStorage as a JSON file,
+    // ask for confirmation and clear localStorage afterwards.
     exportToJSON() {
+      const confirmed = window.confirm(
+        "Deseja exportar o progresso? Isso irá limpar o progresso salvo localmente."
+      );
+      if (!confirmed) return;
       const allAnswers = localStorage.getItem("allAnswers");
       if (!allAnswers) {
         alert("Nenhuma resposta para exportar!");
@@ -265,13 +268,23 @@ export default {
       link.download = "progress.json";
       link.click();
       URL.revokeObjectURL(url);
+      // Clear localStorage after export
+      localStorage.removeItem("allAnswers");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("completedRiskInfo");
+      localStorage.removeItem("completedRequirements");
     },
     // Trigger the hidden file input to import a JSON file
     triggerImport() {
       this.$refs.importFile.click();
     },
-    // Read the imported JSON file and store it in localStorage
+    // Import a JSON file and store it in localStorage,
+    // with confirmation that the current progress will be overwritten.
     importFromJSON(event) {
+      const confirmed = window.confirm(
+        "Ao importar, o progresso atual será substituído. Deseja continuar?"
+      );
+      if (!confirmed) return;
       const file = event.target.files[0];
       if (!file) return;
       const reader = new FileReader();
@@ -294,7 +307,8 @@ export default {
 </script>
 
 <style>
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
