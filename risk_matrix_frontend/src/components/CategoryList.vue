@@ -63,8 +63,8 @@
             </div>
           </div>
           
-          <!-- Submit All Answers Button -->
-          <div class="mt-8 flex justify-center">
+          <!-- Buttons: Submit, Export, and Import -->
+          <div class="mt-8 flex justify-center space-x-4">
             <button
               @click="submitAllAnswers"
               class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 flex items-center"
@@ -75,6 +75,30 @@
                       stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
               </svg>
             </button>
+
+            <button
+              @click="exportToJSON"
+              class="px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 flex items-center"
+            >
+              <span>Exportar Progresso</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M8 12l4 4 4-4M12 4v12" />
+              </svg>
+            </button>
+
+            <button
+              @click="triggerImport"
+              class="px-6 py-3 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-700 transition-all duration-300 flex items-center"
+            >
+              <span>Importar Progresso</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" d="M12 4v12m0 0l-4-4m4 4l4-4M20 12a8 8 0 11-16 0 8 8 0 0116 0z" />
+              </svg>
+            </button>
+            <!-- Hidden file input for importing -->
+            <input type="file" ref="importFile" accept="application/json" style="display: none" @change="importFromJSON" />
           </div>
         </div>
         
@@ -147,13 +171,12 @@ export default {
   },
   computed: {
     categories() {
-  if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
-    const cats = this.selectedQuestionnaire.questions.map(q => q.category);
-    return [...new Set(cats)];
-  }
-  return [];
-}
-
+      if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
+        const cats = this.selectedQuestionnaire.questions.map(q => q.category);
+        return [...new Set(cats)];
+      }
+      return [];
+    }
   },
   async created() {
     await this.fetchQuestionnaires();
@@ -181,7 +204,6 @@ export default {
       // Example: "Risco_de_Autenticacao" -> "Risco de Autenticacao"
       return rawEnum.replace(/_/g, ' ');
     },
-    
     async selectQuestionnaire(id) {
       try {
         const response = await axios.get(`/api/questionnaires/${id}`);
@@ -192,28 +214,24 @@ export default {
       }
     },
     goToCategory(category) {
-  this.$router.push({
-    name: 'Questionary',
-    params: { category, questionnaireId: this.selectedQuestionnaire.id }
-  });
-},
-
-    // Updated to do a single multi-answer request
+      this.$router.push({
+        name: 'Questionary',
+        params: { category, questionnaireId: this.selectedQuestionnaire.id }
+      });
+    },
+    // Submit all answers from localStorage to the backend
     async submitAllAnswers() {
       try {
         // 1. Load allAnswers from localStorage
         const allAnswers = JSON.parse(localStorage.getItem("allAnswers")) || {};
         const payload = [];
-
         // 2. Build an array of AnswerDTO objects
-        //    Here we don't have user emails, so you might add an "email" field from your store or a form
         const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
         console.log("User email:", userEmail);
         for (const category in allAnswers) {
-          const categoryAnswers = allAnswers[category]; // e.g. { "10": "aaaa", "11": "bbb" }
+          const categoryAnswers = allAnswers[category];
           for (const questionId in categoryAnswers) {
             const userResponse = categoryAnswers[questionId];
-            // push one object per answered question
             payload.push({
               questionId: parseInt(questionId),
               userResponse,
@@ -221,24 +239,52 @@ export default {
             });
           }
         }
-
         if (!payload.length) {
           alert("Nenhuma resposta para enviar!");
           return;
         }
-
         // 3. POST them in a single request to your new /submit-multiple endpoint
         await axios.post("/api/answers/submit-multiple", payload);
-
         alert("Todas as respostas foram enviadas com sucesso!");
-
-        // Optionally clear localStorage:
-        // localStorage.removeItem("allAnswers");
-
       } catch (error) {
         console.error("Erro ao enviar respostas:", error);
         alert("Ocorreu um erro ao enviar as respostas.");
       }
+    },
+    // Export allAnswers from localStorage as a JSON file
+    exportToJSON() {
+      const allAnswers = localStorage.getItem("allAnswers");
+      if (!allAnswers) {
+        alert("Nenhuma resposta para exportar!");
+        return;
+      }
+      const blob = new Blob([allAnswers], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "progress.json";
+      link.click();
+      URL.revokeObjectURL(url);
+    },
+    // Trigger the hidden file input to import a JSON file
+    triggerImport() {
+      this.$refs.importFile.click();
+    },
+    // Read the imported JSON file and store it in localStorage
+    importFromJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          localStorage.setItem("allAnswers", JSON.stringify(importedData));
+          alert("Progresso importado com sucesso!");
+        } catch (error) {
+          alert("Falha ao importar o progresso. Certifique-se de que o arquivo é válido.");
+        }
+      };
+      reader.readAsText(file);
     },
     goToFeedbackForm() {
       this.$router.push('/feedback-form');

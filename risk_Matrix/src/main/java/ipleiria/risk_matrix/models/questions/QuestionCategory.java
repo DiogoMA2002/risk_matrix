@@ -12,6 +12,7 @@ public enum QuestionCategory {
     Riscos_de_Material,
     Riscos_Tecnologicos,
     Riscos_Externos,
+
     Risco_de_Configuracao_Inadequada_de_Sistemas,
     Risco_de_Dependencia_de_Fornecedores_e_Terceiros,
     Risco_de_Seguranca_em_APIs_e_Integracoes,
