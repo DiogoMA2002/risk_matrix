@@ -1,7 +1,6 @@
 package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.dto.UserAnswersDTO;
-import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class AnswerController {
     // Obter todas as respostas
     @GetMapping("/all")
     public List<AnswerDTO> getAllAnswers() {
-        return answerService.getAllAnswers(); // ✅ Agora os tipos estão alinhados
+        return answerService.getAllAnswers();
     }
 
     @PostMapping("/submit")

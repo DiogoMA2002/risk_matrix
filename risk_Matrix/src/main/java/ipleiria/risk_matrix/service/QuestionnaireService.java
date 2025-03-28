@@ -84,7 +84,25 @@ public class QuestionnaireService {
         // 5. Save
         return questionnaireRepository.save(incoming);
     }
+    public List<Question> getAllQuestionsForQuestionnaire(Long id) {
+        Questionnaire questionnaire = questionnaireRepository.findById(id)
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id));
+        return questionnaire.getQuestions();
+    }
 
-
+    public List<Questionnaire> searchQuestionnaires(String title) {
+        if (title == null || title.isEmpty()) {
+            return questionnaireRepository.findAll();
+        } else {
+            return questionnaireRepository.findByTitleContainingIgnoreCase(title);
+        }
+    }
+    // In QuestionnaireService.java
+    public Questionnaire updateQuestionnaire(Long id, Questionnaire updatedQuestionnaire) {
+        Questionnaire existing = questionnaireRepository.findById(id)
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id));
+        existing.setTitle(updatedQuestionnaire.getTitle());
+        return questionnaireRepository.save(existing);
+    }
 
 }

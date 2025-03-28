@@ -21,7 +21,7 @@
         <div class="w-full md:w-3/4">
           <div class="max-w-4xl mx-auto">
             <div v-if="!selectedQuestionnaire">
-              <p class="text-lg text-blue-800">Carregando questionário...</p>
+              <SkeletonLoader />
             </div>
             <div v-else>
               <!-- Categories extracted from the selected questionnaire -->
@@ -146,79 +146,65 @@
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
+// eslint-disable-next-line no-unused-vars
+import SkeletonLoader from "./SkeletonLoader.vue"; // Adjust the path if necessary
+
+import { mapState, mapActions } from "vuex";
 
 export default {
-  name: 'CategoryList',
-  data() {
-    return {
-      questionnaires: [],
-      selectedQuestionnaire: null
-    };
-  },
+  name: "CategoryList",
   computed: {
+    ...mapState(["questionnaires", "selectedQuestionnaire"]),
     categories() {
-      if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
-        const cats = this.selectedQuestionnaire.questions.map(q => q.category);
+      if (
+        this.selectedQuestionnaire &&
+        this.selectedQuestionnaire.questions
+      ) {
+        const cats = this.selectedQuestionnaire.questions.map(
+          (q) => q.category
+        );
         return [...new Set(cats)];
       }
       return [];
-    }
+    },
   },
-  async created() {
-    await this.fetchQuestionnaires();
-    if (this.questionnaires.length > 0) {
-      // Auto-select the first questionnaire available.
-      this.selectQuestionnaire(this.questionnaires[0].id);
-    }
+  created() {
+    // Fetch questionnaires from Vuex.
+    this.fetchQuestionnaires().then(() => {
+      // If the store action doesn't auto-select one, select the first available.
+      if (!this.selectedQuestionnaire && this.questionnaires.length > 0) {
+        this.fetchQuestionnaireById(this.questionnaires[0].id);
+      }
+    });
   },
   methods: {
-    async fetchQuestionnaires() {
-      try {
-        const response = await axios.get("/api/questionnaires/all");
-        this.questionnaires = response.data;
-      } catch (error) {
-        console.error("Erro ao buscar questionários:", error);
-        // fallback example
-        this.questionnaires = [
-          { id: 1, title: "Questionário 1" },
-          { id: 2, title: "Questionário 2" },
-          { id: 3, title: "Questionário 3" }
-        ];
-      }
-    },
+    ...mapActions(["fetchQuestionnaires", "fetchQuestionnaireById"]),
     formatCategoryName(rawEnum) {
       // Example: "Risco_de_Autenticacao" -> "Risco de Autenticacao"
-      return rawEnum.replace(/_/g, ' ');
-    },
-    async selectQuestionnaire(id) {
-      try {
-        const response = await axios.get(`/api/questionnaires/${id}`);
-        this.selectedQuestionnaire = response.data;
-      } catch (error) {
-        console.error("Erro ao buscar questionário:", error);
-        this.selectedQuestionnaire = null;
-      }
+      return rawEnum.replace(/_/g, " ");
     },
     goToCategory(category) {
       this.$router.push({
-        name: 'Questionary',
-        params: { category, questionnaireId: this.selectedQuestionnaire.id }
+        name: "Questionary",
+        params: {
+          category,
+          questionnaireId: this.selectedQuestionnaire.id,
+        },
       });
     },
-    // Submit all answers from localStorage to the backend,
-    // ask for confirmation, clear localStorage, and redirect if confirmed.
     async submitAllAnswers() {
       const confirmed = window.confirm(
         "Tem certeza que deseja enviar todas as respostas? Após enviar, o progresso salvo será limpo e você será redirecionado à página principal."
       );
       if (!confirmed) return;
       try {
-        const allAnswers = JSON.parse(localStorage.getItem("allAnswers")) || {};
+        const allAnswers =
+          JSON.parse(localStorage.getItem("allAnswers")) || {};
         const payload = [];
-        const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
+        const userEmail =
+          localStorage.getItem("userEmail") || "fallback@example.com";
         for (const category in allAnswers) {
           const categoryAnswers = allAnswers[category];
           for (const questionId in categoryAnswers) {
@@ -226,7 +212,7 @@ export default {
             payload.push({
               questionId: parseInt(questionId),
               userResponse,
-              email: userEmail
+              email: userEmail,
             });
           }
         }
@@ -236,21 +222,19 @@ export default {
         }
         await axios.post("/api/answers/submit-multiple", payload);
         alert("Todas as respostas foram enviadas com sucesso!");
-        // Clear local storage after successful submission
+        // Clear localStorage after successful submission.
         localStorage.removeItem("allAnswers");
         localStorage.removeItem("userEmail");
         localStorage.removeItem("completedRiskInfo");
         localStorage.removeItem("completedRequirements");
 
-        // Redirect to the main page (change '/' to your desired route)
+        // Redirect to the main page.
         this.$router.push("/");
       } catch (error) {
         console.error("Erro ao enviar respostas:", error);
         alert("Ocorreu um erro ao enviar as respostas.");
       }
     },
-    // Export allAnswers from localStorage as a JSON file,
-    // ask for confirmation and clear localStorage afterwards.
     exportToJSON() {
       const confirmed = window.confirm(
         "Deseja exportar o progresso? Isso irá limpar o progresso salvo localmente."
@@ -268,18 +252,15 @@ export default {
       link.download = "progress.json";
       link.click();
       URL.revokeObjectURL(url);
-      // Clear localStorage after export
+      // Clear localStorage after export.
       localStorage.removeItem("allAnswers");
       localStorage.removeItem("userEmail");
       localStorage.removeItem("completedRiskInfo");
       localStorage.removeItem("completedRequirements");
     },
-    // Trigger the hidden file input to import a JSON file
     triggerImport() {
       this.$refs.importFile.click();
     },
-    // Import a JSON file and store it in localStorage,
-    // with confirmation that the current progress will be overwritten.
     importFromJSON(event) {
       const confirmed = window.confirm(
         "Ao importar, o progresso atual será substituído. Deseja continuar?"
@@ -294,15 +275,17 @@ export default {
           localStorage.setItem("allAnswers", JSON.stringify(importedData));
           alert("Progresso importado com sucesso!");
         } catch (error) {
-          alert("Falha ao importar o progresso. Certifique-se de que o arquivo é válido.");
+          alert(
+            "Falha ao importar o progresso. Certifique-se de que o arquivo é válido."
+          );
         }
       };
       reader.readAsText(file);
     },
     goToFeedbackForm() {
-      this.$router.push('/feedback-form');
-    }
-  }
+      this.$router.push("/feedback-form");
+    },
+  },
 };
 </script>
 

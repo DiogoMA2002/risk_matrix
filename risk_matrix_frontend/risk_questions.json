@@ -1,0 +1,2651 @@
+{
+    "title": "Avaliação de Riscos de Segurança",
+    "questions": [
+        {
+            "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
+            "category": "Risco_de_Autenticacao",
+            "options": [
+                {
+                    "optionText": "Acesso limitado a dados não sensíveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Comprometimento de contas internas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Exposição total de sistemas críticos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Se um atacante conseguir comprometer credenciais de administrador, qual seria o impacto?",
+            "category": "Risco_de_Autenticacao",
+            "options": [
+                {
+                    "optionText": "Impacto restrito a um pequeno conjunto de permissões.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Acesso significativo a sistemas internos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Controlo total sobre sistemas e dados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Com que frequência os utilizadores utilizam senhas fracas ou reutilizadas?",
+            "category": "Risco_de_Autenticacao",
+            "options": [
+                {
+                    "optionText": "Casos isolados sem impacto significativo.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Casos isolados sem impacto significativo.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "A prática é comum e representa um risco elevado.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A organização monitoriza tentativas de login suspeitas e falhas repetidas?",
+            "category": "Risco_de_Autenticacao",
+            "options": [
+                {
+                    "optionText": "Monitorização contínua com alertas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização parcial e análise manual.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Nenhuma monitorização ativa implementada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A autenticação multifator (MFA) está ativada para todas as contas críticas?",
+            "category": "Risco_de_Autenticacao",
+            "options": [
+                {
+                    "optionText": "MFA obrigatório para todas as contas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "MFA ativado apenas para alguns utilizadores.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Nenhum uso de MFA implementado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de senhas)?",
+            "category": "Risco_de_Autenticacao",
+            "options": [
+                {
+                    "optionText": "Armazenamento seguro com criptografia forte.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Proteção parcial das credenciais.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Credenciais armazenadas sem proteção adequada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto caso um colaborador clique em um link malicioso recebido por e-mail?",
+            "category": "Risco_de_Utilizacao_de_Email",
+            "options": [
+                {
+                    "optionText": "Nenhum impacto significativo, pois há camadas de proteção.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Comprometimento parcial de sistemas ou dados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Acesso total ao sistema e possível perda de dados sensíveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto se as credenciais fossem comprometidas por meio de um ataque de phishing?",
+            "category": "Risco_de_Utilizacao_de_Email",
+            "options": [
+                {
+                    "optionText": "Acesso limitado a uma única conta sem dados críticos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Acesso a informações sensíveis, mas sem controlo total.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Controlo total sobre contas críticas e serviços.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Com que frequência os colaboradores recebem e-mails suspeitos?",
+            "category": "Risco_de_Utilizacao_de_Email",
+            "options": [
+                {
+                    "optionText": "Raramente recebem e-mails de phishing.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Recebem ocasionalmente, mas a maioria reconhece os ataques.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "É comum receber e-mails maliciosos e alguns colaboradores caem nos ataques.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa possui filtros eficientes para bloquear e-mails maliciosos?",
+            "category": "Risco_de_Utilizacao_de_Email",
+            "options": [
+                {
+                    "optionText": "Filtros avançados que bloqueiam quase todos os ataques.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Alguns e-mails suspeitos passam pelos filtros.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Os filtros são ineficazes e muitos ataques chegam aos utilizadores.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os colaboradores recebem formações regulares para identificar e-mails fraudulentos?",
+            "category": "Risco_de_Utilizacao_de_Email",
+            "options": [
+                {
+                    "optionText": "Formações frequentes e eficazes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Formações pouco regulares e abrangentes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Nenhuma formação sobre ameaças de e-mail.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A autenticação de e-mail (SPF, DKIM, DMARC) está configurada corretamente?",
+            "category": "Risco_de_Utilizacao_de_Email",
+            "options": [
+                {
+                    "optionText": "Configuração completa e monitorizada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Parcialmente implementada, mas sem monitorização frequente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Não implementada ou configurada incorretamente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado?\n",
+            "category": "Risco_de_Plataforma_da_Empresa",
+            "options": [
+                {
+                    "optionText": "Pouco impacto na operação diária.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Operações parcialmente afetadas, atraso moderado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Paragem total ou significativa das operações",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Caso uma vulnerabilidade crítica numa plataforma não seja corrigida rapidamente, quais seriam os danos potenciais à reputação da empresa?",
+            "category": "Risco_de_Plataforma_da_Empresa",
+            "options": [
+                {
+                    "optionText": "Mínimo impacto reputacional.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Danos reputacionais moderados, recuperação possível.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Graves danos reputacionais, recuperação difícil.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Com que frequência são feitas auditorias às plataformas internas para identificar vulnerabilidades ou falhas de segurança?",
+            "category": "Risco_de_Plataforma_da_Empresa",
+            "options": [
+                {
+                    "optionText": "Auditorias regulares (mínimo trimestral).",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Auditorias anuais ou esporádicas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Não são realizadas auditorias ou são muito raras.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "As equipas responsáveis pelas plataformas são treinadas regularmente sobre práticas seguras de administração e configuração?",
+            "category": "Risco_de_Plataforma_da_Empresa",
+            "options": [
+                {
+                    "optionText": "Formação contínua e atualizada regularmente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Formação ocasional (anual ou pontual).",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem formação ou formação muito rara.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem procedimentos claros para gestão rápida de incidentes relacionados com vulnerabilidades das plataformas críticas?",
+            "category": "Risco_de_Plataforma_da_Empresa",
+            "options": [
+                {
+                    "optionText": "Procedimentos formais claros e testados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Procedimentos existentes, mas pouco claros.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Procedimentos inexistentes ou não documentados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "As plataformas críticas são protegidas por mecanismos avançados de segurança, como firewalls, sistemas IDS/IPS ou proteção anti-malware?",
+            "category": "Risco_de_Plataforma_da_Empresa",
+            "options": [
+                {
+                    "optionText": "Mecanismos completos e atualizados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Alguns mecanismos implementados, porém limitados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem mecanismos avançados ou insuficientes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto para a empresa caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
+            "category": "Risco_de_Armazenamento_de_Dados",
+            "options": [
+                {
+                    "optionText": "Dados facilmente recuperáveis, baixo impacto operacional.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Dados parcialmente recuperáveis, impacto moderado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Perda irreversível de dados críticos, impacto operacional grave.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro caso ocorresse uma exposição indevida de dados confidenciais armazenados pela empresa?",
+            "category": "Risco_de_Armazenamento_de_Dados",
+            "options": [
+                {
+                    "optionText": "Impacto financeiro mínimo, sem penalizações significativas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto financeiro moderado, multas ou custos controláveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto financeiro elevado, multas graves e custos legais significativos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Com que frequência são realizados backups dos dados críticos armazenados pela empresa?",
+            "category": "Risco_de_Armazenamento_de_Dados",
+            "options": [
+                {
+                    "optionText": "Backups automáticos e diários.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Backups semanais ou esporádicos.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Backups raros, inexistentes ou não testados.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "As soluções de armazenamento utilizadas pela empresa são regularmente atualizadas e protegidas contra ameaças conhecidas?",
+            "category": "Risco_de_Armazenamento_de_Dados",
+            "options": [
+                {
+                    "optionText": "Atualizações regulares e gestão ativa de ameaças.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Atualizações ocasionais ou inconsistentes.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem atualizações ou gestão inadequada das ameaças.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem mecanismos robustos de criptografia aplicados ao armazenamento de dados sensíveis?",
+            "category": "Risco_de_Armazenamento_de_Dados",
+            "options": [
+                {
+                    "optionText": "Criptografia forte implementada e testada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Criptografia básica implementada parcialmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Dados sensíveis sem criptografia ou com criptografia fraca.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe uma política clara para gestão do ciclo de vida e descarte seguro dos dados armazenados?",
+            "category": "Risco_de_Armazenamento_de_Dados",
+            "options": [
+                {
+                    "optionText": "Política formal documentada e implementada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Política informal ou parcialmente implementada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem política definida ou inexistente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso a rede interna da empresa sofra uma interrupção significativa?",
+            "category": "Risco_da_Rede_Interna",
+            "options": [
+                {
+                    "optionText": "Impacto reduzido, sistemas rapidamente recuperáveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, recuperação parcial dos sistemas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto elevado, paralisação das operações críticas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto caso ocorresse uma invasão na rede interna com comprometimento de dados confidenciais?",
+            "category": "Risco_da_Rede_Interna",
+            "options": [
+                {
+                    "optionText": "Dados não críticos expostos, baixo impacto operacional.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Exposição de alguns dados críticos, impacto moderado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Exposição generalizada de dados sensíveis, alto impacto operacional e legal.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A rede interna é regularmente monitorizada em tempo real para identificação de atividades suspeitas?",
+            "category": "Risco_da_Rede_Interna",
+            "options": [
+                {
+                    "optionText": "Monitorização constante e automatizada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização parcial ou periódica.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Monitorização inexistente ou muito limitada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os dispositivos conectados à rede interna são regularmente atualizados e protegidos contra vulnerabilidades conhecidas?",
+            "category": "Risco_da_Rede_Interna",
+            "options": [
+                {
+                    "optionText": "Atualizações regulares e automatizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Atualizações esporádicas ou inconsistentes.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem atualizações ou muito raras.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem mecanismos eficazes de segmentação da rede interna para limitar a propagação de ameaças?",
+            "category": "Risco_da_Rede_Interna",
+            "options": [
+                {
+                    "optionText": "Segmentação efetiva implementada e testada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Segmentação parcial, não totalmente eficaz.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Rede não segmentada ou mal configurada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe uma política clara para gestão segura de acessos e autenticação dos dispositivos internos na rede?",
+            "category": "Risco_da_Rede_Interna",
+            "options": [
+                {
+                    "optionText": "Política formal implementada e monitorizada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Política informal ou parcialmente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Ausência de política ou controle inadequado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso ocorra indisponibilidade prolongada de um provedor externo crítico (ex.: cloud, fornecedor de serviços)?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, rapidamente mitigado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, solução parcial disponível.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto grave, paralisação completa de operações críticas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro se dados confidenciais armazenados em infraestrutura externa fossem comprometidos?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Impacto financeiro reduzido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto financeiro moderado, custos adicionais gerenciáveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto financeiro elevado, custos e penalidades significativas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa avalia regularmente a segurança dos fornecedores externos de infraestrutura crítica?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Avaliação frequente e formalizada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Avaliações ocasionais ou informais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem avaliações regulares ou nunca realizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os fornecedores externos possuem certificações reconhecidas de segurança e continuidade operacional?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Todos possuem certificações reconhecidas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Alguns possuem certificações básicas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem certificações ou não verificadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem planos alternativos (backup) em caso de falha ou indisponibilidade de serviços externos essenciais?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Plano alternativo claro e testado regularmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Plano alternativo parcialmente definido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem plano alternativo definido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa possui mecanismos claros de monitorização contínua e alerta sobre incidentes em infraestruturas externas?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Monitorização ativa e alertas automatizados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização básica ou alertas limitados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem monitorização ou alertas eficazes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso a infraestrutura interna falhe e sistemas essenciais fiquem indisponíveis?",
+            "category": "Risco_de_Infraestrutura_de_Informacao_Externa_Interna",
+            "options": [
+                {
+                    "optionText": "Impacto limitado, com recuperação rápida.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, com recuperação parcial.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto severo, indisponibilidade prolongada dos serviços críticos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro decorrente da exposição de informações críticas armazenadas em infraestrutura interna?",
+            "category": "Risco_de_Infraestrutura_de_Informacao_Externa_Interna",
+            "options": [
+                {
+                    "optionText": "Baixo impacto, custos mínimos envolvidos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto financeiro moderado, multas ou penalizações possíveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alto impacto financeiro, penalizações graves e danos legais significativos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os sistemas e equipamentos internos recebem manutenção preventiva regularmente para evitar falhas ou incidentes?",
+            "category": "Risco_de_Infraestrutura_de_Informacao_Externa_Interna",
+            "options": [
+                {
+                    "optionText": "Manutenção frequente e documentada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Manutenção ocasional ou pouco estruturada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem manutenção preventiva ou inexistente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A infraestrutura interna é constantemente monitorizada quanto à disponibilidade e segurança dos serviços essenciais?",
+            "category": "Risco_de_Infraestrutura_de_Informacao_Externa_Interna",
+            "options": [
+                {
+                    "optionText": "Monitorização contínua e eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização parcial ou inconsistente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem monitorização efetiva.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem mecanismos eficazes de redundância para garantir disponibilidade contínua dos serviços internos críticos?",
+            "category": "Risco_de_Infraestrutura_de_Informacao_Externa_Interna",
+            "options": [
+                {
+                    "optionText": "Redundância completa e testada regularmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Redundância parcial implementada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem redundância ou inadequada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa possui planos claros e testados para recuperação rápida da infraestrutura interna em caso de falha grave?",
+            "category": "Risco_de_Infraestrutura_de_Informacao_Externa_Interna",
+            "options": [
+                {
+                    "optionText": "Plano documentado, eficaz e testado regularmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Plano parcialmente documentado ou raramente testado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem plano formal ou inexistente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto operacional caso ocorra um ataque bem-sucedido de phishing direcionado a funcionários?",
+            "category": "Risco_de_Ataques_Phishing_Engenharia_Social",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, incidente rapidamente contido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, comprometimento limitado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto grave, grande comprometimento operacional.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto financeiro e reputacional caso dados sensíveis sejam comprometidos através de engenharia social?",
+            "category": "Risco_de_Ataques_Phishing_Engenharia_Social",
+            "options": [
+                {
+                    "optionText": "Impacto financeiro e reputacional reduzido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto financeiro e reputacional moderado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto elevado, graves danos financeiros e de reputação.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os colaboradores recebem formação periódica sobre como identificar e reagir a tentativas de phishing e engenharia social?",
+            "category": "Risco_de_Ataques_Phishing_Engenharia_Social",
+            "options": [
+                {
+                    "optionText": "Formação regular e eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Formação ocasional, mas insuficiente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem formação ou formação raramente realizada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa realiza testes frequentes de simulação de phishing e engenharia social para medir a conscientização?",
+            "category": "Risco_de_Ataques_Phishing_Engenharia_Social",
+            "options": [
+                {
+                    "optionText": "Testes frequentes e estruturados.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Testes esporádicos ou pouco estruturados.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Testes raramente realizados ou inexistentes.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa possui mecanismos técnicos eficazes (anti-phishing, filtros de e-mail, etc.) para mitigar ataques sociais?",
+            "category": "Risco_de_Ataques_Phishing_Engenharia_Social",
+            "options": [
+                {
+                    "optionText": "Mecanismos eficazes implementados e atualizados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Alguns mecanismos implementados, mas limitados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem mecanismos técnicos ou insuficientes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe um canal claro e rápido para reportar incidentes ou tentativas suspeitas de ataques sociais?",
+            "category": "Risco_de_Ataques_Phishing_Engenharia_Social",
+            "options": [
+                {
+                    "optionText": "Canal claro, eficaz e amplamente conhecido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Canal disponível, mas pouco conhecido ou lento.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem canal formal definido ou amplamente desconhecido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso credenciais de acesso remoto sejam comprometidas por um atacante externo?",
+            "category": "Risco_de_Acesso_Remoto",
+            "options": [
+                {
+                    "optionText": "Acesso limitado, impacto operacional mínimo.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Comprometimento parcial de serviços internos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Comprometimento extenso, impacto operacional grave.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto financeiro e reputacional se ocorrer uma invasão bem-sucedida através de canais remotos?",
+            "category": "Risco_de_Acesso_Remoto",
+            "options": [
+                {
+                    "optionText": "Baixo impacto financeiro e reputacional.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, custos adicionais notáveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto severo, custos financeiros elevados e danos reputacionais graves.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "O acesso remoto dos colaboradores está protegido por autenticação multifator (MFA)?",
+            "category": "Risco_de_Acesso_Remoto",
+            "options": [
+                {
+                    "optionText": "MFA obrigatório e implementado amplamente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "MFA implementado parcialmente ou limitado.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem utilização de MFA.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa realiza auditorias periódicas sobre acessos remotos ativos e tentativas suspeitas de conexão externa?",
+            "category": "Risco_de_Acesso_Remoto",
+            "options": [
+                {
+                    "optionText": "Auditorias frequentes e automatizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Auditorias ocasionais ou não automatizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem auditorias ou raramente realizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem soluções técnicas robustas, como VPNs seguras, para proteção dos acessos remotos?",
+            "category": "Risco_de_Acesso_Remoto",
+            "options": [
+                {
+                    "optionText": "Soluções seguras e amplamente utilizadas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Soluções implementadas parcialmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem soluções técnicas adequadas ou insuficientes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe uma política formal para gestão segura dos acessos remotos (controle, monitorização e revogação rápida)?",
+            "category": "Risco_de_Acesso_Remoto",
+            "options": [
+                {
+                    "optionText": "Política formal, clara e rigorosamente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Política informal ou parcialmente implementada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem política definida ou inexistente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso ocorra dano físico em equipamentos críticos, como servidores ou dispositivos de rede?",
+            "category": "Riscos_de_Material",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, substituição rápida possível.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, recuperação demorada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto elevado, paralisação prolongada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro para substituir equipamentos críticos danificados ou roubados?",
+            "category": "Riscos_de_Material",
+            "options": [
+                {
+                    "optionText": "Baixo custo, facilmente coberto pelo orçamento.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Custo moderado, exigindo recursos adicionais.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alto custo, impactando severamente o orçamento.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe segurança física adequada (controle de acesso, vigilância) para proteger os equipamentos críticos da empresa?",
+            "category": "Riscos_de_Material",
+            "options": [
+                {
+                    "optionText": "Segurança eficaz e amplamente implementada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Segurança física básica ou parcialmente eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Segurança insuficiente ou inexistente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa realiza manutenção preventiva e inspeção regular dos equipamentos para reduzir falhas físicas inesperadas?",
+            "category": "Riscos_de_Material",
+            "options": [
+                {
+                    "optionText": "Manutenção preventiva regular e documentada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Manutenção preventiva ocasional.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem manutenção preventiva ou rara.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe um inventário atualizado regularmente de todos os equipamentos críticos da empresa?",
+            "category": "Riscos_de_Material",
+            "options": [
+                {
+                    "optionText": "Inventário atualizado periodicamente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Inventário esporádico ou parcialmente completo.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Inventário inexistente ou muito desatualizado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa possui planos claros para reposição rápida de equipamentos críticos em caso de dano, falha ou roubo?",
+            "category": "Riscos_de_Material",
+            "options": [
+                {
+                    "optionText": "Plano formal eficaz e frequentemente testado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Plano parcialmente implementado ou pouco testado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem plano definido ou inexistente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso uma tecnologia essencial apresente falhas inesperadas ou indisponibilidade?",
+            "category": "Riscos_Tecnologicos",
+            "options": [
+                {
+                    "optionText": "Impacto limitado, soluções alternativas rápidas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, tempo de recuperação considerável.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto grave, interrupção prolongada das operações.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro da substituição urgente ou reparação de tecnologias críticas danificadas?",
+            "category": "Riscos_Tecnologicos",
+            "options": [
+                {
+                    "optionText": "Baixo impacto financeiro, despesas mínimas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto financeiro moderado, custos gerenciáveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alto impacto financeiro, custos elevados inesperados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "As tecnologias adotadas pela empresa são regularmente avaliadas quanto a vulnerabilidades e compatibilidade?",
+            "category": "Riscos_Tecnologicos",
+            "options": [
+                {
+                    "optionText": "Avaliações regulares e formais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Avaliações ocasionais ou informais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem avaliações regulares ou nunca realizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe um processo estruturado de atualização das tecnologias e softwares críticos utilizados pela empresa?",
+            "category": "Riscos_Tecnologicos",
+            "options": [
+                {
+                    "optionText": "Processo formal e regular.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Processo parcial ou não estruturado.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem processo definido, atualizações raras.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa dispõe de soluções de contingência eficazes caso tecnologias essenciais falhem ou sejam comprometidas?",
+            "category": "Riscos_Tecnologicos",
+            "options": [
+                {
+                    "optionText": "Planos eficazes, testados regularmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Planos parcialmente definidos ou raramente testados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem soluções de contingência definidas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe uma equipa capacitada e pronta para responder rapidamente a incidentes tecnológicos críticos?",
+            "category": "Riscos_Tecnologicos",
+            "options": [
+                {
+                    "optionText": "Equipa dedicada e treinada regularmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Equipa disponível, porém com limitações.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem equipa específica ou capacitada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso um fornecedor ou serviço externo essencial seja subitamente indisponível?",
+            "category": "Riscos_Externos ",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, alternativas imediatas disponíveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, alternativas limitadas disponíveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto alto, sem alternativas imediatas disponíveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro para a empresa caso ocorra uma mudança regulatória inesperada que exija adaptações urgentes?",
+            "category": "Riscos_Externos ",
+            "options": [
+                {
+                    "optionText": "Custos mínimos, ajustes facilmente absorvidos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Custos moderados, adaptação com recursos adicionais.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Custos elevados, adaptação complexa e onerosa.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa avalia regularmente o risco de dependência excessiva de fornecedores ou serviços externos críticos?",
+            "category": "Riscos_Externos ",
+            "options": [
+                {
+                    "optionText": "Avaliações frequentes e formalizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Avaliações ocasionais ou informais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem avaliações ou raramente realizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa monitora regularmente mudanças regulatórias ou eventos externos que possam impactar suas operações?",
+            "category": "Riscos_Externos ",
+            "options": [
+                {
+                    "optionText": "Monitorização contínua e proativa.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização parcial ou esporádica.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem monitorização formal ou eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem planos eficazes e testados para continuidade de negócios em caso de eventos externos críticos (desastres naturais, interrupções externas)?",
+            "category": "Riscos_Externos ",
+            "options": [
+                {
+                    "optionText": "Planos eficazes e regularmente testados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Planos parcialmente definidos ou raramente testados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem planos de continuidade formalizados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe diversificação suficiente entre fornecedores e serviços externos para minimizar impactos em caso de falha de um deles?",
+            "category": "Riscos_Externos ",
+            "options": [
+                {
+                    "optionText": "Alta diversificação e redundância eficaz.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Diversificação limitada, algumas dependências críticas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem diversificação ou alta dependência única.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso um sistema crítico esteja mal configurado e seja explorado por atacantes?",
+            "category": "Risco_de_Configuracao_Inadequada_de_Sistemas",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, incidente facilmente contido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, exploração parcial dos sistemas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto grave, comprometimento total dos sistemas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto financeiro e reputacional decorrente da exposição de dados sensíveis por causa de configurações inadequadas?",
+            "category": "Risco_de_Configuracao_Inadequada_de_Sistemas",
+            "options": [
+                {
+                    "optionText": "Baixo impacto financeiro e reputacional.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, danos gerenciáveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto alto, danos significativos e prolongados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os sistemas críticos têm suas configurações regularmente revistas e validadas para segurança?",
+            "category": "Risco_de_Configuracao_Inadequada_de_Sistemas",
+            "options": [
+                {
+                    "optionText": "Revisões frequentes e documentadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Revisões esporádicas ou informais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem revisão ou raramente realizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes de sua implantação?",
+            "category": "Risco_de_Configuracao_Inadequada_de_Sistemas",
+            "options": [
+                {
+                    "optionText": "Procedimentos formais e rigorosos.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Procedimentos informais ou parcialmente eficazes.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Procedimentos inexistentes ou inadequados.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa utiliza ferramentas automatizadas para identificação rápida de configurações inseguras ou inadequadas?",
+            "category": "Risco_de_Configuracao_Inadequada_de_Sistemas",
+            "options": [
+                {
+                    "optionText": "Uso regular e automatizado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Uso ocasional ou parcial das ferramentas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem ferramentas ou uso inadequado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe treinamento contínuo das equipas técnicas para aplicação correta das práticas de configuração segura?",
+            "category": "Risco_de_Configuracao_Inadequada_de_Sistemas",
+            "options": [
+                {
+                    "optionText": "Treinamentos regulares e eficazes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Treinamentos pontuais ou insuficientes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem treinamentos regulares ou raramente realizados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso um fornecedor essencial deixe subitamente de fornecer produtos ou serviços críticos?",
+            "category": "Risco_de_Dependencia_de_Fornecedores_e_Terceiros",
+            "options": [
+                {
+                    "optionText": "Impacto reduzido, alternativas imediatas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, demora para substituição.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto severo, interrupção significativa.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro e reputacional caso um fornecedor ou parceiro terceiro sofra uma violação grave de dados envolvendo a organização?",
+            "category": "Risco_de_Dependencia_de_Fornecedores_e_Terceiros",
+            "options": [
+                {
+                    "optionText": "Impacto financeiro e reputacional mínimo.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, danos controláveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto elevado, prejuízos financeiros graves e danos à reputação.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa avalia regularmente os níveis de segurança e continuidade operacional dos fornecedores críticos?",
+            "category": "Risco_de_Dependencia_de_Fornecedores_e_Terceiros",
+            "options": [
+                {
+                    "optionText": "Avaliações frequentes e estruturadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Avaliações ocasionais ou parciais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem avaliações regulares ou nunca realizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A organização possui alta dependência de um único fornecedor para serviços ou produtos essenciais?",
+            "category": "Risco_de_Dependencia_de_Fornecedores_e_Terceiros",
+            "options": [
+                {
+                    "optionText": "Sem dependência crítica ou bem diversificada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Dependência moderada com poucas alternativas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alta dependência com alternativas inexistentes.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem planos de contingência claros e testados caso um fornecedor crítico falhe ou seja comprometido?",
+            "category": "Risco_de_Dependencia_de_Fornecedores_e_Terceiros",
+            "options": [
+                {
+                    "optionText": "Plano formal, claro e testado regularmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Plano informal ou parcialmente testado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem plano formal ou inexistente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A organização possui critérios claros e rigorosos na seleção e contratação de fornecedores ou terceiros?",
+            "category": "Risco_de_Dependencia_de_Fornecedores_e_Terceiros",
+            "options": [
+                {
+                    "optionText": "Critérios rigorosos e documentados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Critérios informais ou parcialmente aplicados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem critérios claros ou raramente aplicados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso uma API crítica seja explorada por um atacante?",
+            "category": "Risco_de_Seguranca_em_APIs_e_Integracoes",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, exploração rapidamente mitigada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, exploração limitada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto grave, exploração extensa de sistemas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro e reputacional caso dados sensíveis sejam expostos por vulnerabilidades em APIs?",
+            "category": "Risco_de_Seguranca_em_APIs_e_Integracoes",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, pouca ou nenhuma repercussão.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, custos adicionais e danos controláveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto elevado, multas significativas e danos graves à reputação.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "As APIs são regularmente testadas e validadas quanto a vulnerabilidades conhecidas (pentesting)?",
+            "category": "Risco_de_Seguranca_em_APIs_e_Integracoes",
+            "options": [
+                {
+                    "optionText": "Testes frequentes e estruturados.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Testes ocasionais ou informais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem testes regulares ou inexistentes.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "As integrações externas são monitorizadas constantemente quanto a atividades suspeitas ou anômalas?",
+            "category": "Risco_de_Seguranca_em_APIs_e_Integracoes",
+            "options": [
+                {
+                    "optionText": "Monitorização contínua e eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização parcial ou pouco estruturada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem monitorização formal ou eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "As APIs críticas utilizam mecanismos robustos de autenticação e autorização (ex: tokens, OAuth)?",
+            "category": "Risco_de_Seguranca_em_APIs_e_Integracoes",
+            "options": [
+                {
+                    "optionText": "Autenticação e autorização robustas e atualizadas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Autenticação básica, parcialmente segura.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem mecanismos robustos ou inadequados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem políticas formais para gestão segura, documentação e configuração correta das APIs e integrações?",
+            "category": "Risco_de_Seguranca_em_APIs_e_Integracoes",
+            "options": [
+                {
+                    "optionText": "Políticas formais claras e amplamente aplicadas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Políticas parcialmente definidas ou informais.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem políticas definidas ou raramente aplicadas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso uma vulnerabilidade crítica não seja corrigida a tempo e seja explorada por atacantes?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, facilmente contido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, comprometimento parcial.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto grave, comprometimento significativo dos sistemas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro e reputacional se dados confidenciais fossem expostos devido a falhas em atualizações?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Impacto financeiro e reputacional reduzido.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, custos adicionais controláveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alto impacto, custos elevados e danos reputacionais graves.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os sistemas recebem atualizações e patches críticos regularmente, de forma imediata e automatizada?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Atualizações automáticas e imediatas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Atualizações manuais ou aplicadas parcialmente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Atualizações raras, demoradas ou não realizadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa monitoriza ativamente vulnerabilidades divulgadas e aplica patches relevantes rapidamente após lançamento?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Monitorização ativa e reação rápida.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização ocasional, aplicação moderada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem monitorização formal ou aplicação atrasada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem ferramentas eficazes para garantir a aplicação automática e eficiente das atualizações de segurança necessárias?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Ferramentas robustas e amplamente utilizadas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Ferramentas básicas ou parcialmente eficazes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem ferramentas ou ferramentas inadequadas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe um processo claro e documentado para validação, teste e aplicação rápida de patches e atualizações de segurança?",
+            "category": "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+            "options": [
+                {
+                    "optionText": "Processo formalizado, claro e eficaz.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Processo informal, parcialmente implementado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Processo inexistente ou raramente aplicado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso ocorra a exposição indevida de informações confidenciais internas da empresa?",
+            "category": "Risco_de_Exposicao_de_Dados_Sensiveis",
+            "options": [
+                {
+                    "optionText": "Impacto limitado, facilmente mitigável.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, exposição parcial controlável.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto grave, exposição ampla de informações críticas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro e reputacional em caso de violação dos dados pessoais ou regulados por leis específicas (ex: RGPD)?",
+            "category": "Risco_de_Exposicao_de_Dados_Sensiveis",
+            "options": [
+                {
+                    "optionText": "Baixo impacto, multas improváveis ou reduzidas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, multas e danos reputacionais controláveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alto impacto, multas elevadas e danos reputacionais duradouros.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os dados sensíveis armazenados na empresa são protegidos adequadamente por criptografia robusta?",
+            "category": "Risco_de_Exposicao_de_Dados_Sensiveis",
+            "options": [
+                {
+                    "optionText": "Criptografia forte, amplamente aplicada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Criptografia parcial ou básica.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem criptografia ou muito fraca.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem auditorias regulares sobre a segurança e conformidade dos dados sensíveis armazenados?",
+            "category": "Risco_de_Exposicao_de_Dados_Sensiveis",
+            "options": [
+                {
+                    "optionText": "Auditorias regulares e estruturadas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Auditorias ocasionais ou informais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem auditorias regulares ou inexistentes.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa possui mecanismos eficazes de controlo de acesso e monitorização em tempo real dos dados sensíveis?",
+            "category": "Risco_de_Exposicao_de_Dados_Sensiveis",
+            "options": [
+                {
+                    "optionText": "Controle rigoroso e monitorização contínua.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Controles parciais ou monitorização limitada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem controles eficazes ou monitorização adequada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe uma política formal clara para gestão, classificação e tratamento dos dados sensíveis?",
+            "category": "Risco_de_Exposicao_de_Dados_Sensiveis",
+            "options": [
+                {
+                    "optionText": "Política formal bem definida e aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Política parcialmente definida ou informal.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem política formal definida.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso logs críticos sejam adulterados ou excluídos para esconder atividades maliciosas?",
+            "category": "Risco_de_Manipulacao_de_Logs_e_Registos",
+            "options": [
+                {
+                    "optionText": "Impacto reduzido, incidente rapidamente detectado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, investigação comprometida.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto severo, incapacidade de investigação e resposta adequada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto legal e reputacional caso a empresa não consiga comprovar eventos devido à manipulação ou perda de logs essenciais?",
+            "category": "Risco_de_Manipulacao_de_Logs_e_Registos",
+            "options": [
+                {
+                    "optionText": "Baixo impacto, sem consequências significativas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, possíveis sanções regulatórias.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alto impacto, graves consequências legais e reputacionais.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Os logs e registos críticos são protegidos adequadamente contra manipulação ou exclusão indevida?",
+            "category": "Risco_de_Manipulacao_de_Logs_e_Registos",
+            "options": [
+                {
+                    "optionText": "Proteção robusta, logs imutáveis ou protegidos.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Proteção parcial ou limitada dos logs.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem proteção adequada, facilmente manipuláveis.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe monitorização ativa e constante para identificar tentativas suspeitas de manipulação dos registos e logs?",
+            "category": "Risco_de_Manipulacao_de_Logs_e_Registos",
+            "options": [
+                {
+                    "optionText": "Monitorização contínua e automatizada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização parcial ou esporádica.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem monitorização formal ou eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe armazenamento centralizado e seguro dos logs críticos, garantindo sua integridade e disponibilidade?",
+            "category": "Risco_de_Manipulacao_de_Logs_e_Registos",
+            "options": [
+                {
+                    "optionText": "Armazenamento central seguro, logs protegidos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Armazenamento central básico, segurança parcial.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Armazenamento descentralizado ou inseguro.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe uma política formal e clara definindo responsabilidades e procedimentos para gestão segura e auditoria periódica dos logs?",
+            "category": "Risco_de_Manipulacao_de_Logs_e_Registos",
+            "options": [
+                {
+                    "optionText": "Política formal clara e implementada amplamente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Política informal ou parcialmente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem política formal ou inexistente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional e competitivo caso partes críticas do source code sejam expostas ou obtidas por concorrentes ou atacantes?",
+            "category": "Risco_de_Engenharia_Reversa_e_Exploracao_de_Codigo_Fonte",
+            "options": [
+                {
+                    "optionText": "Impacto limitado, informações não críticas expostas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, exposição parcial de código sensível.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto elevado, exposição ampla de propriedade intelectual e vulnerabilidades críticas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro e reputacional decorrente da exploração bem-sucedida de vulnerabilidades identificadas através de engenharia reversa?",
+            "category": "Risco_de_Engenharia_Reversa_e_Exploracao_de_Codigo_Fonte",
+            "options": [
+                {
+                    "optionText": "Impacto reduzido, fácil mitigação e danos limitados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, custos adicionais gerenciáveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto severo, altos custos financeiros e danos reputacionais significativos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa utiliza mecanismos técnicos para dificultar ou impedir a engenharia reversa do código-fonte e software sensível (ex: ofuscação)?",
+            "category": "Risco_de_Engenharia_Reversa_e_Exploracao_de_Codigo_Fonte",
+            "options": [
+                {
+                    "optionText": "Proteção robusta, amplamente implementada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Proteção parcial, algumas áreas desprotegidas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem proteção ou proteção inadequada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "O código-fonte crítico ou sensível é armazenado e protegido por controles rigorosos de acesso e monitorização ativa?",
+            "category": "Risco_de_Engenharia_Reversa_e_Exploracao_de_Codigo_Fonte",
+            "options": [
+                {
+                    "optionText": "Controles rigorosos e monitorização constante.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Controles básicos ou parcialmente eficazes.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem controles ou monitorização insuficiente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe uma política formal para a proteção eficaz do código-fonte e propriedade intelectual, incluindo medidas contra engenharia reversa?",
+            "category": "Risco_de_Engenharia_Reversa_e_Exploracao_de_Codigo_Fonte",
+            "options": [
+                {
+                    "optionText": "Política clara, documentada e amplamente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Política parcial ou informalmente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem política definida ou raramente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "São realizados testes regulares e auditorias de segurança para detectar riscos relacionados à engenharia reversa ou exposição do código-fonte?",
+            "category": "Risco_de_Engenharia_Reversa_e_Exploracao_de_Codigo_Fonte",
+            "options": [
+                {
+                    "optionText": "Auditorias regulares e eficazes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Auditorias ocasionais ou parciais.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem auditorias regulares ou inexistentes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional se serviços críticos ficarem indisponíveis devido a um ataque de negação de serviço (DoS)?",
+            "category": "Risco_de_Ataques_de_Negacao_de_Servico",
+            "options": [
+                {
+                    "optionText": "Impacto limitado, rápida mitigação.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, serviços parcialmente afetados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto alto, interrupção prolongada de serviços essenciais.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro e reputacional caso a empresa sofra um ataque DoS prolongado?",
+            "category": "Risco_de_Ataques_de_Negacao_de_Servico",
+            "options": [
+                {
+                    "optionText": "Impacto financeiro mínimo, pouco dano à reputação.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, custos adicionais significativos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alto impacto, grandes perdas financeiras e graves danos reputacionais.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A infraestrutura da empresa está protegida contra ataques DoS por meio de ferramentas especializadas (firewalls, filtros anti-DDoS)?",
+            "category": "Risco_de_Ataques_de_Negacao_de_Servico",
+            "options": [
+                {
+                    "optionText": "Proteção robusta e atualizada regularmente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Proteção parcial ou limitada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem proteção adequada ou inexistente.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa monitoriza ativamente o tráfego de rede em tempo real para detectar atividades suspeitas ou ataques de negação de serviço?",
+            "category": "Risco_de_Ataques_de_Negacao_de_Servico",
+            "options": [
+                {
+                    "optionText": "Monitorização ativa e automatizada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização parcial ou básica.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem monitorização eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe um plano formal e testado para mitigação rápida e eficaz em caso de ataque DoS contra serviços essenciais?",
+            "category": "Risco_de_Ataques_de_Negacao_de_Servico",
+            "options": [
+                {
+                    "optionText": "Plano formal testado regularmente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Plano informal ou raramente testado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem plano formal ou inexistente.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa conta com soluções técnicas (ex: redundância, balanceamento de carga) para reduzir o impacto operacional de ataques DoS?",
+            "category": "Risco_de_Ataques_de_Negacao_de_Servico",
+            "options": [
+                {
+                    "optionText": "Soluções técnicas eficazes e implementadas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Soluções parcialmente implementadas ou limitadas.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem soluções adequadas ou insuficientes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual o impacto operacional caso ocorra abuso de privilégios internos por um colaborador autorizado?",
+            "category": " Risco_de_Uso_Indevido_de_Privilegios_Internos",
+            "options": [
+                {
+                    "optionText": "Impacto reduzido, facilmente identificado.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, falhas parciais e controláveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Impacto severo, danos operacionais significativos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Qual seria o impacto financeiro e reputacional decorrente do vazamento ou manipulação de dados por uso indevido de privilégios internos?",
+            "category": " Risco_de_Uso_Indevido_de_Privilegios_Internos",
+            "options": [
+                {
+                    "optionText": "Impacto mínimo, danos rapidamente resolvidos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Impacto moderado, danos controláveis.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Alto impacto financeiro e graves danos à reputação.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A empresa monitora ativamente o uso de privilégios internos para detectar atividades suspeitas ou incomuns?",
+            "category": " Risco_de_Uso_Indevido_de_Privilegios_Internos",
+            "options": [
+                {
+                    "optionText": "Monitorização contínua e automatizada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Monitorização ocasional ou limitada.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem monitorização formal ou eficaz.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "A concessão de privilégios administrativos ou críticos segue critérios rigorosos e revisões periódicas?",
+            "category": " Risco_de_Uso_Indevido_de_Privilegios_Internos",
+            "options": [
+                {
+                    "optionText": "Revisões regulares e critérios rigorosos.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Revisões informais ou ocasionais.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem critérios claros ou revisões raramente feitas.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existem mecanismos eficazes de auditoria e controle para prevenir ou detectar rapidamente o abuso de privilégios internos?",
+            "category": " Risco_de_Uso_Indevido_de_Privilegios_Internos",
+            "options": [
+                {
+                    "optionText": "Mecanismos eficazes e constantemente ativos.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Mecanismos parciais ou limitados.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem mecanismos adequados ou ineficazes.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        },
+        {
+            "questionText": "Existe uma política formal para gestão, revisão e revogação rápida de privilégios administrativos ou críticos em caso de necessidade?",
+            "category": " Risco_de_Uso_Indevido_de_Privilegios_Internos",
+            "options": [
+                {
+                    "optionText": "Política formal, clara e rigorosamente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "LOW"
+                },
+                {
+                    "optionText": "Política informal ou parcialmente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "MEDIUM"
+                },
+                {
+                    "optionText": "Sem política definida ou raramente aplicada.",
+                    "optionType": "IMPACT",
+                    "optionLevel": "HIGH"
+                }
+            ]
+        }
+    ]
+}

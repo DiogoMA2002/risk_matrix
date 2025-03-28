@@ -96,6 +96,22 @@ public class QuestionnaireController {
     public Questionnaire importQuestionnaire(@RequestBody Questionnaire incoming) {
         return questionnaireService.importQuestionnaire(incoming);
     }
+    @PutMapping("/{id}")
+    public Questionnaire updateQuestionnaire(@PathVariable Long id, @RequestBody Questionnaire updatedQuestionnaire) {
+        return questionnaireService.updateQuestionnaire(id, updatedQuestionnaire);
+    }
 
+    @GetMapping("/{id}/questions")
+    public List<Question> getAllQuestionsForQuestionnaire(@PathVariable Long id) {
+        return questionnaireService.getAllQuestionsForQuestionnaire(id);
+    }
+
+    @GetMapping("/search")
+    public List<QuestionnaireDTO> searchQuestionnaires(@RequestParam(required = false) String title) {
+        return questionnaireService.searchQuestionnaires(title)
+                .stream()
+                .map(QuestionnaireDTO::new)
+                .collect(Collectors.toList());
+    }
 
 }

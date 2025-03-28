@@ -200,6 +200,17 @@
           </div>
         </div>
       </div>
+      <!-- Filter Section (Place this above the Existing Questions card) -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Categoria</label>
+      <select v-model="filterCategory" @change="filterQuestionsByCategory"
+        class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300">
+        <option value="">Todos</option>
+        <option v-for="cat in categories" :key="cat" :value="cat">
+          {{ formatCategoryName(cat) }}
+        </option>
+      </select>
+    </div>
 
       <!-- Card: Existing Questions -->
       <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mb-8">
@@ -388,6 +399,7 @@ export default {
         "Riscos_Tecnológicos",
         "Riscos_Externos"
       ],
+      filterCategory: "", // "" means show all
 
       // Feedback
       feedbacks: [],
@@ -457,6 +469,24 @@ export default {
         this.isLoading = false;
       }
     },
+    async filterQuestionsByCategory() {
+    this.isLoading = true;
+    try {
+      if (this.filterCategory === "") {
+        // No filter, load all questions
+        await this.fetchQuestions();
+      } else {
+        // Fetch questions by category from your endpoint
+        const response = await axios.get(`/api/questions/category/${this.filterCategory}`);
+        this.questions = response.data;
+      }
+    } catch (error) {
+      console.error("Erro ao filtrar questões:", error);
+      alert("Falha ao filtrar questões.");
+    } finally {
+      this.isLoading = false;
+    }
+  },
     async addQuestion() {
       if (!this.newQuestion || !this.selectedCategory || !this.selectedQuestionnaire) {
         alert("Por favor, insira a questão, selecione uma categoria e escolha um questionário.");

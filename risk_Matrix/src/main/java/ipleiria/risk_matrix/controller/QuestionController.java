@@ -1,18 +1,13 @@
 package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.dto.QuestionDTO;
-import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
-import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
-import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import ipleiria.risk_matrix.service.QuestionService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/questions")
@@ -58,4 +53,11 @@ public class QuestionController {
     public void deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
     }
+
+    @PutMapping("/{id}")
+    public QuestionDTO updateQuestion(@PathVariable Long id, @RequestBody QuestionDTO updatedQuestionDTO) {
+        return questionService.updateQuestion(id, updatedQuestionDTO);
+    }
+
+
 }

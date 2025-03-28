@@ -3,6 +3,7 @@ package ipleiria.risk_matrix.service;
 import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.dto.QuestionOptionDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidCategoryException;
+import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionNotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
@@ -114,5 +115,43 @@ public class QuestionService {
             throw new QuestionNotFoundException("Question not found for ID: " + id);
         }
         questionRepository.deleteById(id);
+    }
+    public QuestionDTO updateQuestion(Long id, QuestionDTO updatedQuestionDTO) {
+        // Retrieve the existing question or throw an exception if not found.
+        Question existingQuestion = questionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Question not found with id: " + id));
+
+        // Update the question text.
+        existingQuestion.setQuestionText(updatedQuestionDTO.getQuestionText());
+
+        // Convert the string from the DTO to the enum.
+        existingQuestion.setCategory(QuestionCategory.valueOf(updatedQuestionDTO.getCategory().toUpperCase()));
+
+        // Clear current options and convert new ones from the DTO.
+        existingQuestion.getOptions().clear();
+        if (updatedQuestionDTO.getOptions() != null) {
+            List<QuestionOption> newOptions = updatedQuestionDTO.getOptions()
+                    .stream()
+                    .map(dto -> convertDtoToQuestionOption(dto, existingQuestion))
+                    .collect(Collectors.toList());
+            existingQuestion.getOptions().addAll(newOptions);
+        }
+
+        // Save the updated question.
+        Question savedQuestion = questionRepository.save(existingQuestion);
+
+        // Return a DTO of the saved question.
+        return new QuestionDTO(savedQuestion);
+    }
+
+    // Helper method to convert a QuestionOptionDTO into a QuestionOption entity.
+    private QuestionOption convertDtoToQuestionOption(QuestionOptionDTO dto, Question question) {
+        QuestionOption option = new QuestionOption();
+        option.setOptionText(dto.getOptionText());
+        option.setOptionType(dto.getOptionType()); // Already an enum of type OptionLevelType
+        option.setOptionLevel(dto.getOptionLevel()); // Already an enum of type OptionLevel
+        // If you need to set severity, do so here (if applicable)
+        option.setQuestion(question); // Associate this option with the parent question
+        return option;
     }
 }
