@@ -6,6 +6,8 @@ export default createStore({
     questions: [],
     questionnaires: [],
     selectedQuestionnaire: null,
+    allAnswers: {}
+
   },
   mutations: {
     setQuestions(state, questions) {
@@ -17,6 +19,20 @@ export default createStore({
     setSelectedQuestionnaire(state, questionnaire) {
       state.selectedQuestionnaire = questionnaire
     },
+
+    setAllAnswers(state, answers) {
+      state.allAnswers = answers;
+    },
+    updateAnswer(state, { category, questionId, answer }) {
+      // If the category doesn’t exist, create it.
+      if (!state.allAnswers[category]) {
+        state.allAnswers[category] = {};
+      }
+      state.allAnswers[category][questionId] = answer;
+    },
+    clearAllAnswers(state) {
+      state.allAnswers = {};
+    }
   },
   actions: {
     fetchQuestions({ commit }) {
