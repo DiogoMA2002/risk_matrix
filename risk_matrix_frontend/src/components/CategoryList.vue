@@ -1,19 +1,29 @@
 <template>
   <div class="h-screen overflow-y-auto bg-gradient-to-br from-blue-600 to-indigo-100 font-sans">
     <div class="container mx-auto px-4 py-6">
-      <!-- Header with back button -->
-      <div class="flex items-center mb-6">
-        <button @click="$router.go(-1)"
-          class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <div class="text-white">
-          <h1 class="text-2xl font-bold">Categorias de Questões</h1>
-          <p class="text-sm opacity-80">Selecione uma categoria para responder às perguntas</p>
+      <!-- Header with back button and logo on the right -->
+        <div class="flex justify-between items-center mb-6">
+          <!-- Left side: back button and text -->
+          <div class="flex items-center">
+            <button @click="$router.go(-1)"
+              class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div class="text-white">
+              <h1 class="text-2xl font-bold">Categorias de Questões</h1>
+              <p class="text-sm opacity-80">Selecione uma categoria para responder às perguntas</p>
+            </div>
+          </div>
+
+          <!-- Right side: Logo + C-Network text -->
+          <div class="flex items-center space-x-2 text-white">
+            <img src="@/assets/logo.png" alt="Logo" class="h-10">
+            <span class="text-2xl font-bold">C-Network</span>
+          </div>
         </div>
-      </div>
+
 
       <!-- Main layout: Categories grid + Sidebar with Questionnaires -->
       <div class="flex flex-col md:flex-row">
