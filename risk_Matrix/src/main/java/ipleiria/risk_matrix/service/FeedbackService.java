@@ -15,10 +15,10 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private static final int MAX_WORDS = 250;
 
-    @Autowired
     public FeedbackService(FeedbackRepository feedbackRepository) {
         this.feedbackRepository = feedbackRepository;
     }
+
 
     public Feedback saveFeedback(Feedback feedback) {
         int wordCount = feedback.getUserFeedback().trim().split("\\s+").length;

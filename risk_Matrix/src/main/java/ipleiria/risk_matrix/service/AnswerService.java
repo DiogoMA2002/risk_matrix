@@ -8,7 +8,6 @@ import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questions.*;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.function.Function;
+
 
 import static ipleiria.risk_matrix.utils.RiskUtils.computeSeverity;
 import static ipleiria.risk_matrix.utils.RiskUtils.medianLevel;
@@ -23,11 +25,14 @@ import static ipleiria.risk_matrix.utils.RiskUtils.medianLevel;
 @Service
 public class AnswerService {
 
-    @Autowired
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        this.answerRepository = answerRepository;
+        this.questionRepository = questionRepository;
+    }
+
 
     // Create (submit) an answer
     public AnswerDTO submitAnswer(AnswerDTO answerDTO) {
@@ -91,61 +96,34 @@ public class AnswerService {
         }
         return result;
     }
-
-    // Get answers by email + compute severities
     public UserAnswersDTO getUserAnswersWithSeverities(String email) {
         List<AnswerDTO> answers = getAnswersByEmail(email);
 
-        // Group them by category
+        // Batch load all questions for the answers
+        Set<Long> questionIds = answers.stream()
+                .map(AnswerDTO::getQuestionId)
+                .collect(Collectors.toSet());
+        List<Question> questions = questionRepository.findAllById(questionIds);
+
+        // Build a map for quick lookup: question ID -> Question
+        Map<Long, Question> questionMap = questions.stream()
+                .collect(Collectors.toMap(Question::getId, Function.identity()));
+
         Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
         for (AnswerDTO ans : answers) {
-            Question question = questionRepository.findById(ans.getQuestionId())
-                    .orElseThrow(() -> new NotFoundException(
-                            "Question not found for ID: " + ans.getQuestionId()
-                    ));
-
-            String categoryName = question.getCategory().name();
-            answersByCategory
-                    .computeIfAbsent(categoryName, k -> new ArrayList<>())
-                    .add(ans);
-        }
-
-        // For each category, compute final severity
-        Map<String, Severity> severitiesByCategory = new HashMap<>();
-
-        for (Map.Entry<String, List<AnswerDTO>> entry : answersByCategory.entrySet()) {
-            String category = entry.getKey();
-            // Filter out "Não Aplicável" answers
-            List<AnswerDTO> catAnswers = entry.getValue().stream()
-                    .filter(a -> ! "Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
-                    .collect(Collectors.toList());
-
-            // If all answers for this category were "Não Aplicável", catAnswers is empty
-            // We can skip or default severity to LOW
-            if (catAnswers.isEmpty()) {
-                severitiesByCategory.put(category, Severity.LOW);
-                continue;
+            Question question = questionMap.get(ans.getQuestionId());
+            if (question == null) {
+                throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
             }
-
-            // Collect IMPACT levels
-            List<OptionLevel> impactLevels = catAnswers.stream()
-                    .filter(a -> a.getQuestionType() == OptionLevelType.IMPACT)
-                    .map(AnswerDTO::getChosenLevel)
-                    .collect(Collectors.toList());
-            OptionLevel medianImpact = medianLevel(impactLevels);
-
-            // Collect PROBABILITY levels
-            List<OptionLevel> probabilityLevels = catAnswers.stream()
-                    .filter(a -> a.getQuestionType() == OptionLevelType.PROBABILITY)
-                    .map(AnswerDTO::getChosenLevel)
-                    .collect(Collectors.toList());
-            OptionLevel medianProbability = medianLevel(probabilityLevels);
-
-            Severity finalSeverity = computeSeverity(medianImpact, medianProbability);
-            severitiesByCategory.put(category, finalSeverity);
+            String categoryName = question.getCategory().name();
+            answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
         }
 
-        // Build the UserAnswersDTO
+        Map<String, Severity> severitiesByCategory = new HashMap<>();
+        for (Map.Entry<String, List<AnswerDTO>> entry : answersByCategory.entrySet()) {
+            severitiesByCategory.put(entry.getKey(), computeCategorySeverity(entry.getValue()));
+        }
+
         UserAnswersDTO dto = new UserAnswersDTO();
         dto.setEmail(email);
         dto.setAnswers(answers);
@@ -154,67 +132,78 @@ public class AnswerService {
         return dto;
     }
 
-
-    // Get all answers for all users + compute severities
     public List<UserAnswersDTO> getAllAnswersWithSeverityAndEmail() {
-        // 1. Get all answers
         List<AnswerDTO> allAnswers = getAllAnswers();
 
-        // 2. Group by user email
+        // Batch load questions for all answers
+        Set<Long> questionIds = allAnswers.stream()
+                .map(AnswerDTO::getQuestionId)
+                .collect(Collectors.toSet());
+        List<Question> questions = questionRepository.findAllById(questionIds);
+
+        Map<Long, Question> questionMap = questions.stream()
+                .collect(Collectors.toMap(Question::getId, Function.identity()));
+
+        // Group answers by user email
         Map<String, List<AnswerDTO>> answersGroupedByEmail = allAnswers.stream()
                 .collect(Collectors.groupingBy(AnswerDTO::getEmail));
-
         List<UserAnswersDTO> result = new ArrayList<>();
 
-        // 3. For each user, group by category + compute severity
         for (Map.Entry<String, List<AnswerDTO>> entry : answersGroupedByEmail.entrySet()) {
             String email = entry.getKey();
             List<AnswerDTO> userAnswers = entry.getValue();
-
             Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
+
             for (AnswerDTO ans : userAnswers) {
-                Question question = questionRepository.findById(ans.getQuestionId())
-                        .orElseThrow(() -> new NotFoundException(
-                                "Question not found for ID: " + ans.getQuestionId()
-                        ));
+                Question question = questionMap.get(ans.getQuestionId());
+                if (question == null) {
+                    throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
+                }
                 String categoryName = question.getCategory().name();
                 answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
             }
 
             Map<String, Severity> severitiesByCategory = new HashMap<>();
             for (Map.Entry<String, List<AnswerDTO>> catEntry : answersByCategory.entrySet()) {
-                String category = catEntry.getKey();
-                List<AnswerDTO> catAnswers = catEntry.getValue();
-
-                // Collect and compute median IMPACT
-                List<OptionLevel> impactLevels = catAnswers.stream()
-                        .filter(a -> a.getQuestionType() == OptionLevelType.IMPACT)
-                        .map(AnswerDTO::getChosenLevel)
-                        .collect(Collectors.toList());
-                OptionLevel medianImpact = medianLevel(impactLevels);
-
-                // Collect and compute median PROBABILITY
-                List<OptionLevel> probabilityLevels = catAnswers.stream()
-                        .filter(a -> a.getQuestionType() == OptionLevelType.PROBABILITY)
-                        .map(AnswerDTO::getChosenLevel)
-                        .collect(Collectors.toList());
-                OptionLevel medianProbability = medianLevel(probabilityLevels);
-
-                Severity finalSeverity = computeSeverity(medianImpact, medianProbability);
-                severitiesByCategory.put(category, finalSeverity);
+                severitiesByCategory.put(catEntry.getKey(), computeCategorySeverity(catEntry.getValue()));
             }
 
-            // Build the DTO for this email
             UserAnswersDTO dto = new UserAnswersDTO();
             dto.setEmail(email);
             dto.setAnswers(userAnswers);
             dto.setSeveritiesByCategory(severitiesByCategory);
             result.add(dto);
         }
-
         return result;
     }
 
+
+    // Helper method in AnswerService (always filters out "Não Aplicável")
+    private Severity computeCategorySeverity(List<AnswerDTO> answers) {
+        List<AnswerDTO> filteredAnswers = answers.stream()
+                .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
+                .collect(Collectors.toList());
+
+        if (filteredAnswers.isEmpty()) {
+            return Severity.LOW;
+        }
+
+        // Compute median for IMPACT levels
+        List<OptionLevel> impactLevels = filteredAnswers.stream()
+                .filter(a -> a.getQuestionType() == OptionLevelType.IMPACT)
+                .map(AnswerDTO::getChosenLevel)
+                .collect(Collectors.toList());
+        OptionLevel medianImpact = medianLevel(impactLevels);
+
+        // Compute median for PROBABILITY levels
+        List<OptionLevel> probabilityLevels = filteredAnswers.stream()
+                .filter(a -> a.getQuestionType() == OptionLevelType.PROBABILITY)
+                .map(AnswerDTO::getChosenLevel)
+                .collect(Collectors.toList());
+        OptionLevel medianProbability = medianLevel(probabilityLevels);
+
+        return computeSeverity(medianImpact, medianProbability);
+    }
 
 
 }

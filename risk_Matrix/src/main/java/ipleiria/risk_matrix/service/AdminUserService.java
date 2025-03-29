@@ -13,8 +13,11 @@ import java.util.Optional;
 @Service
 public class AdminUserService {
 
-    @Autowired
-    private AdminUserRepository adminUserRepository;
+    private final AdminUserRepository adminUserRepository;
+
+    public AdminUserService(AdminUserRepository adminUserRepository) {
+        this.adminUserRepository = adminUserRepository;
+    }
 
     // Criar um novo administrador
     public AdminUser createAdmin(AdminUser adminUser) {

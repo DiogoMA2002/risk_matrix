@@ -20,11 +20,13 @@ import java.util.stream.Collectors;
 @Service
 public class QuestionService {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+    private final QuestionnaireRepository questionnaireRepository;
 
-    @Autowired
-    private QuestionnaireRepository questionnaireRepository;
+    public QuestionService(QuestionRepository questionRepository, QuestionnaireRepository questionnaireRepository) {
+        this.questionRepository = questionRepository;
+        this.questionnaireRepository = questionnaireRepository;
+    }
 
     // Create a new question
     public QuestionDTO createQuestion(Long questionnaireId, QuestionDTO questionDTO) {

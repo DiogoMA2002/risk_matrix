@@ -353,7 +353,7 @@
         <div class="flex space-x-4 mb-4">
           <button @click="fetchUserAnswersByEmail"
             class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300">
-            Buscar por Email
+            Procurar por Email
           </button>
           <button @click="fetchAllUserAnswers"
             class="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all duration-300">
@@ -467,7 +467,7 @@ export default {
         const response = await axios.get("/api/questions/all");
         this.questions = response.data;
       } catch (error) {
-        console.error("Erro ao buscar questões:", error);
+        console.error("Erro ao procurar questões:", error);
         // fallback example
         this.questions = [
           { id: 1, questionText: "Está habilitada a autenticação de múltiplos fatores?", category: "AUTHENTICATION_RISK" },
@@ -554,7 +554,7 @@ export default {
         const response = await axios.get("/api/questionnaires/all");
         this.questionnaires = response.data;
       } catch (error) {
-        console.error("Erro ao buscar questionários:", error);
+        console.error("Erro ao procurar questionários:", error);
         this.questionnaires = [];
       }
     },
@@ -631,7 +631,7 @@ export default {
         this.selectedQuestionnaire = response.data;
         localStorage.setItem("selectedQuestionnaire", id);
       } catch (error) {
-        console.error("Erro ao buscar questionário:", error);
+        console.error("Erro ao procurar questionário:", error);
         this.selectedQuestionnaire = null;
       }
     },
@@ -678,7 +678,7 @@ export default {
         const response = await axios.get("/api/feedback", { params });
         this.feedbacks = response.data;
       } catch (error) {
-        console.error("Erro ao buscar feedback:", error);
+        console.error("Erro ao procurar feedback:", error);
         this.feedbacks = [];
       } finally {
         this.isLoading = false;
@@ -705,8 +705,8 @@ export default {
           this.userAnswers = [response.data];
         }
       } catch (error) {
-        console.error("Erro ao buscar respostas por email:", error);
-        alert("Falha ao buscar respostas.");
+        console.error("Erro ao procurar respostas por email:", error);
+        alert("Falha ao procurar respostas.");
       } finally {
         this.isLoading = false;
       }
@@ -724,8 +724,8 @@ export default {
           this.userAnswers = response.data;
         }
       } catch (error) {
-        console.error("Erro ao buscar todas as respostas:", error);
-        alert("Falha ao buscar respostas.");
+        console.error("Erro ao procurar todas as respostas:", error);
+        alert("Falha ao procurar respostas.");
       } finally {
         this.isLoading = false;
       }
