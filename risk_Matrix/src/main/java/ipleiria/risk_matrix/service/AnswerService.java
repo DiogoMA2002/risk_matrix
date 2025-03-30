@@ -10,6 +10,8 @@ import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -205,5 +207,12 @@ public class AnswerService {
         return computeSeverity(medianImpact, medianProbability);
     }
 
+    public List<AnswerDTO> getAnswersByDateRange(String startDate, String endDate) {
+        LocalDateTime start = LocalDate.parse(startDate).atStartOfDay();
+        LocalDateTime end = LocalDate.parse(endDate).atTime(23, 59, 59);
+        return answerRepository.findByCreatedAtBetween(start, end).stream()
+                .map(AnswerDTO::new)
+                .collect(Collectors.toList());
+    }
 
 }

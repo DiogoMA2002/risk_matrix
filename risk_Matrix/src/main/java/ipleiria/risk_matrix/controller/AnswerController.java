@@ -48,4 +48,9 @@ public class AnswerController {
         return answerService.submitMultipleAnswers(answers);
     }
 
+    @GetMapping("/by-date-range")
+    public List<AnswerDTO> getAnswersByDateRange(@RequestParam String startDate, @RequestParam String endDate) {
+        return answerService.getAnswersByDateRange(startDate, endDate);
+    }
+
 }
