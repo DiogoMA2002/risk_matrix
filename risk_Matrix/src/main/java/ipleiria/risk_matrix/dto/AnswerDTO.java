@@ -4,6 +4,8 @@ import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questions.OptionLevel;
 import ipleiria.risk_matrix.models.questions.OptionLevelType;
 
+import java.time.LocalDateTime;
+
 public class AnswerDTO {
 
     private Long id;
@@ -14,6 +16,7 @@ public class AnswerDTO {
     private OptionLevelType questionType; // IMPACT or PROBABILITY
     private OptionLevel chosenLevel;      // LOW, MEDIUM, HIGH
     private String email;
+    private LocalDateTime createdAt;
 
     public AnswerDTO() {}
 
@@ -25,6 +28,7 @@ public class AnswerDTO {
         this.questionType = answer.getQuestionType();
         this.chosenLevel = answer.getChosenLevel();
         this.email = answer.getEmail();
+        this.createdAt = answer.getCreatedAt();
     }
 
     // Getters and Setters
@@ -48,4 +52,7 @@ public class AnswerDTO {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

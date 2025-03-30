@@ -3,6 +3,9 @@ import ipleiria.risk_matrix.models.questions.OptionLevel;
 import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.models.questions.Severity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "answers")
@@ -31,6 +34,10 @@ public class Answer {
 
     @Column(nullable = false)
     private String email;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     // Constructors
     public Answer() {}
@@ -66,5 +73,13 @@ public class Answer {
 
     public void setChosenLevel(OptionLevel chosenLevel) {
         this.chosenLevel = chosenLevel;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
