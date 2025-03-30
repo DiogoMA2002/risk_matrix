@@ -14,13 +14,9 @@
     <!-- Logo and branding -->
     <div class="w-full flex justify-center pt-10">
       <div class="flex items-center space-x-3">
-        <!-- Removed the bg-blue-600 and replaced with a neutral container -->
         <div class="flex items-center justify-center">
-          <!-- Increased the size from h-6 w-6 to h-12 w-12 -->
-          <img src="@/assets/logo.png" alt="Logo" class="h-12 w-12" />
-        </div>
-        <div class="text-white">
-          <div class="text-2xl font-bold">C-Network</div>
+          <!-- Ajustado: apenas h-12 + object-contain -->
+          <img src="@/assets/logoCCC.png" alt="Logo" class="h-16 object-contain" />
         </div>
       </div>
     </div>
@@ -81,6 +77,11 @@
                12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
+    </div>
+
+    <!-- Logo no canto inferior esquerdo -->
+    <div class="fixed bottom-6 left-6">
+      <img src="@/assets/LogoFinanciamento.png" alt="Logo C-Network" class="h-12 object-contain" />
     </div>
   </div>
 </template>

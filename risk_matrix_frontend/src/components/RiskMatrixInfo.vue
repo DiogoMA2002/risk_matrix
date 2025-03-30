@@ -19,8 +19,7 @@
 
                 <!-- Right side: Logo + C-Network text -->
                 <div class="flex items-center space-x-2 text-white">
-                    <img src="@/assets/logo.png" alt="Logo" class="h-10">
-                    <span class="text-2xl font-bold">C-Network</span>
+                    <img src="@/assets/logoCCC.png" alt="Logo" class="h-16">
                 </div>
             </div>
         </div>
