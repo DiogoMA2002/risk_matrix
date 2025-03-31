@@ -8,7 +8,8 @@
         <div class="flex items-center">
           <button @click="$router.go(-1)"
             class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -127,9 +128,10 @@
             <select v-model="selectedCategory"
               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 bg-white">
               <option disabled value="">Selecione a Categoria</option>
-              <option v-for="category in categories" :key="category" :value="category">
-                {{ formatCategoryName(category) }}
+              <option v-for="cat in categories" :key="cat" :value="cat">
+                {{ formatCategoryName(cat) }} <!-- still display human readable -->
               </option>
+
             </select>
           </div>
 
@@ -209,16 +211,16 @@
         </div>
       </div>
       <!-- Filter Section (Place this above the Existing Questions card) -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Categoria</label>
-      <select v-model="filterCategory" @change="filterQuestionsByCategory"
-        class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300">
-        <option value="">Todos</option>
-        <option v-for="cat in categories" :key="cat" :value="cat">
-          {{ formatCategoryName(cat) }}
-        </option>
-      </select>
-    </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Categoria</label>
+        <select v-model="filterCategory" @change="filterQuestionsByCategory"
+          class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300">
+          <option value="">Todos</option>
+          <option v-for="cat in categories" :key="cat" :value="cat">
+            {{ formatCategoryName(cat) }}
+          </option>
+        </select>
+      </div>
 
       <!-- Card: Existing Questions -->
       <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mb-8">
@@ -338,7 +340,8 @@
       <!-- Card: User Answers -->
       <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6">
         <h2 class="text-xl font-semibold mb-4 text-blue-800 flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
           Respostas dos Utilizadores
@@ -422,17 +425,27 @@ export default {
       selectedCategory: "",
       categories: [
         "Risco_de_Autenticacao",
-        "Seguranca_de_Email",
+        "Risco_de_Utilizacao_de_Email",
         "Risco_de_Plataforma_da_Empresa",
         "Risco_de_Armazenamento_de_Dados",
         "Risco_da_Rede_Interna",
-        "Risco_de_Infraestrutura_de_Informação_Externa",
-        "Risco_de_Infraestrutura_de_Informação_Interna",
-        "Risco_de_Ataques",
+        "Risco_de_Infraestrutura_de_Informacao_Externa_Interna",
+        "Risco_de_Ataques_Phishing_Engenharia_Social",
+        "Risco_de_Acesso_Remoto",
         "Riscos_de_Material",
-        "Riscos_Tecnológicos",
-        "Riscos_Externos"
-      ],
+        "Riscos_Tecnologicos",
+        "Riscos_Externos",
+        "Risco_de_Configuracao_Inadequada_de_Sistemas",
+        "Risco_de_Dependencia_de_Fornecedores_e_Terceiros",
+        "Risco_de_Seguranca_em_APIs_e_Integracoes",
+        "Risco_de_Falhas_em_Atualizacoes_e_Patches_de_Seguranca",
+        "Risco_de_Exposicao_de_Dados_Sensiveis",
+        "Risco_de_Manipulacao_de_Logs_e_Registos",
+        "Risco_de_Engenharia_Reversa_e_Exploracao_de_Codigo_Fonte",
+        "Risco_de_Ataques_de_Negacao_de_Servico",
+        "Risco_de_Uso_Indevido_de_Privilegios_Internos"
+      ]
+      ,
       filterCategory: "", // "" means show all
 
       // Feedback
@@ -466,7 +479,7 @@ export default {
 
       // For import
       selectedImportFile: null,
-        
+
       //DataFilter
       filterStartDate: "",
       filterEndDate: "",
@@ -508,23 +521,23 @@ export default {
       }
     },
     async filterQuestionsByCategory() {
-    this.isLoading = true;
-    try {
-      if (this.filterCategory === "") {
-        // No filter, load all questions
-        await this.fetchQuestions();
-      } else {
-        // Fetch questions by category from your endpoint
-        const response = await axios.get(`/api/questions/category/${this.filterCategory}`);
-        this.questions = response.data;
+      this.isLoading = true;
+      try {
+        if (this.filterCategory === "") {
+          // No filter, load all questions
+          await this.fetchQuestions();
+        } else {
+          // Fetch questions by category from your endpoint
+          const response = await axios.get(`/api/questions/category/${this.filterCategory}`);
+          this.questions = response.data;
+        }
+      } catch (error) {
+        console.error("Erro ao filtrar questões:", error);
+        alert("Falha ao filtrar questões.");
+      } finally {
+        this.isLoading = false;
       }
-    } catch (error) {
-      console.error("Erro ao filtrar questões:", error);
-      alert("Falha ao filtrar questões.");
-    } finally {
-      this.isLoading = false;
-    }
-  },
+    },
     async addQuestion() {
       if (!this.newQuestion || !this.selectedCategory || !this.selectedQuestionnaire) {
         alert("Por favor, insira a questão, selecione uma categoria e escolha um questionário.");
@@ -605,28 +618,27 @@ export default {
       }
     },
     async deleteQuestionnaire(id) {
-      if (!confirm("Tem certeza que deseja excluir este questionário?")) return;
-      try {
-        // We allow any status < 500 to avoid throwing an Axios error
-        const response = await axios.delete(`/api/questionnaires/delete/${id}`, {
-          validateStatus: status => status < 500
-        });
+  if (!confirm("Tem certeza que deseja excluir este questionário?")) return;
+  try {
+    const response = await axios.delete(`/api/questionnaires/delete/${id}`, {
+      validateStatus: status => status < 500
+    });
 
-        // Now we manually check the response code
-        if (response.status === 204 || response.status === 200) {
-          // Treat as success
-          this.fetchQuestionnaires();
-          this.$delete(this.visibleQuestions, id);
-        } else {
-          // Some other 2xx or 4xx code we consider "fail"
-          console.error("Erro ao excluir questionário. Status:", response.status);
-          alert("Falha ao excluir questionário. Tente novamente.");
-        }
-      } catch (error) {
-        console.error("Erro ao excluir questionário:", error);
-        alert("Falha ao excluir questionário. Tente novamente.");
-      }
+    if (response.status === 204 || response.status === 200) {
+      this.fetchQuestionnaires();
+
+      // ✅ Vue 3-compatible way to remove property if needed:
+      delete this.visibleQuestions?.[id];
+    } else {
+      console.error("Erro ao excluir questionário. Status:", response.status);
+      alert("Falha ao excluir questionário. Tente novamente.");
     }
+  } catch (error) {
+    console.error("Erro ao excluir questionário:", error);
+    alert("Falha ao excluir questionário. Tente novamente.");
+  }
+}
+
     ,
     async exportQuestionnaire(questionnaireId) {
       try {
