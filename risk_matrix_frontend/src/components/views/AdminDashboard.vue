@@ -52,11 +52,11 @@
  /* eslint-disable */
 import axios from "axios";
 import HeaderComponent from "@/components/HeaderComponent.vue";
-import QuestionnaireManager from "@/components/QuestionnaireManager.vue";
-import QuestionForm from "@/components/QuestionForm.vue";
-import QuestionsList from "@/components/QuestionsList.vue";
-import FeedbackList from "@/components/FeedbackList.vue";
-import UserAnswersList from "@/components/UserAnswersList.vue";
+import QuestionnaireManager from "@/components/AdminDashboard/QuestionnaireManager.vue";
+import QuestionForm from "@/components/AdminDashboard/QuestionForm.vue";
+import QuestionsList from "@/components/AdminDashboard/QuestionsList.vue";
+import FeedbackList from "@/components/AdminDashboard/FeedbackList.vue";
+import UserAnswersList from "@/components/AdminDashboard/UserAnswersList.vue";
 
 export default {
   name: "AdminDashboard",
