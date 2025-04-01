@@ -193,7 +193,8 @@ export default {
           validateStatus: status => status < 500,
         });
         if (response.status === 204 || response.status === 200) {
-          this.fetchQuestionnaires();
+          await this.fetchQuestionnaires(); // atualiza a lista de questionários
+          await this.fetchQuestions(); // atualiza a lista de perguntas
         } else {
           console.error("Error deleting questionnaire, status:", response.status);
           alert("Falha ao excluir questionário. Tente novamente.");
