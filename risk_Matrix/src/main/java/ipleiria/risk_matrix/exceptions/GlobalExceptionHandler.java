@@ -5,10 +5,12 @@ import ipleiria.risk_matrix.responses.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.lang.IllegalArgumentException;
 
@@ -17,6 +19,30 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
         return new ResponseEntity<>(new ErrorResponse(status.value(), status, message), status);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+        StringBuilder message = new StringBuilder("Validation failure: ");
+        ex.getAllErrors().forEach(error -> {
+            if (error instanceof FieldError fieldError) {
+                message.append(fieldError.getField())
+                        .append(" ")
+                        .append(fieldError.getDefaultMessage())
+                        .append("; ");
+            } else if (error instanceof ObjectError objectError) {
+                message.append(objectError.getObjectName())
+                        .append(" ")
+                        .append(objectError.getDefaultMessage())
+                        .append("; ");
+            } else {
+                message.append(error.getDefaultMessage()).append("; ");
+            }
+        });
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorResponse(400, HttpStatus.BAD_REQUEST, message.toString()));
     }
 
     @ExceptionHandler(NotFoundException.class)

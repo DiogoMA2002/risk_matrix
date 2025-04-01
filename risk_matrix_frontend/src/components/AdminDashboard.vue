@@ -690,7 +690,6 @@ export default {
       try {
         const fileContent = await this.selectedImportFile.text();
         const jsonData = JSON.parse(fileContent);
-        console.log("Payload being sent to /api/questionnaires/import:", jsonData);
 
         await axios.post("/api/questionnaires/import", jsonData, {
           headers: { "Content-Type": "application/json" }

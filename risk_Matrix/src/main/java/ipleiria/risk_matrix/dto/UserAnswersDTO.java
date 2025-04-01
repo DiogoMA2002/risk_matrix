@@ -1,23 +1,28 @@
 package ipleiria.risk_matrix.dto;
 
 import ipleiria.risk_matrix.models.questions.Severity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 import java.util.Map;
 
 public class UserAnswersDTO {
 
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email")
     private String email;
-    private List<AnswerDTO> answers;
+
+    @NotNull(message = "Answers list is required")
+    @Size(min = 1, message = "At least one answer is required")
+    private List<@Valid AnswerDTO> answers;
+
     private Map<String, Severity> severitiesByCategory;
 
     public UserAnswersDTO() {
-    }
-
-    public UserAnswersDTO(String email, List<AnswerDTO> answers, Map<String, Severity> severitiesByCategory) {
-        this.email = email;
-        this.answers = answers;
-        this.severitiesByCategory = severitiesByCategory;
     }
 
     public String getEmail() {

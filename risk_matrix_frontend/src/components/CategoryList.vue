@@ -230,11 +230,13 @@ export default {
         }
 
         await axios.post("/api/answers/submit-multiple", payload);
+
         alert("Todas as respostas foram enviadas com sucesso!");
         this.$store.commit("clearAllAnswers");
         this.$router.push("/");
       } catch (error) {
         console.error("Erro ao enviar respostas:", error);
+        
         alert("Ocorreu um erro ao enviar as respostas.");
       }
     },

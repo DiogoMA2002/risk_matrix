@@ -2,6 +2,7 @@ package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.service.AnswerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +22,10 @@ public class AnswerController {
     }
 
     @PostMapping("/submit")
-    public AnswerDTO submitAnswer(@RequestBody AnswerDTO answerDTO) {
+    public AnswerDTO submitAnswer(@Valid @RequestBody AnswerDTO answerDTO) {
         return answerService.submitAnswer(answerDTO);
     }
+
 
     @GetMapping("/by-question/{questionId}")
     public List<AnswerDTO> getAnswersByQuestion(@PathVariable Long questionId) {
@@ -44,9 +46,10 @@ public class AnswerController {
         return answerService.getAllAnswersWithSeverityAndEmail();
     }
     @PostMapping("/submit-multiple")
-    public List<AnswerDTO> submitMultipleAnswers(@RequestBody List<AnswerDTO> answers) {
+    public List<AnswerDTO> submitMultipleAnswers(@Valid @RequestBody List<@Valid AnswerDTO> answers) {
         return answerService.submitMultipleAnswers(answers);
     }
+
 
     @GetMapping("/by-date-range")
     public List<AnswerDTO> getAnswersByDateRange(@RequestParam String startDate, @RequestParam String endDate) {
