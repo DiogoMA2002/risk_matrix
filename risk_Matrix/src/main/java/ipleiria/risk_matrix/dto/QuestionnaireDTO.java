@@ -1,5 +1,9 @@
 package ipleiria.risk_matrix.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 
 import java.util.List;
@@ -8,10 +12,12 @@ import java.util.stream.Collectors;
 public class QuestionnaireDTO {
 
     private Long id;
-    private String title;
-    private List<QuestionDTO> questions;
 
-    // 🔥 Construtor padrão vazio (para Jackson)
+    @NotBlank(message = "Title cannot be blank")
+    private String title;
+
+    private List<@Valid QuestionDTO> questions;
+
     public QuestionnaireDTO() {}
 
     public QuestionnaireDTO(Questionnaire questionnaire) {
@@ -21,31 +27,16 @@ public class QuestionnaireDTO {
                 ? questionnaire.getQuestions().stream()
                 .map(QuestionDTO::new)
                 .collect(Collectors.toList())
-                : List.of(); // Retorna lista vazia se for nulo
+                : List.of();
     }
 
-    // Getters e Setters
-    public Long getId() {
-        return id;
-    }
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<QuestionDTO> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<QuestionDTO> questions) {
-        this.questions = questions;
-    }
+    public List<QuestionDTO> getQuestions() { return questions; }
+    public void setQuestions(List<QuestionDTO> questions) { this.questions = questions; }
 }

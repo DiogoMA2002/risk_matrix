@@ -2,6 +2,7 @@ package ipleiria.risk_matrix.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.dto.QuestionnaireDTO;
 import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
@@ -10,6 +11,7 @@ import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import ipleiria.risk_matrix.service.QuestionnaireService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +31,9 @@ public class QuestionnaireController {
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
     @PostMapping("/create")
-    public Questionnaire createQuestionnaire(@RequestBody Questionnaire questionnaire) {
-        return questionnaireService.createQuestionnaire(questionnaire);
+    public ResponseEntity<Questionnaire> createQuestionnaire(@RequestBody @Valid QuestionnaireDTO questionnaireDTO) {
+        Questionnaire created = questionnaireService.importQuestionnaireDto(questionnaireDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping("/all")
@@ -62,9 +65,13 @@ public class QuestionnaireController {
     }
 
     @PostMapping("/{id}/add-question")
-    public Question addQuestionToQuestionnaire(@PathVariable Long id, @RequestBody Question question) {
-        return questionnaireService.addQuestionToQuestionnaire(id, question);
+    public ResponseEntity<Question> addQuestionToQuestionnaire(
+            @PathVariable Long id,
+            @RequestBody @Valid QuestionDTO dto) {
+        Question added = questionnaireService.addQuestionDtoToQuestionnaire(id, dto);
+        return ResponseEntity.ok(added);
     }
+
     // Deletar uma pergunta por ID
     @DeleteMapping("/delete/{id}")
     public void deleteQuestionnaire(@PathVariable Long id) {
@@ -93,8 +100,9 @@ public class QuestionnaireController {
     }
 
     @PostMapping("/import")
-    public Questionnaire importQuestionnaire(@RequestBody Questionnaire incoming) {
-        return questionnaireService.importQuestionnaire(incoming);
+    public ResponseEntity<Questionnaire> importQuestionnaire(@RequestBody @Valid QuestionnaireDTO dto) {
+        Questionnaire imported = questionnaireService.importQuestionnaireDto(dto);
+        return ResponseEntity.ok(imported);
     }
     @PutMapping("/{id}")
     public Questionnaire updateQuestionnaire(@PathVariable Long id, @RequestBody Questionnaire updatedQuestionnaire) {

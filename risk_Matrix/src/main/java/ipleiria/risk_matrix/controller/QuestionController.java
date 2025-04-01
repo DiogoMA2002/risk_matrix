@@ -3,6 +3,7 @@ import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.service.QuestionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class QuestionController {
     @PostMapping("/add/{questionnaireId}")
     public QuestionDTO addQuestionToQuestionnaire(
             @PathVariable Long questionnaireId,
-            @RequestBody QuestionDTO questionDTO) {
+            @RequestBody @Valid QuestionDTO questionDTO) {
         return questionService.createQuestion(questionnaireId, questionDTO);
     }
 
@@ -55,9 +56,12 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public QuestionDTO updateQuestion(@PathVariable Long id, @RequestBody QuestionDTO updatedQuestionDTO) {
+    public QuestionDTO updateQuestion(
+            @PathVariable Long id,
+            @RequestBody @Valid QuestionDTO updatedQuestionDTO) {
         return questionService.updateQuestion(id, updatedQuestionDTO);
     }
+
 
 
 }

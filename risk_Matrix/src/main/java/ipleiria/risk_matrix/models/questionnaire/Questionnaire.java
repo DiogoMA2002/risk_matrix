@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import ipleiria.risk_matrix.models.questions.Question;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,16 @@ public class Questionnaire {
 
     @OneToMany(mappedBy = "questionnaire", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonManagedReference
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
+
+    public Questionnaire() {
+        this.questions = new ArrayList<>();
+    }
+
+    public Questionnaire(List<Question> questions) {
+        this.questions = questions != null ? questions : new ArrayList<>();
+    }
+
 
     public Long getId() {
         return id;

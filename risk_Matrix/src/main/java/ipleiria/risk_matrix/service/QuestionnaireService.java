@@ -1,11 +1,16 @@
 package ipleiria.risk_matrix.service;
 
+import ipleiria.risk_matrix.dto.QuestionDTO;
+import ipleiria.risk_matrix.dto.QuestionOptionDTO;
+import ipleiria.risk_matrix.dto.QuestionnaireDTO;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
+import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,4 +106,70 @@ public class QuestionnaireService {
         existing.setTitle(updatedQuestionnaire.getTitle());
         return questionnaireRepository.save(existing);
     }
+
+
+
+    @Transactional
+    public Questionnaire importQuestionnaireDto(@Valid QuestionnaireDTO dto) {
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setId(null);
+        questionnaire.setTitle(dto.getTitle());
+
+        if (dto.getQuestions() != null) {
+            for (QuestionDTO questionDTO : dto.getQuestions()) {
+                Question question = new Question();
+                question.setId(null);
+                question.setQuestionText(questionDTO.getQuestionText());
+                question.setCategory(questionDTO.getCategory()); // ✅ CORRECT
+                question.setQuestionnaire(questionnaire);
+
+                if (questionDTO.getOptions() != null) {
+                    for (QuestionOptionDTO optionDTO : questionDTO.getOptions()) {
+                        QuestionOption option = new QuestionOption();
+                        option.setId(null);
+                        option.setOptionText(optionDTO.getOptionText());
+                        option.setOptionLevel(optionDTO.getOptionLevel());
+                        option.setOptionType(optionDTO.getOptionType());
+                        option.setQuestion(question);
+                        question.getOptions().add(option);
+                    }
+                }
+
+                ensureNaoAplicavelOption(question); // inject "Não Aplicável" if missing
+                questionnaire.getQuestions().add(question);
+            }
+        }
+
+        return questionnaireRepository.save(questionnaire);
+    }
+
+    @Transactional
+    public Question addQuestionDtoToQuestionnaire(Long questionnaireId, @Valid QuestionDTO dto) {
+        Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
+                .orElseThrow(() -> new QuestionnaireNotFoundException(
+                        "Questionnaire not found for ID: " + questionnaireId
+                ));
+
+        Question question = new Question();
+        question.setId(null);
+        question.setQuestionText(dto.getQuestionText());
+        question.setCategory(dto.getCategory()); // Already parsed
+        question.setQuestionnaire(questionnaire);
+
+        if (dto.getOptions() != null) {
+            for (QuestionOptionDTO optionDTO : dto.getOptions()) {
+                QuestionOption option = new QuestionOption();
+                option.setId(null);
+                option.setOptionText(optionDTO.getOptionText());
+                option.setOptionLevel(optionDTO.getOptionLevel());
+                option.setOptionType(optionDTO.getOptionType());
+                option.setQuestion(question);
+                question.getOptions().add(option);
+            }
+        }
+
+        ensureNaoAplicavelOption(question);
+        return questionRepository.save(question);
+    }
+
 }

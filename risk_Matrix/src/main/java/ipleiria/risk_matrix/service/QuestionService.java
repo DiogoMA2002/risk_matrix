@@ -42,7 +42,7 @@ public class QuestionService {
 
         // 3. Validate category
         try {
-            question.setCategory(QuestionCategory.valueOf(questionDTO.getCategory()));
+            question.setCategory(questionDTO.getCategory());
         } catch (IllegalArgumentException e) {
             throw new InvalidCategoryException("Invalid category: " + questionDTO.getCategory());
         }
@@ -127,7 +127,7 @@ public class QuestionService {
         existingQuestion.setQuestionText(updatedQuestionDTO.getQuestionText());
 
         // Convert the string from the DTO to the enum.
-        existingQuestion.setCategory(QuestionCategory.valueOf(updatedQuestionDTO.getCategory().toUpperCase()));
+        existingQuestion.setCategory(updatedQuestionDTO.getCategory());
 
         // Clear current options and convert new ones from the DTO.
         existingQuestion.getOptions().clear();
