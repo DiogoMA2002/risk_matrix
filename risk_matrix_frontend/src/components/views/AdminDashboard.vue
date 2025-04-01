@@ -238,7 +238,8 @@ export default {
           headers: { "Content-Type": "application/json" },
         });
         alert("Questionário importado com sucesso!");
-        this.fetchQuestionnaires();
+        await this.fetchQuestionnaires(); // Atualiza os questionários
+        await this.fetchQuestions(); // Atualiza as perguntas associadas
       } catch (error) {
         console.error("Error importing questionnaire:", error);
         alert("Falha ao importar questionário.");
