@@ -6,12 +6,12 @@
           <button 
             class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
             @click="$emit('cancel')">
-            Cancel
+            Cancelar
           </button>
           <button 
             class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
             @click="$emit('confirm')">
-            Confirm
+            Confirmar
           </button>
         </div>
       </div>
@@ -19,7 +19,9 @@
   </template>
   
   <script>
+
   export default {
+    
     name: "ConfirmDialog",
     props: {
       message: {

@@ -30,18 +30,21 @@
         <p class="text-gray-500 mb-8">Avalie e gerencie os seus riscos de forma eficiente</p>
 
         <div class="space-y-6">
-          <div class="space-y-2">
+          <div class="space-y-1">
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
             <div class="relative">
-              <input id="email" type="email" v-model="email" placeholder="email@email.com"
-                class="w-full px-4 py-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300" />
+              <input id="email" type="email" v-model="email" placeholder="email@email.com" class="w-full px-4 py-3 pl-10 border rounded-lg transition-all duration-300 focus:outline-none
+             focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+             border-gray-200" />
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-3.5" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
+            <p v-if="emailError" class="text-red-600 text-sm mt-1">{{ emailError }}</p>
           </div>
+          
 
           <button @click="proceed"
             class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-medium transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-md hover:shadow-lg">
@@ -67,11 +70,10 @@
     </div>
     <!-- Help Button -->
     <div class="fixed bottom-6 right-6">
-      <button @click="goToFeedbackForm" class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
-             viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M8.228 9c.549-1.165 2.03-2 3.772-2
+      <button @click="goToFeedbackForm"
+        class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2
                2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006
                2.907-.542.104-.994.54-.994 1.093m0 3h.01M21
                12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -91,7 +93,9 @@ export default {
   name: 'HomePage',
   data() {
     return {
-      email: ''
+      email: '',
+      emailError: ''
+
     }
   },
   methods: {
@@ -101,16 +105,16 @@ export default {
       return re.test(String(email).toLowerCase());
     },
     proceed() {
-      // If empty or doesn't match the pattern, show an alert
       if (!this.email || !this.isValidEmail(this.email)) {
-        alert("Informe um email válido");
+        this.emailError = 'Informe um email válido';
         return;
       }
 
-      // Optionally store the email, then route
+      this.emailError = ''; // clear error if valid
       localStorage.setItem('userEmail', this.email);
       this.$router.push('/risk-info');
-    },
+    }
+    ,
     goToFeedbackForm() {
       // Redirect to the feedback form page
       this.$router.push('/feedback-form');
