@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import RiskMatrixInfo from '../components/RiskMatrixInfo.vue'
 import RequirementsPage from '../components/RequirementsPage.vue'
 import QuestionarioPage from '../components/QuestionarioPage.vue'
-import AdminDashboard from '../components/AdminDashboard.vue'
+import AdminDashboard from '../components/views/AdminDashboard.vue'
 import HomePage from '@/components/HomePage.vue'
 import CategoryList from '../components/CategoryList.vue'
 import FeedbackForm from '@/components/FeedbackForm.vue' // Import the new component

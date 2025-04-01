@@ -1,5 +1,5 @@
 {
-    "title": "Avaliação de Riscos de Segurança",
+    "title": "Avaliação de Riscos de Segurança v2",
     "questions": [
         {
             "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
