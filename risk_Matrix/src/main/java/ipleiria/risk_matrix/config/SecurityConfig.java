@@ -29,9 +29,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Correct way to disable CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**", "/answers/**").hasRole("ADMIN")
                         .requestMatchers("/auth/**","/questions/**", "/suggestions/**", "/answers/submit", "/answers/submit-multiple",
                                 "/questionnaires/**","/feedback/**").permitAll() // Allow these endpoints
+                        .requestMatchers("/admin/**", "/answers/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 ).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
