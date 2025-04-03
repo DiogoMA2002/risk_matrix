@@ -18,7 +18,6 @@
           </div>
         </div>
   
-        <!-- Optional: Logo -->
         <div>
           <img src="@/assets/logoCCC.png" alt="Logo" class="h-10 object-contain" />
         </div>
@@ -26,7 +25,10 @@
   
       <!-- 🔐 Login Card -->
       <div class="flex items-center justify-center px-4 py-8">
-        <div class="bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl shadow-2xl max-w-md w-full">
+        <form
+          @submit.prevent="login"
+          class="bg-white bg-opacity-90 backdrop-blur-md p-8 rounded-xl shadow-2xl max-w-md w-full"
+        >
           <h2 class="text-2xl font-bold text-center text-indigo-700 mb-4">Entrar no Sistema</h2>
   
           <div class="space-y-4">
@@ -51,7 +53,7 @@
             </div>
   
             <button
-              @click="login"
+              type="submit"
               class="w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition"
             >
               Entrar
@@ -59,7 +61,7 @@
   
             <p v-if="error" class="text-red-600 text-sm mt-2">{{ error }}</p>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </template>
