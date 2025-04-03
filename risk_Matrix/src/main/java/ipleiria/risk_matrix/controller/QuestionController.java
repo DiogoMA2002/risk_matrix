@@ -5,6 +5,7 @@ import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.service.QuestionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class QuestionController {
 
     // Criar uma nova pergunta
     @PostMapping("/add/{questionnaireId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public QuestionDTO addQuestionToQuestionnaire(
             @PathVariable Long questionnaireId,
             @RequestBody @Valid QuestionDTO questionDTO) {
@@ -26,6 +28,7 @@ public class QuestionController {
     }
 
     // Obter todas as perguntas
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public List<Question> getAllQuestions() {
         return questionService.getAllQuestions();
@@ -39,6 +42,7 @@ public class QuestionController {
 
     // Obter perguntas por categoria
     @GetMapping("/category/{category}")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Question> getQuestionsByCategory(@PathVariable QuestionCategory category) {
         return questionService.getQuestionsByCategory(category);
     }
@@ -51,11 +55,13 @@ public class QuestionController {
 
     // Deletar uma pergunta por ID
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public QuestionDTO updateQuestion(
             @PathVariable Long id,
             @RequestBody @Valid QuestionDTO updatedQuestionDTO) {

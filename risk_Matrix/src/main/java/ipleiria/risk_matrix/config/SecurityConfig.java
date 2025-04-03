@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**","/questions/**", "/suggestions/**", "/answers/submit", "/answers/submit-multiple",
                                 "/questionnaires/**","/feedback/**").permitAll() // Allow these endpoints
-                        .requestMatchers("/admin/**", "/answers/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 ).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
