@@ -7,6 +7,7 @@ import ipleiria.risk_matrix.dto.AuthResponseDTO;
 import ipleiria.risk_matrix.models.users.AdminUser;
 import ipleiria.risk_matrix.repository.AdminUserRepository;
 import ipleiria.risk_matrix.service.AdminUserDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequestDTO request) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDTO request) {
         try {
             Authentication auth = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -56,7 +57,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> register(@RequestBody AdminRegisterDTO dto) {
+    public ResponseEntity<?> register(@Valid @RequestBody AdminRegisterDTO dto) {
         if (adminRepo.findByUsername(dto.getUsername()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
         }
