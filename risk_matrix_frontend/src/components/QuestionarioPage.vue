@@ -13,7 +13,7 @@
             </svg>
           </button>
           <div class="text-white">
-            <h1 class="text-2xl font-bold">Questionário de Risco</h1>
+            <h1 class="text-2xl font-bold">Questionário de Risco | {{ formattedCategory  }}</h1>
             <p class="text-sm opacity-80">Responda às perguntas para avaliar os riscos</p>
           </div>
         </div>
@@ -106,6 +106,12 @@ export default {
     };
   },
   computed: {
+    formattedCategory() {
+    const raw = this.$route.params.category || "";
+    return raw
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+  },
     // Get answers for the current category from Vuex store
     answers() {
       const category = this.$route.params.category;
