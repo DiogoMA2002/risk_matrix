@@ -4,6 +4,7 @@ import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.service.AnswerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,6 @@ public class AnswerController {
         return answerService.submitAnswer(answerDTO);
     }
 
-
     @GetMapping("/by-question/{questionId}")
     public List<AnswerDTO> getAnswersByQuestion(@PathVariable Long questionId) {
         return answerService.getAnswersByQuestion(questionId);
@@ -37,21 +37,26 @@ public class AnswerController {
     public List<AnswerDTO> getAnswersByEmail(@PathVariable String email) {
         return answerService.getAnswersByEmail(email);
     }
+
     @GetMapping("/by-email-with-severity/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserAnswersDTO getUserAnswersWithSeverity(@PathVariable String email) {
         return answerService.getUserAnswersWithSeverities(email);
     }
+
     @GetMapping("/get-all-email")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserAnswersDTO> getAllAnswersWithSeverityAndEmail() {
         return answerService.getAllAnswersWithSeverityAndEmail();
     }
+
     @PostMapping("/submit-multiple")
     public List<AnswerDTO> submitMultipleAnswers(@Valid @RequestBody List<@Valid AnswerDTO> answers) {
         return answerService.submitMultipleAnswers(answers);
     }
 
-
     @GetMapping("/by-date-range")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AnswerDTO> getAnswersByDateRange(@RequestParam String startDate, @RequestParam String endDate) {
         return answerService.getAnswersByDateRange(startDate, endDate);
     }

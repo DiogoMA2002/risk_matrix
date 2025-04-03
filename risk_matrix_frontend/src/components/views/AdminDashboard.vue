@@ -4,6 +4,9 @@
       <!-- Header -->
       <HeaderComponent />
 
+      <!-- Registrar Novo Admin -->
+      <RegisterAdmin />
+
       <!-- Questionnaire Manager -->
       <QuestionnaireManager
         :questionnaires="questionnaires"
@@ -57,6 +60,8 @@ import QuestionForm from "@/components/AdminDashboard/QuestionForm.vue";
 import QuestionsList from "@/components/AdminDashboard/QuestionsList.vue";
 import FeedbackList from "@/components/AdminDashboard/FeedbackList.vue";
 import UserAnswersList from "@/components/AdminDashboard/UserAnswersList.vue";
+import RegisterAdmin from "@/components/AdminDashboard/RegisterAdmin.vue";
+
 
 export default {
   name: "AdminDashboard",
@@ -67,6 +72,7 @@ export default {
     QuestionsList,
     FeedbackList,
     UserAnswersList,
+    RegisterAdmin,
   },
   data() {
     return {

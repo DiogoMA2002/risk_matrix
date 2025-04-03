@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
@@ -30,13 +31,16 @@ public class QuestionnaireController {
     private QuestionnaireService questionnaireService;
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
+
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Questionnaire> createQuestionnaire(@RequestBody @Valid QuestionnaireDTO questionnaireDTO) {
         Questionnaire created = questionnaireService.importQuestionnaireDto(questionnaireDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<QuestionnaireDTO> getAllQuestionnaires() {
         return questionnaireService.getAllQuestionnaires().stream()
                 .map(QuestionnaireDTO::new)
@@ -44,6 +48,7 @@ public class QuestionnaireController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Optional<Questionnaire> getQuestionnaireById(@PathVariable Long id) {
         return questionnaireService.getQuestionnaireById(id);
     }
@@ -74,11 +79,13 @@ public class QuestionnaireController {
 
     // Deletar uma pergunta por ID
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteQuestionnaire(@PathVariable Long id) {
         questionnaireService.deleteQuestionnaire(id);
     }
 
     @GetMapping("/{id}/export")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<byte[]> exportQuestionnaire(@PathVariable Long id) throws JsonProcessingException {
         Questionnaire questionnaire = questionnaireService.getQuestionnaireById(id)
                 .orElseThrow(() -> new NotFoundException("Questionnaire not found for ID: " + id));
@@ -100,6 +107,7 @@ public class QuestionnaireController {
     }
 
     @PostMapping("/import")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Questionnaire> importQuestionnaire(@RequestBody @Valid QuestionnaireDTO dto) {
         Questionnaire imported = questionnaireService.importQuestionnaireDto(dto);
         return ResponseEntity.ok(imported);
