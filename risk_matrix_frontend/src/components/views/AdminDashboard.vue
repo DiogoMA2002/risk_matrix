@@ -276,11 +276,7 @@ export default {
       }
       this.isLoading = true;
       try {
-        const token = localStorage.getItem("jwt");
         const response = await axios.get(`/api/answers/by-email-with-severity/${email}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
           validateStatus: _status => true
         });
         if (response.status === 401) {
@@ -297,11 +293,7 @@ export default {
     async fetchAllUserAnswers() {
       this.isLoading = true;
       try {
-        const token = localStorage.getItem("jwt");
         const response = await axios.get("/api/answers/get-all-email", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
           validateStatus: _status => true,
         });
         if (response.status === 401) {
