@@ -6,7 +6,9 @@ import ipleiria.risk_matrix.dto.AuthRequestDTO;
 import ipleiria.risk_matrix.dto.AuthResponseDTO;
 import ipleiria.risk_matrix.dto.ChangePasswordRequestDTO;
 import ipleiria.risk_matrix.models.users.AdminUser;
+import ipleiria.risk_matrix.models.users.PasswordHistory;
 import ipleiria.risk_matrix.repository.AdminUserRepository;
+import ipleiria.risk_matrix.repository.PasswordHistoryRepository;
 import ipleiria.risk_matrix.service.AdminUserDetailsService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -33,14 +38,16 @@ public class AuthController {
     private final AdminUserDetailsService userDetailsService;
     private final AdminUserRepository adminRepo;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordHistoryRepository passwordHistoryRepo;
 
     public AuthController(AuthenticationManager authManager, JwtUtil jwtUtil, AdminUserDetailsService userDetailsService,
-                          AdminUserRepository adminRepo, PasswordEncoder passwordEncoder) {
+                          AdminUserRepository adminRepo, PasswordEncoder passwordEncoder, PasswordHistoryRepository passwordHistoryRepo) {
         this.authManager = authManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.adminRepo = adminRepo;
         this.passwordEncoder = passwordEncoder;
+        this.passwordHistoryRepo = passwordHistoryRepo;
     }
 
     @PostMapping("/login")
@@ -84,7 +91,6 @@ public class AuthController {
             Authentication authentication) {
 
         String username = authentication.getName();
-
         AdminUser admin = adminRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Admin not found"));
 
@@ -92,8 +98,30 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password is incorrect");
         }
 
+        // Check if new password was used before
+        List<PasswordHistory> history = passwordHistoryRepo.findTop3ByAdminOrderByChangedAtDesc(admin);
+        for (PasswordHistory past : history) {
+            if (passwordEncoder.matches(request.getNewPassword(), past.getPasswordHash())) {
+                return ResponseEntity.badRequest().body("New password was used recently. Choose a different one.");
+            }
+        }
+
         admin.setPassword(passwordEncoder.encode(request.getNewPassword()));
         adminRepo.save(admin);
+
+        // Save to history
+        PasswordHistory entry = new PasswordHistory();
+        entry.setAdmin(admin);
+        entry.setPasswordHash(admin.getPassword());
+        entry.setChangedAt(LocalDateTime.now());
+        passwordHistoryRepo.save(entry);
+
+        // ⚠️ Clean up history: keep only last 5
+        List<PasswordHistory> allEntries = passwordHistoryRepo.findByAdminOrderByChangedAtDesc(admin);
+        if (allEntries.size() > 5) {
+            List<PasswordHistory> toDelete = allEntries.subList(5, allEntries.size());
+            passwordHistoryRepo.deleteAll(toDelete);
+        }
 
         return ResponseEntity.ok("Password changed successfully");
     }
