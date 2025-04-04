@@ -55,7 +55,7 @@
 
 <script>
  /* eslint-disable */
-import axios from "axios";
+ import axios from '@/plugins/axios'
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import QuestionnaireManager from "@/components/AdminDashboard/QuestionnaireManager.vue";
 import QuestionForm from "@/components/AdminDashboard/QuestionForm.vue";
@@ -255,8 +255,13 @@ export default {
     async fetchFeedback() {
       this.isLoading = true;
       try {
-        const response = await axios.get("/api/feedback");
-        this.feedbacks = response.data;
+        const token = localStorage.getItem("jwt");
+
+        const response = await axios.get("/api/feedback", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
       } catch (error) {
         console.error("Error fetching feedback:", error);
         this.feedbacks = [];
@@ -271,8 +276,12 @@ export default {
       }
       this.isLoading = true;
       try {
+        const token = localStorage.getItem("jwt");
         const response = await axios.get(`/api/answers/by-email-with-severity/${email}`, {
-          validateStatus: _status => true,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          validateStatus: _status => true
         });
         if (response.status === 401) {
           alert("Você não está autorizado.");
@@ -288,7 +297,11 @@ export default {
     async fetchAllUserAnswers() {
       this.isLoading = true;
       try {
+        const token = localStorage.getItem("jwt");
         const response = await axios.get("/api/answers/get-all-email", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
           validateStatus: _status => true,
         });
         if (response.status === 401) {
