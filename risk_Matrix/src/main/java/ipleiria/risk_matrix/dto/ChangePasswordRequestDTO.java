@@ -7,18 +7,18 @@ import jakarta.validation.constraints.Pattern;
 @PasswordMatches  // Custom annotation (defined below)
 public class ChangePasswordRequestDTO {
 
-    @NotBlank(message = "Old password must not be blank")
+    @NotBlank(message = "A senha atual é obrigatória.")
     private String oldPassword;
 
-    @NotBlank(message = "New password must not be blank")
-    @Size(min = 8, message = "New password must be at least 8 characters long")
+    @NotBlank(message = "A nova senha é obrigatória.")
+    @Size(min = 8, message = "A nova senha deve ter pelo menos 8 caracteres.")
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z0-9]).+$",
-            message = "New password must contain upper and lower case letters, a number, and a special character"
+            message = "A nova senha deve conter letras maiúsculas, minúsculas, um número e um caractere especial."
     )
     private String newPassword;
 
-    @NotBlank(message = "Password confirmation must not be blank")
+    @NotBlank(message = "A confirmação da nova senha é obrigatória.")
     private String confirmNewPassword;
 
     // Getters and setters

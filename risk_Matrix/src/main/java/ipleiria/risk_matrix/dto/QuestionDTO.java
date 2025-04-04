@@ -17,15 +17,15 @@ public class QuestionDTO {
 
     private Long questionnaireId;
 
-    @NotBlank(message = "Question text cannot be blank")
+    @NotBlank(message = "O texto da pergunta não pode estar em branco.")
     private String questionText;
 
-    @NotNull(message = "Category is required")
+    @NotNull(message = "A categoria da pergunta é obrigatória.")
     @JsonDeserialize(using = QuestionCategoryDeserializer.class)
     private QuestionCategory category;
 
-    @NotNull(message = "Options list is required")
-    @Size(min = 1, message = "At least one option is required")
+    @NotNull(message = "A lista de opções é obrigatória.")
+    @Size(min = 1, message = "Pelo menos uma opção deve ser fornecida.")
     private List<@Valid QuestionOptionDTO> options;
 
     public QuestionDTO() {}

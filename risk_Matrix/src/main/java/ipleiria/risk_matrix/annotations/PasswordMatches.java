@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordMatches {
-    String message() default "New password and confirmation do not match";
+    String message() default "A nova password e a confirmação não coincidem.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

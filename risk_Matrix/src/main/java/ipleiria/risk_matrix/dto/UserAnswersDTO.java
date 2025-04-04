@@ -12,12 +12,12 @@ import java.util.Map;
 
 public class UserAnswersDTO {
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email")
+    @NotBlank(message = "O e-mail é obrigatório.")
+    @Email(message = "O e-mail fornecido é inválido.")
     private String email;
 
-    @NotNull(message = "Answers list is required")
-    @Size(min = 1, message = "At least one answer is required")
+    @NotNull(message = "A lista de respostas é obrigatória.")
+    @Size(min = 1, message = "Pelo menos uma resposta deve ser fornecida.")
     private List<@Valid AnswerDTO> answers;
 
     private Map<String, Severity> severitiesByCategory;

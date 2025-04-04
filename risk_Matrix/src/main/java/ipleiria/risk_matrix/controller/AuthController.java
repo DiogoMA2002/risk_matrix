@@ -60,7 +60,7 @@ public class AuthController {
             String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.ok(new AuthResponseDTO(jwt));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais Inválidas");
         }
     }
 
@@ -68,11 +68,11 @@ public class AuthController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> register(@Valid @RequestBody AdminRegisterDTO dto) {
         if (adminRepo.findByUsername(dto.getUsername()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username já existe");
         }
 
         if (adminRepo.findByEmail(dto.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já existe");
         }
 
         AdminUser admin = new AdminUser();
@@ -81,7 +81,7 @@ public class AuthController {
         admin.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         adminRepo.save(admin);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Admin created successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Admin criado com sucesso");
     }
 
     @PostMapping("/change-password")
@@ -92,17 +92,17 @@ public class AuthController {
 
         String username = authentication.getName();
         AdminUser admin = adminRepo.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Admin not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("Admin não encontrado"));
 
         if (!passwordEncoder.matches(request.getOldPassword(), admin.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password is incorrect");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Password antiga é incorreta");
         }
 
         // Check if new password was used before
         List<PasswordHistory> history = passwordHistoryRepo.findTop3ByAdminOrderByChangedAtDesc(admin);
         for (PasswordHistory past : history) {
             if (passwordEncoder.matches(request.getNewPassword(), past.getPasswordHash())) {
-                return ResponseEntity.badRequest().body("New password was used recently. Choose a different one.");
+                return ResponseEntity.badRequest().body("A nova password foi recentemente utilizada, escolha outra nova password");
             }
         }
 
@@ -123,7 +123,7 @@ public class AuthController {
             passwordHistoryRepo.deleteAll(toDelete);
         }
 
-        return ResponseEntity.ok("Password changed successfully");
+        return ResponseEntity.ok("Password alterada com sucesso!");
     }
 
 }

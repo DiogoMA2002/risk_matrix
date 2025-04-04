@@ -9,7 +9,7 @@ public class AuthRequestDTO {
     private String username;
 
     @NotBlank(message = "A senha é obrigatória")
-    @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
     private String password;
 
     public AuthRequestDTO(String username, String password) {

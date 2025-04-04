@@ -13,7 +13,7 @@ public class AnswerDTO {
 
     private Long id;
 
-    @NotNull(message = "Question ID is required")
+    @NotNull(message = "Question ID é Obrigatória")
     private Long questionId;
 
     private String questionText;
@@ -25,8 +25,8 @@ public class AnswerDTO {
 
     private OptionLevel chosenLevel;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email format is invalid")
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Formato de Email é inválido")
     private String email;
 
     private LocalDateTime createdAt;
