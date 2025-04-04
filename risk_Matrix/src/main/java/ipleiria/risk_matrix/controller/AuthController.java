@@ -4,6 +4,7 @@ import ipleiria.risk_matrix.config.JwtUtil;
 import ipleiria.risk_matrix.dto.AdminRegisterDTO;
 import ipleiria.risk_matrix.dto.AuthRequestDTO;
 import ipleiria.risk_matrix.dto.AuthResponseDTO;
+import ipleiria.risk_matrix.dto.ChangePasswordRequestDTO;
 import ipleiria.risk_matrix.models.users.AdminUser;
 import ipleiria.risk_matrix.repository.AdminUserRepository;
 import ipleiria.risk_matrix.service.AdminUserDetailsService;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,4 +76,26 @@ public class AuthController {
         adminRepo.save(admin);
         return ResponseEntity.status(HttpStatus.CREATED).body("Admin created successfully");
     }
+
+    @PostMapping("/change-password")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> changePassword(
+            @Valid @RequestBody ChangePasswordRequestDTO request,
+            Authentication authentication) {
+
+        String username = authentication.getName();
+
+        AdminUser admin = adminRepo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Admin not found"));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), admin.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password is incorrect");
+        }
+
+        admin.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        adminRepo.save(admin);
+
+        return ResponseEntity.ok("Password changed successfully");
+    }
+
 }
