@@ -1,7 +1,6 @@
 package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.models.questions.Question;
-import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.service.QuestionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +40,12 @@ public class QuestionController {
 
 
     // Obter perguntas por categoria
-    @GetMapping("/category/{category}")
+    @GetMapping("/category/{categoryName}")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Question> getQuestionsByCategory(@PathVariable QuestionCategory category) {
-        return questionService.getQuestionsByCategory(category);
+    public List<Question> getQuestionsByCategory(@PathVariable("categoryName") String categoryName) {
+        return questionService.getQuestionsByCategory(categoryName);
     }
+
 
     // Obter pergunta por ID
     @GetMapping("/{id}")

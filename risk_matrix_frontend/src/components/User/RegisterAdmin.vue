@@ -5,7 +5,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-4-3a4 4 0 100-8 4 4 0 000 8zm0 2c-4 0-6 2-6 4v1h12v-1c0-2-2-4-6-4z" />
             </svg>
-            <span class="leading-tight">Registrar Novo Administrador</span>
+            <span class="leading-tight">Registar Novo Administrador</span>
         </h2>
   
       <div class="space-y-4">
