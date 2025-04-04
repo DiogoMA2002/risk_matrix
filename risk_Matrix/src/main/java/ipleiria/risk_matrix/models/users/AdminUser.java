@@ -1,6 +1,9 @@
 package ipleiria.risk_matrix.models.users;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "admin_users")
 public class AdminUser {
@@ -18,6 +21,8 @@ public class AdminUser {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PasswordHistory> passwordHistory = new ArrayList<>();
 
     // Constructors
     public AdminUser() {}
@@ -35,4 +40,11 @@ public class AdminUser {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
+    public List<PasswordHistory> getPasswordHistory() {
+        return passwordHistory;
+    }
+
+    public void setPasswordHistory(List<PasswordHistory> passwordHistory) {
+        this.passwordHistory = passwordHistory;
+    }
 }

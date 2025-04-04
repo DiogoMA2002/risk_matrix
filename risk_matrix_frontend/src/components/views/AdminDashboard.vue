@@ -2,10 +2,12 @@
   <div class="h-screen overflow-y-auto bg-gradient-to-br from-blue-600 to-indigo-100 font-sans">
     <div class="container mx-auto px-4 py-6 max-w-7xl">
       <!-- Header -->
-      <HeaderComponent />
-
-      <!-- Registrar Novo Admin -->
-      <RegisterAdmin />
+      <HeaderComponent
+        title="Painel Administrativo"
+        subtitle="Gerencie questões, questionários e feedbacks"
+        back-to="/"
+        :show-user-button="true"
+      />
 
       <!-- Questionnaire Manager -->
       <QuestionnaireManager
@@ -60,7 +62,6 @@ import QuestionForm from "@/components/AdminDashboard/QuestionForm.vue";
 import QuestionsList from "@/components/AdminDashboard/QuestionsList.vue";
 import FeedbackList from "@/components/AdminDashboard/FeedbackList.vue";
 import UserAnswersList from "@/components/AdminDashboard/UserAnswersList.vue";
-import RegisterAdmin from "@/components/AdminDashboard/RegisterAdmin.vue";
 
 
 export default {
@@ -72,7 +73,6 @@ export default {
     QuestionsList,
     FeedbackList,
     UserAnswersList,
-    RegisterAdmin,
   },
   data() {
     return {

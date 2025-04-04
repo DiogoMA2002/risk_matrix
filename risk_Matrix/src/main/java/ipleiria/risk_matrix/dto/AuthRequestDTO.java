@@ -1,8 +1,15 @@
 package ipleiria.risk_matrix.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class AuthRequestDTO {
 
+    @NotBlank(message = "O nome de utilizador é obrigatório")
     private String username;
+
+    @NotBlank(message = "A senha é obrigatória")
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
     private String password;
 
     public AuthRequestDTO(String username, String password) {
@@ -10,19 +17,9 @@ public class AuthRequestDTO {
         this.password = password;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 }

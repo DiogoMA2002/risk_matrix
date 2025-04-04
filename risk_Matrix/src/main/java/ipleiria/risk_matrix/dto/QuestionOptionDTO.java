@@ -11,13 +11,13 @@ import jakarta.validation.constraints.NotNull;
 
 public class QuestionOptionDTO {
 
-    @NotBlank(message = "Option text cannot be blank")
+    @NotBlank(message = "O texto da opção não pode estar em branco.")
     private String optionText;
 
-    @NotNull(message = "Option type is required")
+    @NotNull(message = "O tipo da opção é obrigatório.")
     private OptionLevelType optionType;
 
-    @NotNull(message = "Option level is required")
+    @NotNull(message = "O nível da opção é obrigatório.")
     private OptionLevel optionLevel;
 
     // Optional – include only if you're capturing severity at the option level

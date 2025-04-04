@@ -13,7 +13,7 @@ public class QuestionnaireDTO {
 
     private Long id;
 
-    @NotBlank(message = "Title cannot be blank")
+    @NotBlank(message = "Titulo não pode estar vázio")
     private String title;
 
     private List<@Valid QuestionDTO> questions;
