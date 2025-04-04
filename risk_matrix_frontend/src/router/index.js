@@ -7,6 +7,7 @@ import HomePage from '@/components/HomePage.vue'
 import CategoryList from '../components/CategoryList.vue'
 import FeedbackForm from '@/components/FeedbackForm.vue' // Import the new component
 import AdminLogin from '../components/views/AdminLogin.vue'
+import UserManagement from '../components/views/UserManagement.vue'
 
 const routes = [
   { path: '/', component: HomePage },
@@ -22,6 +23,7 @@ const routes = [
     component: AdminLogin
   },
   { path: '/admin', component: AdminDashboard },
+  { path: '/user', component: UserManagement },
   { path: '/category', component: CategoryList },
   { path: '/feedback-form', component: FeedbackForm } // New route for feedback form
 ]
