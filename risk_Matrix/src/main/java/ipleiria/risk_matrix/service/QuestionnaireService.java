@@ -4,10 +4,11 @@ import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.dto.QuestionOptionDTO;
 import ipleiria.risk_matrix.dto.QuestionnaireDTO;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
+import ipleiria.risk_matrix.models.category.Category;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
-import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.models.questions.QuestionOption;
+import ipleiria.risk_matrix.repository.CategoryRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import jakarta.validation.Valid;
@@ -24,28 +25,32 @@ public class QuestionnaireService {
 
     private final QuestionnaireRepository questionnaireRepository;
     private final QuestionRepository questionRepository;
+    private final CategoryRepository categoryRepository;
 
-    public QuestionnaireService(QuestionnaireRepository questionnaireRepository, QuestionRepository questionRepository) {
+    public QuestionnaireService(QuestionnaireRepository questionnaireRepository,
+                                QuestionRepository questionRepository,
+                                CategoryRepository categoryRepository) {
         this.questionnaireRepository = questionnaireRepository;
         this.questionRepository = questionRepository;
+        this.categoryRepository = categoryRepository;
     }
 
-    // Criar um novo questionário
+    // Create a new questionnaire
     public Questionnaire createQuestionnaire(Questionnaire questionnaire) {
         return questionnaireRepository.save(questionnaire);
     }
 
-    // Obter todos os questionários
+    // Get all questionnaires
     public List<Questionnaire> getAllQuestionnaires() {
         return questionnaireRepository.findAll();
     }
 
-    // Obter um questionário por ID
+    // Get a questionnaire by ID
     public Optional<Questionnaire> getQuestionnaireById(Long id) {
         return questionnaireRepository.findById(id);
     }
 
-    // Associar uma pergunta a um questionário
+    // Associate a question to a questionnaire
     @Transactional
     public Question addQuestionToQuestionnaire(Long questionnaireId, Question question) {
         Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
@@ -66,7 +71,7 @@ public class QuestionnaireService {
         questionnaireRepository.deleteById(id);
     }
 
-    // Importa um questionário com várias operações: nullifica IDs, associa referências, garante "Não Aplicável", etc.
+    // Import a questionnaire (using the entity model directly)
     @Transactional
     public Questionnaire importQuestionnaire(Questionnaire incoming) {
         incoming.setId(null);
@@ -107,8 +112,7 @@ public class QuestionnaireService {
         return questionnaireRepository.save(existing);
     }
 
-
-
+    // Import a questionnaire from a DTO
     @Transactional
     public Questionnaire importQuestionnaireDto(@Valid QuestionnaireDTO dto) {
         Questionnaire questionnaire = new Questionnaire();
@@ -120,7 +124,16 @@ public class QuestionnaireService {
                 Question question = new Question();
                 question.setId(null);
                 question.setQuestionText(questionDTO.getQuestionText());
-                question.setCategory(questionDTO.getCategory()); // ✅ CORRECT
+
+                // Lookup dynamic category by name using the DTO's categoryName field
+                Category category = categoryRepository.findByName(questionDTO.getCategoryName())
+                        .orElseGet(() -> {
+                            Category newCategory = new Category();
+                            newCategory.setName(questionDTO.getCategoryName());
+                            return categoryRepository.save(newCategory);
+                        });
+                question.setCategory(category);
+
                 question.setQuestionnaire(questionnaire);
 
                 if (questionDTO.getOptions() != null) {
@@ -135,7 +148,7 @@ public class QuestionnaireService {
                     }
                 }
 
-                ensureNaoAplicavelOption(question); // inject "Não Aplicável" if missing
+                ensureNaoAplicavelOption(question); // Ensure "Não Aplicável" option exists if needed
                 questionnaire.getQuestions().add(question);
             }
         }
@@ -143,6 +156,7 @@ public class QuestionnaireService {
         return questionnaireRepository.save(questionnaire);
     }
 
+    // Add a question to an existing questionnaire using a DTO
     @Transactional
     public Question addQuestionDtoToQuestionnaire(Long questionnaireId, @Valid QuestionDTO dto) {
         Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
@@ -153,7 +167,16 @@ public class QuestionnaireService {
         Question question = new Question();
         question.setId(null);
         question.setQuestionText(dto.getQuestionText());
-        question.setCategory(dto.getCategory()); // Already parsed
+
+        // Lookup dynamic category by name from the DTO
+        Category category = categoryRepository.findByName(dto.getCategoryName())
+                .orElseGet(() -> {
+                    Category newCategory = new Category();
+                    newCategory.setName(dto.getCategoryName());
+                    return categoryRepository.save(newCategory);
+                });
+        question.setCategory(category);
+
         question.setQuestionnaire(questionnaire);
 
         if (dto.getOptions() != null) {
@@ -171,5 +194,4 @@ public class QuestionnaireService {
         ensureNaoAplicavelOption(question);
         return questionRepository.save(question);
     }
-
 }

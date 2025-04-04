@@ -41,11 +41,12 @@ public class QuestionController {
 
 
     // Obter perguntas por categoria
-    @GetMapping("/category/{category}")
+    @GetMapping("/category/{categoryName}")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Question> getQuestionsByCategory(@PathVariable QuestionCategory category) {
-        return questionService.getQuestionsByCategory(category);
+    public List<Question> getQuestionsByCategory(@PathVariable("categoryName") String categoryName) {
+        return questionService.getQuestionsByCategory(categoryName);
     }
+
 
     // Obter pergunta por ID
     @GetMapping("/{id}")

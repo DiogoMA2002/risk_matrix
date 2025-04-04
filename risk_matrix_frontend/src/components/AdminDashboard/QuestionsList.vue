@@ -97,9 +97,11 @@ export default {
   },
   methods: {
     formatCategoryName(category) {
-      if (!category) return "";
-      return category.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
-    },
+  // Check if category is an object and has a 'name' property.
+  const categoryName = typeof category === 'object' && category !== null ? category.name : category;
+  return categoryName.replace("_", " ");
+}
+,
     onFilterChange() {
       this.$emit("filter-questions", this.selectedFilterCategory);
       this.currentPage = 1; // Reset pagination when the filter changes

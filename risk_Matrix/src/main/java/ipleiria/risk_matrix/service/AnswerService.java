@@ -5,7 +5,11 @@ import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidOptionException;
 import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.models.answers.Answer;
-import ipleiria.risk_matrix.models.questions.*;
+import ipleiria.risk_matrix.models.questions.OptionLevel;
+import ipleiria.risk_matrix.models.questions.OptionLevelType;
+import ipleiria.risk_matrix.models.questions.Question;
+import ipleiria.risk_matrix.models.questions.QuestionOption;
+import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
@@ -16,10 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.function.Function;
-
+import java.util.stream.Collectors;
 
 import static ipleiria.risk_matrix.utils.RiskUtils.computeSeverity;
 import static ipleiria.risk_matrix.utils.RiskUtils.medianLevel;
@@ -34,7 +37,6 @@ public class AnswerService {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
     }
-
 
     // Create (submit) an answer
     public AnswerDTO submitAnswer(AnswerDTO answerDTO) {
@@ -61,7 +63,7 @@ public class AnswerService {
 
         // Instead of separate impact/probability, we store type & level
         answer.setQuestionType(selectedOption.getOptionType());    // IMPACT or PROBABILITY
-        answer.setChosenLevel(selectedOption.getOptionLevel());    // LOW, MEDIUM, HIGH
+        answer.setChosenLevel(selectedOption.getOptionLevel());      // LOW, MEDIUM, HIGH
 
         answerRepository.save(answer);
         return new AnswerDTO(answer);
@@ -98,6 +100,7 @@ public class AnswerService {
         }
         return result;
     }
+
     public UserAnswersDTO getUserAnswersWithSeverities(String email) {
         List<AnswerDTO> answers = getAnswersByEmail(email);
 
@@ -117,7 +120,8 @@ public class AnswerService {
             if (question == null) {
                 throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
             }
-            String categoryName = question.getCategory().name();
+            // Updated: use getName() to retrieve the category name from the dynamic Category entity
+            String categoryName = question.getCategory().getName();
             answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
         }
 
@@ -161,7 +165,8 @@ public class AnswerService {
                 if (question == null) {
                     throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
                 }
-                String categoryName = question.getCategory().name();
+                // Updated: use getName() for dynamic category entity
+                String categoryName = question.getCategory().getName();
                 answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
             }
 
@@ -178,7 +183,6 @@ public class AnswerService {
         }
         return result;
     }
-
 
     // Helper method in AnswerService (always filters out "Não Aplicável")
     private Severity computeCategorySeverity(List<AnswerDTO> answers) {
@@ -214,5 +218,4 @@ public class AnswerService {
                 .map(AnswerDTO::new)
                 .collect(Collectors.toList());
     }
-
 }
