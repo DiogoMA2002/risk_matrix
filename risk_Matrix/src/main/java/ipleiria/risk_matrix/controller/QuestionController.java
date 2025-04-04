@@ -1,7 +1,6 @@
 package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.models.questions.Question;
-import ipleiria.risk_matrix.models.questions.QuestionCategory;
 import ipleiria.risk_matrix.service.QuestionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
