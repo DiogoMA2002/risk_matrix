@@ -1,4 +1,5 @@
 package ipleiria.risk_matrix.controller;
+
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.service.AnswerService;
@@ -32,22 +33,24 @@ public class AnswerController {
         return answerService.getAnswersByQuestion(questionId);
     }
 
-    // ✅ Get all answers by user email
+    // Get answers by user email
     @GetMapping("/by-email/{email}")
     public List<AnswerDTO> getAnswersByEmail(@PathVariable String email) {
         return answerService.getAnswersByEmail(email);
     }
 
+    // Get user submissions with severity (grouped by submissionId) for a specific email
     @GetMapping("/by-email-with-severity/{email}")
     @PreAuthorize("hasRole('ADMIN')")
-    public UserAnswersDTO getUserAnswersWithSeverity(@PathVariable String email) {
-        return answerService.getUserAnswersWithSeverities(email);
+    public List<UserAnswersDTO> getUserSubmissionsWithSeverities(@PathVariable String email) {
+        return answerService.getUserSubmissionsWithSeverities(email);
     }
 
-    @GetMapping("/get-all-email")
+    // Get all submissions (grouped by submissionId) with severity and email information
+    @GetMapping("/get-all-submissions")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserAnswersDTO> getAllAnswersWithSeverityAndEmail() {
-        return answerService.getAllAnswersWithSeverityAndEmail();
+    public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail() {
+        return answerService.getAllSubmissionsWithSeverityAndEmail();
     }
 
     @PostMapping("/submit-multiple")
@@ -60,5 +63,4 @@ public class AnswerController {
     public List<AnswerDTO> getAnswersByDateRange(@RequestParam String startDate, @RequestParam String endDate) {
         return answerService.getAnswersByDateRange(startDate, endDate);
     }
-
 }

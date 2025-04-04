@@ -39,13 +39,18 @@
     <!-- Display Results -->
     <div v-if="userAnswers && userAnswers.length > 0">
       <ul class="divide-y divide-gray-200">
-        <li v-for="ua in userAnswers" :key="ua.email" class="py-3">
-          <p class="font-medium">Email: {{ ua.email }}</p>
+        <!-- Use submissionId as key -->
+        <li v-for="ua in userAnswers" :key="ua.submissionId" class="py-3">
+          <p class="font-medium">
+            <!-- Optionally display the submissionId -->
+            Submission: {{ ua.submissionId }} - Email: {{ ua.email }}
+          </p>
           <div v-for="(severity, category) in ua.severitiesByCategory" :key="category" class="ml-4">
             <span class="text-sm text-blue-600">{{ formatCategoryName(category) }}: {{ severity }}</span>
           </div>
           <ul class="mt-2 ml-4 border-l border-gray-300 pl-4">
-            <li v-for="answer in ua.answers" :key="answer.questionId" class="py-1">
+            <!-- Consider using answer.id if available -->
+            <li v-for="answer in ua.answers" :key="answer.id" class="py-1">
               {{ answer.questionText }} - {{ answer.userResponse }}
             </li>
           </ul>
@@ -57,7 +62,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   name: "UserAnswersList",
@@ -73,6 +77,10 @@ export default {
       filterStartDate: "",
       filterEndDate: "",
     };
+  },
+  mounted() {
+    // Automatically fetch all answers when the component is mounted
+    this.onFetchAll();
   },
   methods: {
     formatCategoryName(category) {

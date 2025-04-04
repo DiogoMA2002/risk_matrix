@@ -6,11 +6,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import java.util.List;
 import java.util.Map;
 
 public class UserAnswersDTO {
+
+    @NotBlank(message = "O submissionId é obrigatório.")
+    private String submissionId;
 
     @NotBlank(message = "O e-mail é obrigatório.")
     @Email(message = "O e-mail fornecido é inválido.")
@@ -23,6 +25,13 @@ public class UserAnswersDTO {
     private Map<String, Severity> severitiesByCategory;
 
     public UserAnswersDTO() {
+    }
+
+    public String getSubmissionId() {
+        return submissionId;
+    }
+    public void setSubmissionId(String submissionId) {
+        this.submissionId = submissionId;
     }
 
     public String getEmail() {

@@ -60,16 +60,23 @@ public class AnswerService {
         answer.setQuestionText(question.getQuestionText());
         answer.setUserResponse(answerDTO.getUserResponse());
         answer.setEmail(answerDTO.getEmail());
-
         // Instead of separate impact/probability, we store type & level
         answer.setQuestionType(selectedOption.getOptionType());    // IMPACT or PROBABILITY
         answer.setChosenLevel(selectedOption.getOptionLevel());      // LOW, MEDIUM, HIGH
+
+        // The submissionId should be generated on the backend (e.g., UUID) if not provided by the client.
+        // For example:
+        if (answerDTO.getSubmissionId() == null) {
+            answer.setSubmissionId(java.util.UUID.randomUUID().toString());
+        } else {
+            answer.setSubmissionId(answerDTO.getSubmissionId());
+        }
 
         answerRepository.save(answer);
         return new AnswerDTO(answer);
     }
 
-    // Get answers by email
+    // Get answers by email (returns all answers from the user regardless of submission)
     public List<AnswerDTO> getAnswersByEmail(String email) {
         return answerRepository.findByEmail(email).stream()
                 .map(AnswerDTO::new)
@@ -93,15 +100,19 @@ public class AnswerService {
     // Submit multiple answers at once
     public List<AnswerDTO> submitMultipleAnswers(List<AnswerDTO> answers) {
         List<AnswerDTO> result = new ArrayList<>();
+        // Generate a unique submissionId for the entire session
+        String submissionId = java.util.UUID.randomUUID().toString();
         for (AnswerDTO answerDTO : answers) {
-            // Reuse your single-answer logic
+            // Set the same submissionId for each answer in this submission
+            answerDTO.setSubmissionId(submissionId);
             AnswerDTO saved = submitAnswer(answerDTO);
             result.add(saved);
         }
         return result;
     }
 
-    public UserAnswersDTO getUserAnswersWithSeverities(String email) {
+    // Get all submissions for a given user (grouped by submissionId)
+    public List<UserAnswersDTO> getUserSubmissionsWithSeverities(String email) {
         List<AnswerDTO> answers = getAnswersByEmail(email);
 
         // Batch load all questions for the answers
@@ -114,31 +125,44 @@ public class AnswerService {
         Map<Long, Question> questionMap = questions.stream()
                 .collect(Collectors.toMap(Question::getId, Function.identity()));
 
-        Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
-        for (AnswerDTO ans : answers) {
-            Question question = questionMap.get(ans.getQuestionId());
-            if (question == null) {
-                throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
+        // Group answers by submissionId instead of email
+        Map<String, List<AnswerDTO>> answersGroupedBySubmission = answers.stream()
+                .collect(Collectors.groupingBy(AnswerDTO::getSubmissionId));
+
+        List<UserAnswersDTO> result = new ArrayList<>();
+        for (Map.Entry<String, List<AnswerDTO>> entry : answersGroupedBySubmission.entrySet()) {
+            String submissionId = entry.getKey();
+            List<AnswerDTO> submissionAnswers = entry.getValue();
+
+            // Group answers by category for severity calculations
+            Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
+            for (AnswerDTO ans : submissionAnswers) {
+                Question question = questionMap.get(ans.getQuestionId());
+                if (question == null) {
+                    throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
+                }
+                String categoryName = question.getCategory().getName();
+                answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
             }
-            // Updated: use getName() to retrieve the category name from the dynamic Category entity
-            String categoryName = question.getCategory().getName();
-            answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
+
+            Map<String, Severity> severitiesByCategory = new HashMap<>();
+            for (Map.Entry<String, List<AnswerDTO>> catEntry : answersByCategory.entrySet()) {
+                severitiesByCategory.put(catEntry.getKey(), computeCategorySeverity(catEntry.getValue()));
+            }
+
+            UserAnswersDTO dto = new UserAnswersDTO();
+            // Assuming you have added a submissionId field to UserAnswersDTO:
+            dto.setSubmissionId(submissionId);
+            dto.setEmail(email);
+            dto.setAnswers(submissionAnswers);
+            dto.setSeveritiesByCategory(severitiesByCategory);
+            result.add(dto);
         }
-
-        Map<String, Severity> severitiesByCategory = new HashMap<>();
-        for (Map.Entry<String, List<AnswerDTO>> entry : answersByCategory.entrySet()) {
-            severitiesByCategory.put(entry.getKey(), computeCategorySeverity(entry.getValue()));
-        }
-
-        UserAnswersDTO dto = new UserAnswersDTO();
-        dto.setEmail(email);
-        dto.setAnswers(answers);
-        dto.setSeveritiesByCategory(severitiesByCategory);
-
-        return dto;
+        return result;
     }
 
-    public List<UserAnswersDTO> getAllAnswersWithSeverityAndEmail() {
+    // Get all submissions grouped by submissionId (across all users)
+    public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail() {
         List<AnswerDTO> allAnswers = getAllAnswers();
 
         // Batch load questions for all answers
@@ -150,22 +174,23 @@ public class AnswerService {
         Map<Long, Question> questionMap = questions.stream()
                 .collect(Collectors.toMap(Question::getId, Function.identity()));
 
-        // Group answers by user email
-        Map<String, List<AnswerDTO>> answersGroupedByEmail = allAnswers.stream()
-                .collect(Collectors.groupingBy(AnswerDTO::getEmail));
+        // Group answers by submissionId instead of email
+        Map<String, List<AnswerDTO>> answersGroupedBySubmission = allAnswers.stream()
+                .collect(Collectors.groupingBy(AnswerDTO::getSubmissionId));
+
         List<UserAnswersDTO> result = new ArrayList<>();
+        for (Map.Entry<String, List<AnswerDTO>> entry : answersGroupedBySubmission.entrySet()) {
+            String submissionId = entry.getKey();
+            List<AnswerDTO> submissionAnswers = entry.getValue();
+            // It is assumed that all answers in a submission share the same email.
+            String email = submissionAnswers.get(0).getEmail();
 
-        for (Map.Entry<String, List<AnswerDTO>> entry : answersGroupedByEmail.entrySet()) {
-            String email = entry.getKey();
-            List<AnswerDTO> userAnswers = entry.getValue();
             Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
-
-            for (AnswerDTO ans : userAnswers) {
+            for (AnswerDTO ans : submissionAnswers) {
                 Question question = questionMap.get(ans.getQuestionId());
                 if (question == null) {
                     throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
                 }
-                // Updated: use getName() for dynamic category entity
                 String categoryName = question.getCategory().getName();
                 answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
             }
@@ -176,8 +201,9 @@ public class AnswerService {
             }
 
             UserAnswersDTO dto = new UserAnswersDTO();
+            dto.setSubmissionId(submissionId);
             dto.setEmail(email);
-            dto.setAnswers(userAnswers);
+            dto.setAnswers(submissionAnswers);
             dto.setSeveritiesByCategory(severitiesByCategory);
             result.add(dto);
         }

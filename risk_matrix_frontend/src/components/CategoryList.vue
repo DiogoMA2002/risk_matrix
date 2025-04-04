@@ -126,6 +126,7 @@ import CategoryCard from "./CategoryCard.vue";
 import ActionButton from "./ActionButton.vue";
 import ProgressStep from "./Progress.vue";
 import ConfirmDialog from "./ConfirmDialogue.vue";
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   name: "CategoryList",
@@ -200,46 +201,50 @@ export default {
       });
     },
     async submitAllAnswers() {
-      try {
-        await this.confirmAction("Tem a certeza que deseja enviar todas as respostas? Após enviar, o progresso guardado será limpo e você será redirecionado à página principal.");
-      } catch {
-        return; // User cancelled
-      }
-      try {
-        const payload = [];
-        const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
+  try {
+    await this.confirmAction("Tem a certeza que deseja enviar todas as respostas? Após enviar, o progresso guardado será limpo e você será redirecionado à página principal.");
+  } catch {
+    return; // User cancelled
+  }
+  
+  try {
+    const payload = [];
+    const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
+    
+    // Generate a unique submissionId for this batch
+    const submissionId = uuidv4();
 
-        for (const category in this.allAnswers) {
-          const categoryAnswers = this.allAnswers[category];
-          for (const questionId in categoryAnswers) {
-            const userResponse = categoryAnswers[questionId];
-            if (!userResponse || !userResponse.trim()) {
-              continue;
-            }
-            payload.push({
-              questionId: parseInt(questionId),
-              userResponse,
-              email: userEmail,
-            });
-          }
+    for (const category in this.allAnswers) {
+      const categoryAnswers = this.allAnswers[category];
+      for (const questionId in categoryAnswers) {
+        const userResponse = categoryAnswers[questionId];
+        if (!userResponse || !userResponse.trim()) {
+          continue;
         }
-
-        if (!payload.length) {
-          alert("Nenhuma resposta para enviar!");
-          return;
-        }
-
-        await axios.post("/api/answers/submit-multiple", payload);
-
-        alert("Todas as respostas foram enviadas com sucesso!");
-        this.$store.commit("clearAllAnswers");
-        this.$router.push("/");
-      } catch (error) {
-        console.error("Erro ao enviar respostas:", error);
-        
-        alert("Ocorreu um erro ao enviar as respostas.");
+        payload.push({
+          questionId: parseInt(questionId),
+          userResponse,
+          email: userEmail,
+          submissionId: submissionId  // Include the submissionId here
+        });
       }
-    },
+    }
+
+    if (!payload.length) {
+      alert("Nenhuma resposta para enviar!");
+      return;
+    }
+
+    await axios.post("/api/answers/submit-multiple", payload);
+
+    alert("Todas as respostas foram enviadas com sucesso!");
+    this.$store.commit("clearAllAnswers");
+    this.$router.push("/");
+  } catch (error) {
+    console.error("Erro ao enviar respostas:", error);
+    alert("Ocorreu um erro ao enviar as respostas.");
+  }
+},
     async exportToJSON() {
       try {
         await this.confirmAction("Deseja exportar o progresso? Isso irá limpar o progresso salvo localmente.");

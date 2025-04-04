@@ -6,7 +6,6 @@ import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
 
 public class AnswerDTO {
@@ -31,6 +30,10 @@ public class AnswerDTO {
 
     private LocalDateTime createdAt;
 
+    // New field: submissionId
+    @NotBlank(message = "Submission ID é obrigatório")
+    private String submissionId;
+
     public AnswerDTO(Answer answer) {
         this.id = answer.getId();
         this.questionId = answer.getQuestionId();
@@ -40,7 +43,9 @@ public class AnswerDTO {
         this.chosenLevel = answer.getChosenLevel();
         this.email = answer.getEmail();
         this.createdAt = answer.getCreatedAt();
+        this.submissionId = answer.getSubmissionId();
     }
+
     public AnswerDTO() {
         // Required by Jackson
     }
@@ -69,4 +74,11 @@ public class AnswerDTO {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public String getSubmissionId() {
+        return submissionId;
+    }
+    public void setSubmissionId(String submissionId) {
+        this.submissionId = submissionId;
+    }
 }

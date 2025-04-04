@@ -35,9 +35,21 @@ public class Answer {
     @Column(nullable = false)
     private String email;
 
+    // New field to uniquely identify a submission session.
+    @Column(nullable = false)
+    private String submissionId;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    public String getSubmissionId() {
+        return submissionId;
+    }
+
+    public void setSubmissionId(String submissionId) {
+        this.submissionId = submissionId;
+    }
 
     // Constructors
     public Answer() {}
