@@ -210,7 +210,6 @@ public class AnswerService {
         return result;
     }
 
-    // Helper method in AnswerService (always filters out "Não Aplicável")
     private Severity computeCategorySeverity(List<AnswerDTO> answers) {
         List<AnswerDTO> filteredAnswers = answers.stream()
                 .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))

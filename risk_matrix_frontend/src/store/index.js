@@ -7,7 +7,6 @@ export default createStore({
     questionnaires: [],
     selectedQuestionnaire: null,
     allAnswers: {}
-
   },
   mutations: {
     setQuestions(state, questions) {
@@ -19,7 +18,6 @@ export default createStore({
     setSelectedQuestionnaire(state, questionnaire) {
       state.selectedQuestionnaire = questionnaire
     },
-
     setAllAnswers(state, answers) {
       state.allAnswers = answers;
     },
@@ -36,7 +34,7 @@ export default createStore({
   },
   actions: {
     fetchQuestions({ commit }) {
-      axios.get('/api/questions/all')
+      return axios.get('/api/questions/all')
         .then(response => commit('setQuestions', response.data))
         .catch(error => console.error('Erro ao buscar perguntas:', error))
     },
@@ -50,12 +48,13 @@ export default createStore({
         })
         .catch(error => console.error('Erro ao buscar questionários:', error))
     },
-    fetchQuestionnaireById({ commit }, id) {
-      return axios.get(`/api/questionnaires/${id}`)
-        .then(response => {
-          commit('setSelectedQuestionnaire', response.data)
-        })
-        .catch(error => console.error('Erro ao buscar questionário:', error))
-    },
+    async fetchQuestionnaireById({ commit }, id) {
+      try {
+        const response = await axios.get(`/api/questionnaires/${id}`);
+        commit('setSelectedQuestionnaire', response.data);
+      } catch (error) {
+        console.error('Erro ao buscar questionário:', error);
+      }
+    }
   },
 })

@@ -47,41 +47,20 @@
             </div>
             <div v-else>
               <div v-if="categories.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <CategoryCard 
-                  v-for="cat in categories" 
-                  :key="cat" 
-                  :category="cat"
-                  :answered-count="answeredCount(cat)"
-                  :total-count="totalCount(cat)"
-                  @click="goToCategory(cat)"
-                />
+                <CategoryCard v-for="cat in categories" :key="cat" :category="cat" :answered-count="answeredCount(cat)"
+                  :total-count="totalCount(cat)" @click="goToCategory(cat)" />
               </div>
               <div v-else class="text-center p-8 bg-white bg-opacity-70 rounded-lg text-blue-800">
                 <p>Nenhuma categoria encontrada neste questionário.</p>
               </div>
             </div>
           </div>
-          
+
           <!-- Action Buttons -->
           <div class="mt-8 flex flex-wrap justify-center gap-4">
-            <ActionButton 
-              icon="send" 
-              text="Enviar Todas as Respostas" 
-              color="blue" 
-              @click="submitAllAnswers"
-            />
-            <ActionButton 
-              icon="export" 
-              text="Exportar Progresso" 
-              color="green" 
-              @click="exportToJSON"
-            />
-            <ActionButton 
-              icon="import" 
-              text="Importar Progresso" 
-              color="red" 
-              @click="triggerImport"
-            />
+            <ActionButton icon="send" text="Enviar Todas as Respostas" color="blue" @click="submitAllAnswers" />
+            <ActionButton icon="export" text="Exportar Progresso" color="green" @click="exportToJSON" />
+            <ActionButton icon="import" text="Importar Progresso" color="red" @click="triggerImport" />
             <input type="file" ref="importFile" accept="application/json" class="hidden" @change="importFromJSON" />
           </div>
         </section>
@@ -110,12 +89,7 @@
       </div>
 
     </div>
-    <ConfirmDialog
-      v-if="showConfirm"
-      :message="confirmMessage"
-      @confirm="handleConfirm"
-      @cancel="handleCancel"
-    />
+    <ConfirmDialog v-if="showConfirm" :message="confirmMessage" @confirm="handleConfirm" @cancel="handleCancel" />
   </div>
 </template>
 <script>
@@ -146,11 +120,19 @@ export default {
     };
   },
   computed: {
-    ...mapState(["questionnaires", "selectedQuestionnaire", "allAnswers"]),
+    ...mapState(['questionnaires', 'selectedQuestionnaire', 'allAnswers']),
     categories() {
       if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
-        const cats = this.selectedQuestionnaire.questions.map(q => q.category);
-        return [...new Set(cats)];
+        return [
+          ...new Set(
+            this.selectedQuestionnaire.questions.map(q => {
+              if (typeof q.category === "object" && q.category !== null) {
+                return q.category.name;
+              }
+              return q.category;
+            })
+          )
+        ];
       }
       return [];
     }
@@ -164,7 +146,7 @@ export default {
   },
   methods: {
     ...mapActions(["fetchQuestionnaires", "fetchQuestionnaireById"]),
-    // Helper method that returns a promise
+    // Helper method to display confirmation dialogs
     confirmAction(message) {
       this.confirmMessage = message;
       this.showConfirm = true;
@@ -201,50 +183,70 @@ export default {
       });
     },
     async submitAllAnswers() {
-  try {
-    await this.confirmAction("Tem a certeza que deseja enviar todas as respostas? Após enviar, o progresso guardado será limpo e você será redirecionado à página principal.");
-  } catch {
-    return; // User cancelled
-  }
-  
-  try {
-    const payload = [];
-    const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
-    
-    // Generate a unique submissionId for this batch
-    const submissionId = uuidv4();
-
-    for (const category in this.allAnswers) {
-      const categoryAnswers = this.allAnswers[category];
-      for (const questionId in categoryAnswers) {
-        const userResponse = categoryAnswers[questionId];
-        if (!userResponse || !userResponse.trim()) {
-          continue;
+      // First, warn if there are answers for questions not belonging to the selected questionnaire.
+      if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
+        const selectedQuestionIds = new Set(this.selectedQuestionnaire.questions.map(q => q.id));
+        let extraCount = 0;
+        for (const category in this.allAnswers) {
+          const categoryAnswers = this.allAnswers[category];
+          for (const questionId in categoryAnswers) {
+            if (!selectedQuestionIds.has(parseInt(questionId))) {
+              extraCount++;
+            }
+          }
         }
-        payload.push({
-          questionId: parseInt(questionId),
-          userResponse,
-          email: userEmail,
-          submissionId: submissionId  // Include the submissionId here
-        });
+        if (extraCount > 0) {
+          const proceed = confirm("Você possui respostas que pertencem a outros questionários. Somente as respostas do questionário selecionado serão enviadas. Deseja continuar?");
+          if (!proceed) {
+            return;
+          }
+        }
       }
-    }
 
-    if (!payload.length) {
-      alert("Nenhuma resposta para enviar!");
-      return;
-    }
-
-    await axios.post("/api/answers/submit-multiple", payload);
-
-    alert("Todas as respostas foram enviadas com sucesso!");
-    this.$store.commit("clearAllAnswers");
-    this.$router.push("/");
-  } catch (error) {
-    console.error("Erro ao enviar respostas:", error);
-    alert("Ocorreu um erro ao enviar as respostas.");
-  }
-},
+      try {
+        await this.confirmAction("Tem a certeza que deseja enviar todas as respostas? Após enviar, o progresso guardado será limpo e você será redirecionado à página principal.");
+      } catch {
+        return; // User cancelled
+      }
+      try {
+        const payload = [];
+        const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
+        // Generate a unique submissionId for this batch
+        const submissionId = uuidv4();
+        // Get list of question IDs from the currently selected questionnaire
+        const selectedQuestionIds = this.selectedQuestionnaire && this.selectedQuestionnaire.questions
+          ? this.selectedQuestionnaire.questions.map(q => q.id)
+          : [];
+        // Only include answers for questions that belong to the selected questionnaire
+        for (const category in this.allAnswers) {
+          const categoryAnswers = this.allAnswers[category];
+          for (const questionId in categoryAnswers) {
+            if (!selectedQuestionIds.includes(parseInt(questionId))) continue;
+            const userResponse = categoryAnswers[questionId];
+            if (!userResponse || !userResponse.trim()) {
+              continue;
+            }
+            payload.push({
+              questionId: parseInt(questionId),
+              userResponse,
+              email: userEmail,
+              submissionId: submissionId
+            });
+          }
+        }
+        if (!payload.length) {
+          alert("Nenhuma resposta para enviar!");
+          return;
+        }
+        await axios.post("/api/answers/submit-multiple", payload);
+        alert("Todas as respostas foram enviadas com sucesso!");
+        this.$store.commit("clearAllAnswers");
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Erro ao enviar respostas:", error);
+        alert("Ocorreu um erro ao enviar as respostas.");
+      }
+    },
     async exportToJSON() {
       try {
         await this.confirmAction("Deseja exportar o progresso? Isso irá limpar o progresso salvo localmente.");
@@ -256,7 +258,6 @@ export default {
         alert("Nenhuma resposta para exportar!");
         return;
       }
-      
       const blob = new Blob([allAnswersStr], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -274,7 +275,6 @@ export default {
         .then(() => {
           const file = event.target.files[0];
           if (!file) return;
-          
           const reader = new FileReader();
           reader.onload = (e) => {
             try {
@@ -288,7 +288,6 @@ export default {
           reader.readAsText(file);
         })
         .catch(() => {
-          // User cancelled import
           return;
         });
     },
@@ -301,13 +300,22 @@ export default {
     },
     totalCount(category) {
       if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
-        return this.selectedQuestionnaire.questions.filter(q => q.category === category).length;
+        return this.selectedQuestionnaire.questions.filter(q => {
+          const catString = (typeof q.category === "object" && q.category !== null)
+            ? q.category.name
+            : q.category;
+          return catString === category;
+        }).length;
       }
       return 0;
     },
     selectQuestionnaire(id) {
-      this.fetchQuestionnaireById(id);
-    }
+  // Clear previous answers before switching
+  this.$store.commit("clearAllAnswers");
+  // Fetch and update the selected questionnaire
+  this.fetchQuestionnaireById(id);
+}
+
   }
 };
 </script>
@@ -320,4 +328,3 @@ body {
   padding: 0;
 }
 </style>
-

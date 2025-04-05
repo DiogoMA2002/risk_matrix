@@ -52,9 +52,10 @@
       }
     },
     computed: {
-      formattedCategory() {
-        return this.category.replace(/_/g, " ");
-      }
-    }
+  formattedCategory() {
+    return this.category || "";
+  }
+}
+
   }
   </script>
