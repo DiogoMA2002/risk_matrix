@@ -51,26 +51,7 @@ public class QuestionnaireService {
         return questionnaireRepository.findById(id);
     }
 
-    // Associate an existing question to a questionnaire (for many-to-many)
-    @Transactional
-    public Question addQuestionToQuestionnaire(Long questionnaireId, Question question) {
-        Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
-                .orElseThrow(() -> new QuestionnaireNotFoundException(
-                        "Questionnaire not found for ID: " + questionnaireId
-                ));
 
-        // Instead of setting a single questionnaire on the question,
-        // add the questionnaire to the question's list.
-        if (!question.getQuestionnaires().contains(questionnaire)) {
-            question.getQuestionnaires().add(questionnaire);
-        }
-        // Also add the question to the questionnaire's list if not present.
-        if (!questionnaire.getQuestions().contains(question)) {
-            questionnaire.getQuestions().add(question);
-        }
-        // Save the question (which will update the join table).
-        return questionRepository.save(question);
-    }
 
     public void deleteQuestionnaire(Long id) {
         if (!questionnaireRepository.existsById(id)) {

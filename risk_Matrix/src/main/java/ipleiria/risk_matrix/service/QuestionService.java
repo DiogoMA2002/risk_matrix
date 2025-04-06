@@ -2,7 +2,6 @@ package ipleiria.risk_matrix.service;
 
 import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.dto.QuestionOptionDTO;
-import ipleiria.risk_matrix.dto.QuestionnaireDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidCategoryException;
 import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionNotFoundException;
@@ -16,13 +15,11 @@ import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.repository.CategoryRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import static ipleiria.risk_matrix.utils.QuestionUtils.ensureNaoAplicavelOption;
 
 @Service
 public class QuestionService {
@@ -112,23 +109,11 @@ public class QuestionService {
         return new QuestionDTO(question);
     }
 
-
-
-    private QuestionOption mapToQuestionOption(QuestionOptionDTO optionDTO, Question question) {
-        QuestionOption option = new QuestionOption();
-        option.setQuestion(question);
-        option.setOptionText(optionDTO.getOptionText());
-        option.setOptionType(optionDTO.getOptionType());
-        option.setOptionLevel(optionDTO.getOptionLevel());
-        return option;
-    }
-
     // Get all questions
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
 
-    // Get all questions (DTO version)
 
 
     // Get questions by category (using dynamic category name)
@@ -199,45 +184,4 @@ public class QuestionService {
         return option;
     }
 
-    // Add a question to an existing questionnaire using a DTO (many-to-many)
-    public QuestionDTO addQuestionDtoToQuestionnaire(Long questionnaireId, @Valid QuestionDTO dto) {
-        Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
-                .orElseThrow(() -> new QuestionnaireNotFoundException(
-                        "Questionnaire not found for ID: " + questionnaireId
-                ));
-
-        Question question = new Question();
-        question.setQuestionText(dto.getQuestionText());
-
-        String categoryName = dto.getCategoryName();
-        if (categoryName == null || categoryName.trim().isEmpty()) {
-            throw new InvalidCategoryException("A categoria da pergunta é obrigatória.");
-        }
-        Category category = categoryRepository.findByName(categoryName)
-                .orElseGet(() -> {
-                    Category newCategory = new Category();
-                    newCategory.setName(categoryName);
-                    return categoryRepository.save(newCategory);
-                });
-        question.setCategory(category);
-
-        // Associate the question with the questionnaire bidirectionally
-        question.getQuestionnaires().add(questionnaire);
-        questionnaire.getQuestions().add(question);
-
-        if (dto.getOptions() != null) {
-            for (QuestionOptionDTO optionDTO : dto.getOptions()) {
-                QuestionOption option = new QuestionOption();
-                option.setOptionText(optionDTO.getOptionText());
-                option.setOptionLevel(optionDTO.getOptionLevel());
-                option.setOptionType(optionDTO.getOptionType());
-                option.setQuestion(question);
-                question.getOptions().add(option);
-            }
-        }
-
-        ensureNaoAplicavelOption(question);
-        questionRepository.save(question);
-        return new QuestionDTO(question);
-    }
 }

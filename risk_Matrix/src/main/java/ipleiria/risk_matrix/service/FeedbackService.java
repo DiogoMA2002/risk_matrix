@@ -4,7 +4,6 @@ import ipleiria.risk_matrix.exceptions.exception.FeedbackTooLongException;
 import ipleiria.risk_matrix.models.feedback.Feedback;
 import ipleiria.risk_matrix.models.feedback.FeedbackType;
 import ipleiria.risk_matrix.repository.FeedbackRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

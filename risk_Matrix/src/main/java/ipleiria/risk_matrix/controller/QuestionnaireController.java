@@ -46,7 +46,6 @@ public class QuestionnaireController {
 
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<QuestionnaireDTO> getAllQuestionnaires() {
         return questionnaireService.getAllQuestionnaires().stream()
                 .map(QuestionnaireDTO::new)
@@ -54,7 +53,6 @@ public class QuestionnaireController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public Optional<Questionnaire> getQuestionnaireById(@PathVariable Long id) {
         return questionnaireService.getQuestionnaireById(id);
     }
@@ -79,6 +77,7 @@ public class QuestionnaireController {
     }
 
     @PostMapping("/{id}/add-question")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Question> addQuestionToQuestionnaire(
             @PathVariable Long id,
             @RequestBody @Valid QuestionDTO dto) {
@@ -120,6 +119,7 @@ public class QuestionnaireController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Questionnaire updateQuestionnaire(@PathVariable Long id, @RequestBody Questionnaire updatedQuestionnaire) {
         return questionnaireService.updateQuestionnaire(id, updatedQuestionnaire);
     }

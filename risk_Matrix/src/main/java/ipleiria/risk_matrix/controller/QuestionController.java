@@ -19,14 +19,13 @@ public class QuestionController {
 
     // Criar uma nova pergunta
     @PostMapping("/add/{questionnaireId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public QuestionDTO addQuestionToQuestionnaire(
             @PathVariable Long questionnaireId,
             @RequestBody @Valid QuestionDTO questionDTO) {
         return questionService.createQuestion(questionnaireId, questionDTO);
     }
-
     // Obter todas as perguntas
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public List<Question> getAllQuestions() {
         return questionService.getAllQuestions();
@@ -38,8 +37,6 @@ public class QuestionController {
     public List<Question> getQuestionsByCategory(@PathVariable("categoryName") String categoryName) {
         return questionService.getQuestionsByCategory(categoryName);
     }
-
-
     // Obter pergunta por ID
     @GetMapping("/{id}")
     public Optional<Question> getQuestionById(@PathVariable Long id) {

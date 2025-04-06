@@ -19,6 +19,7 @@ public class AnswerController {
 
     // Obter todas as respostas
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AnswerDTO> getAllAnswers() {
         return answerService.getAllAnswers();
     }
@@ -29,17 +30,19 @@ public class AnswerController {
     }
 
     @GetMapping("/by-question/{questionId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AnswerDTO> getAnswersByQuestion(@PathVariable Long questionId) {
         return answerService.getAnswersByQuestion(questionId);
     }
 
     // Get answers by user email
     @GetMapping("/by-email/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AnswerDTO> getAnswersByEmail(@PathVariable String email) {
         return answerService.getAnswersByEmail(email);
     }
 
-    // Get user submissions with severity (grouped by submissionId) for a specific email
+    //Get user submissions with severity (grouped by submissionId) for a specific email
     @GetMapping("/by-email-with-severity/{email}")
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserAnswersDTO> getUserSubmissionsWithSeverities(@PathVariable String email) {
