@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,9 +36,14 @@ public class QuestionnaireController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Questionnaire> createQuestionnaire(@RequestBody @Valid QuestionnaireDTO questionnaireDTO) {
-        Questionnaire created = questionnaireService.importQuestionnaireDto(questionnaireDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        Questionnaire questionnaire = new Questionnaire();
+        questionnaire.setTitle(questionnaireDTO.getTitle());
+        questionnaire.setQuestions(new ArrayList<>()); // Ensure non-null
+
+        Questionnaire saved = questionnaireService.createQuestionnaire(questionnaire);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")

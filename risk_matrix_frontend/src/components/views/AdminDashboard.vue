@@ -98,15 +98,18 @@
     },
     methods: {
       async fetchCategories() {
-        try {
-          const response = await axios.get("/api/categories");
-          // Map each Category object to its name (assumes the model has a "name" field)
-          this.categories = response.data.map(category => category.name);
-        } catch (error) {
-          console.error("Error fetching categories:", error);
-          this.categories = [];
-        }
-      },
+  try {
+    const response = await axios.get("/api/categories");
+    // Ensure each category has a valid name
+    this.categories = response.data
+      .map(category => category.name)
+      .filter(name => !!name); // Filter out falsy values
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    this.categories = [];
+  }
+}
+,
       async fetchQuestions() {
         this.isLoading = true;
         try {
@@ -134,6 +137,7 @@
         }
       },
       async addQuestion(questionData) {
+        console.log("Adding question with data:", questionData);
         if (!questionData.newQuestion || !questionData.selectedCategory || questionData.selectedQuestionnaires.length === 0) {
           alert("Por favor, insira a questão, selecione uma categoria e escolha pelo menos um questionário.");
           return;

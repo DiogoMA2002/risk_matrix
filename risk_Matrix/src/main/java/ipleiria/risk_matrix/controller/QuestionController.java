@@ -19,7 +19,6 @@ public class QuestionController {
 
     // Criar uma nova pergunta
     @PostMapping("/add/{questionnaireId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public QuestionDTO addQuestionToQuestionnaire(
             @PathVariable Long questionnaireId,
             @RequestBody @Valid QuestionDTO questionDTO) {
@@ -33,15 +32,9 @@ public class QuestionController {
         return questionService.getAllQuestions();
     }
 
-    @GetMapping("/all/suggestions")
-    public List<QuestionDTO> getAllQuestionsWithSuggestion() {
-        return questionService.getAllQuestionsWithSuggestion();
-    }
-
 
     // Obter perguntas por categoria
     @GetMapping("/category/{categoryName}")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<Question> getQuestionsByCategory(@PathVariable("categoryName") String categoryName) {
         return questionService.getQuestionsByCategory(categoryName);
     }

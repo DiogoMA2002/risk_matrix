@@ -24,7 +24,7 @@ const routes = [
   },
   { path: '/admin', component: AdminDashboard },
   { path: '/user', component: UserManagement },
-  { path: '/category', component: CategoryList },
+  { path: '/category', name: 'CategoryList', component: CategoryList },
   { path: '/feedback-form', component: FeedbackForm } // New route for feedback form
 ]
 

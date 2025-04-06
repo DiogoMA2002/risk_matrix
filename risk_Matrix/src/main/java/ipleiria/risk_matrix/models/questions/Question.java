@@ -1,10 +1,9 @@
 package ipleiria.risk_matrix.models.questions;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ipleiria.risk_matrix.models.category.Category;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,47 +22,30 @@ public class Question {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "questionnaire_id") // Cria uma chave estrangeira na tabela Question
-    @JsonBackReference
-    private Questionnaire questionnaire;
+    // Remove the old ManyToOne relationship to Questionnaire
+    // and replace it with a ManyToMany mapping.
+    @ManyToMany(mappedBy = "questions")
+    @JsonIgnore
+    private List<Questionnaire> questionnaires = new ArrayList<>();
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<QuestionOption> options = new ArrayList<>();
 
-    // Constructors
     public Question() {}
 
-    // Getters and Setters
+    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getQuestionText() { return questionText; }
     public void setQuestionText(String questionText) { this.questionText = questionText; }
 
-    public Category getCategory() {
-        return category;
-    }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+    public List<Questionnaire> getQuestionnaires() { return questionnaires; }
+    public void setQuestionnaires(List<Questionnaire> questionnaires) { this.questionnaires = questionnaires; }
 
-    public Questionnaire getQuestionnaire() {
-        return questionnaire;
-    }
-
-    public void setQuestionnaire(Questionnaire questionnaire) {
-        this.questionnaire = questionnaire;
-    }
-
-    public List<QuestionOption> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<QuestionOption> options) {
-        this.options = options;
-    }
+    public List<QuestionOption> getOptions() { return options; }
+    public void setOptions(List<QuestionOption> options) { this.options = options; }
 }
-

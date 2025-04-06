@@ -4,8 +4,8 @@
       <!-- Header with back button and logo -->
       <div class="flex justify-between items-center mb-6">
         <div class="flex items-center">
-          <button @click="$router.go(-1)"
-            class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
+          <button @click="goBackToCategories"
+                      class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
               viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round"
@@ -147,7 +147,14 @@ export default {
     // If you need to handle "no selection," store null or remove the key
     this.$store.commit("updateAnswer", { category, questionId, answer: value });
   },
-
+  goBackToCategories() {
+  const { questionnaireId } = this.$route.params;
+  this.$router.push({
+    name: 'CategoryList', // or whatever route shows the categories
+    query: { selected: questionnaireId }
+  });
+}
+,
   getAnswer(questionId) {
     const category = this.$route.params.category;
     const answersForCategory = this.$store.state.allAnswers[category] || {};

@@ -6,8 +6,9 @@
       <select v-model="selectedFilterCategory" @change="onFilterChange" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300">
         <option value="">Todos</option>
         <option v-for="cat in categories" :key="cat" :value="cat">
-          {{ formatCategoryName(cat) }}
-        </option>
+  {{ formatCategoryName(cat) }}
+</option>
+
       </select>
     </div>
 
@@ -83,7 +84,7 @@ export default {
     return {
       selectedFilterCategory: "",
       currentPage: 1,
-      itemsPerPage: 5, // Adjust this number as needed
+      itemsPerPage: 5,
     };
   },
   computed: {
@@ -97,14 +98,13 @@ export default {
   },
   methods: {
     formatCategoryName(category) {
-  // Check if category is an object and has a 'name' property.
-  const categoryName = typeof category === 'object' && category !== null ? category.name : category;
-  return categoryName.replace("_", " ");
-}
-,
+      if (!category) return "";
+      let name = typeof category === "object" && category.name ? category.name : category;
+      return name.replace(/_/g, " ");
+    },
     onFilterChange() {
       this.$emit("filter-questions", this.selectedFilterCategory);
-      this.currentPage = 1; // Reset pagination when the filter changes
+      this.currentPage = 1;
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
@@ -119,7 +119,6 @@ export default {
   },
   watch: {
     questions() {
-      // Reset current page if questions change and the current page becomes invalid
       if (this.currentPage > this.totalPages) {
         this.currentPage = 1;
       }

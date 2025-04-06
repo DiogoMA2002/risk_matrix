@@ -6,7 +6,8 @@ export default createStore({
     questions: [],
     questionnaires: [],
     selectedQuestionnaire: null,
-    allAnswers: {}
+    allAnswers: {},
+    selectedQuestionnaireId: null,
   },
   mutations: {
     setQuestions(state, questions) {
@@ -17,6 +18,9 @@ export default createStore({
     },
     setSelectedQuestionnaire(state, questionnaire) {
       state.selectedQuestionnaire = questionnaire
+    },
+    setSelectedQuestionnaireId(state, id) {
+      state.selectedQuestionnaireId = id;
     },
     setAllAnswers(state, answers) {
       state.allAnswers = answers;

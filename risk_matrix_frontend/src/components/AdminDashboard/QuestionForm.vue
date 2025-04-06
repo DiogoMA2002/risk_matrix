@@ -26,9 +26,10 @@
         >
           <option disabled value="">Selecione a Categoria</option>
           <option value="none">Nenhum</option>
-          <option v-for="cat in categories" :key="cat" :value="cat">
-            {{ formatCategoryName(cat) }}
-          </option>
+          <option v-for="cat in categories" :key="cat" :value="cat || ''">
+  {{ formatCategoryName(cat) }}
+</option>
+
         </select>
       </div>
       <!-- Create New Category -->
@@ -85,6 +86,8 @@
               <label class="block text-sm font-medium text-gray-700">Tipo da Opção</label>
               <select
                 v-model="option.optionType"
+                @change="lockOptionType(option.optionType)"
+
                 class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300"
               >
                 <option v-for="type in optionTypes" :key="type" :value="type">
@@ -182,12 +185,12 @@ export default {
   },
   methods: {
     formatCategoryName(category) {
-      if (!category) return "";
-      return category
-        .replace(/_/g, " ")
-        .toLowerCase()
-        .replace(/\b\w/g, (l) => l.toUpperCase());
-    },
+    if (!category || typeof category !== "string") return "";
+    return category
+      .replace(/_/g, " ")
+      .toLowerCase()
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+  },
     addOption() {
       this.newOptions.push({ optionText: "", optionType: "IMPACT", optionLevel: "LOW" });
     },
@@ -199,17 +202,35 @@ export default {
         alert("Por favor, insira um nome para a nova categoria.");
         return;
       }
+      const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
+
+      if (forbidden.test(this.newCategory.trim())) {
+  alert("Nome da categoria contém caracteres inválidos.");
+  return;
+}
       // Emit event to create a new category on the backend
       this.$emit("create-category", this.newCategory.trim());
       // Optionally update the local category list
       this.$emit("update-categories", this.newCategory.trim());
       this.newCategory = "";
     },
+    lockOptionType(type) {
+  this.newOptions.forEach(opt => {
+    opt.optionType = type;
+  });
+}
+,
     onAddQuestion() {
       if (!this.newQuestion.trim()) {
         alert("O texto da questão é obrigatório.");
         return;
       }
+      const invalidChars = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
+if (invalidChars.test(this.newQuestion) || invalidChars.test(this.selectedCategory || this.newCategory)) {
+  alert("O texto da pergunta ou nome da categoria contém caracteres inválidos.");
+  return;
+}
+
       // Check if no category is selected (or "none" is chosen) and no new category is provided.
       if ((!this.selectedCategory || this.selectedCategory === "none") && !this.newCategory.trim()) {
         alert("Por favor, selecione uma categoria existente ou crie uma nova.");
