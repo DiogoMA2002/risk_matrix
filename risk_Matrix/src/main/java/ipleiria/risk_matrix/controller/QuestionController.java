@@ -38,7 +38,7 @@ public class QuestionController {
     }
     // Obter pergunta por ID
     @GetMapping("/{id}")
-    public Optional<Question> getQuestionById(@PathVariable Long id) {
+    public Question getQuestionById(@PathVariable Long id) {
         return questionService.getQuestionById(id);
     }
 

@@ -1,7 +1,9 @@
 package ipleiria.risk_matrix.exceptions.exception;
 
-public class QuestionnaireNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class QuestionnaireNotFoundException extends BaseException {
     public QuestionnaireNotFoundException(String message) {
-        super(message);
+        super(message, HttpStatus.NOT_FOUND, "QUESTIONNAIRE_NOT_FOUND");
     }
 }

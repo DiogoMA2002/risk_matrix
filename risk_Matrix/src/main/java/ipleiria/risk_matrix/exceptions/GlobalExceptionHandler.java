@@ -1,9 +1,15 @@
 package ipleiria.risk_matrix.exceptions;
 
-import ipleiria.risk_matrix.exceptions.exception.*;
+import ipleiria.risk_matrix.exceptions.exception.BaseException;
 import ipleiria.risk_matrix.responses.ErrorResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,110 +18,123 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
-import java.lang.IllegalArgumentException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
-        return new ResponseEntity<>(new ErrorResponse(status.value(), status, message), status);
+    private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message, String errorCode, HttpServletRequest request) {
+        return new ResponseEntity<>(
+                new ErrorResponse(status.value(), status, message, errorCode, request.getRequestURI(), null),
+                status
+        );
+    }
+
+    @ExceptionHandler(BaseException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleBaseException(BaseException ex, HttpServletRequest request) {
+        log.error("Business exception occurred: {}", ex.getMessage(), ex);
+        return buildError(ex.getStatus(), ex.getMessage(), ex.getErrorCode(), request);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+        log.warn("Authentication failed: {}", ex.getMessage());
+        return buildError(HttpStatus.UNAUTHORIZED, "Authentication failed", "AUTHENTICATION_ERROR", request);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
+        log.warn("Bad credentials: {}", ex.getMessage());
+        return buildError(HttpStatus.UNAUTHORIZED, "Invalid credentials", "BAD_CREDENTIALS", request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        log.warn("Access denied: {}", ex.getMessage());
+        return buildError(HttpStatus.FORBIDDEN, "Access denied", "ACCESS_DENIED", request);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException ex, HttpServletRequest request) {
+        log.warn("User not found: {}", ex.getMessage());
+        return buildError(HttpStatus.NOT_FOUND, ex.getMessage(), "USER_NOT_FOUND", request);
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
-        StringBuilder message = new StringBuilder("Validation failure: ");
+    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(
+            HandlerMethodValidationException ex, HttpServletRequest request) {
+        log.warn("Validation error occurred: {}", ex.getMessage());
+        
+        Map<String, List<String>> errors = new HashMap<>();
         ex.getAllErrors().forEach(error -> {
-            if (error instanceof FieldError fieldError) {
-                message.append(fieldError.getField())
-                        .append(" ")
-                        .append(fieldError.getDefaultMessage())
-                        .append("; ");
-            } else if (error instanceof ObjectError objectError) {
-                message.append(objectError.getObjectName())
-                        .append(" ")
-                        .append(objectError.getDefaultMessage())
-                        .append("; ");
-            } else {
-                message.append(error.getDefaultMessage()).append("; ");
-            }
+            String fieldName = error instanceof FieldError ? ((FieldError) error).getField() : "global";
+            String errorMessage = error.getDefaultMessage();
+            errors.computeIfAbsent(fieldName, k -> new java.util.ArrayList<>()).add(errorMessage);
         });
-        return ResponseEntity
-                .badRequest()
-                .body(new ErrorResponse(400, HttpStatus.BAD_REQUEST, message.toString()));
-    }
 
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
-        return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler(InvalidOptionException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleInvalidOptionException(InvalidOptionException ex) {
-        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(UsernameAlreadyExistsException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex) {
-        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(EmailAlreadyExistsException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
-        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(QuestionnaireNotFoundException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleQuestionnaireNotFoundException(QuestionnaireNotFoundException ex) {
-        return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler(InvalidCategoryException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleInvalidCategoryException(InvalidCategoryException ex) {
-        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(QuestionNotFoundException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleQuestionNotFoundException(QuestionNotFoundException ex) {
-        return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler(FeedbackTooLongException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleFeedbackTooLongException(FeedbackTooLongException ex) {
-        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        HttpStatus.BAD_REQUEST.value(),
+                        HttpStatus.BAD_REQUEST,
+                        "Validation failed",
+                        "VALIDATION_ERROR",
+                        request.getRequestURI(),
+                        errors
+                ),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
-        StringBuilder message = new StringBuilder("Validation failed: ");
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            message.append(error.getField()).append(" ").append(error.getDefaultMessage()).append("; ");
-        }
-        return ResponseEntity.badRequest().body(new ErrorResponse(400, HttpStatus.BAD_REQUEST, message.toString()));
-    }
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleValidationException(
+            MethodArgumentNotValidException ex, HttpServletRequest request) {
+        log.warn("Validation error occurred: {}", ex.getMessage());
+        
+        Map<String, List<String>> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            String fieldName = error.getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.computeIfAbsent(fieldName, k -> new java.util.ArrayList<>()).add(errorMessage);
+        });
 
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        HttpStatus.BAD_REQUEST.value(),
+                        HttpStatus.BAD_REQUEST,
+                        "Validation failed",
+                        "VALIDATION_ERROR",
+                        request.getRequestURI(),
+                        errors
+                ),
+                HttpStatus.BAD_REQUEST
+        );
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        ex.printStackTrace(); // log to console
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ErrorResponse errorResponse = new ErrorResponse(status.value(), status, "Internal Server Error: " + ex.getMessage());
-        return new ResponseEntity<>(errorResponse, status);
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
+        log.error("Unexpected error occurred: {}", ex.getMessage(), ex);
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "An unexpected error occurred",
+                        "INTERNAL_SERVER_ERROR",
+                        request.getRequestURI(),
+                        null
+                ),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
-
 }

@@ -1,7 +1,9 @@
 package ipleiria.risk_matrix.exceptions.exception;
 
-public class QuestionNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class QuestionNotFoundException extends BaseException {
     public QuestionNotFoundException(String message) {
-        super(message);
+        super(message, HttpStatus.NOT_FOUND, "QUESTION_NOT_FOUND");
     }
 }

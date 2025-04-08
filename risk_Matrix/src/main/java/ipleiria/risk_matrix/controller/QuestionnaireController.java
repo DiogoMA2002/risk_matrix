@@ -44,7 +44,6 @@ public class QuestionnaireController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-
     @GetMapping("/all")
     public List<QuestionnaireDTO> getAllQuestionnaires() {
         return questionnaireService.getAllQuestionnaires().stream()
@@ -53,8 +52,10 @@ public class QuestionnaireController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Questionnaire> getQuestionnaireById(@PathVariable Long id) {
-        return questionnaireService.getQuestionnaireById(id);
+    public ResponseEntity<Questionnaire> getQuestionnaireById(@PathVariable Long id) {
+        return questionnaireService.getQuestionnaireById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found with id: " + id));
     }
 
     // Updated: Accept category name (String) and filter questions by dynamic category name

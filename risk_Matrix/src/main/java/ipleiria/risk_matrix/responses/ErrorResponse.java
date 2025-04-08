@@ -1,56 +1,39 @@
 package ipleiria.risk_matrix.responses;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
+@Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
-    private LocalDateTime timestamp;
-    private int errorCode;
-    private HttpStatus status;
-    private String message;
+    private final int statusCode;
+    private final HttpStatus status;
+    private final String message;
+    private final String errorCode;
+    private final LocalDateTime timestamp;
+    private final String path;
+    private final Map<String, List<String>> validationErrors;
 
-    // Constructor
-    public ErrorResponse(int errorCode, HttpStatus status, String message) {
+    public ErrorResponse(int statusCode, HttpStatus status, String message) {
+        this(statusCode, status, message, null, null, null);
+    }
+
+    public ErrorResponse(int statusCode, HttpStatus status, String message, String errorCode) {
+        this(statusCode, status, message, errorCode, null, null);
+    }
+
+    public ErrorResponse(int statusCode, HttpStatus status, String message, String errorCode, String path, Map<String, List<String>> validationErrors) {
+        this.statusCode = statusCode;
+        this.status = status;
+        this.message = message;
+        this.errorCode = errorCode;
         this.timestamp = LocalDateTime.now();
-        this.errorCode = errorCode;
-        this.status = status;
-        this.message = message;
-    }
-
-    public ErrorResponse() {
-
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(HttpStatus status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+        this.path = path;
+        this.validationErrors = validationErrors;
     }
 }

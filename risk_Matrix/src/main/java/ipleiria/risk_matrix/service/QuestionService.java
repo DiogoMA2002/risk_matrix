@@ -122,15 +122,22 @@ public class QuestionService {
 
     // Get questions by category (using dynamic category name)
     public List<Question> getQuestionsByCategory(String categoryName) {
-        return questionRepository.findAll().stream()
+        List<Question> questions = questionRepository.findAll().stream()
                 .filter(q -> q.getCategory() != null &&
                         q.getCategory().getName().equalsIgnoreCase(categoryName))
                 .collect(Collectors.toList());
+        
+        if (questions.isEmpty()) {
+            throw new NotFoundException("No questions found for category: " + categoryName);
+        }
+        
+        return questions;
     }
 
     // Get a question by ID
-    public Optional<Question> getQuestionById(Long id) {
-        return questionRepository.findById(id);
+    public Question getQuestionById(Long id) {
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException("Question not found with id: " + id));
     }
 
     // Delete a question
