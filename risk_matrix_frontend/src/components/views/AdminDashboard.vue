@@ -25,6 +25,16 @@
       <!-- User Answers List -->
       <UserAnswersList :user-answers="userAnswers" @fetch-by-email="fetchUserAnswersByEmail"
         @fetch-all="fetchAllUserAnswers" @filter-by-date="filterAnswersByDate" />
+
+      <!-- Alert Dialog -->
+      <AlertDialog
+        :show="showAlert"
+        :title="alertTitle"
+        :message="alertMessage"
+        :type="alertType"
+        @confirm="handleAlertConfirm"
+        @cancel="handleAlertCancel"
+      />
     </div>
   </div>
 </template>
@@ -38,6 +48,7 @@ import QuestionForm from "@/components/AdminDashboard/QuestionForm.vue";
 import QuestionsList from "@/components/AdminDashboard/QuestionsList.vue";
 import FeedbackList from "@/components/AdminDashboard/FeedbackList.vue";
 import UserAnswersList from "@/components/AdminDashboard/UserAnswersList.vue";
+import AlertDialog from "@/components/AlertDialog.vue";
 
 export default {
   name: "AdminDashboard",
@@ -48,6 +59,7 @@ export default {
     QuestionsList,
     FeedbackList,
     UserAnswersList,
+    AlertDialog
   },
   data() {
     return {
@@ -62,6 +74,11 @@ export default {
       isLoading: false,
       // We'll track the currently selected questionnaire
       selectedQuestionnaire: null,
+      showAlert: false,
+      alertTitle: "",
+      alertMessage: "",
+      alertType: "info",
+      alertResolve: null
     };
   },
   created() {
@@ -71,6 +88,29 @@ export default {
     this.fetchQuestionnaires();
   },
   methods: {
+    async showAlertDialog(title, message, type = "info") {
+      this.alertTitle = title;
+      this.alertMessage = message;
+      this.alertType = type;
+      this.showAlert = true;
+      return new Promise((resolve) => {
+        this.alertResolve = resolve;
+      });
+    },
+    handleAlertConfirm() {
+      this.showAlert = false;
+      if (this.alertResolve) {
+        this.alertResolve(true);
+        this.alertResolve = null;
+      }
+    },
+    handleAlertCancel() {
+      this.showAlert = false;
+      if (this.alertResolve) {
+        this.alertResolve(false);
+        this.alertResolve = null;
+      }
+    },
     async fetchCategories() {
       try {
         const response = await axios.get("/api/categories");
@@ -81,9 +121,9 @@ export default {
       } catch (error) {
         console.error("Error fetching categories:", error);
         this.categories = [];
+        await this.showAlertDialog("Erro", "Erro ao carregar categorias.", "error");
       }
-    }
-    ,
+    },
     async fetchQuestions() {
       this.isLoading = true;
       try {
@@ -91,6 +131,7 @@ export default {
         this.questions = response.data;
       } catch (error) {
         console.error("Error fetching questions:", error);
+        await this.showAlertDialog("Erro", "Erro ao carregar questões.", "error");
       } finally {
         this.isLoading = false;
       }
@@ -113,7 +154,7 @@ export default {
     async addQuestion(questionData) {
       console.log("Adding question with data:", questionData);
       if (!questionData.newQuestion || !questionData.selectedCategory || questionData.selectedQuestionnaires.length === 0) {
-        alert("Por favor, insira a questão, selecione uma categoria e escolha pelo menos um questionário.");
+        await this.showAlertDialog("Aviso", "Por favor, insira a questão, selecione uma categoria e escolha pelo menos um questionário.", "error");
         return;
       }
       this.isLoading = true;
@@ -133,25 +174,29 @@ export default {
         // Optionally fetch all questions as well
         this.fetchQuestions();
 
-
-        // Then fetch the updated questionnaire
-        await this.$store.dispatch('fetchQuestionnaireById', questionData.selectedQuestionnaires[0]);
-
-        // Optionally fetch all questions as well
-        this.fetchQuestions();
+        await this.showAlertDialog("Sucesso", "Questão adicionada com sucesso!", "success");
       } catch (error) {
         console.error("Error adding question:", error);
+        await this.showAlertDialog("Erro", "Erro ao adicionar questão.", "error");
       } finally {
         this.isLoading = false;
       }
     },
     async deleteQuestion(id) {
-      if (!confirm("Tem certeza que deseja excluir esta questão?")) return;
+      const proceed = await this.showAlertDialog(
+        "Confirmar Exclusão",
+        "Tem certeza que deseja excluir esta questão?",
+        "confirm"
+      );
+      if (!proceed) return;
+
       try {
         await axios.delete(`/api/questions/delete/${id}`);
         this.fetchQuestions();
+        await this.showAlertDialog("Sucesso", "Questão excluída com sucesso!", "success");
       } catch (error) {
         console.error("Error deleting question:", error);
+        await this.showAlertDialog("Erro", "Erro ao excluir questão.", "error");
       }
     },
     async fetchQuestionnaires() {
@@ -165,6 +210,7 @@ export default {
       } catch (error) {
         console.error("Error fetching questionnaires:", error);
         this.questionnaires = [];
+        await this.showAlertDialog("Erro", "Erro ao carregar questionários.", "error");
       }
     },
     async fetchQuestionnaireById(id) {
@@ -173,25 +219,34 @@ export default {
         this.selectedQuestionnaire = response.data;
       } catch (error) {
         console.error("Error fetching questionnaire by id:", error);
+        await this.showAlertDialog("Erro", "Erro ao carregar questionário.", "error");
       }
     },
     async addQuestionnaire(newTitle) {
       if (!newTitle) {
-        alert("Por favor, insira um título para o questionário.");
+        await this.showAlertDialog("Aviso", "Por favor, insira um título para o questionário.", "error");
         return;
       }
       this.isLoading = true;
       try {
         await axios.post("/api/questionnaires/create", { title: newTitle });
         this.fetchQuestionnaires();
+        await this.showAlertDialog("Sucesso", "Questionário criado com sucesso!", "success");
       } catch (error) {
         console.error("Error adding questionnaire:", error);
+        await this.showAlertDialog("Erro", "Erro ao criar questionário.", "error");
       } finally {
         this.isLoading = false;
       }
     },
     async deleteQuestionnaire(id) {
-      if (!confirm("Tem certeza que deseja excluir este questionário?")) return;
+      const proceed = await this.showAlertDialog(
+        "Confirmar Exclusão",
+        "Tem certeza que deseja excluir este questionário?",
+        "confirm"
+      );
+      if (!proceed) return;
+
       try {
         const response = await axios.delete(`/api/questionnaires/delete/${id}`, {
           validateStatus: status => status < 500,
@@ -199,12 +254,14 @@ export default {
         if (response.status === 204 || response.status === 200) {
           await this.fetchQuestionnaires();
           await this.fetchQuestions();
+          await this.showAlertDialog("Sucesso", "Questionário excluído com sucesso!", "success");
         } else {
           console.error("Error deleting questionnaire, status:", response.status);
-          alert("Falha ao excluir questionário. Tente novamente.");
+          await this.showAlertDialog("Erro", "Falha ao excluir questionário. Tente novamente mais tarde.", "error");
         }
       } catch (error) {
         console.error("Error deleting questionnaire:", error);
+        await this.showAlertDialog("Erro", "Erro ao excluir questionário.", "error");
       }
     },
     async exportQuestionnaire(questionnaireId) {
@@ -223,10 +280,10 @@ export default {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        alert("Export concluído!");
+        await this.showAlertDialog("Sucesso", "Export concluído!");
       } catch (error) {
         console.error("Error exporting questionnaire:", error);
-        alert("Falha ao exportar questionário.");
+        await this.showAlertDialog("Erro", "Falha ao exportar questionário.", "error");
       }
     },
     async selectQuestionnaire(id) {
@@ -242,12 +299,12 @@ export default {
         await axios.post("/api/questionnaires/import", jsonData, {
           headers: { "Content-Type": "application/json" },
         });
-        alert("Questionário importado com sucesso!");
+        await this.showAlertDialog("Sucesso", "Questionário importado com sucesso!");
         await this.fetchQuestionnaires();
         await this.fetchQuestions();
       } catch (error) {
         console.error("Error importing questionnaire:", error);
-        alert("Falha ao importar questionário.");
+        await this.showAlertDialog("Erro", "Falha ao importar questionário.", "error");
       }
     },
     async fetchFeedback() {
@@ -263,13 +320,14 @@ export default {
       } catch (error) {
         console.error("Error fetching feedback:", error);
         this.feedbacks = [];
+        await this.showAlertDialog("Erro", "Erro ao carregar feedbacks.", "error");
       } finally {
         this.isLoading = false;
       }
     },
     async fetchUserAnswersByEmail(email) {
       if (!email) {
-        alert("Por favor, insira um email para filtrar.");
+        await this.showAlertDialog("Aviso", "Por favor, insira um email para filtrar.", "error");
         return;
       }
       this.isLoading = true;
@@ -278,12 +336,13 @@ export default {
           validateStatus: _status => true
         });
         if (response.status === 401) {
-          alert("Você não está autorizado.");
+          await this.showAlertDialog("Erro", "Você não está autorizado.", "error");
         } else {
           this.userAnswers = [response.data];
         }
       } catch (error) {
         console.error("Error fetching user answers by email:", error);
+        await this.showAlertDialog("Erro", "Erro ao buscar respostas por email.", "error");
       } finally {
         this.isLoading = false;
       }
@@ -295,19 +354,20 @@ export default {
           validateStatus: _status => true,
         });
         if (response.status === 401) {
-          alert("Você não está autorizado.");
+          await this.showAlertDialog("Erro", "Você não está autorizado.", "error");
         } else {
           this.userAnswers = response.data;
         }
       } catch (error) {
         console.error("Error fetching all user answers:", error);
+        await this.showAlertDialog("Erro", "Erro ao buscar todas as respostas.", "error");
       } finally {
         this.isLoading = false;
       }
     },
     async filterAnswersByDate({ startDate, endDate }) {
       if (!startDate || !endDate) {
-        alert("Por favor, selecione ambas as datas.");
+        await this.showAlertDialog("Aviso", "Por favor, selecione ambas as datas.", "error");
         return;
       }
       try {
@@ -317,22 +377,22 @@ export default {
         this.userAnswers = response.data;
       } catch (error) {
         console.error("Error filtering answers by date:", error);
+        await this.showAlertDialog("Erro", "Erro ao filtrar respostas por data.", "error");
       }
     },
     // NEW METHODS TO HANDLE CATEGORY EVENTS FROM QuestionForm
-    createCategory(newCategory) {
-      axios.post("/api/categories", { name: newCategory })
-        .then(response => {
-          const createdCategory = response.data;
-          if (!this.categories.includes(createdCategory.name)) {
-            this.categories.push(createdCategory.name);
-          }
-          alert("Categoria criada com sucesso!");
-        })
-        .catch(error => {
-          console.error("Error creating category:", error);
-          alert("Erro ao criar categoria.");
-        });
+    async createCategory(newCategory) {
+      try {
+        const response = await axios.post("/api/categories", { name: newCategory });
+        const createdCategory = response.data;
+        if (!this.categories.includes(createdCategory.name)) {
+          this.categories.push(createdCategory.name);
+        }
+        await this.showAlertDialog("Sucesso", "Categoria criada com sucesso!");
+      } catch (error) {
+        console.error("Error creating category:", error);
+        await this.showAlertDialog("Erro", "Erro ao criar categoria.", "error");
+      }
     },
     updateCategories(newCategory) {
       if (!this.categories.includes(newCategory)) {

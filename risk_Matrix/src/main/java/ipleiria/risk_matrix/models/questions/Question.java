@@ -15,8 +15,9 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String questionText;
+
 
     @ManyToOne
     @JoinColumn(name = "category_id")

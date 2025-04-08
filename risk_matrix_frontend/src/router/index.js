@@ -1,31 +1,32 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import RiskMatrixInfo from '../components/RiskMatrixInfo.vue'
-import RequirementsPage from '../components/RequirementsPage.vue'
-import QuestionarioPage from '../components/QuestionarioPage.vue'
-import AdminDashboard from '../components/views/AdminDashboard.vue'
-import HomePage from '@/components/HomePage.vue'
-import CategoryList from '../components/CategoryList.vue'
-import FeedbackForm from '@/components/FeedbackForm.vue' // Import the new component
-import AdminLogin from '../components/views/AdminLogin.vue'
-import UserManagement from '../components/views/UserManagement.vue'
+// Remove static imports
+// import RiskMatrixInfo from '../components/RiskMatrixInfo.vue'
+// import RequirementsPage from '../components/RequirementsPage.vue'
+// import QuestionarioPage from '../components/QuestionarioPage.vue'
+// import AdminDashboard from '../components/views/AdminDashboard.vue'
+// import HomePage from '@/components/HomePage.vue'
+// import CategoryList from '../components/CategoryList.vue'
+// import FeedbackForm from '@/components/FeedbackForm.vue' // Import the new component
+// import AdminLogin from '../components/views/AdminLogin.vue'
+// import UserManagement from '../components/views/UserManagement.vue'
 
 const routes = [
-  { path: '/', component: HomePage },
-  { path: '/risk-info', component: RiskMatrixInfo },
-  { path: '/requirements', component: RequirementsPage },
+  { path: '/', component: () => import('@/components/HomePage.vue') },
+  { path: '/risk-info', component: () => import('@/components/RiskMatrixInfo.vue') },
+  { path: '/requirements', component: () => import('@/components/RequirementsPage.vue') },
   {
     path: '/questions/:questionnaireId/:category',
     name: 'Questionary',
-    component: QuestionarioPage
+    component: () => import('@/components/QuestionarioPage.vue')
   },
   {
     path: '/login',
-    component: AdminLogin
+    component: () => import('@/components/views/AdminLogin.vue')
   },
-  { path: '/admin', component: AdminDashboard },
-  { path: '/user', component: UserManagement },
-  { path: '/category', name: 'CategoryList', component: CategoryList },
-  { path: '/feedback-form', component: FeedbackForm } // New route for feedback form
+  { path: '/admin', component: () => import('@/components/views/AdminDashboard.vue') },
+  { path: '/user', component: () => import('@/components/views/UserManagement.vue') },
+  { path: '/category', name: 'CategoryList', component: () => import('@/components/CategoryList.vue') },
+  { path: '/feedback-form', component: () => import('@/components/FeedbackForm.vue') } // New route for feedback form
 ]
 
 const router = createRouter({
