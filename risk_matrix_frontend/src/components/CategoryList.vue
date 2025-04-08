@@ -8,7 +8,7 @@
         <!-- Header -->
         <header class="flex justify-between items-center mb-6">
           <div class="flex items-center">
-            <button @click="$router.go(-1)"
+            <button @click="$router.push('/requirements')"
               class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">

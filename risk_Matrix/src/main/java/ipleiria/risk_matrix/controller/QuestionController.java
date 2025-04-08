@@ -18,13 +18,12 @@ public class QuestionController {
     private QuestionService questionService;
 
     // Criar uma nova pergunta
-    @PostMapping("/add/{questionnaireId}")
+    @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public QuestionDTO addQuestionToQuestionnaire(
-            @PathVariable Long questionnaireId,
-            @RequestBody @Valid QuestionDTO questionDTO) {
-        return questionService.createQuestion(questionnaireId, questionDTO);
+    public QuestionDTO addQuestionToQuestionnaires(@RequestBody @Valid QuestionDTO questionDTO) {
+        return questionService.createQuestion(questionDTO);
     }
+
     // Obter todas as perguntas
     @GetMapping("/all")
     public List<Question> getAllQuestions() {

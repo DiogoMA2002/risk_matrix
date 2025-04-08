@@ -15,6 +15,7 @@ import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.repository.CategoryRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -38,19 +39,16 @@ public class QuestionService {
     }
 
     // Create a new question and associate it with a questionnaire (many-to-many)
-    public QuestionDTO createQuestion(Long questionnaireId, QuestionDTO questionDTO) {
-        Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
-                .orElseThrow(() -> new QuestionnaireNotFoundException(
-                        "Questionnaire not found for ID: " + questionnaireId));
-
-        // 1. Check if question already exists by text
-        Optional<Question> existing = questionRepository.findByQuestionText(questionDTO.getQuestionText());
+    @Transactional
+    public QuestionDTO createQuestion(QuestionDTO questionDTO) {
+        // 1. Check if the question already exists by text.
+        Optional<Question> existingOpt = questionRepository.findByQuestionText(questionDTO.getQuestionText());
         Question question;
 
-        if (existing.isPresent()) {
-            question = existing.get();
+        if (existingOpt.isPresent()) {
+            question = existingOpt.get();
         } else {
-            // 2. New Question
+            // 2. Create new Question
             question = new Question();
             question.setQuestionText(questionDTO.getQuestionText());
 
@@ -59,31 +57,29 @@ public class QuestionService {
             if (categoryName == null || categoryName.trim().isEmpty()) {
                 throw new InvalidCategoryException("A categoria da pergunta é obrigatória.");
             }
-
             Category category = categoryRepository.findByName(categoryName.trim())
                     .orElseGet(() -> {
                         Category newCategory = new Category();
                         newCategory.setName(categoryName.trim());
                         return categoryRepository.save(newCategory);
                     });
-
             question.setCategory(category);
-            final Question finalQuestion = question;
+
             // 4. Convert and attach options
+            final Question finalQuestion = question;
             List<QuestionOption> options = questionDTO.getOptions().stream()
                     .map(optDto -> {
                         QuestionOption opt = new QuestionOption();
                         opt.setOptionText(optDto.getOptionText());
                         opt.setOptionType(optDto.getOptionType());
                         opt.setOptionLevel(optDto.getOptionLevel());
-                        opt.setQuestion(finalQuestion); // assign parent
+                        opt.setQuestion(finalQuestion);
                         return opt;
                     }).collect(Collectors.toList());
 
             // 5. Ensure "Não Aplicável" exists
             boolean hasNaoAplicavel = options.stream()
                     .anyMatch(opt -> "Não Aplicável".equalsIgnoreCase(opt.getOptionText()));
-
             if (!hasNaoAplicavel) {
                 QuestionOption naoAplicavel = new QuestionOption();
                 naoAplicavel.setOptionText("Não Aplicável");
@@ -92,22 +88,30 @@ public class QuestionService {
                 naoAplicavel.setQuestion(question);
                 options.add(naoAplicavel);
             }
-
             question.setOptions(options);
 
-            // ✅ Save the full question with options
+            // Save the new question along with options.
             question = questionRepository.save(question);
         }
 
-        // 6. Associate with questionnaire if needed
-        if (!question.getQuestionnaires().contains(questionnaire)) {
-            question.getQuestionnaires().add(questionnaire);
-            questionnaire.getQuestions().add(question);
-            question = questionRepository.save(question); // update join
+        // 6. Associate with all provided questionnaires.
+        for (Long questionnaireId : questionDTO.getQuestionnaireIds()) {
+            Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
+                    .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + questionnaireId));
+
+            // Avoid duplicate associations by checking using proper entity equality.
+            if (!question.getQuestionnaires().contains(questionnaire)) {
+                question.getQuestionnaires().add(questionnaire);
+                questionnaire.getQuestions().add(question);
+            }
         }
+
+        // Save final updates in one go.
+        question = questionRepository.save(question);
 
         return new QuestionDTO(question);
     }
+
 
     // Get all questions
     public List<Question> getAllQuestions() {
