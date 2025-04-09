@@ -24,17 +24,13 @@
 
       <!-- User Answers List -->
       <UserAnswersList :user-answers="userAnswers" @fetch-by-email="fetchUserAnswersByEmail"
-        @fetch-all="fetchAllUserAnswers" @filter-by-date="filterAnswersByDate" />
+        @fetch-all="fetchAllUserAnswers" @filter-by-date="filterAnswersByDate"
+        @download-report="downloadSubmissionDocx" />
+
 
       <!-- Alert Dialog -->
-      <AlertDialog
-        :show="showAlert"
-        :title="alertTitle"
-        :message="alertMessage"
-        :type="alertType"
-        @confirm="handleAlertConfirm"
-        @cancel="handleAlertCancel"
-      />
+      <AlertDialog :show="showAlert" :title="alertTitle" :message="alertMessage" :type="alertType"
+        @confirm="handleAlertConfirm" @cancel="handleAlertCancel" />
     </div>
   </div>
 </template>
@@ -307,6 +303,35 @@ export default {
         await this.showAlertDialog("Erro", "Falha ao importar questionário.", "error");
       }
     },
+    async downloadSubmissionDocx(submissionId) {
+      try {
+        const token = localStorage.getItem("jwt");
+        if (!token) {
+          await this.showAlertDialog("Erro", "Token JWT não encontrado.", "error");
+          return;
+        }
+
+        const response = await axios.get(`/api/answers/export-submission/${submissionId}`, {
+          responseType: 'blob',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `relatorio_${submissionId}.docx`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Erro ao descarregar relatório:", error);
+        await this.showAlertDialog("Erro", "Falha ao descarregar relatório.", "error");
+      }
+    }
+    ,
     async fetchFeedback() {
       this.isLoading = true;
       try {

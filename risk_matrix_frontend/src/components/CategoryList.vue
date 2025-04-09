@@ -246,7 +246,7 @@ export default {
         if (!proceed) {
           return;
         }
-
+        
         const payload = [];
         const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
         const submissionId = uuidv4();

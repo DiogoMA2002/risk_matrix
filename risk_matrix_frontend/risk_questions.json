@@ -53,7 +53,7 @@
                     "optionLevel": "LOW"
                 },
                 {
-                    "optionText": "Casos isolados sem impacto significativo.",
+                    "optionText": "Casos isolados com impacto significativo.",
                     "optionType": "PROBABILITY",
                     "optionLevel": "MEDIUM"
                 },

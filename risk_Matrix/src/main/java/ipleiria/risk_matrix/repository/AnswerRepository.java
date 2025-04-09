@@ -17,4 +17,5 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     List<Answer> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 
 
+    List<Answer> findBySubmissionId(String submissionId);
 }
