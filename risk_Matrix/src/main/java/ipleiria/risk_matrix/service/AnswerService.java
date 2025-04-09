@@ -12,11 +12,8 @@ import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
-import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,8 +24,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static ipleiria.risk_matrix.utils.RiskUtils.computeSeverity;
-import static ipleiria.risk_matrix.utils.RiskUtils.medianLevel;
+import static ipleiria.risk_matrix.utils.RiskUtils.computeCategorySeverity;
 
 @Service
 public class AnswerService {
@@ -213,31 +209,7 @@ public class AnswerService {
         return result;
     }
 
-    private Severity computeCategorySeverity(List<AnswerDTO> answers) {
-        List<AnswerDTO> filteredAnswers = answers.stream()
-                .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
-                .collect(Collectors.toList());
 
-        if (filteredAnswers.isEmpty()) {
-            return Severity.LOW;
-        }
-
-        // Compute median for IMPACT levels
-        List<OptionLevel> impactLevels = filteredAnswers.stream()
-                .filter(a -> a.getQuestionType() == OptionLevelType.IMPACT)
-                .map(AnswerDTO::getChosenLevel)
-                .collect(Collectors.toList());
-        OptionLevel medianImpact = medianLevel(impactLevels);
-
-        // Compute median for PROBABILITY levels
-        List<OptionLevel> probabilityLevels = filteredAnswers.stream()
-                .filter(a -> a.getQuestionType() == OptionLevelType.PROBABILITY)
-                .map(AnswerDTO::getChosenLevel)
-                .collect(Collectors.toList());
-        OptionLevel medianProbability = medianLevel(probabilityLevels);
-
-        return computeSeverity(medianImpact, medianProbability);
-    }
 
     public List<AnswerDTO> getAnswersByDateRange(String startDate, String endDate) {
         LocalDateTime start = LocalDate.parse(startDate).atStartOfDay();
@@ -246,90 +218,7 @@ public class AnswerService {
                 .map(AnswerDTO::new)
                 .collect(Collectors.toList());
     }
-    public byte[] generateDocxForSubmission(String submissionId) throws IOException {
-        List<Answer> answers = answerRepository.findBySubmissionId(submissionId);
-        if (answers.isEmpty()) {
-            throw new IllegalArgumentException("No answers found for submission ID: " + submissionId);
-        }
 
-        // Fetch related questions for category lookup
-        Set<Long> questionIds = answers.stream().map(Answer::getQuestionId).collect(Collectors.toSet());
-        List<Question> questions = questionRepository.findAllById(questionIds);
-        Map<Long, Question> questionMap = questions.stream()
-                .collect(Collectors.toMap(Question::getId, Function.identity()));
-
-        // Group answers by category and convert to AnswerDTO for reuse
-        Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
-        for (Answer answer : answers) {
-            Question question = questionMap.get(answer.getQuestionId());
-            if (question == null) continue;
-            String categoryName = question.getCategory().getName();
-            answersByCategory
-                    .computeIfAbsent(categoryName, k -> new ArrayList<>())
-                    .add(new AnswerDTO(answer));
-        }
-
-        // Compute severities
-        Map<String, Severity> severitiesByCategory = new HashMap<>();
-        for (Map.Entry<String, List<AnswerDTO>> entry : answersByCategory.entrySet()) {
-            Severity severity = computeCategorySeverity(entry.getValue());
-            severitiesByCategory.put(entry.getKey(), severity);
-        }
-
-        // Build the DOCX document
-        XWPFDocument document = new XWPFDocument();
-
-        // Title
-        XWPFParagraph title = document.createParagraph();
-        title.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun runTitle = title.createRun();
-        runTitle.setText("Relatório de Respostas");
-        runTitle.setBold(true);
-        runTitle.setFontSize(20);
-
-        // Info
-        XWPFParagraph info = document.createParagraph();
-        XWPFRun runInfo = info.createRun();
-        runInfo.setText("Submission ID: " + submissionId);
-        runInfo.addBreak();
-        runInfo.setText("Email: " + answers.get(0).getEmail());
-        runInfo.addBreak();
-        runInfo.setText("Data: " + answers.get(0).getCreatedAt().toLocalDate());
-
-        // Severity Summary
-        XWPFParagraph sevParagraph = document.createParagraph();
-        XWPFRun sevRun = sevParagraph.createRun();
-        sevRun.addBreak();
-        sevRun.setBold(true);
-        sevRun.setText("Severidade por Categoria:");
-        sevRun.addBreak();
-
-        for (Map.Entry<String, Severity> entry : severitiesByCategory.entrySet()) {
-            XWPFRun catRun = sevParagraph.createRun();
-            catRun.setText(entry.getKey() + ": " + entry.getValue().name());
-            catRun.addBreak();
-        }
-
-        // Answers Table
-        XWPFTable table = document.createTable();
-        XWPFTableRow header = table.getRow(0);
-        header.getCell(0).setText("Pergunta");
-        header.addNewTableCell().setText("Resposta");
-        header.addNewTableCell().setText("Tipo");
-        header.addNewTableCell().setText("Nível");
-
-        for (Answer answer : answers) {
-            XWPFTableRow row = table.createRow();
-            row.getCell(0).setText(answer.getQuestionText());
-            row.getCell(1).setText(answer.getUserResponse());
-            row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
-            row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        document.write(out);
-        return out.toByteArray();
-    }
 
 
 }

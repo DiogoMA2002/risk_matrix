@@ -1,6 +1,8 @@
 package ipleiria.risk_matrix.utils;
 
+import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.models.questions.OptionLevel;
+import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.models.questions.Severity;
 
 import java.util.List;
@@ -76,7 +78,31 @@ public class RiskUtils {
             };
         };
     }
+    public static Severity computeCategorySeverity(List<AnswerDTO> answers) {
+        List<AnswerDTO> filteredAnswers = answers.stream()
+                .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
+                .collect(Collectors.toList());
 
+        if (filteredAnswers.isEmpty()) {
+            return Severity.LOW;
+        }
+
+        // Compute median for IMPACT levels
+        List<OptionLevel> impactLevels = filteredAnswers.stream()
+                .filter(a -> a.getQuestionType() == OptionLevelType.IMPACT)
+                .map(AnswerDTO::getChosenLevel)
+                .collect(Collectors.toList());
+        OptionLevel medianImpact = medianLevel(impactLevels);
+
+        // Compute median for PROBABILITY levels
+        List<OptionLevel> probabilityLevels = filteredAnswers.stream()
+                .filter(a -> a.getQuestionType() == OptionLevelType.PROBABILITY)
+                .map(AnswerDTO::getChosenLevel)
+                .collect(Collectors.toList());
+        OptionLevel medianProbability = medianLevel(probabilityLevels);
+
+        return computeSeverity(medianImpact, medianProbability);
+    }
     // Private constructor to prevent instantiation
     private RiskUtils() {}
 }

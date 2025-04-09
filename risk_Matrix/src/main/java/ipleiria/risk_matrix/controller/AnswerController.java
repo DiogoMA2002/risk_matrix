@@ -3,7 +3,9 @@ package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.service.AnswerService;
+import ipleiria.risk_matrix.service.DocumentsService;
 import jakarta.validation.Valid;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,6 +22,9 @@ public class AnswerController {
 
     @Autowired
     private AnswerService answerService;
+
+    @Autowired
+    private DocumentsService documentsService;
 
     // Obter todas as respostas
     @GetMapping("/all")
@@ -72,8 +77,8 @@ public class AnswerController {
     }
     @GetMapping("/export-submission/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<byte[]> exportSubmission(@PathVariable String id) throws IOException {
-        byte[] docBytes = answerService.generateDocxForSubmission(id);
+    public ResponseEntity<byte[]> exportSubmission(@PathVariable String id) throws IOException, InvalidFormatException {
+        byte[] docBytes = documentsService.generateEnhancedDocx(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"report.docx\"");
