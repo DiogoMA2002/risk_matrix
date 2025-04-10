@@ -38,13 +38,13 @@
 <script>
 /* eslint-disable */
 import axios from '@/plugins/axios'
-import HeaderComponent from "@/components/HeaderComponent.vue";
+import HeaderComponent from "@/components/Static/HeaderComponent.vue";
 import QuestionnaireManager from "@/components/AdminDashboard/QuestionnaireManager.vue";
 import QuestionForm from "@/components/AdminDashboard/QuestionForm.vue";
 import QuestionsList from "@/components/AdminDashboard/QuestionsList.vue";
 import FeedbackList from "@/components/AdminDashboard/FeedbackList.vue";
 import UserAnswersList from "@/components/AdminDashboard/UserAnswersList.vue";
-import AlertDialog from "@/components/AlertDialog.vue";
+import AlertDialog from "@/components/Static/AlertDialog.vue";
 
 export default {
   name: "AdminDashboard",

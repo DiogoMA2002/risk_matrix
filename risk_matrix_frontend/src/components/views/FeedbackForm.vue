@@ -48,7 +48,7 @@
 
 <script>
 import axios from "axios";
-import ConfirmDialog from "./ConfirmDialogue.vue";
+import ConfirmDialog from "../Static/ConfirmDialogue.vue";
 
 export default {
   components: {

@@ -130,10 +130,10 @@
 <script>
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
-import CategoryCard from "./CategoryCard.vue";
-import ActionButton from "./ActionButton.vue";
-import ProgressStep from "./Progress.vue";
-import AlertDialog from "./AlertDialog.vue";
+import CategoryCard from "@/components/Questionnaire/CategoryCard.vue";
+import ActionButton from "@/components/Static/ActionButton.vue";
+import ProgressStep from "@/components/Static/Progress.vue";
+import AlertDialog from "@/components/Static/AlertDialog.vue";
 import { v4 as uuidv4 } from 'uuid';
 
 export default {

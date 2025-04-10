@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import AlertDialog from "@/components/AlertDialog.vue";
+import AlertDialog from "@/components/Static/AlertDialog.vue";
 
 export default {
   name: "QuestionnaireManager",

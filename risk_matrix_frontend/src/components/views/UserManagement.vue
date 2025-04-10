@@ -18,7 +18,7 @@
   </template>
   
   <script>
-  import HeaderComponent from "@/components/HeaderComponent.vue"
+  import HeaderComponent from "@/components/Static/HeaderComponent.vue"
   import RegisterAdmin from "@/components/User/RegisterAdmin.vue"
   import ChangePassword from "@/components/User/ChangePassword.vue"
   
