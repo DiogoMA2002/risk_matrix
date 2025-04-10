@@ -25,32 +25,37 @@
       </header>
 
       <!-- Main Content -->
-      <main class="flex flex-col md:flex-row gap-6">
-        <!-- Sidebar -->
-        <aside class="w-full md:w-1/4 order-2 md:order-1">
-          <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-4 h-full">
-            <h3 class="text-lg font-semibold text-blue-800 mb-4" v-once>Questionários</h3>
-            <transition name="fade" mode="out-in">
-              <ul v-if="!loading" class="divide-y divide-gray-200">
-                <li v-for="qnr in questionnaires" :key="qnr.id"
-                  class="py-2 cursor-pointer hover:bg-blue-50 transition-colors rounded px-2"
-                  :class="{ 'bg-blue-100': selectedQuestionnaire && qnr.id === selectedQuestionnaire.id }"
-                  @click="selectQuestionnaire(qnr.id)">
+      <main class="flex flex-col gap-6">
+        <!-- Questionnaires Dropdown -->
+        <div class="w-full max-w-md mx-auto">
+          <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-4">
+            <h3 class="text-lg font-semibold text-blue-800 mb-3" v-once>Questionários</h3>
+            <div class="relative">
+              <select 
+                v-if="!loading" 
+                class="w-full bg-white border border-blue-200 rounded-lg py-2 px-3 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+                @change="selectQuestionnaire($event.target.value)"
+                :value="selectedQuestionnaire ? selectedQuestionnaire.id : ''"
+              >
+                <option v-for="qnr in questionnaires" :key="qnr.id" :value="qnr.id">
                   {{ qnr.title }}
-                </li>
-              </ul>
-              <div v-else class="space-y-2">
-                <div v-for="i in 3" :key="i" class="h-8 bg-blue-100 rounded animate-pulse"></div>
+                </option>
+              </select>
+              <div v-else class="h-10 bg-blue-100 rounded animate-pulse"></div>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-800">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
               </div>
-            </transition>
+            </div>
           </div>
-        </aside>
+        </div>
 
         <!-- Categories Grid -->
-        <section class="w-full md:w-3/4 order-1 md:order-2">
+        <section class="w-full">
           <div class="max-w-4xl mx-auto">
             <transition name="fade" mode="out-in">
-              <div v-if="!loading && categories.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div v-if="!loading && categories.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
                 <CategoryCard
                   v-for="cat in categories"
                   :key="cat"
@@ -58,13 +63,14 @@
                   :answered-count="answeredCount(cat)"
                   :total-count="totalCount(cat)"
                   @click="goToCategory(cat)"
+                  class="w-full"
                 />
               </div>
               <div v-else-if="!loading" class="text-center p-8 bg-white bg-opacity-70 rounded-lg text-blue-800">
                 <p>Nenhuma categoria encontrada neste questionário.</p>
               </div>
-              <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div v-for="i in 6" :key="i" class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6">
+              <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                <div v-for="i in 6" :key="i" class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 w-full">
                   <div class="h-6 bg-blue-100 rounded w-3/4 animate-pulse mb-4"></div>
                   <div class="flex justify-between items-center">
                     <div class="h-4 bg-blue-100 rounded w-1/4 animate-pulse"></div>
@@ -286,48 +292,47 @@ export default {
       }
     },
     async exportToJSON() {
-  try {
-    const proceed = await this.showAlertDialog(
-      "Exportar Progresso",
-      "Deseja exportar o progresso? Isso irá limpar o progresso salvo localmente.",
-      "confirm"
-    );
-    if (!proceed) return;
+      try {
+        const proceed = await this.showAlertDialog(
+          "Exportar Progresso",
+          "Deseja exportar o progresso? Isso irá limpar o progresso salvo localmente.",
+          "confirm"
+        );
+        if (!proceed) return;
 
-    const allAnswersArray = [];
+        const allAnswersArray = [];
 
-    for (const category in this.allAnswers) {
-      for (const questionId in this.allAnswers[category]) {
-        allAnswersArray.push({
-          category,
-          questionId: parseInt(questionId),
-          selectedOption: this.allAnswers[category][questionId]
+        for (const category in this.allAnswers) {
+          for (const questionId in this.allAnswers[category]) {
+            allAnswersArray.push({
+              category,
+              questionId: parseInt(questionId),
+              selectedOption: this.allAnswers[category][questionId]
+            });
+          }
+        }
+
+        if (!allAnswersArray.length) {
+          await this.showAlertDialog("Aviso", "Nenhuma resposta para exportar!");
+          return;
+        }
+
+        const blob = new Blob([JSON.stringify({ answers: allAnswersArray }, null, 2)], {
+          type: "application/json"
         });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "progress.json";
+        link.click();
+        URL.revokeObjectURL(url);
+        this.$store.commit("clearAllAnswers");
+
+      } catch (error) {
+        await this.showAlertDialog("Erro", "Ocorreu um erro ao exportar o progresso.");
       }
-    }
-
-    if (!allAnswersArray.length) {
-      await this.showAlertDialog("Aviso", "Nenhuma resposta para exportar!");
-      return;
-    }
-
-    const blob = new Blob([JSON.stringify({ answers: allAnswersArray }, null, 2)], {
-      type: "application/json"
-    });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "progress.json";
-    link.click();
-    URL.revokeObjectURL(url);
-    this.$store.commit("clearAllAnswers");
-
-  } catch (error) {
-    await this.showAlertDialog("Erro", "Ocorreu um erro ao exportar o progresso.");
-  }
-}
-,
+    },
     triggerImport() {
       this.$refs.importFile.click();
     },
@@ -376,7 +381,7 @@ export default {
           }
 
           this.showAlertDialog("Importação Concluída", message, "success");
-          // Reset file input to allow importing the samef file again
+          // Reset file input to allow importing the same file again
           this.$refs.importFile.value = null;
 
         } catch (error) {
@@ -392,9 +397,9 @@ export default {
       this.$router.push("/feedback-form");
     },
     answeredCount(category) {
-  const answersForCategory = this.allAnswers[category] || {};
-  return Object.values(answersForCategory).filter(ans => typeof ans === 'string' && ans.trim() !== "").length;
-},
+      const answersForCategory = this.allAnswers[category] || {};
+      return Object.values(answersForCategory).filter(ans => typeof ans === 'string' && ans.trim() !== "").length;
+    },
     totalCount(category) {
       if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
         return this.selectedQuestionnaire.questions.filter(q => {
