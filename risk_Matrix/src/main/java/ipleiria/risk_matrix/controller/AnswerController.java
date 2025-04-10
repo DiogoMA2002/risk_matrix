@@ -78,7 +78,9 @@ public class AnswerController {
     @GetMapping("/export-submission/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<byte[]> exportSubmission(@PathVariable String id) throws IOException, InvalidFormatException {
+        //byte[] docBytes = documentsServiceTest.generateReport(id);
         byte[] docBytes = documentsService.generateEnhancedDocx(id);
+
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"report.docx\"");

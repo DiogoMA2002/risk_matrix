@@ -7,21 +7,11 @@ import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ipleiria.risk_matrix.utils.RiskUtils.computeCategorySeverity;
@@ -36,16 +26,15 @@ public class DocumentsService {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
     }
+
     public byte[] generateEnhancedDocx(String submissionId) throws IOException, InvalidFormatException {
         List<Answer> answers = answerRepository.findBySubmissionId(submissionId);
         if (answers.isEmpty()) {
             throw new IllegalArgumentException("No answers found for submission ID: " + submissionId);
         }
 
-        // Group answers by category for summary and compute severity per category.
         Map<String, List<Answer>> answersByCategory = new HashMap<>();
         for (Answer ans : answers) {
-            // Retrieve question info per answer; skip if missing category.
             Question question = questionRepository.findById(ans.getQuestionId()).orElse(null);
             if (question == null || question.getCategory() == null) continue;
             String category = question.getCategory().getName();
@@ -60,103 +49,68 @@ public class DocumentsService {
             severities.put(entry.getKey(), computeCategorySeverity(dtos));
         }
 
-        XWPFDocument document = new XWPFDocument();
-        // Path to the cover image.
-        String imagePath = "src/main/resources/images/capa.png";
+        try (InputStream template = getClass().getClassLoader().getResourceAsStream("template/template.docx");
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-        // Note: no caching for answers.get(0) is done—using it directly.
-        addCoverPage(document, submissionId, answers.get(0), imagePath);
-        addSubmissionInfo(document, submissionId, answers.get(0));
-        addSummarySection(document, severities);
-        addAnswersTable(document, answers);
+            if (template == null) {
+                throw new FileNotFoundException("Template not found in classpath.");
+            }
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        document.write(out);
-        return out.toByteArray();
-    }
+            XWPFDocument document = new XWPFDocument(template);
+            Map<String, String> vars = new HashMap<>();
+            vars.put("submissionId", submissionId);
+            vars.put("email", answers.get(0).getEmail());
+            vars.put("date", answers.get(0).getCreatedAt().toLocalDate().toString());
 
-    /**
-     * Adds a dedicated cover page with a title and a full-page (nearly) cover image.
-     */
+            replacePlaceholders(document, vars);
 
-    private void addCoverPage(XWPFDocument document, String submissionId, Answer firstAnswer, String imagePath)
-            throws InvalidFormatException, IOException {
-        // Optionally set minimal or zero margins for the entire section (A4 in portrait).
-        // This helps the image truly fill the page.
-        CTSectPr sectPr = document.getDocument().getBody().addNewSectPr();
-        CTPageMar pageMar = sectPr.addNewPgMar();
-        // For "borderless" margins, set them to 0 or a very small value (in twentieths of a point).
-        pageMar.setTop(BigInteger.valueOf(300));     // ~0.21 cm
-        pageMar.setBottom(BigInteger.valueOf(300));
-        pageMar.setLeft(BigInteger.valueOf(300));
-        pageMar.setRight(BigInteger.valueOf(300));
+            // Add dynamic content after cover page
+            addSummarySection(document, severities);
+            addAnswersTable(document, answers);
 
-        // -- 1. Paragraph for the Title (no page break).
-        XWPFParagraph titleParagraph = document.createParagraph();
-        titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun titleRun = titleParagraph.createRun();
-        titleRun.setText("RELATÓRIO DE RESPOSTAS");
-        titleRun.setBold(true);
-        titleRun.setFontSize(24);
-
-        // -- 2. Paragraph for the cover image (still on the same page).
-        XWPFParagraph coverParagraph = document.createParagraph();
-        coverParagraph.setAlignment(ParagraphAlignment.CENTER);
-        // Make sure not to set pageBreak(true) here.
-        XWPFRun coverRun = coverParagraph.createRun();
-
-        // Slightly reduce the image size so it fits on the same page with the title above.
-        // 595×842 EMUs is exactly A4, but you must allow some space for margins & the title paragraph.
-        try (InputStream imageStream = new FileInputStream(imagePath)) {
-            coverRun.addPicture(
-                    imageStream,
-                    Document.PICTURE_TYPE_PNG,
-                    imagePath,
-                    Units.toEMU(595), // Adjust width
-                    Units.toEMU(750)  // Adjust height so there's room for the title
-            );
+            document.write(out);
+            return out.toByteArray();
         }
-
-        // -- 3. Metadata below the image, still on the same page.
-        XWPFParagraph meta = document.createParagraph();
-        meta.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun metaRun = meta.createRun();
-        metaRun.addBreak();
-        metaRun.setText("Submission ID: " + submissionId);
-        metaRun.addBreak();
-        metaRun.setText("Email: " + firstAnswer.getEmail());
-        metaRun.addBreak();
-        metaRun.setText("Data: " + firstAnswer.getCreatedAt().toLocalDate());
-
-        // -- 4. Now insert an explicit page break to move on to the next page.
-        XWPFParagraph pageBreakParagraph = document.createParagraph();
-        pageBreakParagraph.setPageBreak(true);
     }
 
+    private void replacePlaceholders(XWPFDocument document, String submissionId, Answer firstAnswer) {
+        for (XWPFParagraph p : document.getParagraphs()) {
+            for (XWPFRun run : p.getRuns()) {
+                String text = run.getText(0);
+                if (text != null) {
+                    text = text.replace("${submissionId}", submissionId)
+                            .replace("${email}", firstAnswer.getEmail())
+                            .replace("${date}", firstAnswer.getCreatedAt().toLocalDate().toString());
+                    run.setText(text, 0);
+                }
+            }
+        }
+    }
+    private void replacePlaceholders(XWPFDocument doc, Map<String, String> replacements) {
+        for (XWPFParagraph paragraph : doc.getParagraphs()) {
+            StringBuilder fullText = new StringBuilder();
+            for (XWPFRun run : paragraph.getRuns()) {
+                fullText.append(run.getText(0));
+            }
 
-    /**
-     * Adds submission information on the following page.
-     */
-    private void addSubmissionInfo(XWPFDocument document, String submissionId, Answer firstAnswer) {
-        XWPFParagraph info = document.createParagraph();
-        XWPFRun infoRun = info.createRun();
-        infoRun.setText("Submission ID: " + submissionId);
-        infoRun.addBreak();
-        infoRun.setText("Email: " + firstAnswer.getEmail());
-        infoRun.addBreak();
-        infoRun.setText("Data: " + firstAnswer.getCreatedAt().toLocalDate());
+            String replaced = fullText.toString();
+            for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                replaced = replaced.replace("${" + entry.getKey() + "}", entry.getValue());
+            }
+
+            // Clear existing runs
+            int numRuns = paragraph.getRuns().size();
+            for (int i = numRuns - 1; i >= 0; i--) {
+                paragraph.removeRun(i);
+            }
+
+            // Create new run with replaced text
+            XWPFRun newRun = paragraph.createRun();
+            newRun.setText(replaced);
+        }
     }
 
-    /**
-     * Adds a summary section listing the computed severity per category.
-     */
     private void addSummarySection(XWPFDocument document, Map<String, Severity> severities) {
-        XWPFParagraph summaryTitle = document.createParagraph();
-        summaryTitle.setSpacingBefore(500);
-        XWPFRun runSummary = summaryTitle.createRun();
-        runSummary.setText("Resumo por Categoria de Risco");
-        runSummary.setBold(true);
-        runSummary.setFontSize(16);
 
         for (Map.Entry<String, Severity> entry : severities.entrySet()) {
             XWPFParagraph p = document.createParagraph();
@@ -167,9 +121,6 @@ public class DocumentsService {
         }
     }
 
-    /**
-     * Creates a table that lists each answer with its associated question, response, type, and chosen level.
-     */
     private void addAnswersTable(XWPFDocument document, List<Answer> answers) {
         XWPFTable table = document.createTable();
         XWPFTableRow header = table.getRow(0);
@@ -186,5 +137,4 @@ public class DocumentsService {
             row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
         }
     }
-
 }
