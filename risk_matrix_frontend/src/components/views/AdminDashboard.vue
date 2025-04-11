@@ -360,14 +360,29 @@ export default {
         const response = await axios.get(`/api/answers/by-email-with-severity/${email}`, {
           validateStatus: _status => true
         });
+
         if (response.status === 401) {
           await this.showAlertDialog("Erro", "Você não está autorizado.", "error");
+          this.userAnswers = [];
+        } else if (response.status >= 200 && response.status < 300) {
+           // Ensure we assign the array directly if the response data is an array
+           if (Array.isArray(response.data)) {
+             this.userAnswers = response.data; // <<< Change this line
+           } else {
+             // Handle unexpected non-array response
+             console.warn("Expected an array from /api/answers/by-email-with-severity, but received:", response.data);
+             this.userAnswers = response.data ? [response.data] : []; // Fallback: wrap if single object received
+           }
         } else {
-          this.userAnswers = [response.data];
+          console.error("Error fetching user answers by email, status:", response.status);
+          this.userAnswers = [];
+          await this.showAlertDialog("Erro", `Erro ${response.status} ao buscar respostas por email.`, "error");
         }
+
       } catch (error) {
-        console.error("Error fetching user answers by email:", error);
-        await this.showAlertDialog("Erro", "Erro ao buscar respostas por email.", "error");
+        console.error("Error fetching user answers by email (network/request failed):", error);
+        this.userAnswers = [];
+        await this.showAlertDialog("Erro", "Erro de rede ao buscar respostas por email.", "error");
       } finally {
         this.isLoading = false;
       }

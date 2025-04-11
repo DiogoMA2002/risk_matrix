@@ -72,7 +72,7 @@ public class AnswerController {
 
     @GetMapping("/by-date-range")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<AnswerDTO> getAnswersByDateRange(@RequestParam String startDate, @RequestParam String endDate) {
+    public List<UserAnswersDTO> getAnswersByDateRange(@RequestParam String startDate, @RequestParam String endDate) {
         return answerService.getAnswersByDateRange(startDate, endDate);
     }
     @GetMapping("/export-submission/{id}")

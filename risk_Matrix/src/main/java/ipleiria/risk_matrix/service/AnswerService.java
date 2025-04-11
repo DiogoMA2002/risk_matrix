@@ -211,12 +211,70 @@ public class AnswerService {
 
 
 
-    public List<AnswerDTO> getAnswersByDateRange(String startDate, String endDate) {
+    public List<UserAnswersDTO> getAnswersByDateRange(String startDate, String endDate) {
         LocalDateTime start = LocalDate.parse(startDate).atStartOfDay();
         LocalDateTime end = LocalDate.parse(endDate).atTime(23, 59, 59);
-        return answerRepository.findByCreatedAtBetween(start, end).stream()
+        List<AnswerDTO> answersInRange = answerRepository.findByCreatedAtBetween(start, end).stream()
                 .map(AnswerDTO::new)
                 .collect(Collectors.toList());
+
+        if (answersInRange.isEmpty()) {
+            return new ArrayList<>(); // Return empty list if no answers found in the range
+        }
+
+        // Batch load questions for the answers in the range
+        Set<Long> questionIds = answersInRange.stream()
+                .map(AnswerDTO::getQuestionId)
+                .collect(Collectors.toSet());
+        List<Question> questions = questionRepository.findAllById(questionIds);
+
+        Map<Long, Question> questionMap = questions.stream()
+                .collect(Collectors.toMap(Question::getId, Function.identity()));
+
+        // Group answers by submissionId
+        Map<String, List<AnswerDTO>> answersGroupedBySubmission = answersInRange.stream()
+                .collect(Collectors.groupingBy(AnswerDTO::getSubmissionId));
+
+        List<UserAnswersDTO> result = new ArrayList<>();
+        for (Map.Entry<String, List<AnswerDTO>> entry : answersGroupedBySubmission.entrySet()) {
+            String submissionId = entry.getKey();
+            List<AnswerDTO> submissionAnswers = entry.getValue();
+
+            if (submissionAnswers.isEmpty()) {
+                continue;
+            }
+            // Assume all answers in a submission share the same email
+            String email = submissionAnswers.get(0).getEmail();
+
+            // Group answers by category for severity calculations
+            Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
+            for (AnswerDTO ans : submissionAnswers) {
+                Question question = questionMap.get(ans.getQuestionId());
+                 if (question == null) {
+                    // Consider logging this issue or handling it differently
+                    System.err.println("Warning: Question not found for ID: " + ans.getQuestionId() + " in submission: " + submissionId);
+                    continue; // Skip this answer if the question is missing
+                    // Or throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
+                }
+                String categoryName = question.getCategory().getName();
+                answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
+            }
+
+            // Compute severities for each category
+            Map<String, Severity> severitiesByCategory = new HashMap<>();
+            for (Map.Entry<String, List<AnswerDTO>> catEntry : answersByCategory.entrySet()) {
+                severitiesByCategory.put(catEntry.getKey(), computeCategorySeverity(catEntry.getValue()));
+            }
+
+            // Create DTO
+            UserAnswersDTO dto = new UserAnswersDTO();
+            dto.setSubmissionId(submissionId);
+            dto.setEmail(email);
+            dto.setAnswers(submissionAnswers); // Contains all answers for this submission within the date range
+            dto.setSeveritiesByCategory(severitiesByCategory);
+            result.add(dto);
+        }
+        return result;
     }
 
 
