@@ -52,7 +52,7 @@
   
   <script>
  /* eslint-disable */
-import axios from '@/plugins/axios'
+import axios from 'axios'
 
 // Apenas limpa o prefixo da mensagem de erro do Spring
 function formatValidationMessage(message) {
