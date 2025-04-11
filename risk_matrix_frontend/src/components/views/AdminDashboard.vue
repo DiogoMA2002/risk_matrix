@@ -37,7 +37,7 @@
 
 <script>
 /* eslint-disable */
-import axios from '@/plugins/axios'
+import axios from 'axios'
 import HeaderComponent from "@/components/Static/HeaderComponent.vue";
 import QuestionnaireManager from "@/components/AdminDashboard/QuestionnaireManager.vue";
 import QuestionForm from "@/components/AdminDashboard/QuestionForm.vue";
@@ -155,6 +155,7 @@ export default {
       }
       this.isLoading = true;
       try {
+        const token = localStorage.getItem("jwt");
         const payload = {
           questionText: questionData.newQuestion,
           category: questionData.selectedCategory,
@@ -162,7 +163,14 @@ export default {
           questionnaireIds: questionData.selectedQuestionnaires, // new field with multiple IDs
         };
 
-        await axios.post("/api/questions/add", payload);
+        await axios.post("/api/questions/add", payload, 
+        {
+          headers: {
+             Authorization: `Bearer ${token}`
+           },
+        },
+        );
+        
 
         // Then fetch the updated questionnaire
         await this.$store.dispatch('fetchQuestionnaireById', questionData.selectedQuestionnaires[0]);
@@ -187,7 +195,12 @@ export default {
       if (!proceed) return;
 
       try {
-        await axios.delete(`/api/questions/delete/${id}`);
+        const token = localStorage.getItem("jwt");
+        await axios.delete(`/api/questions/delete/${id}`, {
+           headers: {
+             Authorization: `Bearer ${token}`
+           }}
+        );
         this.fetchQuestions();
         await this.showAlertDialog("Sucesso", "Questão excluída com sucesso!", "success");
       } catch (error) {
@@ -225,7 +238,13 @@ export default {
       }
       this.isLoading = true;
       try {
-        await axios.post("/api/questionnaires/create", { title: newTitle });
+        const token = localStorage.getItem("jwt");
+        await axios.post("/api/questionnaires/create", { title: newTitle, 
+          headers: {
+             Authorization: `Bearer ${token}`
+           },
+          },
+         );
         this.fetchQuestionnaires();
         await this.showAlertDialog("Sucesso", "Questionário criado com sucesso!", "success");
       } catch (error) {
@@ -244,8 +263,12 @@ export default {
       if (!proceed) return;
 
       try {
+        const token = localStorage.getItem("jwt");
         const response = await axios.delete(`/api/questionnaires/delete/${id}`, {
           validateStatus: status => status < 500,
+          headers: {
+             Authorization: `Bearer ${token}`
+           },
         });
         if (response.status === 204 || response.status === 200) {
           await this.fetchQuestionnaires();
@@ -262,8 +285,12 @@ export default {
     },
     async exportQuestionnaire(questionnaireId) {
       try {
+        const token = localStorage.getItem("jwt");
         const response = await axios.get(`/api/questionnaires/${questionnaireId}/export`, {
           responseType: "json",
+          headers: {
+             Authorization: `Bearer ${token}`
+           },
         });
         const jsonData = response.data;
         const jsonString = JSON.stringify(jsonData, null, 2);
@@ -292,8 +319,12 @@ export default {
     async importQuestionnaire(jsonData) {
       if (!jsonData) return;
       try {
+        const token = localStorage.getItem("jwt");
         await axios.post("/api/questionnaires/import", jsonData, {
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
         });
         await this.showAlertDialog("Sucesso", "Questionário importado com sucesso!");
         await this.fetchQuestionnaires();
@@ -310,7 +341,6 @@ export default {
           await this.showAlertDialog("Erro", "Token JWT não encontrado.", "error");
           return;
         }
-
         const response = await axios.get(`/api/answers/export-submission/${submissionId}`, {
           responseType: 'blob',
           headers: {
@@ -357,8 +387,12 @@ export default {
       }
       this.isLoading = true;
       try {
+        const token = localStorage.getItem("jwt");
         const response = await axios.get(`/api/answers/by-email-with-severity/${email}`, {
-          validateStatus: _status => true
+          validateStatus: _status => true, 
+          headers: {
+             Authorization: `Bearer ${token}`
+           },
         });
         if (response.status === 401) {
           await this.showAlertDialog("Erro", "Você não está autorizado.", "error");
@@ -375,8 +409,12 @@ export default {
     async fetchAllUserAnswers() {
       this.isLoading = true;
       try {
+        const token = localStorage.getItem("jwt");
         const response = await axios.get("/api/answers/get-all-submissions", {
           validateStatus: _status => true,
+          headers: {
+             Authorization: `Bearer ${token}`
+           },
         });
         if (response.status === 401) {
           await this.showAlertDialog("Erro", "Você não está autorizado.", "error");
@@ -396,8 +434,12 @@ export default {
         return;
       }
       try {
+        const token = localStorage.getItem("jwt");
         const response = await axios.get("/api/answers/by-date-range", {
           params: { startDate, endDate },
+          headers: {
+             Authorization: `Bearer ${token}`
+           },
         });
         this.userAnswers = response.data;
       } catch (error) {
