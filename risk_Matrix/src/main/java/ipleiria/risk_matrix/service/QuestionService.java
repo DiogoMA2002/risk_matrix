@@ -149,18 +149,15 @@ public class QuestionService {
     }
 
     public QuestionDTO updateQuestion(Long id, QuestionDTO updatedQuestionDTO) {
-        // Retrieve the existing question or throw an exception if not found.
         Question existingQuestion = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Question not found with id: " + id));
 
-        // Update the question text.
         existingQuestion.setQuestionText(updatedQuestionDTO.getQuestionText());
 
-        // Update dynamic category using categoryName from DTO
-        String categoryName = updatedQuestionDTO.getCategoryName();
-        if (categoryName == null || categoryName.trim().isEmpty()) {
-            throw new InvalidCategoryException("A categoria da pergunta é obrigatória.");
-        }
+        String categoryName = Optional.ofNullable(updatedQuestionDTO.getCategoryName())
+                .map(String::trim)
+                .orElseThrow(() -> new InvalidCategoryException("A categoria da pergunta é obrigatória."));
+
         Category category = categoryRepository.findByName(categoryName)
                 .orElseGet(() -> {
                     Category newCategory = new Category();
@@ -169,19 +166,46 @@ public class QuestionService {
                 });
         existingQuestion.setCategory(category);
 
-        // Clear current options and convert new ones from the DTO.
         existingQuestion.getOptions().clear();
         if (updatedQuestionDTO.getOptions() != null) {
             List<QuestionOption> newOptions = updatedQuestionDTO.getOptions()
                     .stream()
                     .map(dto -> convertDtoToQuestionOption(dto, existingQuestion))
-                    .toList();
+                    .collect(Collectors.toList());
             existingQuestion.getOptions().addAll(newOptions);
         }
 
-        // Save the updated question.
-        Question savedQuestion = questionRepository.save(existingQuestion);
+        boolean hasNaoAplicavel = existingQuestion.getOptions().stream()
+                .anyMatch(opt -> "Não Aplicável".equalsIgnoreCase(opt.getOptionText()));
+        if (!hasNaoAplicavel) {
+            QuestionOption naoAplicavel = new QuestionOption();
+            naoAplicavel.setOptionText("Não Aplicável");
+            naoAplicavel.setOptionType(OptionLevelType.IMPACT);
+            naoAplicavel.setOptionLevel(OptionLevel.LOW);
+            naoAplicavel.setQuestion(existingQuestion);
+            existingQuestion.getOptions().add(naoAplicavel);
+        }
 
+// ✅ First: remove old associations on both sides
+        for (Questionnaire q : existingQuestion.getQuestionnaires()) {
+            q.getQuestions().remove(existingQuestion);
+        }
+        existingQuestion.getQuestionnaires().clear();
+
+// ✅ Then: add new associations safely
+        for (Long questionnaireId : updatedQuestionDTO.getQuestionnaireIds()) {
+            Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
+                    .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + questionnaireId));
+
+            // Add to both sides if not already present
+            if (!questionnaire.getQuestions().contains(existingQuestion)) {
+                questionnaire.getQuestions().add(existingQuestion);
+            }
+            existingQuestion.getQuestionnaires().add(questionnaire);
+        }
+
+
+        Question savedQuestion = questionRepository.save(existingQuestion);
         return new QuestionDTO(savedQuestion);
     }
 

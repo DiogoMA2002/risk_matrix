@@ -186,7 +186,9 @@ public class AnswerService {
             for (AnswerDTO ans : submissionAnswers) {
                 Question question = questionMap.get(ans.getQuestionId());
                 if (question == null) {
-                    throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
+                    // Log a warning and skip this answer if its question is missing
+                    System.err.println("Warning: Question not found for ID: " + ans.getQuestionId() + " while processing submission: " + submissionId);
+                    continue; // Skip processing this specific answer
                 }
                 String categoryName = question.getCategory().getName();
                 answersByCategory.computeIfAbsent(categoryName, _ -> new ArrayList<>()).add(ans);
@@ -251,7 +253,7 @@ public class AnswerService {
                  if (question == null) {
                     // Consider logging this issue or handling it differently
                     System.err.println("Warning: Question not found for ID: " + ans.getQuestionId() + " in submission: " + submissionId);
-                    continue; // Skip this answer if the question is missing
+                    continue; // Skip this answer if the question is missing due to being deleted.
                     // Or throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
                 }
                 String categoryName = question.getCategory().getName();

@@ -31,8 +31,6 @@ public class QuestionDTO {
     // Use categoryName instead of a numeric categoryId.
     @NotBlank(message = "A categoria da pergunta é obrigatória.")
     @Pattern(regexp = "^[\\p{L}0-9 ]+$", message = "Nome inválido (sem caracteres especiais)")
-    @JsonProperty("category") // Maps the JSON field "category" to categoryName.
-
     private String categoryName;
 
     @NotNull(message = "A lista de opções é obrigatória.")

@@ -10,13 +10,11 @@ import java.util.stream.Collectors;
 
 public class RiskUtils {
 
-    // Utility method to compute the median of a list of OptionLevels
     public static OptionLevel medianLevel(List<OptionLevel> levels) {
         if (levels == null || levels.isEmpty()) {
             return null; // or handle "no data" scenario
         }
 
-        // Convert LOW=1, MEDIUM=2, HIGH=3
         List<Integer> numeric = levels.stream()
                 .map(RiskUtils::levelToInt)
                 .sorted()
