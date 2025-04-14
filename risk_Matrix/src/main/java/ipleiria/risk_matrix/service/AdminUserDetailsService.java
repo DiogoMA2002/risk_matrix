@@ -24,27 +24,20 @@ public class AdminUserDetailsService implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        // Try finding by username first
-        Optional<AdminUser> userByUsername = adminRepo.findByUsername(usernameOrEmail);
-
-        if (userByUsername.isPresent()) {
-            AdminUser user = userByUsername.get();
-            return new User(user.getUsername(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        // Check if the input looks like an email
+        Optional<AdminUser> userOptional;
+        if (usernameOrEmail != null && usernameOrEmail.contains("@")) {
+            // Attempt to find by email
+            userOptional = adminRepo.findByEmail(usernameOrEmail);
+        } else {
+            // Attempt to find by username
+            userOptional = adminRepo.findByUsername(usernameOrEmail);
         }
 
-        // If not found by username, try finding by email
-        Optional<AdminUser> userByEmail = adminRepo.findByEmail(usernameOrEmail);
-        if (userByEmail.isPresent()) {
-            AdminUser user = userByEmail.get();
-            // IMPORTANT: Return UserDetails with the *actual username*, not the email used for lookup
-            return new User(user.getUsername(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
-        }
-
-        // If not found by either, throw the exception
-        throw new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail);
-
-        // AdminUser user = adminRepo.findByUsername(username)
-        //         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        // return new User(user.getUsername(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        AdminUser user = userOptional.orElseThrow(() -> 
+            new UsernameNotFoundException("User not found with identifier: " + usernameOrEmail)
+        );
+        
+        return new User(user.getUsername(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
     }
 }
