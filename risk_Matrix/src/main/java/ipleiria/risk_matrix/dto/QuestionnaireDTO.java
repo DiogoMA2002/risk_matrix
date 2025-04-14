@@ -2,15 +2,18 @@ package ipleiria.risk_matrix.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Setter
+@Getter
 public class QuestionnaireDTO {
 
+    // Getters and setters
     private Long id;
 
     @NotBlank(message = "Titulo não pode estar vázio")
@@ -18,7 +21,9 @@ public class QuestionnaireDTO {
 
     private List<@Valid QuestionDTO> questions;
 
-    public QuestionnaireDTO() {}
+    public QuestionnaireDTO() {
+        // DO NOT DELETE - JACKSON
+    }
 
     public QuestionnaireDTO(Questionnaire questionnaire) {
         this.id = questionnaire.getId();
@@ -30,13 +35,4 @@ public class QuestionnaireDTO {
                 : List.of();
     }
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public List<QuestionDTO> getQuestions() { return questions; }
-    public void setQuestions(List<QuestionDTO> questions) { this.questions = questions; }
 }

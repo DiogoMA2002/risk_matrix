@@ -1,8 +1,0 @@
-package ipleiria.risk_matrix.exceptions.exception;
-
-public class UsernameAlreadyExistsException extends RuntimeException {
-    public UsernameAlreadyExistsException(String message) {
-        super(message);
-    }
-}
-

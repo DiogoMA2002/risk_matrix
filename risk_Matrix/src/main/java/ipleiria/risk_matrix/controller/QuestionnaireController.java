@@ -11,7 +11,6 @@ import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import ipleiria.risk_matrix.service.QuestionnaireService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +20,19 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/questionnaires")
 public class QuestionnaireController {
 
-    @Autowired
-    private QuestionnaireService questionnaireService;
-    @Autowired
-    private QuestionnaireRepository questionnaireRepository;
+    private final QuestionnaireService questionnaireService;
+    private final QuestionnaireRepository questionnaireRepository;
+
+    public QuestionnaireController(QuestionnaireService questionnaireService, QuestionnaireRepository questionnaireRepository) {
+        this.questionnaireService = questionnaireService;
+        this.questionnaireRepository = questionnaireRepository;
+    }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")

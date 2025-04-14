@@ -3,7 +3,11 @@ import ipleiria.risk_matrix.annotations.PasswordMatches;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @PasswordMatches  // Custom annotation (defined below)
 public class ChangePasswordRequestDTO {
 
@@ -21,29 +25,5 @@ public class ChangePasswordRequestDTO {
     @NotBlank(message = "A confirmação da nova senha é obrigatória.")
     private String confirmNewPassword;
 
-    // Getters and setters
 
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public String getConfirmNewPassword() {
-        return confirmNewPassword;
-    }
-
-    public void setConfirmNewPassword(String confirmNewPassword) {
-        this.confirmNewPassword = confirmNewPassword;
-    }
 }

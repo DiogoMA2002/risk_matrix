@@ -53,7 +53,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDTO request) {
         try {
-            Authentication auth = authManager.authenticate(
+            authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());

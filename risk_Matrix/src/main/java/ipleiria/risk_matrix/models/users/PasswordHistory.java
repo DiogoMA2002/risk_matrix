@@ -1,9 +1,13 @@
 package ipleiria.risk_matrix.models.users;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
 public class PasswordHistory {
 
@@ -19,35 +23,4 @@ public class PasswordHistory {
 
     private LocalDateTime changedAt;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public AdminUser getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(AdminUser admin) {
-        this.admin = admin;
-    }
-
-    public LocalDateTime getChangedAt() {
-        return changedAt;
-    }
-
-    public void setChangedAt(LocalDateTime changedAt) {
-        this.changedAt = changedAt;
-    }
 }

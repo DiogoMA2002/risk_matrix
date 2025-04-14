@@ -8,9 +8,14 @@ import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.models.questions.Severity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class QuestionOptionDTO {
 
+    // Getters and Setters
     @NotBlank(message = "O texto da opção não pode estar em branco.")
     private String optionText;
 
@@ -23,7 +28,10 @@ public class QuestionOptionDTO {
     // Optional – include only if you're capturing severity at the option level
     private Severity severity;
 
-    public QuestionOptionDTO() {}
+    public QuestionOptionDTO() {
+        // DO NOT DELETE - JACKSON
+
+    }
 
     @JsonCreator
     public QuestionOptionDTO(
@@ -44,36 +52,4 @@ public class QuestionOptionDTO {
         // this.severity = option.getSeverity();
     }
 
-    // Getters and Setters
-    public String getOptionText() {
-        return optionText;
-    }
-
-    public void setOptionText(String optionText) {
-        this.optionText = optionText;
-    }
-
-    public OptionLevelType getOptionType() {
-        return optionType;
-    }
-
-    public void setOptionType(OptionLevelType optionType) {
-        this.optionType = optionType;
-    }
-
-    public OptionLevel getOptionLevel() {
-        return optionLevel;
-    }
-
-    public void setOptionLevel(OptionLevel optionLevel) {
-        this.optionLevel = optionLevel;
-    }
-
-    public Severity getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(Severity severity) {
-        this.severity = severity;
-    }
 }

@@ -5,7 +5,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "feedback")
 public class Feedback {
@@ -31,35 +35,4 @@ public class Feedback {
 
     // Getters and Setters
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserFeedback() {
-        return userFeedback;
-    }
-
-    public void setUserFeedback(String userFeedback) {
-        this.userFeedback = userFeedback;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public FeedbackType getFeedbackType() {
-        return feedbackType;
-    }
-
-    public void setFeedbackType(FeedbackType feedbackType) {
-        this.feedbackType = feedbackType;
-    }
 }
