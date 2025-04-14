@@ -79,7 +79,7 @@ public class AnswerController {
     }
     @GetMapping("/export-submission/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<byte[]> exportSubmission(@PathVariable String id) throws IOException, InvalidFormatException {
+    public ResponseEntity<byte[]> exportSubmission(@PathVariable String id) throws IOException {
         //byte[] docBytes = documentsServiceTest.generateReport(id);
         byte[] docBytes = documentsService.generateEnhancedDocx(id);
 

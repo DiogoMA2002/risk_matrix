@@ -5,14 +5,11 @@ import ipleiria.risk_matrix.dto.AdminRegisterDTO;
 import ipleiria.risk_matrix.dto.AuthRequestDTO;
 import ipleiria.risk_matrix.dto.AuthResponseDTO;
 import ipleiria.risk_matrix.dto.ChangePasswordRequestDTO;
-import ipleiria.risk_matrix.dto.UpdateEmailRequestDTO;
-import ipleiria.risk_matrix.dto.UpdateUsernameRequestDTO;
 import ipleiria.risk_matrix.models.users.AdminUser;
 import ipleiria.risk_matrix.models.users.PasswordHistory;
 import ipleiria.risk_matrix.repository.AdminUserRepository;
 import ipleiria.risk_matrix.repository.PasswordHistoryRepository;
 import ipleiria.risk_matrix.service.AdminUserDetailsService;
-import ipleiria.risk_matrix.service.AdminUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,18 +39,15 @@ public class AuthController {
     private final AdminUserRepository adminRepo;
     private final PasswordEncoder passwordEncoder;
     private final PasswordHistoryRepository passwordHistoryRepo;
-    private final AdminUserService adminUserService;
 
     public AuthController(AuthenticationManager authManager, JwtUtil jwtUtil, AdminUserDetailsService userDetailsService,
-                          AdminUserRepository adminRepo, PasswordEncoder passwordEncoder, PasswordHistoryRepository passwordHistoryRepo,
-                          AdminUserService adminUserService) {
+                          AdminUserRepository adminRepo, PasswordEncoder passwordEncoder, PasswordHistoryRepository passwordHistoryRepo) {
         this.authManager = authManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.adminRepo = adminRepo;
         this.passwordEncoder = passwordEncoder;
         this.passwordHistoryRepo = passwordHistoryRepo;
-        this.adminUserService = adminUserService;
     }
 
     @PostMapping("/login")

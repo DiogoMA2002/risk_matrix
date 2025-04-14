@@ -15,6 +15,7 @@ import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.repository.CategoryRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
+import ipleiria.risk_matrix.utils.QuestionUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -176,21 +177,12 @@ public class QuestionService {
             List<QuestionOption> newOptions = updatedQuestionDTO.getOptions()
                     .stream()
                     .map(dto -> convertDtoToQuestionOption(dto, existingQuestion))
-                    .collect(Collectors.toList());
+                    .toList();
             existingQuestion.getOptions().addAll(newOptions);
         }
 
         // Ensure "Não Aplicável" option exists
-        boolean hasNaoAplicavel = existingQuestion.getOptions().stream()
-                .anyMatch(opt -> "Não Aplicável".equalsIgnoreCase(opt.getOptionText()));
-        if (!hasNaoAplicavel) {
-            QuestionOption naoAplicavel = new QuestionOption();
-            naoAplicavel.setOptionText("Não Aplicável");
-            naoAplicavel.setOptionType(OptionLevelType.IMPACT);
-            naoAplicavel.setOptionLevel(OptionLevel.LOW);
-            naoAplicavel.setQuestion(existingQuestion);
-            existingQuestion.getOptions().add(naoAplicavel);
-        }
+        QuestionUtils.ensureNaoAplicavelOption(existingQuestion);
 
         // Remove old questionnaire associations (both sides)
         for (Questionnaire q : new ArrayList<>(existingQuestion.getQuestionnaires())) {
