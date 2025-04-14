@@ -1,8 +1,12 @@
 package ipleiria.risk_matrix.service;
 
+import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.models.users.AdminUser;
 import ipleiria.risk_matrix.repository.AdminUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +15,12 @@ import java.util.Optional;
 public class AdminUserService {
 
     private final AdminUserRepository adminUserRepository;
+    private final PasswordEncoder passwordEncoder; // Inject PasswordEncoder
 
-    public AdminUserService(AdminUserRepository adminUserRepository) {
+    @Autowired // Use constructor injection
+    public AdminUserService(AdminUserRepository adminUserRepository, PasswordEncoder passwordEncoder) {
         this.adminUserRepository = adminUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -26,4 +33,6 @@ public class AdminUserService {
     public List<AdminUser> getAllAdmins() {
         return adminUserRepository.findAll();
     }
+
+
 }

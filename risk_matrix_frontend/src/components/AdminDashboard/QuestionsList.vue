@@ -5,10 +5,9 @@
       <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Categoria</label>
       <select v-model="selectedFilterCategory" @change="onFilterChange" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300">
         <option value="">Todos</option>
-        <option v-for="cat in categories" :key="cat" :value="cat">
-  {{ formatCategoryName(cat) }}
-</option>
-
+        <option v-for="cat in categories" :key="cat.id" :value="cat.name">
+          {{ formatCategoryName(cat.name) }}
+        </option>
       </select>
     </div>
 
@@ -98,9 +97,11 @@ export default {
   },
   methods: {
     formatCategoryName(category) {
-      if (!category) return "";
-      let name = typeof category === "object" && category.name ? category.name : category;
-      return name.replace(/_/g, " ");
+      if (!category) return "Sem Categoria";
+      let name = typeof category === "object" && category.name ? category.name : typeof category === 'string' ? category : "Inválida";
+      return name.replace(/_/g, " ")
+                 .toLowerCase()
+                 .replace(/\b\w/g, (l) => l.toUpperCase());
     },
     onFilterChange() {
       this.$emit("filter-questions", this.selectedFilterCategory);
