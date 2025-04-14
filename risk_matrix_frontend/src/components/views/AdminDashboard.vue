@@ -10,13 +10,21 @@
         @delete-questionnaire="deleteQuestionnaire" @import-questionnaire="importQuestionnaire"
         @export-questionnaire="exportQuestionnaire" @select-questionnaire="selectQuestionnaire" />
 
+      <!-- Category Manager (NEW) -->
+      <CategoryManager 
+        :categories="fullCategories" 
+        :loading="isLoadingCategories"
+        @edit-category="handleEditCategory"
+        @delete-category="handleDeleteCategory" 
+      />
+
       <!-- Add Question Form -->
-      <QuestionForm :categories="categories" :questionnaires="questionnaires" :optionTypes="optionTypes"
-        :optionLevels="optionLevels" @add-question="addQuestion" @create-category="createCategory"
-        @update-categories="updateCategories" />
+      <QuestionForm :categories="fullCategories" :questionnaires="questionnaires" :optionTypes="optionTypes"
+        :optionLevels="optionLevels" @add-question="addQuestion" @create-category="handleCreateCategory"
+         /> 
 
       <!-- Questions List -->
-      <QuestionsList :questions="questions" :categories="categories" @delete-question="deleteQuestion"
+      <QuestionsList :questions="questions" :categories="fullCategories" @delete-question="deleteQuestion"
         @filter-questions="filterQuestionsByCategory" />
 
       <!-- Feedback List -->
@@ -40,6 +48,7 @@
 import axios from 'axios'
 import HeaderComponent from "@/components/Static/HeaderComponent.vue";
 import QuestionnaireManager from "@/components/AdminDashboard/QuestionnaireManager.vue";
+import CategoryManager from "@/components/AdminDashboard/CategoryManager.vue";
 import QuestionForm from "@/components/AdminDashboard/QuestionForm.vue";
 import QuestionsList from "@/components/AdminDashboard/QuestionsList.vue";
 import FeedbackList from "@/components/AdminDashboard/FeedbackList.vue";
@@ -51,6 +60,7 @@ export default {
   components: {
     HeaderComponent,
     QuestionnaireManager,
+    CategoryManager,
     QuestionForm,
     QuestionsList,
     FeedbackList,
@@ -63,12 +73,11 @@ export default {
       feedbacks: [],
       questionnaires: [],
       userAnswers: [],
-      // Categories are fetched from the backend and stored as an array of strings (names)
-      categories: [],
+      fullCategories: [],
+      isLoadingCategories: false,
       optionTypes: ["IMPACT", "PROBABILITY"],
       optionLevels: ["LOW", "MEDIUM", "HIGH"],
       isLoading: false,
-      // We'll track the currently selected questionnaire
       selectedQuestionnaire: null,
       showAlert: false,
       alertTitle: "",
@@ -108,16 +117,16 @@ export default {
       }
     },
     async fetchCategories() {
+      this.isLoadingCategories = true;
       try {
         const response = await axios.get("/api/categories");
-        // Ensure each category has a valid name
-        this.categories = response.data
-          .map(category => category.name)
-          .filter(name => !!name); // Filter out falsy values
+        this.fullCategories = response.data;
       } catch (error) {
         console.error("Error fetching categories:", error);
-        this.categories = [];
+        this.fullCategories = [];
         await this.showAlertDialog("Erro", "Erro ao carregar categorias.", "error");
+      } finally {
+        this.isLoadingCategories = false;
       }
     },
     async fetchQuestions() {
@@ -462,23 +471,99 @@ export default {
         await this.showAlertDialog("Erro", "Erro ao filtrar respostas por data.", "error");
       }
     },
-    // NEW METHODS TO HANDLE CATEGORY EVENTS FROM QuestionForm
-    async createCategory(newCategory) {
+    async handleCreateCategory(newCategoryName) {
+      if (!newCategoryName || !newCategoryName.trim()) {
+         await this.showAlertDialog("Erro", "Nome da categoria não pode ser vazio.", "error");
+         return;
+      }
+      // Basic validation (similar to QuestionForm, maybe centralize later)
+      const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
+      if (forbidden.test(newCategoryName.trim())) {
+        await this.showAlertDialog("Erro", "Nome da categoria contém caracteres inválidos.", "error");
+        return;
+      }
+      
+      // Prevent duplicates (case-insensitive check)
+      if (this.fullCategories.some(cat => cat.name.toLowerCase() === newCategoryName.trim().toLowerCase())) {
+          await this.showAlertDialog("Erro", `A categoria '${newCategoryName.trim()}' já existe.`, "error");
+          return;
+      }
+
       try {
-        const response = await axios.post("/api/categories", { name: newCategory });
-        const createdCategory = response.data;
-        if (!this.categories.includes(createdCategory.name)) {
-          this.categories.push(createdCategory.name);
-        }
-        await this.showAlertDialog("Sucesso", "Categoria criada com sucesso!");
+        const token = localStorage.getItem("jwt");
+        const response = await axios.post("/api/categories", 
+           { name: newCategoryName.trim() },
+           {
+             headers: {
+               Authorization: `Bearer ${token}`
+             }
+           }
+        );
+        await this.showAlertDialog("Sucesso", `Categoria '${response.data.name}' criada com sucesso!`);
+        await this.fetchCategories(); // Refresh the list
       } catch (error) {
         console.error("Error creating category:", error);
-        await this.showAlertDialog("Erro", "Erro ao criar categoria.", "error");
+        const errorMsg = error.response?.data?.message || "Erro ao criar categoria.";
+        await this.showAlertDialog("Erro", errorMsg, "error");
       }
     },
-    updateCategories(newCategory) {
-      if (!this.categories.includes(newCategory)) {
-        this.categories.push(newCategory);
+    async handleEditCategory({ id, name }) {
+       if (!name || !name.trim()) {
+         await this.showAlertDialog("Erro", "Nome da categoria não pode ser vazio.", "error");
+         return;
+       }
+       // Prevent duplicates (excluding the category being edited)
+       if (this.fullCategories.some(cat => cat.id !== id && cat.name.toLowerCase() === name.trim().toLowerCase())) {
+          await this.showAlertDialog("Erro", `Já existe uma categoria com o nome '${name.trim()}'.`, "error");
+          return;
+       }
+       
+       try {
+        const token = localStorage.getItem("jwt");
+        await axios.put(`/api/categories/${id}`, 
+          { name: name.trim() },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        await this.showAlertDialog("Sucesso", "Categoria atualizada com sucesso!");
+        await this.fetchCategories(); // Refresh the list
+      } catch (error) {
+        console.error("Error updating category:", error);
+        const errorMsg = error.response?.data?.message || "Erro ao atualizar categoria.";
+        await this.showAlertDialog("Erro", errorMsg, "error");
+      }
+    },
+    async handleDeleteCategory(id) {
+      const proceed = await this.showAlertDialog(
+        "Confirmar Exclusão",
+        "Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.",
+        "confirm"
+      );
+      if (!proceed) return;
+
+      try {
+        const token = localStorage.getItem("jwt");
+        await axios.delete(`/api/categories/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        await this.showAlertDialog("Sucesso", "Categoria excluída com sucesso!");
+        await this.fetchCategories(); // Refresh the list
+        await this.fetchQuestions(); // Also refresh questions in case some were using the category
+      } catch (error) {
+        console.error("Error deleting category:", error);
+        // Check for specific backend constraints if possible
+        let errorMsg = "Erro ao excluir categoria.";
+        if (error.response && error.response.status === 409) { // Example: Conflict if category is in use
+           errorMsg = "Não é possível excluir a categoria pois ela está associada a questões existentes.";
+        } else {
+           errorMsg = error.response?.data?.message || errorMsg;
+        }
+        await this.showAlertDialog("Erro", errorMsg, "error");
       }
     },
   },

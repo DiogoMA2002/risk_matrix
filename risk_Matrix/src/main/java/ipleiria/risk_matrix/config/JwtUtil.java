@@ -11,7 +11,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     private final String jwtSecret = "f6568a73b70f52979a313374043159476a286926019a80f5a777a2a95a6f60fc";
-    private final long jwtExpirationMs = 15000; // 1 day
+    private final long jwtExpirationMs = 86400000; // 1 day
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()

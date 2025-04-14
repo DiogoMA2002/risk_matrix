@@ -22,14 +22,12 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
         <select
           v-model="selectedCategory"
-          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300 bg-white"
+          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300"
         >
-          <option disabled value="">Selecione a Categoria</option>
-          <option value="none">Nenhum</option>
-          <option v-for="cat in categories" :key="cat" :value="cat || ''">
-  {{ formatCategoryName(cat) }}
-</option>
-
+          <option disabled value="">Selecione uma Categoria</option>
+          <option v-for="category in categories" :key="category.id" :value="category.name">
+            {{ formatCategoryName(category.name) }}
+          </option>
         </select>
       </div>
       <!-- Create New Category -->
@@ -131,7 +129,7 @@
       <!-- Submit Button -->
       <div class="pt-4">
         <button
-          @click="onAddQuestion"
+          @click="addQuestion"
           class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 flex items-center"
         >
           <span>Adicionar Questão</span>
@@ -184,13 +182,13 @@ export default {
     };
   },
   methods: {
-    formatCategoryName(category) {
-    if (!category || typeof category !== "string") return "";
-    return category
-      .replace(/_/g, " ")
-      .toLowerCase()
-      .replace(/\b\w/g, (l) => l.toUpperCase());
-  },
+    formatCategoryName(categoryName) {
+      if (!categoryName || typeof categoryName !== "string") return "";
+      return categoryName
+        .replace(/_/g, " ")
+        .toLowerCase()
+        .replace(/\b\w/g, (l) => l.toUpperCase());
+    },
     addOption() {
       this.newOptions.push({ optionText: "", optionType: "IMPACT", optionLevel: "LOW" });
     },
@@ -205,31 +203,28 @@ export default {
       const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
 
       if (forbidden.test(this.newCategory.trim())) {
-  alert("Nome da categoria contém caracteres inválidos.");
-  return;
-}
+        alert("Nome da categoria contém caracteres inválidos.");
+        return;
+      }
       // Emit event to create a new category on the backend
       this.$emit("create-category", this.newCategory.trim());
-      // Optionally update the local category list
-      this.$emit("update-categories", this.newCategory.trim());
       this.newCategory = "";
     },
     lockOptionType(type) {
-  this.newOptions.forEach(opt => {
-    opt.optionType = type;
-  });
-}
-,
-    onAddQuestion() {
+      this.newOptions.forEach(opt => {
+        opt.optionType = type;
+      });
+    },
+    addQuestion() {
       if (!this.newQuestion.trim()) {
         alert("O texto da questão é obrigatório.");
         return;
       }
       const invalidChars = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
-if (invalidChars.test(this.newQuestion) || invalidChars.test(this.selectedCategory || this.newCategory)) {
-  alert("O texto da pergunta ou nome da categoria contém caracteres inválidos.");
-  return;
-}
+      if (invalidChars.test(this.newQuestion) || invalidChars.test(this.selectedCategory || this.newCategory)) {
+        alert("O texto da pergunta ou nome da categoria contém caracteres inválidos.");
+        return;
+      }
 
       // Check if no category is selected (or "none" is chosen) and no new category is provided.
       if ((!this.selectedCategory || this.selectedCategory === "none") && !this.newCategory.trim()) {
@@ -243,13 +238,13 @@ if (invalidChars.test(this.newQuestion) || invalidChars.test(this.selectedCatego
         alert("Selecione pelo menos um questionário.");
         return;
       }
-      // Emit the new question data, including multiple questionnaire IDs
-      this.$emit("add-question", {
+      const questionData = {
         newQuestion: this.newQuestion,
         selectedCategory: this.selectedCategory,
-        selectedQuestionnaires: this.selectedQuestionnaires,
         newOptions: this.newOptions,
-      });
+        selectedQuestionnaires: this.selectedQuestionnaires,
+      };
+      this.$emit("add-question", questionData);
       // Reset form fields
       this.newQuestion = "";
       this.selectedCategory = "";
