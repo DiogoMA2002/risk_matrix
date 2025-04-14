@@ -172,7 +172,6 @@ export default {
             }
             
             this.$emit("import-questionnaire", jsonData);
-            await this.showAlertDialog("Sucesso", "Questionário importado com sucesso!", "success");
             this.showImportDialog = false;
           } catch (error) {
             console.error("Error parsing JSON:", error);

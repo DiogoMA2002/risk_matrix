@@ -44,6 +44,12 @@ public class QuestionnaireController {
         Questionnaire saved = questionnaireService.createQuestionnaire(questionnaire);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+    @PostMapping("/import")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Questionnaire> importQuestionnaire(@RequestBody @Valid QuestionnaireDTO dto) {
+        Questionnaire imported = questionnaireService.importQuestionnaireDto(dto);
+        return ResponseEntity.ok(imported);
+    }
 
     @GetMapping("/all")
     public List<QuestionnaireDTO> getAllQuestionnaires() {
@@ -113,12 +119,6 @@ public class QuestionnaireController {
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
 
-    @PostMapping("/import")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Questionnaire> importQuestionnaire(@RequestBody @Valid QuestionnaireDTO dto) {
-        Questionnaire imported = questionnaireService.importQuestionnaireDto(dto);
-        return ResponseEntity.ok(imported);
-    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

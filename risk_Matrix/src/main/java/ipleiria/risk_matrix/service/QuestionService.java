@@ -18,6 +18,8 @@ import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -152,8 +154,10 @@ public class QuestionService {
         Question existingQuestion = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Question not found with id: " + id));
 
+        // Update question text
         existingQuestion.setQuestionText(updatedQuestionDTO.getQuestionText());
 
+        // Handle category (create if not exists)
         String categoryName = Optional.ofNullable(updatedQuestionDTO.getCategoryName())
                 .map(String::trim)
                 .orElseThrow(() -> new InvalidCategoryException("A categoria da pergunta é obrigatória."));
@@ -166,6 +170,7 @@ public class QuestionService {
                 });
         existingQuestion.setCategory(category);
 
+        // Replace options
         existingQuestion.getOptions().clear();
         if (updatedQuestionDTO.getOptions() != null) {
             List<QuestionOption> newOptions = updatedQuestionDTO.getOptions()
@@ -175,6 +180,7 @@ public class QuestionService {
             existingQuestion.getOptions().addAll(newOptions);
         }
 
+        // Ensure "Não Aplicável" option exists
         boolean hasNaoAplicavel = existingQuestion.getOptions().stream()
                 .anyMatch(opt -> "Não Aplicável".equalsIgnoreCase(opt.getOptionText()));
         if (!hasNaoAplicavel) {
@@ -186,25 +192,28 @@ public class QuestionService {
             existingQuestion.getOptions().add(naoAplicavel);
         }
 
-// ✅ First: remove old associations on both sides
-        for (Questionnaire q : existingQuestion.getQuestionnaires()) {
+        // Remove old questionnaire associations (both sides)
+        for (Questionnaire q : new ArrayList<>(existingQuestion.getQuestionnaires())) {
             q.getQuestions().remove(existingQuestion);
         }
         existingQuestion.getQuestionnaires().clear();
 
-// ✅ Then: add new associations safely
-        for (Long questionnaireId : updatedQuestionDTO.getQuestionnaireIds()) {
+        // Add new associations (avoiding duplicates)
+        List<Long> distinctQuestionnaireIds = updatedQuestionDTO.getQuestionnaireIds().stream()
+                .distinct()
+                .toList();
+
+        for (Long questionnaireId : distinctQuestionnaireIds) {
             Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
                     .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + questionnaireId));
 
-            // Add to both sides if not already present
             if (!questionnaire.getQuestions().contains(existingQuestion)) {
                 questionnaire.getQuestions().add(existingQuestion);
             }
             existingQuestion.getQuestionnaires().add(questionnaire);
         }
 
-
+        // Save and return
         Question savedQuestion = questionRepository.save(existingQuestion);
         return new QuestionDTO(savedQuestion);
     }

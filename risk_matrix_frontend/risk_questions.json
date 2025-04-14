@@ -3,7 +3,7 @@
     "questions": [
         {
             "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
-            "category": "Risco de Autenticação",
+            "categoryName": "Risco de Autenticação",
             "options": [
                 {
                     "optionText": "Acesso limitado a dados não sensíveis.",
@@ -24,7 +24,7 @@
         },
         {
             "questionText": "Se um atacante conseguir comprometer credenciais de administrador, qual seria o impacto?",
-            "category": "Risco de Autenticação",
+            "categoryName": "Risco de Autenticação",
             "options": [
                 {
                     "optionText": "Impacto restrito a um pequeno conjunto de permissões.",
@@ -45,7 +45,7 @@
         },
         {
             "questionText": "Com que frequência os utilizadores utilizam senhas fracas ou reutilizadas?",
-            "category": "Risco de Autenticação",
+            "categoryName": "Risco de Autenticação",
             "options": [
                 {
                     "optionText": "Casos isolados sem impacto significativo.",
@@ -66,7 +66,7 @@
         },
         {
             "questionText": "A organização monitoriza tentativas de login suspeitas e falhas repetidas?",
-            "category": "Risco de Autenticação",
+            "categoryName": "Risco de Autenticação",
             "options": [
                 {
                     "optionText": "Monitorização contínua com alertas.",
@@ -87,7 +87,7 @@
         },
         {
             "questionText": "A autenticação multifator (MFA) está ativada para todas as contas críticas?",
-            "category": "Risco de Autenticação",
+            "categoryName": "Risco de Autenticação",
             "options": [
                 {
                     "optionText": "MFA obrigatório para todas as contas.",
@@ -108,7 +108,7 @@
         },
         {
             "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de senhas)?",
-            "category": "Risco de Autenticação",
+            "categoryName": "Risco de Autenticação",
             "options": [
                 {
                     "optionText": "Armazenamento seguro com criptografia forte.",
@@ -129,7 +129,7 @@
         },
         {
             "questionText": "Qual o impacto caso um colaborador clique em um link malicioso recebido por e-mail?",
-            "category": "Risco de Utilizacão de Email",
+            "categoryName": "Risco de Utilizacão de Email",
             "options": [
                 {
                     "optionText": "Nenhum impacto significativo, pois há camadas de proteção.",
@@ -150,7 +150,7 @@
         },
         {
             "questionText": "Qual seria o impacto se as credenciais fossem comprometidas por meio de um ataque de phishing?",
-            "category": "Risco de Utilizacão de Email",
+            "categoryName": "Risco de Utilizacão de Email",
             "options": [
                 {
                     "optionText": "Acesso limitado a uma única conta sem dados críticos.",
@@ -171,7 +171,7 @@
         },
         {
             "questionText": "Com que frequência os colaboradores recebem e-mails suspeitos?",
-            "category": "Risco de Utilizacão de Email",
+            "categoryName": "Risco de Utilizacão de Email",
             "options": [
                 {
                     "optionText": "Raramente recebem e-mails de phishing.",
@@ -192,7 +192,7 @@
         },
         {
             "questionText": "A empresa possui filtros eficientes para bloquear e-mails maliciosos?",
-            "category": "Risco de Utilizacão de Email",
+            "categoryName": "Risco de Utilizacão de Email",
             "options": [
                 {
                     "optionText": "Filtros avançados que bloqueiam quase todos os ataques.",
@@ -213,7 +213,7 @@
         },
         {
             "questionText": "Os colaboradores recebem formações regulares para identificar e-mails fraudulentos?",
-            "category": "Risco de Utilizacão de Email",
+            "categoryName": "Risco de Utilizacão de Email",
             "options": [
                 {
                     "optionText": "Formações frequentes e eficazes.",
@@ -234,7 +234,7 @@
         },
         {
             "questionText": "A autenticação de e-mail (SPF, DKIM, DMARC) está configurada corretamente?",
-            "category": "Risco de Utilizacão de Email",
+            "categoryName": "Risco de Utilizacão de Email",
             "options": [
                 {
                     "optionText": "Configuração completa e monitorizada.",
@@ -255,7 +255,7 @@
         },
         {
             "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado?\n",
-            "category": "Risco da Plataforma da Empresa",
+            "categoryName": "Risco da Plataforma da Empresa",
             "options": [
                 {
                     "optionText": "Pouco impacto na operação diária.",
@@ -276,7 +276,7 @@
         },
         {
             "questionText": "Caso uma vulnerabilidade crítica numa plataforma não seja corrigida rapidamente, quais seriam os danos potenciais à reputação da empresa?",
-            "category": "Risco da Plataforma da Empresa",
+            "categoryName": "Risco da Plataforma da Empresa",
             "options": [
                 {
                     "optionText": "Mínimo impacto reputacional.",
@@ -297,7 +297,7 @@
         },
         {
             "questionText": "Com que frequência são feitas auditorias às plataformas internas para identificar vulnerabilidades ou falhas de segurança?",
-            "category": "Risco da Plataforma da Empresa",
+            "categoryName": "Risco da Plataforma da Empresa",
             "options": [
                 {
                     "optionText": "Auditorias regulares (mínimo trimestral).",
@@ -318,7 +318,7 @@
         },
         {
             "questionText": "As equipas responsáveis pelas plataformas são treinadas regularmente sobre práticas seguras de administração e configuração?",
-            "category": "Risco da Plataforma da Empresa",
+            "categoryName": "Risco da Plataforma da Empresa",
             "options": [
                 {
                     "optionText": "Formação contínua e atualizada regularmente.",
@@ -339,7 +339,7 @@
         },
         {
             "questionText": "Existem procedimentos claros para gestão rápida de incidentes relacionados com vulnerabilidades das plataformas críticas?",
-            "category": "Risco da Plataforma da Empresa",
+            "categoryName": "Risco da Plataforma da Empresa",
             "options": [
                 {
                     "optionText": "Procedimentos formais claros e testados.",
@@ -360,7 +360,7 @@
         },
         {
             "questionText": "As plataformas críticas são protegidas por mecanismos avançados de segurança, como firewalls, sistemas IDS/IPS ou proteção anti-malware?",
-            "category": "Risco da Plataforma da Empresa",
+            "categoryName": "Risco da Plataforma da Empresa",
             "options": [
                 {
                     "optionText": "Mecanismos completos e atualizados.",
@@ -381,7 +381,7 @@
         },
         {
             "questionText": "Qual o impacto para a empresa caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
-            "category": "Risco de Armazenamento de Dados",
+            "categoryName": "Risco de Armazenamento de Dados",
             "options": [
                 {
                     "optionText": "Dados facilmente recuperáveis, baixo impacto operacional.",
@@ -402,7 +402,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro caso ocorresse uma exposição indevida de dados confidenciais armazenados pela empresa?",
-            "category": "Risco de Armazenamento de Dados",
+            "categoryName": "Risco de Armazenamento de Dados",
             "options": [
                 {
                     "optionText": "Impacto financeiro mínimo, sem penalizações significativas.",
@@ -423,7 +423,7 @@
         },
         {
             "questionText": "Com que frequência são realizados backups dos dados críticos armazenados pela empresa?",
-            "category": "Risco de Armazenamento de Dados",
+            "categoryName": "Risco de Armazenamento de Dados",
             "options": [
                 {
                     "optionText": "Backups automáticos e diários.",
@@ -444,7 +444,7 @@
         },
         {
             "questionText": "As soluções de armazenamento utilizadas pela empresa são regularmente atualizadas e protegidas contra ameaças conhecidas?",
-            "category": "Risco de Armazenamento de Dados",
+            "categoryName": "Risco de Armazenamento de Dados",
             "options": [
                 {
                     "optionText": "Atualizações regulares e gestão ativa de ameaças.",
@@ -465,7 +465,7 @@
         },
         {
             "questionText": "Existem mecanismos robustos de criptografia aplicados ao armazenamento de dados sensíveis?",
-            "category": "Risco de Armazenamento de Dados",
+            "categoryName": "Risco de Armazenamento de Dados",
             "options": [
                 {
                     "optionText": "Criptografia forte implementada e testada.",
@@ -486,7 +486,7 @@
         },
         {
             "questionText": "Existe uma política clara para gestão do ciclo de vida e descarte seguro dos dados armazenados?",
-            "category": "Risco de Armazenamento de Dados",
+            "categoryName": "Risco de Armazenamento de Dados",
             "options": [
                 {
                     "optionText": "Política formal documentada e implementada.",
@@ -507,7 +507,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso a rede interna da empresa sofra uma interrupção significativa?",
-            "category": "Risco da Rede Interna",
+            "categoryName": "Risco da Rede Interna",
             "options": [
                 {
                     "optionText": "Impacto reduzido, sistemas rapidamente recuperáveis.",
@@ -528,7 +528,7 @@
         },
         {
             "questionText": "Qual seria o impacto caso ocorresse uma invasão na rede interna com comprometimento de dados confidenciais?",
-            "category": "Risco da Rede Interna",
+            "categoryName": "Risco da Rede Interna",
             "options": [
                 {
                     "optionText": "Dados não críticos expostos, baixo impacto operacional.",
@@ -549,7 +549,7 @@
         },
         {
             "questionText": "A rede interna é regularmente monitorizada em tempo real para identificação de atividades suspeitas?",
-            "category": "Risco da Rede Interna",
+            "categoryName": "Risco da Rede Interna",
             "options": [
                 {
                     "optionText": "Monitorização constante e automatizada.",
@@ -570,7 +570,7 @@
         },
         {
             "questionText": "Os dispositivos conectados à rede interna são regularmente atualizados e protegidos contra vulnerabilidades conhecidas?",
-            "category": "Risco da Rede Interna",
+            "categoryName": "Risco da Rede Interna",
             "options": [
                 {
                     "optionText": "Atualizações regulares e automatizadas.",
@@ -591,7 +591,7 @@
         },
         {
             "questionText": "Existem mecanismos eficazes de segmentação da rede interna para limitar a propagação de ameaças?",
-            "category": "Risco da Rede Interna",
+            "categoryName": "Risco da Rede Interna",
             "options": [
                 {
                     "optionText": "Segmentação efetiva implementada e testada.",
@@ -612,7 +612,7 @@
         },
         {
             "questionText": "Existe uma política clara para gestão segura de acessos e autenticação dos dispositivos internos na rede?",
-            "category": "Risco da Rede Interna",
+            "categoryName": "Risco da Rede Interna",
             "options": [
                 {
                     "optionText": "Política formal implementada e monitorizada.",
@@ -633,7 +633,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso ocorra indisponibilidade prolongada de um provedor externo crítico (ex.: cloud, fornecedor de serviços)?",
-            "category": "Risco de Infraestrutura de Informação Externa",
+            "categoryName": "Risco de Infraestrutura de Informação Externa",
             "options": [
                 {
                     "optionText": "Impacto mínimo, rapidamente mitigado.",
@@ -654,7 +654,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro se dados confidenciais armazenados em infraestrutura externa fossem comprometidos?",
-            "category": "Risco de Infraestrutura de Informação Externa",
+            "categoryName": "Risco de Infraestrutura de Informação Externa",
             "options": [
                 {
                     "optionText": "Impacto financeiro reduzido.",
@@ -675,7 +675,7 @@
         },
         {
             "questionText": "A empresa avalia regularmente a segurança dos fornecedores externos de infraestrutura crítica?",
-            "category": "Risco de Infraestrutura de Informação Externa",
+            "categoryName": "Risco de Infraestrutura de Informação Externa",
             "options": [
                 {
                     "optionText": "Avaliação frequente e formalizada.",
@@ -696,7 +696,7 @@
         },
         {
             "questionText": "Os fornecedores externos possuem certificações reconhecidas de segurança e continuidade operacional?",
-            "category": "Risco de Infraestrutura de Informação Externa",
+            "categoryName": "Risco de Infraestrutura de Informação Externa",
             "options": [
                 {
                     "optionText": "Todos possuem certificações reconhecidas.",
@@ -717,7 +717,7 @@
         },
         {
             "questionText": "Existem planos alternativos (backup) em caso de falha ou indisponibilidade de serviços externos essenciais?",
-            "category": "Risco de Infraestrutura de Informação Externa",
+            "categoryName": "Risco de Infraestrutura de Informação Externa",
             "options": [
                 {
                     "optionText": "Plano alternativo claro e testado regularmente.",
@@ -738,7 +738,7 @@
         },
         {
             "questionText": "A empresa possui mecanismos claros de monitorização contínua e alerta sobre incidentes em infraestruturas externas?",
-            "category": "Risco de Infraestrutura de Informação Externa",
+            "categoryName": "Risco de Infraestrutura de Informação Externa",
             "options": [
                 {
                     "optionText": "Monitorização ativa e alertas automatizados.",
@@ -759,7 +759,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso a infraestrutura interna falhe e sistemas essenciais fiquem indisponíveis?",
-            "category": "Risco de Falhas em Atualizacoes e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizacoes e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Impacto limitado, com recuperação rápida.",
@@ -780,7 +780,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro decorrente da exposição de informações críticas armazenadas em infraestrutura interna?",
-            "category": "Risco de Falhas em Atualizacoes e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizacoes e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Baixo impacto, custos mínimos envolvidos.",
@@ -801,7 +801,7 @@
         },
         {
             "questionText": "Os sistemas e equipamentos internos recebem manutenção preventiva regularmente para evitar falhas ou incidentes?",
-            "category": "Risco de Falhas em Atualizacoes e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizacoes e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Manutenção frequente e documentada.",
@@ -822,7 +822,7 @@
         },
         {
             "questionText": "A infraestrutura interna é constantemente monitorizada quanto à disponibilidade e segurança dos serviços essenciais?",
-            "category": "Risco de Falhas em Atualizacoes e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizacoes e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Monitorização contínua e eficaz.",
@@ -843,7 +843,7 @@
         },
         {
             "questionText": "Existem mecanismos eficazes de redundância para garantir disponibilidade contínua dos serviços internos críticos?",
-            "category": "Risco de Falhas em Atualizacoes e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizacoes e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Redundância completa e testada regularmente.",
@@ -864,7 +864,7 @@
         },
         {
             "questionText": "A empresa possui planos claros e testados para recuperação rápida da infraestrutura interna em caso de falha grave?",
-            "category": "Risco de Falhas em Atualizacoes e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizacoes e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Plano documentado, eficaz e testado regularmente.",
@@ -885,7 +885,7 @@
         },
         {
             "questionText": "Qual seria o impacto operacional caso ocorra um ataque bem-sucedido de phishing direcionado a funcionários?",
-            "category": "Risco de Ataques Phishing Engenharia Social",
+            "categoryName": "Risco de Ataques Phishing Engenharia Social",
             "options": [
                 {
                     "optionText": "Impacto mínimo, incidente rapidamente contido.",
@@ -906,7 +906,7 @@
         },
         {
             "questionText": "Qual o impacto financeiro e reputacional caso dados sensíveis sejam comprometidos através de engenharia social?",
-            "category": "Risco de Ataques Phishing Engenharia Social",
+            "categoryName": "Risco de Ataques Phishing Engenharia Social",
             "options": [
                 {
                     "optionText": "Impacto financeiro e reputacional reduzido.",
@@ -927,7 +927,7 @@
         },
         {
             "questionText": "Os colaboradores recebem formação periódica sobre como identificar e reagir a tentativas de phishing e engenharia social?",
-            "category": "Risco de Ataques Phishing Engenharia Social",
+            "categoryName": "Risco de Ataques Phishing Engenharia Social",
             "options": [
                 {
                     "optionText": "Formação regular e eficaz.",
@@ -948,7 +948,7 @@
         },
         {
             "questionText": "A empresa realiza testes frequentes de simulação de phishing e engenharia social para medir a conscientização?",
-            "category": "Risco de Ataques Phishing Engenharia Social",
+            "categoryName": "Risco de Ataques Phishing Engenharia Social",
             "options": [
                 {
                     "optionText": "Testes frequentes e estruturados.",
@@ -969,7 +969,7 @@
         },
         {
             "questionText": "A empresa possui mecanismos técnicos eficazes (anti-phishing, filtros de e-mail, etc.) para mitigar ataques sociais?",
-            "category": "Risco de Ataques Phishing Engenharia Social",
+            "categoryName": "Risco de Ataques Phishing Engenharia Social",
             "options": [
                 {
                     "optionText": "Mecanismos eficazes implementados e atualizados.",
@@ -990,7 +990,7 @@
         },
         {
             "questionText": "Existe um canal claro e rápido para reportar incidentes ou tentativas suspeitas de ataques sociais?",
-            "category": "Risco de Ataques Phishing Engenharia Social",
+            "categoryName": "Risco de Ataques Phishing Engenharia Social",
             "options": [
                 {
                     "optionText": "Canal claro, eficaz e amplamente conhecido.",
@@ -1011,7 +1011,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso credenciais de acesso remoto sejam comprometidas por um atacante externo?",
-            "category": "Risco de Acesso Remoto",
+            "categoryName": "Risco de Acesso Remoto",
             "options": [
                 {
                     "optionText": "Acesso limitado, impacto operacional mínimo.",
@@ -1032,7 +1032,7 @@
         },
         {
             "questionText": "Qual o impacto financeiro e reputacional se ocorrer uma invasão bem-sucedida através de canais remotos?",
-            "category": "Risco de Acesso Remoto",
+            "categoryName": "Risco de Acesso Remoto",
             "options": [
                 {
                     "optionText": "Baixo impacto financeiro e reputacional.",
@@ -1053,7 +1053,7 @@
         },
         {
             "questionText": "O acesso remoto dos colaboradores está protegido por autenticação multifator (MFA)?",
-            "category": "Risco de Acesso Remoto",
+            "categoryName": "Risco de Acesso Remoto",
             "options": [
                 {
                     "optionText": "MFA obrigatório e implementado amplamente.",
@@ -1074,7 +1074,7 @@
         },
         {
             "questionText": "A empresa realiza auditorias periódicas sobre acessos remotos ativos e tentativas suspeitas de conexão externa?",
-            "category": "Risco de Acesso Remoto",
+            "categoryName": "Risco de Acesso Remoto",
             "options": [
                 {
                     "optionText": "Auditorias frequentes e automatizadas.",
@@ -1095,7 +1095,7 @@
         },
         {
             "questionText": "Existem soluções técnicas robustas, como VPNs seguras, para proteção dos acessos remotos?",
-            "category": "Risco de Acesso Remoto",
+            "categoryName": "Risco de Acesso Remoto",
             "options": [
                 {
                     "optionText": "Soluções seguras e amplamente utilizadas.",
@@ -1116,7 +1116,7 @@
         },
         {
             "questionText": "Existe uma política formal para gestão segura dos acessos remotos (controle, monitorização e revogação rápida)?",
-            "category": "Risco de Acesso Remoto",
+            "categoryName": "Risco de Acesso Remoto",
             "options": [
                 {
                     "optionText": "Política formal, clara e rigorosamente aplicada.",
@@ -1137,7 +1137,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso ocorra dano físico em equipamentos críticos, como servidores ou dispositivos de rede?",
-            "category": "Riscos de Material",
+            "categoryName": "Riscos de Material",
             "options": [
                 {
                     "optionText": "Impacto mínimo, substituição rápida possível.",
@@ -1158,7 +1158,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro para substituir equipamentos críticos danificados ou roubados?",
-            "category": "Riscos de Material",
+            "categoryName": "Riscos de Material",
             "options": [
                 {
                     "optionText": "Baixo custo, facilmente coberto pelo orçamento.",
@@ -1179,7 +1179,7 @@
         },
         {
             "questionText": "Existe segurança física adequada (controle de acesso, vigilância) para proteger os equipamentos críticos da empresa?",
-            "category": "Riscos de Material",
+            "categoryName": "Riscos de Material",
             "options": [
                 {
                     "optionText": "Segurança eficaz e amplamente implementada.",
@@ -1200,7 +1200,7 @@
         },
         {
             "questionText": "A empresa realiza manutenção preventiva e inspeção regular dos equipamentos para reduzir falhas físicas inesperadas?",
-            "category": "Riscos de Material",
+            "categoryName": "Riscos de Material",
             "options": [
                 {
                     "optionText": "Manutenção preventiva regular e documentada.",
@@ -1221,7 +1221,7 @@
         },
         {
             "questionText": "Existe um inventário atualizado regularmente de todos os equipamentos críticos da empresa?",
-            "category": "Riscos de Material",
+            "categoryName": "Riscos de Material",
             "options": [
                 {
                     "optionText": "Inventário atualizado periodicamente.",
@@ -1242,7 +1242,7 @@
         },
         {
             "questionText": "A empresa possui planos claros para reposição rápida de equipamentos críticos em caso de dano, falha ou roubo?",
-            "category": "Riscos de Material",
+            "categoryName": "Riscos de Material",
             "options": [
                 {
                     "optionText": "Plano formal eficaz e frequentemente testado.",
@@ -1263,7 +1263,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso uma tecnologia essencial apresente falhas inesperadas ou indisponibilidade?",
-            "category": "Riscos Tecnológicos",
+            "categoryName": "Riscos Tecnológicos",
             "options": [
                 {
                     "optionText": "Impacto limitado, soluções alternativas rápidas.",
@@ -1284,7 +1284,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro da substituição urgente ou reparação de tecnologias críticas danificadas?",
-            "category": "Riscos Tecnológicos",
+            "categoryName": "Riscos Tecnológicos",
             "options": [
                 {
                     "optionText": "Baixo impacto financeiro, despesas mínimas.",
@@ -1305,7 +1305,7 @@
         },
         {
             "questionText": "As tecnologias adotadas pela empresa são regularmente avaliadas quanto a vulnerabilidades e compatibilidade?",
-            "category": "Riscos Tecnológicos",
+            "categoryName": "Riscos Tecnológicos",
             "options": [
                 {
                     "optionText": "Avaliações regulares e formais.",
@@ -1326,7 +1326,7 @@
         },
         {
             "questionText": "Existe um processo estruturado de atualização das tecnologias e softwares críticos utilizados pela empresa?",
-            "category": "Riscos Tecnológicos",
+            "categoryName": "Riscos Tecnológicos",
             "options": [
                 {
                     "optionText": "Processo formal e regular.",
@@ -1347,7 +1347,7 @@
         },
         {
             "questionText": "A empresa dispõe de soluções de contingência eficazes caso tecnologias essenciais falhem ou sejam comprometidas?",
-            "category": "Riscos Tecnológicos",
+            "categoryName": "Riscos Tecnológicos",
             "options": [
                 {
                     "optionText": "Planos eficazes, testados regularmente.",
@@ -1368,7 +1368,7 @@
         },
         {
             "questionText": "Existe uma equipa capacitada e pronta para responder rapidamente a incidentes tecnológicos críticos?",
-            "category": "Riscos Tecnológicos",
+            "categoryName": "Riscos Tecnológicos",
             "options": [
                 {
                     "optionText": "Equipa dedicada e treinada regularmente.",
@@ -1389,7 +1389,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso um fornecedor ou serviço externo essencial seja subitamente indisponível?",
-            "category": "Riscos Externos",
+            "categoryName": "Riscos Externos",
             "options": [
                 {
                     "optionText": "Impacto mínimo, alternativas imediatas disponíveis.",
@@ -1410,7 +1410,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro para a empresa caso ocorra uma mudança regulatória inesperada que exija adaptações urgentes?",
-            "category": "Riscos Externos",
+            "categoryName": "Riscos Externos",
             "options": [
                 {
                     "optionText": "Custos mínimos, ajustes facilmente absorvidos.",
@@ -1431,7 +1431,7 @@
         },
         {
             "questionText": "A empresa avalia regularmente o risco de dependência excessiva de fornecedores ou serviços externos críticos?",
-            "category": "Riscos Externos",
+            "categoryName": "Riscos Externos",
             "options": [
                 {
                     "optionText": "Avaliações frequentes e formalizadas.",
@@ -1452,7 +1452,7 @@
         },
         {
             "questionText": "A empresa monitora regularmente mudanças regulatórias ou eventos externos que possam impactar suas operações?",
-            "category": "Riscos Externos",
+            "categoryName": "Riscos Externos",
             "options": [
                 {
                     "optionText": "Monitorização contínua e proativa.",
@@ -1473,7 +1473,7 @@
         },
         {
             "questionText": "Existem planos eficazes e testados para continuidade de negócios em caso de eventos externos críticos (desastres naturais, interrupções externas)?",
-            "category": "Riscos Externos",
+            "categoryName": "Riscos Externos",
             "options": [
                 {
                     "optionText": "Planos eficazes e regularmente testados.",
@@ -1494,7 +1494,7 @@
         },
         {
             "questionText": "Existe diversificação suficiente entre fornecedores e serviços externos para minimizar impactos em caso de falha de um deles?",
-            "category": "Riscos Externos",
+            "categoryName": "Riscos Externos",
             "options": [
                 {
                     "optionText": "Alta diversificação e redundância eficaz.",
@@ -1515,7 +1515,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso um sistema crítico esteja mal configurado e seja explorado por atacantes?",
-            "category": "Risco de Configuração Inadequada de Sistemas",
+            "categoryName": "Risco de Configuração Inadequada de Sistemas",
             "options": [
                 {
                     "optionText": "Impacto mínimo, incidente facilmente contido.",
@@ -1536,7 +1536,7 @@
         },
         {
             "questionText": "Qual o impacto financeiro e reputacional decorrente da exposição de dados sensíveis por causa de configurações inadequadas?",
-            "category": "Risco de Configuração Inadequada de Sistemas",
+            "categoryName": "Risco de Configuração Inadequada de Sistemas",
             "options": [
                 {
                     "optionText": "Baixo impacto financeiro e reputacional.",
@@ -1557,7 +1557,7 @@
         },
         {
             "questionText": "Os sistemas críticos têm suas configurações regularmente revistas e validadas para segurança?",
-            "category": "Risco de Configuração Inadequada de Sistemas",
+            "categoryName": "Risco de Configuração Inadequada de Sistemas",
             "options": [
                 {
                     "optionText": "Revisões frequentes e documentadas.",
@@ -1578,7 +1578,7 @@
         },
         {
             "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes de sua implantação?",
-            "category": "Risco de Configuração Inadequada de Sistemas",
+            "categoryName": "Risco de Configuração Inadequada de Sistemas",
             "options": [
                 {
                     "optionText": "Procedimentos formais e rigorosos.",
@@ -1599,7 +1599,7 @@
         },
         {
             "questionText": "A empresa utiliza ferramentas automatizadas para identificação rápida de configurações inseguras ou inadequadas?",
-            "category": "Risco de Configuração Inadequada de Sistemas",
+            "categoryName": "Risco de Configuração Inadequada de Sistemas",
             "options": [
                 {
                     "optionText": "Uso regular e automatizado.",
@@ -1620,7 +1620,7 @@
         },
         {
             "questionText": "Existe treinamento contínuo das equipas técnicas para aplicação correta das práticas de configuração segura?",
-            "category": "Risco de Configuração Inadequada de Sistemas",
+            "categoryName": "Risco de Configuração Inadequada de Sistemas",
             "options": [
                 {
                     "optionText": "Treinamentos regulares e eficazes.",
@@ -1641,7 +1641,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso um fornecedor essencial deixe subitamente de fornecer produtos ou serviços críticos?",
-            "category": "Risco de Dependência de Fornecedores e Terceiros",
+            "categoryName": "Risco de Dependência de Fornecedores e Terceiros",
             "options": [
                 {
                     "optionText": "Impacto reduzido, alternativas imediatas.",
@@ -1662,7 +1662,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro e reputacional caso um fornecedor ou parceiro terceiro sofra uma violação grave de dados envolvendo a organização?",
-            "category": "Risco de Dependência de Fornecedores e Terceiros",
+            "categoryName": "Risco de Dependência de Fornecedores e Terceiros",
             "options": [
                 {
                     "optionText": "Impacto financeiro e reputacional mínimo.",
@@ -1683,7 +1683,7 @@
         },
         {
             "questionText": "A empresa avalia regularmente os níveis de segurança e continuidade operacional dos fornecedores críticos?",
-            "category": "Risco de Dependência de Fornecedores e Terceiros",
+            "categoryName": "Risco de Dependência de Fornecedores e Terceiros",
             "options": [
                 {
                     "optionText": "Avaliações frequentes e estruturadas.",
@@ -1704,7 +1704,7 @@
         },
         {
             "questionText": "A organização possui alta dependência de um único fornecedor para serviços ou produtos essenciais?",
-            "category": "Risco de Dependência de Fornecedores e Terceiros",
+            "categoryName": "Risco de Dependência de Fornecedores e Terceiros",
             "options": [
                 {
                     "optionText": "Sem dependência crítica ou bem diversificada.",
@@ -1725,7 +1725,7 @@
         },
         {
             "questionText": "Existem planos de contingência claros e testados caso um fornecedor crítico falhe ou seja comprometido?",
-            "category": "Risco de Dependência de Fornecedores e Terceiros",
+            "categoryName": "Risco de Dependência de Fornecedores e Terceiros",
             "options": [
                 {
                     "optionText": "Plano formal, claro e testado regularmente.",
@@ -1746,7 +1746,7 @@
         },
         {
             "questionText": "A organização possui critérios claros e rigorosos na seleção e contratação de fornecedores ou terceiros?",
-            "category": "Risco de Dependência de Fornecedores e Terceiros",
+            "categoryName": "Risco de Dependência de Fornecedores e Terceiros",
             "options": [
                 {
                     "optionText": "Critérios rigorosos e documentados.",
@@ -1767,7 +1767,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso uma API crítica seja explorada por um atacante?",
-            "category": "Risco de Segurança em APIs e Integrações",
+            "categoryName": "Risco de Segurança em APIs e Integrações",
             "options": [
                 {
                     "optionText": "Impacto mínimo, exploração rapidamente mitigada.",
@@ -1788,7 +1788,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro e reputacional caso dados sensíveis sejam expostos por vulnerabilidades em APIs?",
-            "category": "Risco de Segurança em APIs e Integrações",
+            "categoryName": "Risco de Segurança em APIs e Integrações",
             "options": [
                 {
                     "optionText": "Impacto mínimo, pouca ou nenhuma repercussão.",
@@ -1809,7 +1809,7 @@
         },
         {
             "questionText": "As APIs são regularmente testadas e validadas quanto a vulnerabilidades conhecidas (pentesting)?",
-            "category": "Risco de Segurança em APIs e Integrações",
+            "categoryName": "Risco de Segurança em APIs e Integrações",
             "options": [
                 {
                     "optionText": "Testes frequentes e estruturados.",
@@ -1830,7 +1830,7 @@
         },
         {
             "questionText": "As integrações externas são monitorizadas constantemente quanto a atividades suspeitas ou anômalas?",
-            "category": "Risco de Segurança em APIs e Integrações",
+            "categoryName": "Risco de Segurança em APIs e Integrações",
             "options": [
                 {
                     "optionText": "Monitorização contínua e eficaz.",
@@ -1851,7 +1851,7 @@
         },
         {
             "questionText": "As APIs críticas utilizam mecanismos robustos de autenticação e autorização (ex: tokens, OAuth)?",
-            "category": "Risco de Segurança em APIs e Integrações",
+            "categoryName": "Risco de Segurança em APIs e Integrações",
             "options": [
                 {
                     "optionText": "Autenticação e autorização robustas e atualizadas.",
@@ -1872,7 +1872,7 @@
         },
         {
             "questionText": "Existem políticas formais para gestão segura, documentação e configuração correta das APIs e integrações?",
-            "category": "Risco de Segurança em APIs e Integrações",
+            "categoryName": "Risco de Segurança em APIs e Integrações",
             "options": [
                 {
                     "optionText": "Políticas formais claras e amplamente aplicadas.",
@@ -1893,7 +1893,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso uma vulnerabilidade crítica não seja corrigida a tempo e seja explorada por atacantes?",
-            "category": "Risco de Falhas em Atualizações e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Impacto mínimo, facilmente contido.",
@@ -1914,7 +1914,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro e reputacional se dados confidenciais fossem expostos devido a falhas em atualizações?",
-            "category": "Risco de Falhas em Atualizações e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Impacto financeiro e reputacional reduzido.",
@@ -1935,7 +1935,7 @@
         },
         {
             "questionText": "Os sistemas recebem atualizações e patches críticos regularmente, de forma imediata e automatizada?",
-            "category": "Risco de Falhas em Atualizações e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Atualizações automáticas e imediatas.",
@@ -1956,7 +1956,7 @@
         },
         {
             "questionText": "A empresa monitoriza ativamente vulnerabilidades divulgadas e aplica patches relevantes rapidamente após lançamento?",
-            "category": "Risco de Falhas em Atualizações e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Monitorização ativa e reação rápida.",
@@ -1977,7 +1977,7 @@
         },
         {
             "questionText": "Existem ferramentas eficazes para garantir a aplicação automática e eficiente das atualizações de segurança necessárias?",
-            "category": "Risco de Falhas em Atualizações e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Ferramentas robustas e amplamente utilizadas.",
@@ -1998,7 +1998,7 @@
         },
         {
             "questionText": "Existe um processo claro e documentado para validação, teste e aplicação rápida de patches e atualizações de segurança?",
-            "category": "Risco de Falhas em Atualizações e Patches de Segurança",
+            "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
             "options": [
                 {
                     "optionText": "Processo formalizado, claro e eficaz.",
@@ -2019,7 +2019,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso ocorra a exposição indevida de informações confidenciais internas da empresa?",
-            "category": "Risco de Exposição de Dados Sensíveis",
+            "categoryName": "Risco de Exposição de Dados Sensíveis",
             "options": [
                 {
                     "optionText": "Impacto limitado, facilmente mitigável.",
@@ -2040,7 +2040,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro e reputacional em caso de violação dos dados pessoais ou regulados por leis específicas (ex: RGPD)?",
-            "category": "Risco de Exposição de Dados Sensíveis",
+            "categoryName": "Risco de Exposição de Dados Sensíveis",
             "options": [
                 {
                     "optionText": "Baixo impacto, multas improváveis ou reduzidas.",
@@ -2061,7 +2061,7 @@
         },
         {
             "questionText": "Os dados sensíveis armazenados na empresa são protegidos adequadamente por criptografia robusta?",
-            "category": "Risco de Exposição de Dados Sensíveis",
+            "categoryName": "Risco de Exposição de Dados Sensíveis",
             "options": [
                 {
                     "optionText": "Criptografia forte, amplamente aplicada.",
@@ -2082,7 +2082,7 @@
         },
         {
             "questionText": "Existem auditorias regulares sobre a segurança e conformidade dos dados sensíveis armazenados?",
-            "category": "Risco de Exposição de Dados Sensíveis",
+            "categoryName": "Risco de Exposição de Dados Sensíveis",
             "options": [
                 {
                     "optionText": "Auditorias regulares e estruturadas.",
@@ -2103,7 +2103,7 @@
         },
         {
             "questionText": "A empresa possui mecanismos eficazes de controlo de acesso e monitorização em tempo real dos dados sensíveis?",
-            "category": "Risco de Exposição de Dados Sensíveis",
+            "categoryName": "Risco de Exposição de Dados Sensíveis",
             "options": [
                 {
                     "optionText": "Controle rigoroso e monitorização contínua.",
@@ -2124,7 +2124,7 @@
         },
         {
             "questionText": "Existe uma política formal clara para gestão, classificação e tratamento dos dados sensíveis?",
-            "category": "Risco de Exposição de Dados Sensíveis",
+            "categoryName": "Risco de Exposição de Dados Sensíveis",
             "options": [
                 {
                     "optionText": "Política formal bem definida e aplicada.",
@@ -2145,7 +2145,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso logs críticos sejam adulterados ou excluídos para esconder atividades maliciosas?",
-            "category": "Risco de Manipulação de Logs e Registos",
+            "categoryName": "Risco de Manipulação de Logs e Registos",
             "options": [
                 {
                     "optionText": "Impacto reduzido, incidente rapidamente detectado.",
@@ -2166,7 +2166,7 @@
         },
         {
             "questionText": "Qual seria o impacto legal e reputacional caso a empresa não consiga comprovar eventos devido à manipulação ou perda de logs essenciais?",
-            "category": "Risco de Manipulação de Logs e Registos",
+            "categoryName": "Risco de Manipulação de Logs e Registos",
             "options": [
                 {
                     "optionText": "Baixo impacto, sem consequências significativas.",
@@ -2187,7 +2187,7 @@
         },
         {
             "questionText": "Os logs e registos críticos são protegidos adequadamente contra manipulação ou exclusão indevida?",
-            "category": "Risco de Manipulação de Logs e Registos",
+            "categoryName": "Risco de Manipulação de Logs e Registos",
             "options": [
                 {
                     "optionText": "Proteção robusta, logs imutáveis ou protegidos.",
@@ -2208,7 +2208,7 @@
         },
         {
             "questionText": "Existe monitorização ativa e constante para identificar tentativas suspeitas de manipulação dos registos e logs?",
-            "category": "Risco de Manipulação de Logs e Registos",
+            "categoryName": "Risco de Manipulação de Logs e Registos",
             "options": [
                 {
                     "optionText": "Monitorização contínua e automatizada.",
@@ -2229,7 +2229,7 @@
         },
         {
             "questionText": "Existe armazenamento centralizado e seguro dos logs críticos, garantindo sua integridade e disponibilidade?",
-            "category": "Risco de Manipulação de Logs e Registos",
+            "categoryName": "Risco de Manipulação de Logs e Registos",
             "options": [
                 {
                     "optionText": "Armazenamento central seguro, logs protegidos.",
@@ -2250,7 +2250,7 @@
         },
         {
             "questionText": "Existe uma política formal e clara definindo responsabilidades e procedimentos para gestão segura e auditoria periódica dos logs?",
-            "category": "Risco de Manipulação de Logs e Registos",
+            "categoryName": "Risco de Manipulação de Logs e Registos",
             "options": [
                 {
                     "optionText": "Política formal clara e implementada amplamente.",
@@ -2271,7 +2271,7 @@
         },
         {
             "questionText": "Qual o impacto operacional e competitivo caso partes críticas do source code sejam expostas ou obtidas por concorrentes ou atacantes?",
-            "category": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+            "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
             "options": [
                 {
                     "optionText": "Impacto limitado, informações não críticas expostas.",
@@ -2292,7 +2292,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro e reputacional decorrente da exploração bem-sucedida de vulnerabilidades identificadas através de engenharia reversa?",
-            "category": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+            "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
             "options": [
                 {
                     "optionText": "Impacto reduzido, fácil mitigação e danos limitados.",
@@ -2313,7 +2313,7 @@
         },
         {
             "questionText": "A empresa utiliza mecanismos técnicos para dificultar ou impedir a engenharia reversa do código-fonte e software sensível (ex: ofuscação)?",
-            "category": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+            "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
             "options": [
                 {
                     "optionText": "Proteção robusta, amplamente implementada.",
@@ -2334,7 +2334,7 @@
         },
         {
             "questionText": "O código-fonte crítico ou sensível é armazenado e protegido por controles rigorosos de acesso e monitorização ativa?",
-            "category": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+            "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
             "options": [
                 {
                     "optionText": "Controles rigorosos e monitorização constante.",
@@ -2355,7 +2355,7 @@
         },
         {
             "questionText": "Existe uma política formal para a proteção eficaz do código-fonte e propriedade intelectual, incluindo medidas contra engenharia reversa?",
-            "category": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+            "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
             "options": [
                 {
                     "optionText": "Política clara, documentada e amplamente aplicada.",
@@ -2376,7 +2376,7 @@
         },
         {
             "questionText": "São realizados testes regulares e auditorias de segurança para detectar riscos relacionados à engenharia reversa ou exposição do código-fonte?",
-            "category": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+            "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
             "options": [
                 {
                     "optionText": "Auditorias regulares e eficazes.",
@@ -2397,7 +2397,7 @@
         },
         {
             "questionText": "Qual o impacto operacional se serviços críticos ficarem indisponíveis devido a um ataque de negação de serviço (DoS)?",
-            "category": "Risco de Ataques de Negação de Serviço",
+            "categoryName": "Risco de Ataques de Negação de Serviço",
             "options": [
                 {
                     "optionText": "Impacto limitado, rápida mitigação.",
@@ -2418,7 +2418,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro e reputacional caso a empresa sofra um ataque DoS prolongado?",
-            "category": "Risco de Ataques de Negação de Serviço",
+            "categoryName": "Risco de Ataques de Negação de Serviço",
             "options": [
                 {
                     "optionText": "Impacto financeiro mínimo, pouco dano à reputação.",
@@ -2439,7 +2439,7 @@
         },
         {
             "questionText": "A infraestrutura da empresa está protegida contra ataques DoS por meio de ferramentas especializadas (firewalls, filtros anti-DDoS)?",
-            "category": "Risco de Ataques de Negação de Serviço",
+            "categoryName": "Risco de Ataques de Negação de Serviço",
             "options": [
                 {
                     "optionText": "Proteção robusta e atualizada regularmente.",
@@ -2460,7 +2460,7 @@
         },
         {
             "questionText": "A empresa monitoriza ativamente o tráfego de rede em tempo real para detectar atividades suspeitas ou ataques de negação de serviço?",
-            "category": "Risco de Ataques de Negação de Serviço",
+            "categoryName": "Risco de Ataques de Negação de Serviço",
             "options": [
                 {
                     "optionText": "Monitorização ativa e automatizada.",
@@ -2481,7 +2481,7 @@
         },
         {
             "questionText": "Existe um plano formal e testado para mitigação rápida e eficaz em caso de ataque DoS contra serviços essenciais?",
-            "category": "Risco de Ataques de Negação de Serviço",
+            "categoryName": "Risco de Ataques de Negação de Serviço",
             "options": [
                 {
                     "optionText": "Plano formal testado regularmente.",
@@ -2502,7 +2502,7 @@
         },
         {
             "questionText": "A empresa conta com soluções técnicas (ex: redundância, balanceamento de carga) para reduzir o impacto operacional de ataques DoS?",
-            "category": "Risco de Ataques de Negação de Serviço",
+            "categoryName": "Risco de Ataques de Negação de Serviço",
             "options": [
                 {
                     "optionText": "Soluções técnicas eficazes e implementadas.",
@@ -2523,7 +2523,7 @@
         },
         {
             "questionText": "Qual o impacto operacional caso ocorra abuso de privilégios internos por um colaborador autorizado?",
-            "category": " Risco de Uso Indevido de Privilégios Internos",
+            "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
                     "optionText": "Impacto reduzido, facilmente identificado.",
@@ -2544,7 +2544,7 @@
         },
         {
             "questionText": "Qual seria o impacto financeiro e reputacional decorrente do vazamento ou manipulação de dados por uso indevido de privilégios internos?",
-            "category": " Risco de Uso Indevido de Privilégios Internos",
+            "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
                     "optionText": "Impacto mínimo, danos rapidamente resolvidos.",
@@ -2565,7 +2565,7 @@
         },
         {
             "questionText": "A empresa monitora ativamente o uso de privilégios internos para detectar atividades suspeitas ou incomuns?",
-            "category": " Risco de Uso Indevido de Privilégios Internos",
+            "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
                     "optionText": "Monitorização contínua e automatizada.",
@@ -2586,7 +2586,7 @@
         },
         {
             "questionText": "A concessão de privilégios administrativos ou críticos segue critérios rigorosos e revisões periódicas?",
-            "category": " Risco de Uso Indevido de Privilégios Internos",
+            "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
                     "optionText": "Revisões regulares e critérios rigorosos.",
@@ -2607,7 +2607,7 @@
         },
         {
             "questionText": "Existem mecanismos eficazes de auditoria e controle para prevenir ou detectar rapidamente o abuso de privilégios internos?",
-            "category": " Risco de Uso Indevido de Privilégios Internos",
+            "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
                     "optionText": "Mecanismos eficazes e constantemente ativos.",
@@ -2628,7 +2628,7 @@
         },
         {
             "questionText": "Existe uma política formal para gestão, revisão e revogação rápida de privilégios administrativos ou críticos em caso de necessidade?",
-            "category": " Risco de Uso Indevido de Privilégios Internos",
+            "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
                     "optionText": "Política formal, clara e rigorosamente aplicada.",
