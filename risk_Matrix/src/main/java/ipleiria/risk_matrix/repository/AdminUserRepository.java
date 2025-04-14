@@ -15,9 +15,4 @@ public interface AdminUserRepository extends JpaRepository<AdminUser, Long> {
     // Busca um admin pelo email
     Optional<AdminUser> findByEmail(String email);
 
-    // Verifica se um admin existe pelo username
-    boolean existsByUsername(String username);
-
-    // Verifica se um admin existe pelo email
-    boolean existsByEmail(String email);
 }

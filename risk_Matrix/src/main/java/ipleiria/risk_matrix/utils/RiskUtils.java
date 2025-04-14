@@ -10,17 +10,15 @@ import java.util.stream.Collectors;
 
 public class RiskUtils {
 
-    // Utility method to compute the median of a list of OptionLevels
     public static OptionLevel medianLevel(List<OptionLevel> levels) {
         if (levels == null || levels.isEmpty()) {
             return null; // or handle "no data" scenario
         }
 
-        // Convert LOW=1, MEDIUM=2, HIGH=3
         List<Integer> numeric = levels.stream()
                 .map(RiskUtils::levelToInt)
                 .sorted()
-                .collect(Collectors.toList());
+                .toList();
 
         int size = numeric.size();
         if (size % 2 == 1) {
@@ -81,8 +79,7 @@ public class RiskUtils {
     public static Severity computeCategorySeverity(List<AnswerDTO> answers) {
         List<AnswerDTO> filteredAnswers = answers.stream()
                 .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
-                .collect(Collectors.toList());
-
+                .toList();
         if (filteredAnswers.isEmpty()) {
             return Severity.LOW;
         }

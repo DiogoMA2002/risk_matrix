@@ -26,7 +26,13 @@ const routes = [
   { path: '/admin', component: () => import('@/components/views/AdminDashboard.vue') },
   { path: '/user', component: () => import('@/components/views/UserManagement.vue') },
   { path: '/category', name: 'CategoryList', component: () => import('@/components/views/CategoryList.vue') },
-  { path: '/feedback-form', component: () => import('@/components/views/FeedbackForm.vue') } // New route for feedback form
+  { path: '/feedback-form', component: () => import('@/components/views/FeedbackForm.vue') }, // New route for feedback form
+  {
+    path: '/admin/edit-question/:questionId',
+    name: 'EditQuestion',
+    component: () => import('@/components/AdminDashboard/EditQuestionPage.vue'), // Route for editing questions
+    meta: { requiresAuth: true, requiresAdmin: true } // Assuming admin routes need authentication
+  }
 ]
 
 const router = createRouter({

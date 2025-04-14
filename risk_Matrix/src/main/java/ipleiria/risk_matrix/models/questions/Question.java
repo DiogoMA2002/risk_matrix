@@ -4,13 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ipleiria.risk_matrix.models.category.Category;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "questions")
 public class Question {
 
+    // Getters and setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,19 +40,4 @@ public class Question {
 
     public Question() {}
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getQuestionText() { return questionText; }
-    public void setQuestionText(String questionText) { this.questionText = questionText; }
-
-    public Category getCategory() { return category; }
-    public void setCategory(Category category) { this.category = category; }
-
-    public List<Questionnaire> getQuestionnaires() { return questionnaires; }
-    public void setQuestionnaires(List<Questionnaire> questionnaires) { this.questionnaires = questionnaires; }
-
-    public List<QuestionOption> getOptions() { return options; }
-    public void setOptions(List<QuestionOption> options) { this.options = options; }
 }

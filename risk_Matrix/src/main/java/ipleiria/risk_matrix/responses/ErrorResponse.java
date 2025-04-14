@@ -19,14 +19,6 @@ public class ErrorResponse {
     private final String path;
     private final Map<String, List<String>> validationErrors;
 
-    public ErrorResponse(int statusCode, HttpStatus status, String message) {
-        this(statusCode, status, message, null, null, null);
-    }
-
-    public ErrorResponse(int statusCode, HttpStatus status, String message, String errorCode) {
-        this(statusCode, status, message, errorCode, null, null);
-    }
-
     public ErrorResponse(int statusCode, HttpStatus status, String message, String errorCode, String path, Map<String, List<String>> validationErrors) {
         this.statusCode = statusCode;
         this.status = status;

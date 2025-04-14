@@ -6,7 +6,6 @@ import ipleiria.risk_matrix.service.AnswerService;
 import ipleiria.risk_matrix.service.DocumentsService;
 import jakarta.validation.Valid;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +19,14 @@ import java.util.List;
 @RequestMapping("/answers")
 public class AnswerController {
 
-    @Autowired
-    private AnswerService answerService;
+    private final AnswerService answerService;
 
-    @Autowired
-    private DocumentsService documentsService;
+    private final DocumentsService documentsService;
+
+    public AnswerController(AnswerService answerService, DocumentsService documentsService) {
+        this.answerService = answerService;
+        this.documentsService = documentsService;
+    }
 
     // Obter todas as respostas
     @GetMapping("/all")

@@ -11,7 +11,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +20,6 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @ControllerAdvice
@@ -79,7 +77,7 @@ public class GlobalExceptionHandler {
         ex.getAllErrors().forEach(error -> {
             String fieldName = error instanceof FieldError ? ((FieldError) error).getField() : "global";
             String errorMessage = error.getDefaultMessage();
-            errors.computeIfAbsent(fieldName, k -> new java.util.ArrayList<>()).add(errorMessage);
+            errors.computeIfAbsent(fieldName, _ -> new java.util.ArrayList<>()).add(errorMessage);
         });
 
         return new ResponseEntity<>(
@@ -99,13 +97,12 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
-        log.warn("Validation error occurred: {}", ex.getMessage());
-        
+
         Map<String, List<String>> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             String fieldName = error.getField();
             String errorMessage = error.getDefaultMessage();
-            errors.computeIfAbsent(fieldName, k -> new java.util.ArrayList<>()).add(errorMessage);
+            errors.computeIfAbsent(fieldName, _ -> new java.util.ArrayList<>()).add(errorMessage);
         });
 
         return new ResponseEntity<>(

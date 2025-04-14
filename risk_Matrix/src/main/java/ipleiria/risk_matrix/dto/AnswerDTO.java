@@ -6,10 +6,16 @@ import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 public class AnswerDTO {
 
+    // Getters and Setters
     private Long id;
 
     @NotNull(message = "Question ID é Obrigatória")
@@ -50,35 +56,4 @@ public class AnswerDTO {
         // Required by Jackson
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getQuestionId() { return questionId; }
-    public void setQuestionId(Long questionId) { this.questionId = questionId; }
-
-    public String getQuestionText() { return questionText; }
-    public void setQuestionText(String questionText) { this.questionText = questionText; }
-
-    public String getUserResponse() { return userResponse; }
-    public void setUserResponse(String userResponse) { this.userResponse = userResponse; }
-
-    public OptionLevelType getQuestionType() { return questionType; }
-    public void setQuestionType(OptionLevelType questionType) { this.questionType = questionType; }
-
-    public OptionLevel getChosenLevel() { return chosenLevel; }
-    public void setChosenLevel(OptionLevel chosenLevel) { this.chosenLevel = chosenLevel; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public String getSubmissionId() {
-        return submissionId;
-    }
-    public void setSubmissionId(String submissionId) {
-        this.submissionId = submissionId;
-    }
 }

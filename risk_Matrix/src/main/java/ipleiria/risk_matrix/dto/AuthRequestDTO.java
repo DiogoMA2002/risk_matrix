@@ -2,7 +2,11 @@ package ipleiria.risk_matrix.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class AuthRequestDTO {
 
     @NotBlank(message = "O nome de utilizador é obrigatório")
@@ -17,9 +21,4 @@ public class AuthRequestDTO {
         this.password = password;
     }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
 }

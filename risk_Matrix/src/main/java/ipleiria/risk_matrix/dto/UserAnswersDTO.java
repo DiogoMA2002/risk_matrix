@@ -6,9 +6,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.Map;
 
+@Setter
+@Getter
 public class UserAnswersDTO {
 
     @NotBlank(message = "O submissionId é obrigatório.")
@@ -27,31 +32,4 @@ public class UserAnswersDTO {
     public UserAnswersDTO() {
     }
 
-    public String getSubmissionId() {
-        return submissionId;
-    }
-    public void setSubmissionId(String submissionId) {
-        this.submissionId = submissionId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<AnswerDTO> getAnswers() {
-        return answers;
-    }
-    public void setAnswers(List<AnswerDTO> answers) {
-        this.answers = answers;
-    }
-
-    public Map<String, Severity> getSeveritiesByCategory() {
-        return severitiesByCategory;
-    }
-    public void setSeveritiesByCategory(Map<String, Severity> severitiesByCategory) {
-        this.severitiesByCategory = severitiesByCategory;
-    }
 }
