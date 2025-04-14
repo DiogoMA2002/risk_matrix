@@ -5,8 +5,6 @@ import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidOptionException;
 import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.models.answers.Answer;
-import ipleiria.risk_matrix.models.questions.OptionLevel;
-import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.models.questions.Severity;
@@ -141,7 +139,7 @@ public class AnswerService {
                     throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
                 }
                 String categoryName = question.getCategory().getName();
-                answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
+                answersByCategory.computeIfAbsent(categoryName, _ -> new ArrayList<>()).add(ans);
             }
 
             Map<String, Severity> severitiesByCategory = new HashMap<>();
@@ -182,7 +180,7 @@ public class AnswerService {
             String submissionId = entry.getKey();
             List<AnswerDTO> submissionAnswers = entry.getValue();
             // It is assumed that all answers in a submission share the same email.
-            String email = submissionAnswers.get(0).getEmail();
+            String email = submissionAnswers.getFirst().getEmail();
 
             Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
             for (AnswerDTO ans : submissionAnswers) {
@@ -191,7 +189,7 @@ public class AnswerService {
                     throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
                 }
                 String categoryName = question.getCategory().getName();
-                answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
+                answersByCategory.computeIfAbsent(categoryName, _ -> new ArrayList<>()).add(ans);
             }
 
             Map<String, Severity> severitiesByCategory = new HashMap<>();
@@ -216,7 +214,7 @@ public class AnswerService {
         LocalDateTime end = LocalDate.parse(endDate).atTime(23, 59, 59);
         List<AnswerDTO> answersInRange = answerRepository.findByCreatedAtBetween(start, end).stream()
                 .map(AnswerDTO::new)
-                .collect(Collectors.toList());
+                .toList();
 
         if (answersInRange.isEmpty()) {
             return new ArrayList<>(); // Return empty list if no answers found in the range
@@ -244,7 +242,7 @@ public class AnswerService {
                 continue;
             }
             // Assume all answers in a submission share the same email
-            String email = submissionAnswers.get(0).getEmail();
+            String email = submissionAnswers.getFirst().getEmail();
 
             // Group answers by category for severity calculations
             Map<String, List<AnswerDTO>> answersByCategory = new HashMap<>();
@@ -257,7 +255,7 @@ public class AnswerService {
                     // Or throw new NotFoundException("Question not found for ID: " + ans.getQuestionId());
                 }
                 String categoryName = question.getCategory().getName();
-                answersByCategory.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(ans);
+                answersByCategory.computeIfAbsent(categoryName, _ -> new ArrayList<>()).add(ans);
             }
 
             // Compute severities for each category

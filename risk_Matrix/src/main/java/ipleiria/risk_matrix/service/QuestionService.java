@@ -175,7 +175,7 @@ public class QuestionService {
             List<QuestionOption> newOptions = updatedQuestionDTO.getOptions()
                     .stream()
                     .map(dto -> convertDtoToQuestionOption(dto, existingQuestion))
-                    .collect(Collectors.toList());
+                    .toList();
             existingQuestion.getOptions().addAll(newOptions);
         }
 

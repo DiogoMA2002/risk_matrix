@@ -2,8 +2,6 @@ package ipleiria.risk_matrix.utils;
 
 import ipleiria.risk_matrix.models.questions.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class QuestionUtils {
 

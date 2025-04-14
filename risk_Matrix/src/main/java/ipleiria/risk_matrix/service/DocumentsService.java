@@ -6,7 +6,6 @@ import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ public class DocumentsService {
         this.questionRepository = questionRepository;
     }
 
-    public byte[] generateEnhancedDocx(String submissionId) throws IOException, InvalidFormatException {
+    public byte[] generateEnhancedDocx(String submissionId) throws IOException {
         List<Answer> answers = answerRepository.findBySubmissionId(submissionId);
         if (answers.isEmpty()) {
             throw new IllegalArgumentException("No answers found for submission ID: " + submissionId);
@@ -38,7 +37,7 @@ public class DocumentsService {
             Question question = questionRepository.findById(ans.getQuestionId()).orElse(null);
             if (question == null || question.getCategory() == null) continue;
             String category = question.getCategory().getName();
-            answersByCategory.computeIfAbsent(category, k -> new ArrayList<>()).add(ans);
+            answersByCategory.computeIfAbsent(category, _ -> new ArrayList<>()).add(ans);
         }
 
         Map<String, Severity> severities = new HashMap<>();
@@ -59,8 +58,8 @@ public class DocumentsService {
             XWPFDocument document = new XWPFDocument(template);
             Map<String, String> vars = new HashMap<>();
             vars.put("submissionId", submissionId);
-            vars.put("email", answers.get(0).getEmail());
-            vars.put("date", answers.get(0).getCreatedAt().toLocalDate().toString());
+            vars.put("email", answers.getFirst().getEmail());
+            vars.put("date", answers.getFirst().getCreatedAt().toLocalDate().toString());
 
             replacePlaceholders(document, vars);
 
@@ -73,19 +72,6 @@ public class DocumentsService {
         }
     }
 
-    private void replacePlaceholders(XWPFDocument document, String submissionId, Answer firstAnswer) {
-        for (XWPFParagraph p : document.getParagraphs()) {
-            for (XWPFRun run : p.getRuns()) {
-                String text = run.getText(0);
-                if (text != null) {
-                    text = text.replace("${submissionId}", submissionId)
-                            .replace("${email}", firstAnswer.getEmail())
-                            .replace("${date}", firstAnswer.getCreatedAt().toLocalDate().toString());
-                    run.setText(text, 0);
-                }
-            }
-        }
-    }
     private void replacePlaceholders(XWPFDocument doc, Map<String, String> replacements) {
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
             StringBuilder fullText = new StringBuilder();

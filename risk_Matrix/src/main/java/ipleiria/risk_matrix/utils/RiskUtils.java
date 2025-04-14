@@ -20,7 +20,7 @@ public class RiskUtils {
         List<Integer> numeric = levels.stream()
                 .map(RiskUtils::levelToInt)
                 .sorted()
-                .collect(Collectors.toList());
+                .toList();
 
         int size = numeric.size();
         if (size % 2 == 1) {
@@ -81,8 +81,7 @@ public class RiskUtils {
     public static Severity computeCategorySeverity(List<AnswerDTO> answers) {
         List<AnswerDTO> filteredAnswers = answers.stream()
                 .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
-                .collect(Collectors.toList());
-
+                .toList();
         if (filteredAnswers.isEmpty()) {
             return Severity.LOW;
         }
