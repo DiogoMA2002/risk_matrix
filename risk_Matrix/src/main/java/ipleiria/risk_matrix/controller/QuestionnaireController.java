@@ -18,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,21 +36,25 @@ public class QuestionnaireController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Questionnaire> createQuestionnaire(@RequestBody @Valid QuestionnaireDTO questionnaireDTO) {
+        if (questionnaireDTO.getTitle() == null || questionnaireDTO.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Title is required.");
+        }
+
         Questionnaire questionnaire = new Questionnaire();
-        questionnaire.setTitle(questionnaireDTO.getTitle());
-        questionnaire.setQuestions(new ArrayList<>()); // Ensure non-null
+        questionnaire.setTitle(questionnaireDTO.getTitle().trim());
+        questionnaire.setQuestions(List.of()); // Ensure non-null
 
         Questionnaire saved = questionnaireService.createQuestionnaire(questionnaire);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
+
     @PostMapping("/import")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Questionnaire> importQuestionnaire(@RequestBody @Valid QuestionnaireDTO dto) {
-        Questionnaire imported = questionnaireService.importQuestionnaireDto(dto);
-        return ResponseEntity.ok(imported);
+        return ResponseEntity.ok(questionnaireService.importQuestionnaireDto(dto));
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public List<QuestionnaireDTO> getAllQuestionnaires() {
         return questionnaireService.getAllQuestionnaires().stream()
                 .map(QuestionnaireDTO::new)
@@ -62,22 +65,17 @@ public class QuestionnaireController {
     public ResponseEntity<Questionnaire> getQuestionnaireById(@PathVariable Long id) {
         return questionnaireService.getQuestionnaireById(id)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found with id: " + id));
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found with ID: " + id));
     }
 
-    // Updated: Accept category name (String) and filter questions by dynamic category name
     @GetMapping("/{questionnaireId}/category/{categoryName}")
     public List<Question> getQuestionsByQuestionnaireAndCategory(
             @PathVariable Long questionnaireId,
             @PathVariable String categoryName
     ) {
-        // 1) Load the questionnaire
         Questionnaire q = questionnaireRepository.findById(questionnaireId)
-                .orElseThrow(() -> new QuestionnaireNotFoundException(
-                        "Questionnaire not found for ID: " + questionnaireId
-                ));
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found with ID: " + questionnaireId));
 
-        // 2) Filter the questions by checking the category name (case-insensitive)
         return q.getQuestions().stream()
                 .filter(question -> question.getCategory() != null &&
                         question.getCategory().getName().equalsIgnoreCase(categoryName))
@@ -88,16 +86,24 @@ public class QuestionnaireController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Question> addQuestionToQuestionnaire(
             @PathVariable Long id,
-            @RequestBody @Valid QuestionDTO dto) {
+            @RequestBody @Valid QuestionDTO dto
+    ) {
+        if (dto.getQuestionText() == null || dto.getQuestionText().trim().isEmpty()) {
+            throw new IllegalArgumentException("Question text must not be empty.");
+        }
+        if (dto.getCategoryName() == null || dto.getCategoryName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Category name must not be empty.");
+        }
+
         Question added = questionnaireService.addQuestionDtoToQuestionnaire(id, dto);
         return ResponseEntity.ok(added);
     }
 
-    // Delete a questionnaire by ID
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteQuestionnaire(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteQuestionnaire(@PathVariable Long id) {
         questionnaireService.deleteQuestionnaire(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/export")
@@ -106,23 +112,23 @@ public class QuestionnaireController {
         Questionnaire questionnaire = questionnaireService.getQuestionnaireById(id)
                 .orElseThrow(() -> new NotFoundException("Questionnaire not found for ID: " + id));
 
-        // Convert to JSON
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(questionnaire);
 
-        // Create headers
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=\"questionnaire_" + id + ".json\"");
         headers.add("Content-Type", "application/json; charset=UTF-8");
 
-        byte[] data = json.getBytes(StandardCharsets.UTF_8);
-        return new ResponseEntity<>(data, headers, HttpStatus.OK);
+        return new ResponseEntity<>(json.getBytes(StandardCharsets.UTF_8), headers, HttpStatus.OK);
     }
-
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Questionnaire updateQuestionnaire(@PathVariable Long id, @RequestBody Questionnaire updatedQuestionnaire) {
+    public Questionnaire updateQuestionnaire(@PathVariable Long id, @RequestBody @Valid Questionnaire updatedQuestionnaire) {
+        if (updatedQuestionnaire.getTitle() == null || updatedQuestionnaire.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Updated title must not be empty.");
+        }
+
         return questionnaireService.updateQuestionnaire(id, updatedQuestionnaire);
     }
 

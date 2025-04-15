@@ -132,7 +132,7 @@ export default {
     async fetchQuestions() {
       this.isLoading = true;
       try {
-        const response = await axios.get("/api/questions/all");
+        const response = await axios.get("/api/questions");
         this.questions = response.data;
       } catch (error) {
         console.error("Error fetching questions:", error);
@@ -172,7 +172,7 @@ export default {
           questionnaireIds: questionData.selectedQuestionnaires, // new field with multiple IDs
         };
 
-        await axios.post("/api/questions/add", payload, 
+        await axios.post("/api/questions", payload, 
         {
           headers: {
              Authorization: `Bearer ${token}`
@@ -205,7 +205,7 @@ export default {
 
       try {
         const token = localStorage.getItem("jwt");
-        await axios.delete(`/api/questions/delete/${id}`, {
+        await axios.delete(`/api/questions/${id}`, {
            headers: {
              Authorization: `Bearer ${token}`
            }}
@@ -219,7 +219,7 @@ export default {
     },
     async fetchQuestionnaires() {
       try {
-        const response = await axios.get("/api/questionnaires/all");
+        const response = await axios.get("/api/questionnaires");
         this.questionnaires = response.data;
         // If there's no selected questionnaire, set the first one as selected.
         if (response.data.length > 0 && !this.selectedQuestionnaire) {

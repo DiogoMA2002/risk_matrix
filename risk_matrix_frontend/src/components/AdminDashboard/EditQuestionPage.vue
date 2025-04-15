@@ -284,7 +284,6 @@ export default {
       } finally {
         this.loading = false;
         // Log category name after fetching question details
-        console.log('Category Name after fetchQuestionDetails:', this.question.categoryName);
       }
     },
 
@@ -292,7 +291,7 @@ export default {
       this.loadingQuestionnaires = true;
       this.questionnaireError = null;
       try {
-        const response = await axios.get('/api/questionnaires/all');
+        const response = await axios.get('/api/questionnaires');
         this.allQuestionnaires = response.data.map(dto => ({
           id: dto.id,
           name: dto.title
@@ -345,11 +344,10 @@ export default {
       }
 
       // Log the category name right before creating the payload
-      console.log('Category Name before validation:', this.question.categoryName);
+
 
       // Trim and re-validate categoryName before creating payload
       const finalCategoryName = this.question.categoryName ? this.question.categoryName.trim() : '';
-      console.log('Category Name after trim for validation:', finalCategoryName);
       if (!finalCategoryName) {
         this.saveError = "Please select a valid category for the question.";
         this.isSaving = false;
@@ -368,10 +366,8 @@ export default {
         questionnaireIds: this.associatedQuestionnaireIds
       };
 
-      console.log('Saving question with payload:', JSON.stringify(payload, null, 2));
 
       try {
-        console.log("Option validation check:", this.question.options);
 
         await axios.put(`/api/questions/${this.question.id}`, payload, {
           headers: {

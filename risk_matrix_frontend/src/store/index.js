@@ -38,12 +38,12 @@ export default createStore({
   },
   actions: {
     fetchQuestions({ commit }) {
-      return axios.get('/api/questions/all')
+      return axios.get('/api/questions')
         .then(response => commit('setQuestions', response.data))
         .catch(error => console.error('Erro ao buscar perguntas:', error))
     },
     fetchQuestionnaires({ commit }) {
-      return axios.get('/api/questionnaires/all')
+      return axios.get('/api/questionnaires')
         .then(response => {
           commit('setQuestionnaires', response.data)
           if (response.data.length > 0) {
