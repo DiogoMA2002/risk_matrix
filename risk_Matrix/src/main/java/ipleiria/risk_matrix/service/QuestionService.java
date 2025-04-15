@@ -125,17 +125,12 @@ public class QuestionService {
 
     // Get questions by category (using dynamic category name)
     public List<Question> getQuestionsByCategory(String categoryName) {
-        List<Question> questions = questionRepository.findAll().stream()
+        return questionRepository.findAll().stream()
                 .filter(q -> q.getCategory() != null &&
                         q.getCategory().getName().equalsIgnoreCase(categoryName))
                 .collect(Collectors.toList());
-        
-        if (questions.isEmpty()) {
-            throw new NotFoundException("No questions found for category: " + categoryName);
-        }
-        
-        return questions;
     }
+
 
     // Get a question by ID
     public Question getQuestionById(Long id) {
@@ -144,12 +139,19 @@ public class QuestionService {
     }
 
     // Delete a question
+    @Transactional
     public void deleteQuestion(Long id) {
-        if (!questionRepository.existsById(id)) {
-            throw new QuestionNotFoundException("Question not found for ID: " + id);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException("Question not found for ID: " + id));
+
+        for (Questionnaire q : new ArrayList<>(question.getQuestionnaires())) {
+            q.getQuestions().remove(question);
         }
-        questionRepository.deleteById(id);
+        question.getQuestionnaires().clear();
+
+        questionRepository.delete(question);
     }
+
 
     public QuestionDTO updateQuestion(Long id, QuestionDTO updatedQuestionDTO) {
         Question existingQuestion = questionRepository.findById(id)

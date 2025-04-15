@@ -167,7 +167,7 @@ export default {
         const token = localStorage.getItem("jwt");
         const payload = {
           questionText: questionData.newQuestion,
-          category: questionData.selectedCategory,
+          categoryName: questionData.selectedCategory,
           options: questionData.newOptions,
           questionnaireIds: questionData.selectedQuestionnaires, // new field with multiple IDs
         };

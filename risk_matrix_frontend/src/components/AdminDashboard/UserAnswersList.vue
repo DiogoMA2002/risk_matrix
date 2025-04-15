@@ -152,7 +152,17 @@ export default {
     }
     ,
     formatCategoryName(category) {
-      return category ? category.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, l => l.toUpperCase()) : "";
+      if (!category) return "";
+      
+      return category
+        .replace(/_/g, " ")
+        .split(' ')
+        .map(word => {
+          if (!word) return '';
+          return word.charAt(0).toLocaleUpperCase('pt-PT') + 
+                 word.slice(1).toLocaleLowerCase('pt-PT');
+        })
+        .join(' ');
     },
     searchByEmail() {
       if (!this.filters.email.trim()) {

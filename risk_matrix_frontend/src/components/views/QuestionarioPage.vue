@@ -120,7 +120,14 @@ export default {
   computed: {
     formattedCategory() {
       const raw = this.$route.params.category || "";
-      return raw.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      return raw.replace(/_/g, ' ')
+                .split(' ')
+                .map(word => {
+                  if (!word) return '';
+                  return word.charAt(0).toLocaleUpperCase('pt-PT') + 
+                         word.slice(1).toLocaleLowerCase('pt-PT');
+                })
+                .join(' ');
     },
     answers() {
       const category = this.$route.params.category;

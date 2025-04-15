@@ -52,10 +52,19 @@
       }
     },
     computed: {
-  formattedCategory() {
-    return this.category || "";
-  }
-}
-
+      formattedCategory() {
+        if (!this.category) return "";
+        
+        // Title case with proper locale handling for Portuguese
+        return this.category
+          .split(' ')
+          .map(word => {
+            if (!word) return '';
+            return word.charAt(0).toLocaleUpperCase('pt-PT') + 
+                   word.slice(1).toLocaleLowerCase('pt-PT');
+          })
+          .join(' ');
+      }
+    }
   }
   </script>

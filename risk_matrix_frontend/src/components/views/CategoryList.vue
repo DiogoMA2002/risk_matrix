@@ -211,7 +211,16 @@ export default {
       }
     },
     formatCategoryName(rawEnum) {
-      return rawEnum.replace(/_/g, " ");
+      if (!rawEnum) return "";
+      
+      return rawEnum.replace(/_/g, " ")
+                   .split(' ')
+                   .map(word => {
+                     if (!word) return '';
+                     return word.charAt(0).toLocaleUpperCase('pt-PT') + 
+                            word.slice(1).toLocaleLowerCase('pt-PT');
+                   })
+                   .join(' ');
     },
     goToCategory(category) {
       this.$router.push({

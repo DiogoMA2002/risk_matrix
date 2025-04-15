@@ -1,7 +1,9 @@
 package ipleiria.risk_matrix.exceptions.exception;
 
-public class FeedbackTooLongException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class FeedbackTooLongException extends BaseException {
     public FeedbackTooLongException(String message) {
-        super(message);
+        super(message, HttpStatus.BAD_REQUEST, "FEEDBACK_TOO_LONG");
     }
 }

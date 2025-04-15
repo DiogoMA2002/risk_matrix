@@ -65,7 +65,7 @@ public class DocumentsService {
 
             // Add dynamic content after cover page
             addSummarySection(document, severities);
-            addAnswersTable(document, answers);
+            addAnswersTable(document, answersByCategory);
 
             document.write(out);
             return out.toByteArray();
@@ -107,20 +107,37 @@ public class DocumentsService {
         }
     }
 
-    private void addAnswersTable(XWPFDocument document, List<Answer> answers) {
-        XWPFTable table = document.createTable();
-        XWPFTableRow header = table.getRow(0);
-        header.getCell(0).setText("Pergunta");
-        header.addNewTableCell().setText("Resposta");
-        header.addNewTableCell().setText("Tipo");
-        header.addNewTableCell().setText("Nível");
+    private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory) {
+        for (Map.Entry<String, List<Answer>> entry : answersByCategory.entrySet()) {
+            String category = entry.getKey();
+            List<Answer> answers = entry.getValue();
 
-        for (Answer answer : answers) {
-            XWPFTableRow row = table.createRow();
-            row.getCell(0).setText(answer.getQuestionText());
-            row.getCell(1).setText(answer.getUserResponse());
-            row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
-            row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+            // Add category title
+            XWPFParagraph categoryHeader = document.createParagraph();
+            XWPFRun headerRun = categoryHeader.createRun();
+            headerRun.setText("Categoria: " + category);
+            headerRun.setBold(true);
+            headerRun.setFontSize(14);
+
+            // Create table
+            XWPFTable table = document.createTable();
+            XWPFTableRow header = table.getRow(0);
+            header.getCell(0).setText("Pergunta");
+            header.addNewTableCell().setText("Resposta");
+            header.addNewTableCell().setText("Tipo");
+            header.addNewTableCell().setText("Nível");
+
+            for (Answer answer : answers) {
+                XWPFTableRow row = table.createRow();
+                row.getCell(0).setText(answer.getQuestionText());
+                row.getCell(1).setText(answer.getUserResponse());
+                row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
+                row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+            }
+
+            // Add spacing between tables
+            document.createParagraph();
         }
     }
+
 }

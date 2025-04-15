@@ -1,9 +1,12 @@
 package ipleiria.risk_matrix.controller;
 
+import ipleiria.risk_matrix.exceptions.exception.InvalidFeedbackTypeException;
 import ipleiria.risk_matrix.models.feedback.Feedback;
 import ipleiria.risk_matrix.models.feedback.FeedbackType;
 import ipleiria.risk_matrix.service.FeedbackService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +25,8 @@ public class FeedbackController {
         this.feedbackService = feedbackService;
     }
 
-    // Endpoint for users to submit feedback (either a suggestion or help request)
     @PostMapping
-    public ResponseEntity<Feedback> createFeedback(@RequestBody Feedback feedback) {
+    public ResponseEntity<Feedback> createFeedback(@Valid @RequestBody Feedback feedback) {
         return ResponseEntity.ok(feedbackService.saveFeedback(feedback));
     }
 
@@ -43,12 +45,7 @@ public class FeedbackController {
     @GetMapping("/type/{type}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Feedback>> getFeedbackByType(@PathVariable String type) {
-        try {
-            FeedbackType feedbackType = FeedbackType.valueOf(type.toUpperCase());
-            return ResponseEntity.ok(feedbackService.getFeedbackByType(feedbackType));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(feedbackService.getFeedbackByType(parseFeedbackType(type)));
     }
 
     @GetMapping("/email/{email}/type/{type}")
@@ -56,19 +53,14 @@ public class FeedbackController {
     public ResponseEntity<List<Feedback>> getFeedbackByEmailAndType(
             @PathVariable String email,
             @PathVariable String type) {
-        try {
-            FeedbackType feedbackType = FeedbackType.valueOf(type.toUpperCase());
-            return ResponseEntity.ok(feedbackService.getFeedbackByEmailAndType(email, feedbackType));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(feedbackService.getFeedbackByEmailAndType(email, parseFeedbackType(type)));
     }
 
     @GetMapping("/date-range")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Feedback>> getFeedbackByDateRange(
-            @RequestParam LocalDateTime startDate,
-            @RequestParam LocalDateTime endDate) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return ResponseEntity.ok(feedbackService.getFeedbackByDateRange(startDate, endDate));
     }
 
@@ -76,8 +68,8 @@ public class FeedbackController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Feedback>> getFeedbackByEmailAndDateRange(
             @PathVariable String email,
-            @RequestParam LocalDateTime startDate,
-            @RequestParam LocalDateTime endDate) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return ResponseEntity.ok(feedbackService.getFeedbackByEmailAndDateRange(email, startDate, endDate));
     }
 
@@ -85,14 +77,9 @@ public class FeedbackController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Feedback>> getFeedbackByTypeAndDateRange(
             @PathVariable String type,
-            @RequestParam LocalDateTime startDate,
-            @RequestParam LocalDateTime endDate) {
-        try {
-            FeedbackType feedbackType = FeedbackType.valueOf(type.toUpperCase());
-            return ResponseEntity.ok(feedbackService.getFeedbackByTypeAndDateRange(feedbackType, startDate, endDate));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        return ResponseEntity.ok(feedbackService.getFeedbackByTypeAndDateRange(parseFeedbackType(type), startDate, endDate));
     }
 
     @GetMapping("/email/{email}/type/{type}/date-range")
@@ -100,13 +87,18 @@ public class FeedbackController {
     public ResponseEntity<List<Feedback>> getFeedbackByEmailAndTypeAndDateRange(
             @PathVariable String email,
             @PathVariable String type,
-            @RequestParam LocalDateTime startDate,
-            @RequestParam LocalDateTime endDate) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        return ResponseEntity.ok(
+                feedbackService.getFeedbackByEmailAndTypeAndDateRange(email, parseFeedbackType(type), startDate, endDate)
+        );
+    }
+
+    private FeedbackType parseFeedbackType(String type) {
         try {
-            FeedbackType feedbackType = FeedbackType.valueOf(type.toUpperCase());
-            return ResponseEntity.ok(feedbackService.getFeedbackByEmailAndTypeAndDateRange(email, feedbackType, startDate, endDate));
+            return FeedbackType.valueOf(type.toUpperCase());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            throw new InvalidFeedbackTypeException("Invalid feedback type: " + type);
         }
     }
 }

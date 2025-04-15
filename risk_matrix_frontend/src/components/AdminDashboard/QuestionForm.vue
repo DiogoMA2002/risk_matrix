@@ -184,10 +184,16 @@ export default {
   methods: {
     formatCategoryName(categoryName) {
       if (!categoryName || typeof categoryName !== "string") return "";
+      
       return categoryName
         .replace(/_/g, " ")
-        .toLowerCase()
-        .replace(/\b\w/g, (l) => l.toUpperCase());
+        .split(' ')
+        .map(word => {
+          if (!word) return '';
+          return word.charAt(0).toLocaleUpperCase('pt-PT') + 
+                 word.slice(1).toLocaleLowerCase('pt-PT');
+        })
+        .join(' ');
     },
     addOption() {
       this.newOptions.push({ optionText: "", optionType: "IMPACT", optionLevel: "LOW" });

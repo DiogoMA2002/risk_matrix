@@ -2,6 +2,7 @@ package ipleiria.risk_matrix.controller;
 
 import ipleiria.risk_matrix.models.category.Category;
 import ipleiria.risk_matrix.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +35,14 @@ public class CategoryController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+    public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category) {
         Category createdCategory = categoryService.createCategory(category);
         return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category categoryDetails) {
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @Valid @RequestBody Category categoryDetails) {
         Category updatedCategory = categoryService.updateCategory(id, categoryDetails);
         return ResponseEntity.ok(updatedCategory);
     }

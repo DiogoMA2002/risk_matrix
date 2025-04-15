@@ -98,10 +98,19 @@ export default {
   methods: {
     formatCategoryName(category) {
       if (!category) return "Sem Categoria";
-      let name = typeof category === "object" && category.name ? category.name : typeof category === 'string' ? category : "Inválida";
+      
+      let name = typeof category === "object" && category.name ? 
+                 category.name : 
+                 typeof category === 'string' ? category : "Inválida";
+                 
       return name.replace(/_/g, " ")
-                 .toLowerCase()
-                 .replace(/\b\w/g, (l) => l.toUpperCase());
+                .split(' ')
+                .map(word => {
+                  if (!word) return '';
+                  return word.charAt(0).toLocaleUpperCase('pt-PT') + 
+                         word.slice(1).toLocaleLowerCase('pt-PT');
+                })
+                .join(' ');
     },
     onFilterChange() {
       this.$emit("filter-questions", this.selectedFilterCategory);
