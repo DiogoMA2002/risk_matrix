@@ -371,11 +371,30 @@ export default {
       }
     }
     ,
-    async fetchFeedback() {
+    async fetchFeedback(filters = {}) {
       this.isLoading = true;
       try {
         const token = localStorage.getItem("jwt");
-        const response = await axios.get("/api/feedback", {
+        let url = "/api/feedback";
+        
+        // Build URL based on filters
+        if (filters.email && filters.type && filters.startDate && filters.endDate) {
+          url = `/api/feedback/email/${encodeURIComponent(filters.email)}/type/${encodeURIComponent(filters.type)}/date-range?startDate=${filters.startDate}T00:00:00&endDate=${filters.endDate}T23:59:59`;
+        } else if (filters.email && filters.type) {
+          url = `/api/feedback/email/${encodeURIComponent(filters.email)}/type/${encodeURIComponent(filters.type)}`;
+        } else if (filters.email && filters.startDate && filters.endDate) {
+          url = `/api/feedback/email/${encodeURIComponent(filters.email)}/date-range?startDate=${filters.startDate}T00:00:00&endDate=${filters.endDate}T23:59:59`;
+        } else if (filters.type && filters.startDate && filters.endDate) {
+          url = `/api/feedback/type/${encodeURIComponent(filters.type)}/date-range?startDate=${filters.startDate}T00:00:00&endDate=${filters.endDate}T23:59:59`;
+        } else if (filters.email) {
+          url = `/api/feedback/email/${encodeURIComponent(filters.email)}`;
+        } else if (filters.type) {
+          url = `/api/feedback/type/${encodeURIComponent(filters.type)}`;
+        } else if (filters.startDate && filters.endDate) {
+          url = `/api/feedback/date-range?startDate=${filters.startDate}T00:00:00&endDate=${filters.endDate}T23:59:59`;
+        }
+
+        const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${token}`
           }
