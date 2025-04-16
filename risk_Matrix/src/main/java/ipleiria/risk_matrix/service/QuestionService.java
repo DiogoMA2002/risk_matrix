@@ -3,7 +3,6 @@ package ipleiria.risk_matrix.service;
 import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.dto.QuestionOptionDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidCategoryException;
-import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionNotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.category.Category;
@@ -15,11 +14,11 @@ import ipleiria.risk_matrix.models.questions.QuestionOption;
 import ipleiria.risk_matrix.repository.CategoryRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
+import ipleiria.risk_matrix.utils.QuestionUtils;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +28,6 @@ public class QuestionService {
     private final QuestionnaireRepository questionnaireRepository;
     private final CategoryRepository categoryRepository;
 
-    @Autowired
     public QuestionService(QuestionRepository questionRepository,
                            QuestionnaireRepository questionnaireRepository,
                            CategoryRepository categoryRepository) {
@@ -38,185 +36,139 @@ public class QuestionService {
         this.categoryRepository = categoryRepository;
     }
 
-    // Create a new question and associate it with a questionnaire (many-to-many)
     @Transactional
     public QuestionDTO createQuestion(QuestionDTO questionDTO) {
-        // 1. Check if the question already exists by text.
-        Optional<Question> existingOpt = questionRepository.findByQuestionText(questionDTO.getQuestionText());
-        Question question;
+        Objects.requireNonNull(questionDTO, "QuestionDTO must not be null");
 
-        if (existingOpt.isPresent()) {
-            question = existingOpt.get();
-        } else {
-            // 2. Create new Question
-            question = new Question();
-            question.setQuestionText(questionDTO.getQuestionText());
+        Question question = questionRepository.findByQuestionText(questionDTO.getQuestionText())
+                .orElseGet(() -> buildNewQuestionFromDTO(questionDTO));
 
-            // 3. Handle category
-            String categoryName = questionDTO.getCategoryName();
-            if (categoryName == null || categoryName.trim().isEmpty()) {
-                throw new InvalidCategoryException("A categoria da pergunta é obrigatória.");
-            }
-            Category category = categoryRepository.findByName(categoryName.trim())
-                    .orElseGet(() -> {
-                        Category newCategory = new Category();
-                        newCategory.setName(categoryName.trim());
-                        return categoryRepository.save(newCategory);
-                    });
-            question.setCategory(category);
+        associateQuestionWithQuestionnaires(question, questionDTO.getQuestionnaireIds());
 
-            // 4. Convert and attach options
-            final Question finalQuestion = question;
-            List<QuestionOption> options = questionDTO.getOptions().stream()
-                    .map(optDto -> {
-                        QuestionOption opt = new QuestionOption();
-                        opt.setOptionText(optDto.getOptionText());
-                        opt.setOptionType(optDto.getOptionType());
-                        opt.setOptionLevel(optDto.getOptionLevel());
-                        opt.setQuestion(finalQuestion);
-                        return opt;
-                    }).collect(Collectors.toList());
-
-            // 5. Ensure "Não Aplicável" exists
-            boolean hasNaoAplicavel = options.stream()
-                    .anyMatch(opt -> "Não Aplicável".equalsIgnoreCase(opt.getOptionText()));
-            if (!hasNaoAplicavel) {
-                QuestionOption naoAplicavel = new QuestionOption();
-                naoAplicavel.setOptionText("Não Aplicável");
-                naoAplicavel.setOptionType(OptionLevelType.IMPACT);
-                naoAplicavel.setOptionLevel(OptionLevel.LOW);
-                naoAplicavel.setQuestion(question);
-                options.add(naoAplicavel);
-            }
-            question.setOptions(options);
-
-            // Save the new question along with options.
-            question = questionRepository.save(question);
-        }
-
-        // 6. Associate with all provided questionnaires.
-        for (Long questionnaireId : questionDTO.getQuestionnaireIds()) {
-            Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
-                    .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + questionnaireId));
-
-            // Avoid duplicate associations by checking using proper entity equality.
-            if (!question.getQuestionnaires().contains(questionnaire)) {
-                question.getQuestionnaires().add(questionnaire);
-                questionnaire.getQuestions().add(question);
-            }
-        }
-
-        // Save final updates in one go.
-        question = questionRepository.save(question);
-
-        return new QuestionDTO(question);
+        return new QuestionDTO(questionRepository.save(question));
     }
 
+    private Question buildNewQuestionFromDTO(QuestionDTO dto) {
+        Question question = new Question();
+        question.setQuestionText(dto.getQuestionText());
 
-    // Get all questions
+        Category category = resolveOrCreateCategory(dto.getCategoryName());
+        question.setCategory(category);
+
+        List<QuestionOption> options = dto.getOptions() != null ? dto.getOptions().stream()
+                .map(optDto -> buildOptionFromDTO(optDto, question))
+                .collect(Collectors.toList()) : new ArrayList<>();
+
+        ensureNaoAplicavelExists(options, question);
+        question.setOptions(options);
+
+        return questionRepository.save(question);
+    }
+
+    private QuestionOption buildOptionFromDTO(QuestionOptionDTO dto, Question question) {
+        QuestionOption opt = new QuestionOption();
+        opt.setOptionText(dto.getOptionText());
+        opt.setOptionType(dto.getOptionType());
+        opt.setOptionLevel(dto.getOptionLevel());
+        opt.setQuestion(question);
+        return opt;
+    }
+
+    private void ensureNaoAplicavelExists(List<QuestionOption> options, Question question) {
+        boolean exists = options.stream()
+                .anyMatch(opt -> "Não Aplicável".equalsIgnoreCase(opt.getOptionText()));
+
+        if (!exists) {
+            QuestionOption naoAplicavel = new QuestionOption();
+            naoAplicavel.setOptionText("Não Aplicável");
+            naoAplicavel.setOptionType(OptionLevelType.IMPACT);
+            naoAplicavel.setOptionLevel(OptionLevel.LOW);
+            naoAplicavel.setQuestion(question);
+            options.add(naoAplicavel);
+        }
+    }
+
+    private Category resolveOrCreateCategory(String categoryName) {
+        if (categoryName == null || categoryName.trim().isEmpty()) {
+            throw new InvalidCategoryException("A categoria da pergunta é obrigatória.");
+        }
+        return categoryRepository.findByName(categoryName.trim())
+                .orElseGet(() -> {
+                    Category newCat = new Category();
+                    newCat.setName(categoryName.trim());
+                    return categoryRepository.save(newCat);
+                });
+    }
+
+    private void associateQuestionWithQuestionnaires(Question question, List<Long> questionnaireIds) {
+        if (questionnaireIds == null) return;
+
+        for (Long id : new HashSet<>(questionnaireIds)) {
+            Questionnaire q = questionnaireRepository.findById(id)
+                    .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id));
+
+            if (!question.getQuestionnaires().contains(q)) {
+                question.getQuestionnaires().add(q);
+                q.getQuestions().add(question);
+            }
+        }
+    }
+
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
 
-
-
-    // Get questions by category (using dynamic category name)
     public List<Question> getQuestionsByCategory(String categoryName) {
-        List<Question> questions = questionRepository.findAll().stream()
+        if (categoryName == null || categoryName.trim().isEmpty()) return Collections.emptyList();
+
+        return questionRepository.findAll().stream()
                 .filter(q -> q.getCategory() != null &&
                         q.getCategory().getName().equalsIgnoreCase(categoryName))
                 .collect(Collectors.toList());
-        
-        if (questions.isEmpty()) {
-            throw new NotFoundException("No questions found for category: " + categoryName);
-        }
-        
-        return questions;
     }
 
-    // Get a question by ID
     public Question getQuestionById(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found with id: " + id));
     }
 
-    // Delete a question
+    @Transactional
     public void deleteQuestion(Long id) {
-        if (!questionRepository.existsById(id)) {
-            throw new QuestionNotFoundException("Question not found for ID: " + id);
+        Question question = getQuestionById(id);
+
+        for (Questionnaire q : new ArrayList<>(question.getQuestionnaires())) {
+            q.getQuestions().remove(question);
         }
-        questionRepository.deleteById(id);
+        question.getQuestionnaires().clear();
+
+        questionRepository.delete(question);
     }
 
-    public QuestionDTO updateQuestion(Long id, QuestionDTO updatedQuestionDTO) {
-        Question existingQuestion = questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Question not found with id: " + id));
+    @Transactional
+    public QuestionDTO updateQuestion(Long id, QuestionDTO dto) {
+        Question existing = getQuestionById(id);
 
-        existingQuestion.setQuestionText(updatedQuestionDTO.getQuestionText());
+        existing.setQuestionText(dto.getQuestionText());
 
-        String categoryName = Optional.ofNullable(updatedQuestionDTO.getCategoryName())
-                .map(String::trim)
-                .orElseThrow(() -> new InvalidCategoryException("A categoria da pergunta é obrigatória."));
+        Category category = resolveOrCreateCategory(dto.getCategoryName());
+        existing.setCategory(category);
 
-        Category category = categoryRepository.findByName(categoryName)
-                .orElseGet(() -> {
-                    Category newCategory = new Category();
-                    newCategory.setName(categoryName);
-                    return categoryRepository.save(newCategory);
-                });
-        existingQuestion.setCategory(category);
-
-        existingQuestion.getOptions().clear();
-        if (updatedQuestionDTO.getOptions() != null) {
-            List<QuestionOption> newOptions = updatedQuestionDTO.getOptions()
-                    .stream()
-                    .map(dto -> convertDtoToQuestionOption(dto, existingQuestion))
-                    .collect(Collectors.toList());
-            existingQuestion.getOptions().addAll(newOptions);
+        existing.getOptions().clear();
+        if (dto.getOptions() != null) {
+            existing.getOptions().addAll(dto.getOptions().stream()
+                    .map(opt -> buildOptionFromDTO(opt, existing))
+                    .toList());
         }
 
-        boolean hasNaoAplicavel = existingQuestion.getOptions().stream()
-                .anyMatch(opt -> "Não Aplicável".equalsIgnoreCase(opt.getOptionText()));
-        if (!hasNaoAplicavel) {
-            QuestionOption naoAplicavel = new QuestionOption();
-            naoAplicavel.setOptionText("Não Aplicável");
-            naoAplicavel.setOptionType(OptionLevelType.IMPACT);
-            naoAplicavel.setOptionLevel(OptionLevel.LOW);
-            naoAplicavel.setQuestion(existingQuestion);
-            existingQuestion.getOptions().add(naoAplicavel);
+        QuestionUtils.ensureNaoAplicavelOption(existing);
+
+        for (Questionnaire q : new ArrayList<>(existing.getQuestionnaires())) {
+            q.getQuestions().remove(existing);
         }
+        existing.getQuestionnaires().clear();
 
-// ✅ First: remove old associations on both sides
-        for (Questionnaire q : existingQuestion.getQuestionnaires()) {
-            q.getQuestions().remove(existingQuestion);
-        }
-        existingQuestion.getQuestionnaires().clear();
+        associateQuestionWithQuestionnaires(existing, dto.getQuestionnaireIds());
 
-// ✅ Then: add new associations safely
-        for (Long questionnaireId : updatedQuestionDTO.getQuestionnaireIds()) {
-            Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
-                    .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + questionnaireId));
-
-            // Add to both sides if not already present
-            if (!questionnaire.getQuestions().contains(existingQuestion)) {
-                questionnaire.getQuestions().add(existingQuestion);
-            }
-            existingQuestion.getQuestionnaires().add(questionnaire);
-        }
-
-
-        Question savedQuestion = questionRepository.save(existingQuestion);
-        return new QuestionDTO(savedQuestion);
+        return new QuestionDTO(questionRepository.save(existing));
     }
-
-    // Helper method to convert a QuestionOptionDTO into a QuestionOption entity.
-    private QuestionOption convertDtoToQuestionOption(QuestionOptionDTO dto, Question question) {
-        QuestionOption option = new QuestionOption();
-        option.setOptionText(dto.getOptionText());
-        option.setOptionType(dto.getOptionType());
-        option.setOptionLevel(dto.getOptionLevel());
-        option.setQuestion(question);
-        return option;
-    }
-
 }

@@ -4,6 +4,6 @@ import org.springframework.http.HttpStatus;
 
 public class QuestionNotFoundException extends BaseException {
     public QuestionNotFoundException(String message) {
-        super(message, HttpStatus.NOT_FOUND, "QUESTION_NOT_FOUND");
+        super(message, HttpStatus.BAD_REQUEST, "QUESTION_NOT_FOUND");
     }
 }

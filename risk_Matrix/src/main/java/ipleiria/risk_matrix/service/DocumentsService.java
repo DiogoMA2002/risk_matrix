@@ -28,15 +28,16 @@ public class DocumentsService {
 
     public byte[] generateEnhancedDocx(String submissionId) throws IOException {
         List<Answer> answers = answerRepository.findBySubmissionId(submissionId);
-        if (answers.isEmpty()) {
+        if (answers == null || answers.isEmpty()) {
             throw new IllegalArgumentException("No answers found for submission ID: " + submissionId);
         }
 
         Map<String, List<Answer>> answersByCategory = new HashMap<>();
         for (Answer ans : answers) {
-            Question question = questionRepository.findById(ans.getQuestionId()).orElse(null);
-            if (question == null || question.getCategory() == null) continue;
-            String category = question.getCategory().getName();
+            Optional<Question> questionOpt = questionRepository.findById(ans.getQuestionId());
+            if (questionOpt.isEmpty() || questionOpt.get().getCategory() == null) continue;
+
+            String category = questionOpt.get().getCategory().getName();
             answersByCategory.computeIfAbsent(category, _ -> new ArrayList<>()).add(ans);
         }
 
@@ -57,15 +58,14 @@ public class DocumentsService {
 
             XWPFDocument document = new XWPFDocument(template);
             Map<String, String> vars = new HashMap<>();
+            Answer firstAnswer = answers.getFirst();
             vars.put("submissionId", submissionId);
-            vars.put("email", answers.getFirst().getEmail());
-            vars.put("date", answers.getFirst().getCreatedAt().toLocalDate().toString());
+            vars.put("email", firstAnswer.getEmail());
+            vars.put("date", firstAnswer.getCreatedAt().toLocalDate().toString());
 
             replacePlaceholders(document, vars);
-
-            // Add dynamic content after cover page
             addSummarySection(document, severities);
-            addAnswersTable(document, answers);
+            addAnswersTable(document, answersByCategory);
 
             document.write(out);
             return out.toByteArray();
@@ -76,7 +76,10 @@ public class DocumentsService {
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
             StringBuilder fullText = new StringBuilder();
             for (XWPFRun run : paragraph.getRuns()) {
-                fullText.append(run.getText(0));
+                String text = run.getText(0);
+                if (text != null) {
+                    fullText.append(text);
+                }
             }
 
             String replaced = fullText.toString();
@@ -84,43 +87,57 @@ public class DocumentsService {
                 replaced = replaced.replace("${" + entry.getKey() + "}", entry.getValue());
             }
 
-            // Clear existing runs
-            int numRuns = paragraph.getRuns().size();
-            for (int i = numRuns - 1; i >= 0; i--) {
+            // Clear and replace text
+            for (int i = paragraph.getRuns().size() - 1; i >= 0; i--) {
                 paragraph.removeRun(i);
             }
 
-            // Create new run with replaced text
             XWPFRun newRun = paragraph.createRun();
             newRun.setText(replaced);
+            newRun.setFontFamily("Calibri");
         }
     }
 
     private void addSummarySection(XWPFDocument document, Map<String, Severity> severities) {
-
         for (Map.Entry<String, Severity> entry : severities.entrySet()) {
             XWPFParagraph p = document.createParagraph();
             XWPFRun run = p.createRun();
             run.setText(entry.getKey() + ": " + entry.getValue());
             run.setFontSize(14);
+            run.setFontFamily("Calibri");
             run.setBold(true);
         }
     }
 
-    private void addAnswersTable(XWPFDocument document, List<Answer> answers) {
-        XWPFTable table = document.createTable();
-        XWPFTableRow header = table.getRow(0);
-        header.getCell(0).setText("Pergunta");
-        header.addNewTableCell().setText("Resposta");
-        header.addNewTableCell().setText("Tipo");
-        header.addNewTableCell().setText("Nível");
+    private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory) {
+        for (Map.Entry<String, List<Answer>> entry : answersByCategory.entrySet()) {
+            String category = entry.getKey();
+            List<Answer> answers = entry.getValue();
 
-        for (Answer answer : answers) {
-            XWPFTableRow row = table.createRow();
-            row.getCell(0).setText(answer.getQuestionText());
-            row.getCell(1).setText(answer.getUserResponse());
-            row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
-            row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+            XWPFParagraph categoryHeader = document.createParagraph();
+            XWPFRun headerRun = categoryHeader.createRun();
+            headerRun.setText("Categoria: " + category);
+            headerRun.setBold(true);
+            headerRun.setFontSize(14);
+            headerRun.setFontFamily("Calibri");
+
+            XWPFTable table = document.createTable();
+            XWPFTableRow header = table.getRow(0);
+            header.getCell(0).setText("Pergunta");
+            header.addNewTableCell().setText("Resposta");
+            header.addNewTableCell().setText("Tipo");
+            header.addNewTableCell().setText("Nível");
+
+            for (Answer answer : answers) {
+                XWPFTableRow row = table.createRow();
+                row.getCell(0).setText(answer.getQuestionText());
+                row.getCell(1).setText(answer.getUserResponse());
+                row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
+                row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+            }
+
+            // Spacing
+            document.createParagraph();
         }
     }
 }

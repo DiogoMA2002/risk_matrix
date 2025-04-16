@@ -11,8 +11,11 @@ import java.util.Optional;
 @RequestMapping("/admin")
 public class AdminUserController {
 
-    @Autowired
-    private AdminUserService adminUserService;
+    private final AdminUserService adminUserService;
+
+    public AdminUserController(AdminUserService adminUserService) {
+        this.adminUserService = adminUserService;
+    }
 
 
     // Buscar um administrador por username

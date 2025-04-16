@@ -132,7 +132,7 @@ export default {
     async fetchQuestions() {
       this.isLoading = true;
       try {
-        const response = await axios.get("/api/questions/all");
+        const response = await axios.get("/api/questions");
         this.questions = response.data;
       } catch (error) {
         console.error("Error fetching questions:", error);
@@ -167,12 +167,12 @@ export default {
         const token = localStorage.getItem("jwt");
         const payload = {
           questionText: questionData.newQuestion,
-          category: questionData.selectedCategory,
+          categoryName: questionData.selectedCategory,
           options: questionData.newOptions,
           questionnaireIds: questionData.selectedQuestionnaires, // new field with multiple IDs
         };
 
-        await axios.post("/api/questions/add", payload, 
+        await axios.post("/api/questions", payload, 
         {
           headers: {
              Authorization: `Bearer ${token}`
@@ -205,7 +205,7 @@ export default {
 
       try {
         const token = localStorage.getItem("jwt");
-        await axios.delete(`/api/questions/delete/${id}`, {
+        await axios.delete(`/api/questions/${id}`, {
            headers: {
              Authorization: `Bearer ${token}`
            }}
@@ -219,7 +219,7 @@ export default {
     },
     async fetchQuestionnaires() {
       try {
-        const response = await axios.get("/api/questionnaires/all");
+        const response = await axios.get("/api/questionnaires");
         this.questionnaires = response.data;
         // If there's no selected questionnaire, set the first one as selected.
         if (response.data.length > 0 && !this.selectedQuestionnaire) {
@@ -371,11 +371,30 @@ export default {
       }
     }
     ,
-    async fetchFeedback() {
+    async fetchFeedback(filters = {}) {
       this.isLoading = true;
       try {
         const token = localStorage.getItem("jwt");
-        const response = await axios.get("/api/feedback", {
+        let url = "/api/feedback";
+        
+        // Build URL based on filters
+        if (filters.email && filters.type && filters.startDate && filters.endDate) {
+          url = `/api/feedback/email/${encodeURIComponent(filters.email)}/type/${encodeURIComponent(filters.type)}/date-range?startDate=${filters.startDate}T00:00:00&endDate=${filters.endDate}T23:59:59`;
+        } else if (filters.email && filters.type) {
+          url = `/api/feedback/email/${encodeURIComponent(filters.email)}/type/${encodeURIComponent(filters.type)}`;
+        } else if (filters.email && filters.startDate && filters.endDate) {
+          url = `/api/feedback/email/${encodeURIComponent(filters.email)}/date-range?startDate=${filters.startDate}T00:00:00&endDate=${filters.endDate}T23:59:59`;
+        } else if (filters.type && filters.startDate && filters.endDate) {
+          url = `/api/feedback/type/${encodeURIComponent(filters.type)}/date-range?startDate=${filters.startDate}T00:00:00&endDate=${filters.endDate}T23:59:59`;
+        } else if (filters.email) {
+          url = `/api/feedback/email/${encodeURIComponent(filters.email)}`;
+        } else if (filters.type) {
+          url = `/api/feedback/type/${encodeURIComponent(filters.type)}`;
+        } else if (filters.startDate && filters.endDate) {
+          url = `/api/feedback/date-range?startDate=${filters.startDate}T00:00:00&endDate=${filters.endDate}T23:59:59`;
+        }
+
+        const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${token}`
           }

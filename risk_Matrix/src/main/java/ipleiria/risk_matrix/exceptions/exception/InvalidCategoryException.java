@@ -1,7 +1,8 @@
 package ipleiria.risk_matrix.exceptions.exception;
 
-public class InvalidCategoryException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class InvalidCategoryException extends BaseException {
     public InvalidCategoryException(String message) {
-        super(message);
-    }
-}
+        super(message, HttpStatus.BAD_REQUEST, "INVALID_CATEGORY");
+    }}

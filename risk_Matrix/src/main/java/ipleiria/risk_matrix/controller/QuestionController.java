@@ -1,9 +1,9 @@
 package ipleiria.risk_matrix.controller;
+
 import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.service.QuestionService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,46 +19,44 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    // Criar uma nova pergunta
-    @PostMapping("/add")
+    // Create a new question and associate with questionnaires
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public QuestionDTO addQuestionToQuestionnaires(@RequestBody @Valid QuestionDTO questionDTO) {
-        return questionService.createQuestion(questionDTO);
+    public QuestionDTO create(@RequestBody @Valid QuestionDTO dto) {
+        return questionService.createQuestion(dto);
     }
 
-    // Obter todas as perguntas
-    @GetMapping("/all")
-    public List<Question> getAllQuestions() {
+    // Get all questions
+    @GetMapping
+    public List<Question> getAll() {
         return questionService.getAllQuestions();
     }
 
-
-    // Obter perguntas por categoria
+    // Get questions by category name
     @GetMapping("/category/{categoryName}")
-    public List<Question> getQuestionsByCategory(@PathVariable("categoryName") String categoryName) {
+    public List<Question> getByCategory(@PathVariable String categoryName) {
         return questionService.getQuestionsByCategory(categoryName);
     }
-    // Obter pergunta por ID
+
+    // Get question by ID
     @GetMapping("/{id}")
-    public Question getQuestionById(@PathVariable Long id) {
+    public Question getById(@PathVariable Long id) {
         return questionService.getQuestionById(id);
     }
 
-    // Deletar uma pergunta por ID
-    @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void deleteQuestion(@PathVariable Long id) {
-        questionService.deleteQuestion(id);
-    }
-
+    // Update question
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public QuestionDTO updateQuestion(
+    public QuestionDTO update(
             @PathVariable Long id,
-            @RequestBody @Valid QuestionDTO updatedQuestionDTO) {
-        return questionService.updateQuestion(id, updatedQuestionDTO);
+            @RequestBody @Valid QuestionDTO dto) {
+        return questionService.updateQuestion(id, dto);
     }
 
-
-
+    // Delete question
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(@PathVariable Long id) {
+        questionService.deleteQuestion(id);
+    }
 }

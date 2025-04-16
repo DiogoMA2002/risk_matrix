@@ -172,7 +172,6 @@ export default {
             }
             
             this.$emit("import-questionnaire", jsonData);
-            await this.showAlertDialog("Sucesso", "Questionário importado com sucesso!", "success");
             this.showImportDialog = false;
           } catch (error) {
             console.error("Error parsing JSON:", error);
@@ -202,7 +201,7 @@ export default {
         title: questionnaire.title,
         questions: questionnaire.questions.map(question => ({
           questionText: question.questionText,
-          category: question.category || "Sem Categoria",
+          categoryName: question.category || "Sem Categoria",
           options: question.options.map(option => ({
             optionText: option.optionText,
             optionType: option.optionType,

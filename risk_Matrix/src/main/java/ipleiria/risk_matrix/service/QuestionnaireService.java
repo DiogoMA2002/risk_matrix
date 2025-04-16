@@ -1,3 +1,4 @@
+
 package ipleiria.risk_matrix.service;
 
 import ipleiria.risk_matrix.dto.QuestionDTO;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import static ipleiria.risk_matrix.utils.QuestionUtils.ensureNaoAplicavelOption;
 
 @Service
@@ -36,34 +38,24 @@ public class QuestionnaireService {
         this.categoryRepository = categoryRepository;
     }
 
-    // Create a new questionnaire
     public Questionnaire createQuestionnaire(Questionnaire questionnaire) {
         return questionnaireRepository.save(questionnaire);
     }
 
-    // Get all questionnaires
     public List<Questionnaire> getAllQuestionnaires() {
         return questionnaireRepository.findAll();
     }
 
-    // Get a questionnaire by ID
     public Optional<Questionnaire> getQuestionnaireById(Long id) {
         return questionnaireRepository.findById(id);
     }
 
-
-
     public void deleteQuestionnaire(Long id) {
         if (!questionnaireRepository.existsById(id)) {
-            throw new QuestionnaireNotFoundException(
-                    "Não foi possível excluir. Questionário não encontrado para o ID: " + id
-            );
+            throw new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id);
         }
         questionnaireRepository.deleteById(id);
     }
-
-    // Import a questionnaire (using the entity model directly)
-
 
     public List<Question> getAllQuestionsForQuestionnaire(Long id) {
         Questionnaire questionnaire = questionnaireRepository.findById(id)
@@ -72,11 +64,10 @@ public class QuestionnaireService {
     }
 
     public List<Questionnaire> searchQuestionnaires(String title) {
-        if (title == null || title.isEmpty()) {
+        if (title == null || title.trim().isEmpty()) {
             return questionnaireRepository.findAll();
-        } else {
-            return questionnaireRepository.findByTitleContainingIgnoreCase(title);
         }
+        return questionnaireRepository.findByTitleContainingIgnoreCase(title);
     }
 
     public Questionnaire updateQuestionnaire(Long id, Questionnaire updatedQuestionnaire) {
@@ -86,22 +77,14 @@ public class QuestionnaireService {
         return questionnaireRepository.save(existing);
     }
 
-    // Import a questionnaire from a DTO (updated for many-to-many)
     @Transactional
     public Questionnaire importQuestionnaireDto(QuestionnaireDTO dto) {
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setTitle(dto.getTitle());
-
         List<Question> resolvedQuestions = new ArrayList<>();
 
         for (QuestionDTO qdto : dto.getQuestions()) {
-            String categoryName = qdto.getCategoryName().trim();
-            Category category = categoryRepository.findByName(categoryName)
-                    .orElseGet(() -> {
-                        Category newCat = new Category();
-                        newCat.setName(categoryName);
-                        return categoryRepository.save(newCat);
-                    });
+            Category category = resolveCategoryByName(qdto.getCategoryName());
 
             Optional<Question> existing = questionRepository.findByQuestionText(qdto.getQuestionText());
             if (existing.isPresent()) {
@@ -110,74 +93,77 @@ public class QuestionnaireService {
             }
 
             Question question = new Question();
-            question.setQuestionText(qdto.getQuestionText());
+            question.setQuestionText(validateQuestionText(qdto.getQuestionText()));
             question.setCategory(category);
-            question = questionRepository.save(question); // Get ID before setting options
+            question = questionRepository.save(question);
 
-            // Add options
-            Question finalQuestion = question;
-            List<QuestionOption> options = qdto.getOptions().stream().map(optDto -> {
-                QuestionOption opt = new QuestionOption();
-                opt.setOptionText(optDto.getOptionText());
-                opt.setOptionType(optDto.getOptionType());
-                opt.setOptionLevel(optDto.getOptionLevel());
-                opt.setQuestion(finalQuestion);
-                return opt;
-            }).collect(Collectors.toList());
-
+            List<QuestionOption> options = mapOptionsFromDTOs(qdto.getOptions(), question);
             question.setOptions(options);
 
             ensureNaoAplicavelOption(question);
-
-            question = questionRepository.save(question);
-
-            resolvedQuestions.add(question);
+            resolvedQuestions.add(questionRepository.save(question));
         }
 
         questionnaire.setQuestions(resolvedQuestions);
         return questionnaireRepository.save(questionnaire);
     }
 
-
-
-    // Add a question to an existing questionnaire using a DTO (updated for many-to-many)
     @Transactional
     public Question addQuestionDtoToQuestionnaire(Long questionnaireId, @Valid QuestionDTO dto) {
         Questionnaire questionnaire = questionnaireRepository.findById(questionnaireId)
-                .orElseThrow(() -> new QuestionnaireNotFoundException(
-                        "Questionnaire not found for ID: " + questionnaireId
-                ));
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + questionnaireId));
 
         Question question = new Question();
-        question.setId(null);
-        question.setQuestionText(dto.getQuestionText());
-
-        // Lookup dynamic category by name from the DTO
-        Category category = categoryRepository.findByName(dto.getCategoryName())
-                .orElseGet(() -> {
-                    Category newCategory = new Category();
-                    newCategory.setName(dto.getCategoryName());
-                    return categoryRepository.save(newCategory);
-                });
-        question.setCategory(category);
-
-        // Instead of setting questionnaire directly, add to the many-to-many lists.
+        question.setQuestionText(validateQuestionText(dto.getQuestionText()));
+        question.setCategory(resolveCategoryByName(dto.getCategoryName()));
         question.getQuestionnaires().add(questionnaire);
         questionnaire.getQuestions().add(question);
 
         if (dto.getOptions() != null) {
-            for (QuestionOptionDTO optionDTO : dto.getOptions()) {
-                QuestionOption option = new QuestionOption();
-                option.setId(null);
-                option.setOptionText(optionDTO.getOptionText());
-                option.setOptionLevel(optionDTO.getOptionLevel());
-                option.setOptionType(optionDTO.getOptionType());
-                option.setQuestion(question);
-                question.getOptions().add(option);
-            }
+            List<QuestionOption> options = mapOptionsFromDTOs(dto.getOptions(), question);
+            question.getOptions().addAll(options);
         }
 
         ensureNaoAplicavelOption(question);
         return questionRepository.save(question);
+    }
+
+    private Category resolveCategoryByName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Category name cannot be empty.");
+        }
+        return categoryRepository.findByName(name.trim())
+                .orElseGet(() -> {
+                    Category newCategory = new Category();
+                    newCategory.setName(name.trim());
+                    return categoryRepository.save(newCategory);
+                });
+    }
+
+    private String validateQuestionText(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            throw new IllegalArgumentException("Question text cannot be empty.");
+        }
+        return text.trim();
+    }
+
+    private List<QuestionOption> mapOptionsFromDTOs(List<QuestionOptionDTO> optionDTOs, Question question) {
+        if (optionDTOs == null || optionDTOs.isEmpty()) {
+            throw new IllegalArgumentException("Question must have at least one option.");
+        }
+        return optionDTOs.stream().map(dto -> {
+            if (dto.getOptionText() == null || dto.getOptionText().trim().isEmpty()) {
+                throw new IllegalArgumentException("Option text cannot be blank.");
+            }
+            if (dto.getOptionType() == null || dto.getOptionLevel() == null) {
+                throw new IllegalArgumentException("Option type and level must be specified.");
+            }
+            QuestionOption opt = new QuestionOption();
+            opt.setOptionText(dto.getOptionText());
+            opt.setOptionType(dto.getOptionType());
+            opt.setOptionLevel(dto.getOptionLevel());
+            opt.setQuestion(question);
+            return opt;
+        }).collect(Collectors.toList());
     }
 }

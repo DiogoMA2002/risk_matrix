@@ -45,8 +45,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**","/questions/**", "/suggestions/**", "/answers/submit", "/answers/submit-multiple",
-                                "/questionnaires/**","/feedback/**","/categories/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                                "/questionnaires/**","/feedback","/categories/**").permitAll()
+                        .requestMatchers("/admin/**", "/feedback/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
