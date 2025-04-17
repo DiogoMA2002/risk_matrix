@@ -1,6 +1,5 @@
 package ipleiria.risk_matrix.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

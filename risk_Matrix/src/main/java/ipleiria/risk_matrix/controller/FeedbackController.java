@@ -36,63 +36,23 @@ public class FeedbackController {
         return ResponseEntity.ok(feedbackService.getAllFeedback());
     }
 
-    @GetMapping("/email/{email}")
+    @GetMapping("/filter")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Feedback>> getFeedbackByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(feedbackService.getFeedbackByEmail(email));
+    public ResponseEntity<List<Feedback>> filterFeedback(
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+
+        FeedbackType feedbackType = null;
+        if (type != null && !type.isBlank()) {
+            feedbackType = parseFeedbackType(type);
+        }
+
+        List<Feedback> result = feedbackService.filterFeedback(email, feedbackType, startDate, endDate);
+        return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/type/{type}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Feedback>> getFeedbackByType(@PathVariable String type) {
-        return ResponseEntity.ok(feedbackService.getFeedbackByType(parseFeedbackType(type)));
-    }
-
-    @GetMapping("/email/{email}/type/{type}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Feedback>> getFeedbackByEmailAndType(
-            @PathVariable String email,
-            @PathVariable String type) {
-        return ResponseEntity.ok(feedbackService.getFeedbackByEmailAndType(email, parseFeedbackType(type)));
-    }
-
-    @GetMapping("/date-range")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Feedback>> getFeedbackByDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        return ResponseEntity.ok(feedbackService.getFeedbackByDateRange(startDate, endDate));
-    }
-
-    @GetMapping("/email/{email}/date-range")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Feedback>> getFeedbackByEmailAndDateRange(
-            @PathVariable String email,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        return ResponseEntity.ok(feedbackService.getFeedbackByEmailAndDateRange(email, startDate, endDate));
-    }
-
-    @GetMapping("/type/{type}/date-range")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Feedback>> getFeedbackByTypeAndDateRange(
-            @PathVariable String type,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        return ResponseEntity.ok(feedbackService.getFeedbackByTypeAndDateRange(parseFeedbackType(type), startDate, endDate));
-    }
-
-    @GetMapping("/email/{email}/type/{type}/date-range")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Feedback>> getFeedbackByEmailAndTypeAndDateRange(
-            @PathVariable String email,
-            @PathVariable String type,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        return ResponseEntity.ok(
-                feedbackService.getFeedbackByEmailAndTypeAndDateRange(email, parseFeedbackType(type), startDate, endDate)
-        );
-    }
 
     private FeedbackType parseFeedbackType(String type) {
         try {

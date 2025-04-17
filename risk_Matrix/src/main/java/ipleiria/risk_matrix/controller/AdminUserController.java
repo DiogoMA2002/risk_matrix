@@ -1,7 +1,6 @@
 package ipleiria.risk_matrix.controller;
 import ipleiria.risk_matrix.models.users.AdminUser;
 import ipleiria.risk_matrix.service.AdminUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

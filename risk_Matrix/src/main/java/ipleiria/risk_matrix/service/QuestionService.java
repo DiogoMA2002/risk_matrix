@@ -154,7 +154,7 @@ public class QuestionService {
         // Defensive: check for duplicates before making changes
         questionRepository.findByQuestionText(dto.getQuestionText())
                 .filter(q -> !q.getId().equals(id)) // allow if it's the same question
-                .ifPresent(q -> {
+                .ifPresent(_ -> {
                     throw new handleDuplicateException("Já existe uma pergunta com esse texto.");
                 });
 

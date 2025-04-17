@@ -64,11 +64,6 @@ public class AnswerService {
                 .collect(Collectors.toList());
     }
 
-    public List<AnswerDTO> getAnswersByQuestion(Long questionId) {
-        return answerRepository.findByQuestionId(questionId).stream()
-                .map(AnswerDTO::new)
-                .collect(Collectors.toList());
-    }
 
     public List<AnswerDTO> getAllAnswers() {
         return answerRepository.findAll().stream()
@@ -124,7 +119,7 @@ public class AnswerService {
             dto.setEmail(email);
             dto.setAnswers(submissionAnswers);
             dto.setSeveritiesByCategory(severities);
-            dto.setCreatedAt(submissionAnswers.get(0).getCreatedAt());
+            dto.setCreatedAt(submissionAnswers.getFirst().getCreatedAt());
             result.add(dto);
         }
         return result;

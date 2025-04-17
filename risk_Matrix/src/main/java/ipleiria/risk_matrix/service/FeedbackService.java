@@ -43,68 +43,14 @@ public class FeedbackService {
         return feedbackRepository.findAll();
     }
 
-    public List<Feedback> getFeedbackByEmail(String email) {
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email must be provided.");
-        }
-        return feedbackRepository.findByEmail(email.trim());
-    }
 
-    public List<Feedback> getFeedbackByType(FeedbackType type) {
-        if (type == null) {
-            throw new IllegalArgumentException("Feedback type must be provided.");
-        }
-        return feedbackRepository.findByFeedbackType(type);
-    }
-
-    public List<Feedback> getFeedbackByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        validateDateRange(startDate, endDate);
-        return feedbackRepository.findByCreatedAtBetween(startDate, endDate);
-    }
-
-    public List<Feedback> getFeedbackByEmailAndType(String email, FeedbackType type) {
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email must be provided.");
-        }
-        if (type == null) {
-            throw new IllegalArgumentException("Feedback type must be provided.");
-        }
-        return feedbackRepository.findByEmailAndFeedbackType(email.trim(), type);
-    }
-
-    public List<Feedback> getFeedbackByEmailAndDateRange(String email, LocalDateTime startDate, LocalDateTime endDate) {
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email must be provided.");
-        }
-        validateDateRange(startDate, endDate);
-        return feedbackRepository.findByEmailAndCreatedAtBetween(email.trim(), startDate, endDate);
-    }
-
-    public List<Feedback> getFeedbackByTypeAndDateRange(FeedbackType type, LocalDateTime startDate, LocalDateTime endDate) {
-        if (type == null) {
-            throw new IllegalArgumentException("Feedback type must be provided.");
-        }
-        validateDateRange(startDate, endDate);
-        return feedbackRepository.findByFeedbackTypeAndCreatedAtBetween(type, startDate, endDate);
-    }
-
-    public List<Feedback> getFeedbackByEmailAndTypeAndDateRange(String email, FeedbackType type, LocalDateTime startDate, LocalDateTime endDate) {
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email must be provided.");
-        }
-        if (type == null) {
-            throw new IllegalArgumentException("Feedback type must be provided.");
-        }
-        validateDateRange(startDate, endDate);
-        return feedbackRepository.findByEmailAndFeedbackTypeAndCreatedAtBetween(email.trim(), type, startDate, endDate);
-    }
-    private void validateDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        if (startDate == null || endDate == null) {
-            throw new IllegalArgumentException("Start and end dates must be provided.");
-        }
-        if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("Start date cannot be after end date.");
-        }
+    public List<Feedback> filterFeedback(String email, FeedbackType type, LocalDateTime startDate, LocalDateTime endDate) {
+        return feedbackRepository.findAll().stream()
+                .filter(fb -> email == null || fb.getEmail().equalsIgnoreCase(email))
+                .filter(fb -> type == null || fb.getFeedbackType() == type)
+                .filter(fb -> startDate == null || !fb.getCreatedAt().isBefore(startDate))
+                .filter(fb -> endDate == null || !fb.getCreatedAt().isAfter(endDate))
+                .toList();
     }
 
 }

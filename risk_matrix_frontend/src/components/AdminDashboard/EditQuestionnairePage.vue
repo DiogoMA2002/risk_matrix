@@ -81,7 +81,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
                   </button>
-                  <button @click="deleteQuestion(question.id)" class="p-2 text-gray-500 hover:text-red-600" title="Remover">
+                  <button @click="confirmDelete(question.id)" class="p-2 text-gray-500 hover:text-red-600" title="Remover">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
               </svg>
@@ -114,6 +114,12 @@
   message="O nome do questionário foi atualizado com sucesso!"
   @confirm="showSuccessDialog = false"
 />
+<ConfirmDialog
+  v-if="showDeleteDialog"
+  :message="'Tem a certeza que deseja remover esta questão do questionário?'"
+  @confirm="performDelete"
+  @cancel="showDeleteDialog = false"
+/>
 
 </template>
 
@@ -121,7 +127,7 @@
 import { mapState } from 'vuex';
 import axios from 'axios';
 import AlertDialog from '@/components/Static/AlertDialog.vue';
-
+import ConfirmDialog from '@/components/Static/ConfirmDialogue.vue';
 export default {
   name: 'EditQuestionnairePage',
   data() {
@@ -135,6 +141,9 @@ export default {
       itemsPerPage: 5,
       filteredQuestions: [],
       showSuccessDialog: false,
+      confirmDeleteId: null,
+showDeleteDialog: false
+
 
     };
   },
@@ -158,7 +167,8 @@ export default {
     ]);
   },
   components: {
-  AlertDialog
+  AlertDialog,
+  ConfirmDialog
 }
 ,
   methods: {
@@ -226,26 +236,34 @@ export default {
       this.$router.push(`/admin/edit-question/${id}`);
     },
 
-    async deleteQuestion(questionId) {
-      if (!confirm('Tem a certeza que deseja remover esta questão do questionário?')) return;
+    confirmDelete(questionId) {
+  this.confirmDeleteId = questionId;
+  this.showDeleteDialog = true;
+},
 
-      try {
-        const token = localStorage.getItem('jwt');
-        const question = await axios.get(`/api/questions/${questionId}`);
-        const updatedIds = question.data.questionnaireIds.filter(id => id != this.questionnaireId);
-        await axios.put(`/api/questions/${questionId}`, {
-          ...question.data,
-          questionnaireIds: updatedIds
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+async performDelete() {
+  try {
+    const token = localStorage.getItem('jwt');
+    const question = await axios.get(`/api/questions/${this.confirmDeleteId}`);
+    const updatedIds = question.data.questionnaireIds.filter(id => id != this.questionnaireId);
 
-        await this.fetchQuestionnaireDetails();
-      } catch (err) {
-        alert('Erro ao remover questão.');
-        console.error(err);
-      }
-    },
+    await axios.put(`/api/questions/${this.confirmDeleteId}`, {
+      ...question.data,
+      questionnaireIds: updatedIds
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    await this.fetchQuestionnaireDetails();
+  } catch (err) {
+    alert('Erro ao remover questão.');
+    console.error(err);
+  } finally {
+    this.showDeleteDialog = false;
+    this.confirmDeleteId = null;
+  }
+},
+
 
     nextPage() {
       if (this.currentPage < this.totalPages) this.currentPage++;
