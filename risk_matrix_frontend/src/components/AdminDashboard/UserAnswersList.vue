@@ -63,6 +63,7 @@
                 Submissão: <span class="font-semibold">{{ response.submissionId }}</span>
               </h3>
               <p class="text-sm text-gray-600">{{ response.email }}</p>
+              <p class="text-xs text-gray-500">Data: {{ formatDate(response.createdAt) }}</p>
             </div>
             <button @click="$emit('download-report', response.submissionId)"
               class="px-3 py-1.5 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all flex items-center">
@@ -191,6 +192,11 @@ export default {
       if (s.includes("baixo") || s.includes("low")) return "bg-green-100 text-green-800";
       if (s.includes("critico") || s.includes("critical")) return "bg-red-100 text-red-800";
       return "bg-blue-100 text-blue-800";
+    },
+    formatDate(date) {
+      if (!date) return "N/A";
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+      return new Date(date).toLocaleDateString('pt-PT', options);
     }
   }
 };

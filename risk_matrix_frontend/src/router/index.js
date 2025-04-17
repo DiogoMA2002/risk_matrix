@@ -32,6 +32,12 @@ const routes = [
     name: 'EditQuestion',
     component: () => import('@/components/AdminDashboard/EditQuestionPage.vue'), // Route for editing questions
     meta: { requiresAuth: true, requiresAdmin: true } // Assuming admin routes need authentication
+  },
+  {
+    path: '/admin/edit-questionnaire/:questionnaireId',
+    name: 'EditQuestionnaire',
+    component: () => import('@/components/AdminDashboard/EditQuestionnairePage.vue'), // Route for editing questionnaires
+    meta: { requiresAuth: true, requiresAdmin: true }
   }
 ]
 

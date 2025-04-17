@@ -124,6 +124,7 @@ public class AnswerService {
             dto.setEmail(email);
             dto.setAnswers(submissionAnswers);
             dto.setSeveritiesByCategory(severities);
+            dto.setCreatedAt(submissionAnswers.get(0).getCreatedAt());
             result.add(dto);
         }
         return result;

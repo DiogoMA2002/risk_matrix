@@ -17,7 +17,7 @@
     <div class="w-full flex justify-center pt-10">
       <div class="flex items-center space-x-3">
         <div class="flex items-center justify-center">
-          <img src="@/assets/logoCCC.png" alt="Logo" class="h-16 object-contain" v-once />
+          <img src="@/assets/logoCCC.webp" alt="Logo" class="h-16 object-contain" v-once />
         </div>
       </div>
     </div>
@@ -79,11 +79,11 @@
 
     <!-- Logo no canto inferior esquerdo -->
     <div class="fixed bottom-6 left-6">
-      <img src="@/assets/LogoFinanciamento.png" alt="Logo C-Network" class="h-12 object-contain" v-once />
+      <img src="@/assets/LogoFinanciamento.webp" alt="Logo C-Network" class="h-12 object-contain" v-once />
     </div>
   </div>
   <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2">
-    <img src="@/assets/Barra-PRR-RP-EU-1024x148.png" alt="Financiamento Logo" class="h-12 object-contain" v-once />
+    <img src="@/assets/Barra-PRR-RP-EU-1024x148.webp" alt="Financiamento Logo" class="h-12 object-contain" v-once />
   </div>
 </template>
 

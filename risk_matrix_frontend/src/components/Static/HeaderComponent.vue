@@ -34,7 +34,7 @@
             Sair
           </button>
   
-          <img src="@/assets/logoCCC.png" alt="Logo" class="h-12 object-contain" />
+          <img src="@/assets/logoCCC.webp" alt="Logo" class="h-12 object-contain" />
         </div>
       </div>
   

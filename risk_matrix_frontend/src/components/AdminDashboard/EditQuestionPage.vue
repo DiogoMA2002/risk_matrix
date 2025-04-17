@@ -5,7 +5,7 @@
       <div class="flex justify-between items-center">
         <!-- Left side: back button and title -->
         <div class="flex items-center">
-          <button @click="$router.go(-1)"
+          <button @click="$router.push('/admin')"
             class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -129,35 +129,36 @@
             </button>
           </div>
 
-          <!-- Questionnaire Associations -->
-          <div>
-            <h2 class="text-xl font-semibold text-blue-600 mb-3">Associated Questionnaires</h2>
-            <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500 mb-4">
-              <p class="font-medium">
-                Select the questionnaires this question belongs to.
-              </p>
-            </div>
+        <!-- Questionnaire Associations -->
+<div>
+  <h2 class="text-xl font-semibold text-blue-600 mb-3">Associated Questionnaires</h2>
+  <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500 mb-4">
+    <p class="font-medium">
+      Select the questionnaires this question belongs to.
+    </p>
+  </div>
 
-            <div v-if="loadingQuestionnaires" class="text-center py-4">
-              <p>Loading questionnaires...</p>
-            </div>
-            <div v-else-if="questionnaireError" class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500 mb-4">
-              <p class="text-red-700">Error loading questionnaires: {{ questionnaireError }}</p>
-            </div>
-            <div v-else class="bg-indigo-50 p-4 rounded-lg">
-              <div class="max-h-60 overflow-y-auto p-3 rounded-md bg-white shadow-sm">
-                <div v-for="q in allQuestionnaires" :key="q.id"
-                  class="flex items-center hover:bg-indigo-50 p-2 rounded">
-                  <label class="inline-flex items-center cursor-pointer w-full">
-                    <input type="checkbox" :value="q.id" v-model="associatedQuestionnaireIds"
-                      class="form-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
-                    <span class="ml-2 block text-sm text-gray-900">{{ q.name }}</span>
-                  </label>
-                </div>
-                <p v-if="!allQuestionnaires.length" class="text-center py-3 text-gray-500">No questionnaires found.</p>
-              </div>
-            </div>
-          </div>
+  <div v-if="questionnaireError" class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500 mb-4">
+    <p class="text-red-700">Error loading questionnaires: {{ questionnaireError }}</p>
+  </div>
+  <div v-else-if="!questionnaires.length" class="text-center py-4 text-gray-500">
+    <p>Loading questionnaires...</p>
+  </div>
+  <div v-else class="bg-indigo-50 p-4 rounded-lg">
+    <div class="max-h-60 overflow-y-auto p-3 rounded-md bg-white shadow-sm">
+      <div v-for="q in allQuestionnaires" :key="q.id"
+        class="flex items-center hover:bg-indigo-50 p-2 rounded">
+        <label class="inline-flex items-center cursor-pointer w-full">
+          <input type="checkbox" :value="q.id" v-model="associatedQuestionnaireIds"
+            class="form-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+          <span class="ml-2 block text-sm text-gray-900">{{ q.name }}</span>
+        </label>
+      </div>
+      <p v-if="!allQuestionnaires.length" class="text-center py-3 text-gray-500">No questionnaires found.</p>
+    </div>
+  </div>
+</div>
+
 
           <!-- Action Buttons -->
           <div class="mt-8 pt-4 border-t border-gray-200">
@@ -211,17 +212,16 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'; 
+import { mapState } from 'vuex';
 import SkeletonLoader from '@/components/Static/SkeletonLoader.vue';
 
-// Define OptionLevel enum/constants for clarity
 const OptionLevel = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',
   HIGH: 'HIGH',
 };
 
-// Define OptionLevelType enum/constants
 const OptionLevelType = {
   IMPACT: 'IMPACT',
   PROBABILITY: 'PROBABILITY'
@@ -238,29 +238,40 @@ export default {
         categoryName: '',
         options: [],
       },
-      allQuestionnaires: [],
       associatedQuestionnaireIds: [],
-      availableCategories: [],
       loading: true,
       error: null,
+      loadingCategories: false,
       loadingQuestionnaires: true,
-      questionnaireError: null,
-      loadingCategories: true,
       categoryError: null,
+      questionnaireError: null,
       isSaving: false,
       saveError: null,
       saveSuccess: false,
     };
   },
   computed: {
+    ...mapState(['questions', 'questionnaires', 'categories']),
     questionId() {
       return parseInt(this.$route.params.questionId, 10);
+    },
+    allQuestionnaires() {
+  return this.questionnaires
+    .filter(q => q.id && (q.title || q.name))
+    .map(q => ({
+      id: q.id,
+      name: q.title || q.name
+    }));
+}
+,
+    availableCategories() {
+      // Filter out categories without name (if any edge case)
+      return this.categories.filter(cat => cat.name);
     }
   },
   methods: {
     async fetchQuestionDetails() {
       this.loading = true;
-      this.error = null;
       try {
         const response = await axios.get(`/api/questions/${this.questionId}`);
         const backendQuestion = response.data;
@@ -277,45 +288,11 @@ export default {
         };
 
         this.associatedQuestionnaireIds = backendQuestion.questionnaires?.map(q => q.id) || [];
-
       } catch (err) {
         console.error("Error fetching question details:", err);
         this.error = err.response?.data?.message || err.message || 'Failed to load question details.';
       } finally {
         this.loading = false;
-        // Log category name after fetching question details
-      }
-    },
-
-    async fetchAllQuestionnaires() {
-      this.loadingQuestionnaires = true;
-      this.questionnaireError = null;
-      try {
-        const response = await axios.get('/api/questionnaires');
-        this.allQuestionnaires = response.data.map(dto => ({
-          id: dto.id,
-          name: dto.title
-        }));
-      } catch (err) {
-        console.error("Error fetching questionnaires:", err);
-        this.questionnaireError = err.response?.data?.message || err.message || 'Failed to load questionnaires.';
-      } finally {
-        this.loadingQuestionnaires = false;
-      }
-    },
-
-    async fetchCategories() {
-      this.loadingCategories = true;
-      this.categoryError = null;
-      try {
-        const response = await axios.get('/api/categories');
-        this.availableCategories = response.data.filter(cat => cat.name);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-        this.categoryError = err.response?.data?.message || err.message || 'Failed to load categories.';
-        this.availableCategories = [];
-      } finally {
-        this.loadingCategories = false;
       }
     },
 
@@ -343,13 +320,20 @@ export default {
         return;
       }
 
-      // Log the category name right before creating the payload
-
-
-      // Trim and re-validate categoryName before creating payload
-      const finalCategoryName = this.question.categoryName ? this.question.categoryName.trim() : '';
+      const finalCategoryName = this.question.categoryName?.trim() || '';
       if (!finalCategoryName) {
         this.saveError = "Please select a valid category for the question.";
+        this.isSaving = false;
+        return;
+      }
+
+      const isDuplicate = this.questions.some(q =>
+        q.questionText?.trim().toLowerCase() === this.question.questionText.trim().toLowerCase() &&
+        q.id !== this.question.id
+      );
+
+      if (isDuplicate) {
+        this.saveError = "Já existe uma pergunta com esse texto.";
         this.isSaving = false;
         return;
       }
@@ -357,7 +341,7 @@ export default {
       const payload = {
         id: this.question.id,
         questionText: this.question.questionText,
-        categoryName: finalCategoryName, // Use the validated name
+        categoryName: finalCategoryName,
         options: this.question.options.map(opt => ({
           optionText: opt.optionText,
           optionLevel: opt.optionLevel,
@@ -366,25 +350,17 @@ export default {
         questionnaireIds: this.associatedQuestionnaireIds
       };
 
-
       try {
-
         await axios.put(`/api/questions/${this.question.id}`, payload, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         });
+
         this.saveSuccess = true;
         this.saveError = null;
-
-        setTimeout(() => {
-          this.saveSuccess = false;
-        }, 2500);
-
+        setTimeout(() => this.saveSuccess = false, 2500);
       } catch (err) {
         console.error("Error saving question:", err);
         this.saveError = err.response?.data?.message || err.message || 'Failed to save question.';
-        this.saveSuccess = false;
       } finally {
         this.isSaving = false;
       }
@@ -394,23 +370,27 @@ export default {
       this.$router.go(-1);
     }
   },
-  async mounted() {
-    try {
-      await Promise.all([
-        this.fetchAllQuestionnaires(),
-        this.fetchCategories(),
-        this.fetchQuestionDetails()
-      ]);
-    } catch (err) {
-      console.error("Error during initial load:", err);
-    }
-  }
 
+  async mounted() {
+    await Promise.all([
+      this.$store.dispatch('fetchQuestionnaires'),
+      this.$store.dispatch('fetchQuestions'),
+      this.$store.dispatch('fetchCategories'), // ✅ Centralised categories fetch
+      this.fetchQuestionDetails()
+    ]);
+    console.log('Vuex questionnaires:', this.questionnaires);
+
+  }
 };
 </script>
 
-<style scoped>
-.max-h-60 {
-  max-height: 15rem;
+
+
+<style>
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 </style>

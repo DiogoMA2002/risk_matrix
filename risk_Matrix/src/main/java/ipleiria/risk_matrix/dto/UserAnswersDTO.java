@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,9 @@ public class UserAnswersDTO {
     private List<@Valid AnswerDTO> answers;
 
     private Map<String, Severity> severitiesByCategory;
+
+    private LocalDateTime createdAt;
+
 
     public UserAnswersDTO() {
     }

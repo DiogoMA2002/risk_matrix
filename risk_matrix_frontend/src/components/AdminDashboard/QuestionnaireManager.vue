@@ -18,6 +18,10 @@
            class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
         <span class="text-gray-800">{{ questionnaire.title }}</span>
         <div class="flex space-x-2">
+          <button @click="editQuestionnaire(questionnaire.id)"
+                  class="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors">
+            Editar
+          </button>
           <button @click="exportQuestionnaire(questionnaire.id)" 
                   class="px-3 py-1 text-sm bg-green-100 text-green-800 rounded hover:bg-green-200 transition-colors">
             Exportar
@@ -220,6 +224,9 @@ export default {
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
+    },
+    editQuestionnaire(id) {
+      this.$router.push({ path: `/admin/edit-questionnaire/${id}` });
     }
   }
 };

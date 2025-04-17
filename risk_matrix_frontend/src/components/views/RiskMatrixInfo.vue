@@ -19,7 +19,7 @@
 
                 <!-- Right side: Logo + C-Network text -->
                 <div class="flex items-center space-x-2 text-white">
-                    <img src="@/assets/logoCCC.png" alt="Logo" class="h-16">
+                    <img src="@/assets/logoCCC.webp" alt="Logo" class="h-16">
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
 
                 <div class="mt-8 pt-4 border-t border-gray-200">
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-500">Tempo estimado: 10-15 minutos</span>
+                        <span class="text-sm text-gray-500">Tempo estimado: 15-30 minutos</span>
                         <button @click="proceed"
                             class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium transition-all duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-md hover:shadow-lg flex items-center">
                             <span>Continuar</span>

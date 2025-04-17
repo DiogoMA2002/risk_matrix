@@ -19,7 +19,7 @@
 
                 <!-- Right side: Logo + C-Network text -->
                 <div class="flex items-center space-x-2 text-white">
-                    <img src="@/assets/logoCCC.png" alt="Logo" class="h-16">
+                    <img src="@/assets/logoCCC.webp" alt="Logo" class="h-16">
                 </div>
             </div>
         </div>

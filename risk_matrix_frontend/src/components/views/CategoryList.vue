@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="flex items-center space-x-2 text-white">
-          <img src="@/assets/logoCCC.png" alt="Logo" class="h-16" v-once>
+          <img src="@/assets/logoCCC.webp" alt="Logo" class="h-16" v-once>
         </div>
       </header>
 

@@ -26,33 +26,11 @@ public class AnswerController {
         this.documentsService = documentsService;
     }
 
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<AnswerDTO> getAllAnswers() {
-        return answerService.getAllAnswers();
-    }
-
-    @PostMapping("/submit")
-    public AnswerDTO submitAnswer(@Valid @RequestBody AnswerDTO answerDTO) {
-        return answerService.submitAnswer(answerDTO);
-    }
-
     @PostMapping("/submit-multiple")
     public List<AnswerDTO> submitMultipleAnswers(@Valid @RequestBody List<@Valid AnswerDTO> answers) {
         return answerService.submitMultipleAnswers(answers);
     }
 
-    @GetMapping("/by-question/{questionId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<AnswerDTO> getAnswersByQuestion(@PathVariable Long questionId) {
-        return answerService.getAnswersByQuestion(questionId);
-    }
-
-    @GetMapping("/by-email/{email}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<AnswerDTO> getAnswersByEmail(@PathVariable String email) {
-        return answerService.getAnswersByEmail(email);
-    }
 
     @GetMapping("/by-email-with-severity/{email}")
     @PreAuthorize("hasRole('ADMIN')")

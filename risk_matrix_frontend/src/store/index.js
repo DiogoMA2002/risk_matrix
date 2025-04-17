@@ -7,7 +7,9 @@ export default createStore({
     questionnaires: [],
     selectedQuestionnaire: null,
     allAnswers: {},
+    categories: [],          
     selectedQuestionnaireId: null,
+    
   },
   mutations: {
     setQuestions(state, questions) {
@@ -15,6 +17,9 @@ export default createStore({
     },
     setQuestionnaires(state, questionnaires) {
       state.questionnaires = questionnaires
+    },
+    setCategories(state, categories) {        
+      state.categories = categories
     },
     setSelectedQuestionnaire(state, questionnaire) {
       state.selectedQuestionnaire = questionnaire
@@ -51,6 +56,13 @@ export default createStore({
           }
         })
         .catch(error => console.error('Erro ao buscar questionários:', error))
+    },
+    fetchCategories({ commit }) {                
+      return axios.get('/api/categories')
+        .then(response => {
+          commit('setCategories', response.data.filter(cat => cat.name))
+        })
+        .catch(error => console.error('Erro ao buscar categorias:', error))
     },
     async fetchQuestionnaireById({ commit }, id) {
       try {

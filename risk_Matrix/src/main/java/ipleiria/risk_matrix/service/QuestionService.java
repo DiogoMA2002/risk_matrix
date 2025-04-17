@@ -5,6 +5,7 @@ import ipleiria.risk_matrix.dto.QuestionOptionDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidCategoryException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionNotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
+import ipleiria.risk_matrix.exceptions.exception.handleDuplicateException;
 import ipleiria.risk_matrix.models.category.Category;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.OptionLevel;
@@ -143,9 +144,20 @@ public class QuestionService {
 
         questionRepository.delete(question);
     }
+    public QuestionDTO getQuestionDtoById(Long id) {
+        Question question = getQuestionById(id);
+        return new QuestionDTO(question);
+    }
 
     @Transactional
     public QuestionDTO updateQuestion(Long id, QuestionDTO dto) {
+        // Defensive: check for duplicates before making changes
+        questionRepository.findByQuestionText(dto.getQuestionText())
+                .filter(q -> !q.getId().equals(id)) // allow if it's the same question
+                .ifPresent(q -> {
+                    throw new handleDuplicateException("Já existe uma pergunta com esse texto.");
+                });
+
         Question existing = getQuestionById(id);
 
         existing.setQuestionText(dto.getQuestionText());

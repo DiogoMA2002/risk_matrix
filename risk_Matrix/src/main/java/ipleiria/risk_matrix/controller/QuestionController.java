@@ -19,32 +19,27 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    // Create a new question and associate with questionnaires
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public QuestionDTO create(@RequestBody @Valid QuestionDTO dto) {
         return questionService.createQuestion(dto);
     }
 
-    // Get all questions
     @GetMapping
     public List<Question> getAll() {
         return questionService.getAllQuestions();
     }
 
-    // Get questions by category name
     @GetMapping("/category/{categoryName}")
     public List<Question> getByCategory(@PathVariable String categoryName) {
         return questionService.getQuestionsByCategory(categoryName);
     }
 
-    // Get question by ID
     @GetMapping("/{id}")
-    public Question getById(@PathVariable Long id) {
-        return questionService.getQuestionById(id);
+    public QuestionDTO getById(@PathVariable Long id) {
+        return questionService.getQuestionDtoById(id);
     }
 
-    // Update question
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public QuestionDTO update(
@@ -53,7 +48,6 @@ public class QuestionController {
         return questionService.updateQuestion(id, dto);
     }
 
-    // Delete question
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Long id) {
