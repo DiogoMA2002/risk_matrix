@@ -1,33 +1,34 @@
 <template>
   <div class="h-screen bg-gradient-to-br from-blue-600 to-indigo-100 font-sans overflow-y-scroll">
-    <!-- Header with back button and logo -->
+    <!-- Header -->
     <div class="container mx-auto px-4 py-6">
-            <div class="flex justify-between items-center">
-                <!-- Left side: back button and title -->
-                <div class="flex items-center">
-                    <button @click="$router.push('/risk-info')"
-                        class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                <div class="text-white">
-                    <div class="text-lg font-bold">Matriz de Risco</div>
-                    <div class="text-sm font-light">Requisitos</div>
-                </div>
-                </div>
-
-                <!-- Right side: Logo + C-Network text -->
-                <div class="flex items-center space-x-2 text-white">
-                    <img src="@/assets/logoCCC.webp" alt="Logo" class="h-16">
-                </div>
-            </div>
+      <div class="flex justify-between items-center">
+        <!-- Back button and title -->
+        <div class="flex items-center">
+          <button @click="goBack"
+            class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <div class="text-white">
+            <div class="text-lg font-bold">Matriz de Risco</div>
+            <div class="text-sm font-light">Requisitos</div>
+          </div>
         </div>
+
+        <!-- Logo -->
+        <div class="flex items-center space-x-2 text-white">
+          <img src="@/assets/logoCCC.webp" alt="Logo" class="h-16" />
+        </div>
+      </div>
+    </div>
 
     <!-- Main content -->
     <div class="container mx-auto px-4 py-6">
       <div
-        class="bg-white bg-opacity-90 backdrop-blur-md rounded-xl shadow-xl p-8 max-w-3xl mx-auto transition-all duration-500 hover:shadow-2xl">
+        class="bg-white bg-opacity-90 backdrop-blur-md rounded-xl shadow-xl p-8 max-w-3xl mx-auto transition-shadow duration-500 hover:shadow-xl">
         <h1 class="text-3xl font-bold text-blue-600 mb-6">Termos e Requisitos</h1>
 
         <div class="space-y-6 text-gray-700">
@@ -57,13 +58,12 @@
             <div class="flex items-start">
               <div
                 class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M7 11.5V14m0-2.5v-6a2.5 2.5 0 015 0v6a2.5 2.5 0 11-5 0z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M11 17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 00-1-1h-2a1 1 0 00-1 1v2z" />
+                    d="M3 3v18h18M9 17V9m4 8V5m4 12v-4" />
                 </svg>
+
               </div>
               <div class="ml-4">
                 <h2 class="text-lg font-semibold text-blue-600">Classificação dos ativos</h2>
@@ -114,7 +114,7 @@
 
         <div class="mt-8 pt-4 border-t border-gray-200">
           <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-            <button @click="$router.go(-1)"
+            <button @click="goBack"
               class="px-6 py-2 text-gray-600 rounded-lg font-medium transition-all duration-300 hover:bg-gray-100 mb-4 md:mb-0">
               Voltar
             </button>
@@ -130,8 +130,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Progress indicator -->
       <div class="max-w-3xl mx-auto mt-8 px-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center">
@@ -154,10 +152,9 @@
           </div>
         </div>
       </div>
-      <!-- Botão flutuante de ajuda -->
       <!-- Help Button -->
       <div class="fixed bottom-6 right-6">
-        <button @click="goToFeedbackForm"
+        <button @click="goToFeedbackForm" aria-label="Ajuda"
           class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2
@@ -171,18 +168,22 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'RequirementsPage',
-  methods: {
-    accept() {
-      localStorage.setItem('completedRequirements', 'true');
-      this.$router.push('/category');
-    },
-    goToFeedbackForm() {
-      // Redirect to the feedback form page
-      this.$router.push('/feedback-form');
-    }
-  }
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function accept() {
+  localStorage.setItem('completedRequirements', 'true')
+  router.push('/category')
+}
+
+function goToFeedbackForm() {
+  router.push('/feedback-form')
+}
+
+function goBack() {
+  if (window.history.length > 1) router.go(-1)
+  else router.push('/risk-info')
 }
 </script>

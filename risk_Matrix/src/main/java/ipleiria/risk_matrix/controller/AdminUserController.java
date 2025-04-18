@@ -17,14 +17,13 @@ public class AdminUserController {
     }
 
 
-    // Buscar um administrador por username
+
     @GetMapping("/{username}")
     public Optional<AdminUser> getAdminByUsername(@PathVariable String username) {
         return adminUserService.getAdminByUsername(username);
     }
 
-    // Listar todos os administradores
-    @GetMapping("/all")
+     @GetMapping("/all")
     public List<AdminUser> getAllAdmins() {
         return adminUserService.getAllAdmins();
     }
