@@ -85,28 +85,30 @@ public class QuestionnaireService {
 
         for (QuestionDTO qdto : dto.getQuestions()) {
             Category category = resolveCategoryByName(qdto.getCategoryName());
+            String questionText = validateQuestionText(qdto.getQuestionText());
 
-            Optional<Question> existing = questionRepository.findByQuestionText(qdto.getQuestionText());
+            Optional<Question> existing = questionRepository.findByQuestionText(questionText);
             if (existing.isPresent()) {
                 resolvedQuestions.add(existing.get());
                 continue;
             }
 
             Question question = new Question();
-            question.setQuestionText(validateQuestionText(qdto.getQuestionText()));
+            question.setQuestionText(questionText);
             question.setCategory(category);
-            question = questionRepository.save(question);
 
             List<QuestionOption> options = mapOptionsFromDTOs(qdto.getOptions(), question);
             question.setOptions(options);
 
             ensureNaoAplicavelOption(question);
+
             resolvedQuestions.add(questionRepository.save(question));
         }
 
         questionnaire.setQuestions(resolvedQuestions);
         return questionnaireRepository.save(questionnaire);
     }
+
 
     @Transactional
     public Question addQuestionDtoToQuestionnaire(Long questionnaireId, @Valid QuestionDTO dto) {

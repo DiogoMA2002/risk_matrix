@@ -625,7 +625,7 @@
                     "optionLevel": "MEDIUM"
                 },
                 {
-                    "optionText": "Ausência de política ou controle inadequado.",
+                    "optionText": "Ausência de política ou controlo inadequado.",
                     "optionType": "IMPACT",
                     "optionLevel": "HIGH"
                 }
@@ -1115,7 +1115,7 @@
             ]
         },
         {
-            "questionText": "Existe uma política formal para gestão segura dos acessos remotos (controle, monitorização e revogação rápida)?",
+            "questionText": "Existe uma política formal para gestão segura dos acessos remotos (controlo, monitorização e revogação rápida)?",
             "categoryName": "Risco de Acesso Remoto",
             "options": [
                 {
@@ -1178,7 +1178,7 @@
             ]
         },
         {
-            "questionText": "Existe segurança física adequada (controle de acesso, vigilância) para proteger os equipamentos críticos da empresa?",
+            "questionText": "Existe segurança física adequada (controlo de acesso, vigilância) para proteger os equipamentos críticos da empresa?",
             "categoryName": "Riscos de Material",
             "options": [
                 {
@@ -2106,17 +2106,17 @@
             "categoryName": "Risco de Exposição de Dados Sensíveis",
             "options": [
                 {
-                    "optionText": "Controle rigoroso e monitorização contínua.",
+                    "optionText": "controlo rigoroso e monitorização contínua.",
                     "optionType": "IMPACT",
                     "optionLevel": "LOW"
                 },
                 {
-                    "optionText": "Controles parciais ou monitorização limitada.",
+                    "optionText": "controlos parciais ou monitorização limitada.",
                     "optionType": "IMPACT",
                     "optionLevel": "MEDIUM"
                 },
                 {
-                    "optionText": "Sem controles eficazes ou monitorização adequada.",
+                    "optionText": "Sem controlos eficazes ou monitorização adequada.",
                     "optionType": "IMPACT",
                     "optionLevel": "HIGH"
                 }
@@ -2333,21 +2333,21 @@
             ]
         },
         {
-            "questionText": "O código-fonte crítico ou sensível é armazenado e protegido por controles rigorosos de acesso e monitorização ativa?",
+            "questionText": "O código-fonte crítico ou sensível é armazenado e protegido por controlos rigorosos de acesso e monitorização ativa?",
             "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
             "options": [
                 {
-                    "optionText": "Controles rigorosos e monitorização constante.",
+                    "optionText": "controlos rigorosos e monitorização constante.",
                     "optionType": "PROBABILITY",
                     "optionLevel": "LOW"
                 },
                 {
-                    "optionText": "Controles básicos ou parcialmente eficazes.",
+                    "optionText": "controlos básicos ou parcialmente eficazes.",
                     "optionType": "PROBABILITY",
                     "optionLevel": "MEDIUM"
                 },
                 {
-                    "optionText": "Sem controles ou monitorização insuficiente.",
+                    "optionText": "Sem controlos ou monitorização insuficiente.",
                     "optionType": "PROBABILITY",
                     "optionLevel": "HIGH"
                 }
@@ -2606,7 +2606,7 @@
             ]
         },
         {
-            "questionText": "Existem mecanismos eficazes de auditoria e controle para prevenir ou detectar rapidamente o abuso de privilégios internos?",
+            "questionText": "Existem mecanismos eficazes de auditoria e controlo para prevenir ou detectar rapidamente o abuso de privilégios internos?",
             "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
