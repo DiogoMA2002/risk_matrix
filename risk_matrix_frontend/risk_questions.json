@@ -184,6 +184,11 @@
                     "optionLevel": "MEDIUM"
                 },
                 {
+                    "optionText": "É comum receber e-mails maliciosos, mas os colaboradores não caem nos ataques.",
+                    "optionType": "PROBABILITY",
+                    "optionLevel": "MEDIUM"
+                },
+                {
                     "optionText": "É comum receber e-mails maliciosos e alguns colaboradores caem nos ataques.",
                     "optionType": "PROBABILITY",
                     "optionLevel": "HIGH"

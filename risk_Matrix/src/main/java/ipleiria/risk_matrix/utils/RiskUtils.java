@@ -80,26 +80,26 @@ public class RiskUtils {
         List<AnswerDTO> filteredAnswers = answers.stream()
                 .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
                 .toList();
+
         if (filteredAnswers.isEmpty()) {
-            return Severity.LOW;
+            return Severity.UNKNOWN;
         }
 
-        // Compute median for IMPACT levels
         List<OptionLevel> impactLevels = filteredAnswers.stream()
                 .filter(a -> a.getQuestionType() == OptionLevelType.IMPACT)
                 .map(AnswerDTO::getChosenLevel)
-                .collect(Collectors.toList());
+                .toList();
         OptionLevel medianImpact = medianLevel(impactLevels);
 
-        // Compute median for PROBABILITY levels
         List<OptionLevel> probabilityLevels = filteredAnswers.stream()
                 .filter(a -> a.getQuestionType() == OptionLevelType.PROBABILITY)
                 .map(AnswerDTO::getChosenLevel)
-                .collect(Collectors.toList());
+                .toList();
         OptionLevel medianProbability = medianLevel(probabilityLevels);
 
         return computeSeverity(medianImpact, medianProbability);
     }
+
     // Private constructor to prevent instantiation
     private RiskUtils() {}
 }

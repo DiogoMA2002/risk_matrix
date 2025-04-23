@@ -297,7 +297,7 @@ export default {
         this.$router.push("/");
       } catch (error) {
         console.error("Erro ao enviar respostas:", error);
-        await this.showAlertDialog("Erro", "Ocorreu um erro ao enviar as respostas.");
+        await this.showAlertDialog("Erro", "Ocorreu um erro ao enviar as respostas.", "error");
       }
     },
     async exportToJSON() {
