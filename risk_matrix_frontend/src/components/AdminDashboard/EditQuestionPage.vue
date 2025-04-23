@@ -3,7 +3,8 @@
     <div class="container mx-auto px-4 py-6">
       <div class="flex justify-between items-center">
         <div class="flex items-center">
-          <button @click="cancelEdit" class="p-2 rounded-full bg-white bg-opacity-20 text-white hover:bg-opacity-30 mr-4">
+          <button @click="cancelEdit"
+            class="p-2 rounded-full bg-white bg-opacity-20 text-white hover:bg-opacity-30 mr-4">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
@@ -37,8 +38,7 @@
           <!-- Question text -->
           <div>
             <label class="block text-xl font-semibold text-blue-600 mb-3">Texto da Pergunta</label>
-            <input v-model="question.questionText" type="text" required
-              placeholder="Introduza o texto da pergunta"
+            <input v-model="question.questionText" type="text" required placeholder="Introduza o texto da pergunta"
               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
           </div>
 
@@ -67,7 +67,14 @@
                     <input v-model="option.optionText" type="text" required
                       class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
                   </div>
-                  <input type="hidden" v-model="option.optionType" />
+                  <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-700">Tipo</label>
+                    <select v-model="option.optionType" required
+                      class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                      <option value="IMPACT">Impacto</option>
+                      <option value="PROBABILITY">Probabilidade</option>
+                    </select>
+                  </div>
                   <div class="flex-1">
                     <label class="block text-sm font-medium text-gray-700">Nível</label>
                     <select v-model="option.optionLevel" required
@@ -99,7 +106,8 @@
           <!-- Questionnaire checkboxes -->
           <div>
             <h2 class="text-xl font-semibold text-blue-600 mb-3">Questionários Associados</h2>
-            <div v-if="questionnaireError" class="text-red-500 mb-2">Erro ao carregar questionários: {{ questionnaireError }}</div>
+            <div v-if="questionnaireError" class="text-red-500 mb-2">Erro ao carregar questionários: {{
+              questionnaireError }}</div>
             <div v-else-if="!allQuestionnaires.length" class="text-gray-500">A carregar questionários...</div>
             <div v-else class="space-y-2 bg-white p-4 rounded-lg shadow">
               <div v-for="q in allQuestionnaires" :key="q.id" class="flex items-center space-x-2">
@@ -129,14 +137,8 @@
     </div>
 
     <!-- Alert Dialog -->
-    <AlertDialog
-      v-if="showSuccessDialog"
-      :show="showSuccessDialog"
-      type="success"
-      title="Sucesso"
-      message="A pergunta foi guardada com sucesso!"
-      @confirm="showSuccessDialog = false"
-    />
+    <AlertDialog v-if="showSuccessDialog" :show="showSuccessDialog" type="success" title="Sucesso"
+      message="A pergunta foi guardada com sucesso!" @confirm="showSuccessDialog = false" />
   </div>
 </template>
 
@@ -293,7 +295,8 @@ export default {
 </script>
 
 <style>
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;

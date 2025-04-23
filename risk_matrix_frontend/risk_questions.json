@@ -1,5 +1,5 @@
 {
-    "title": "Avaliação de Riscos de Segurança - V2",
+    "title": "Avaliação de Riscos de Segurança",
     "questions": [
         {
             "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
@@ -1619,21 +1619,21 @@
             ]
         },
         {
-            "questionText": "Existe treinamento contínuo das equipas técnicas para aplicação correta das práticas de configuração segura?",
+            "questionText": "Existe treino contínuo das equipas técnicas para aplicação correta das práticas de configuração segura?",
             "categoryName": "Risco de Configuração Inadequada de Sistemas",
             "options": [
                 {
-                    "optionText": "Treinamentos regulares e eficazes.",
+                    "optionText": "Treinos regulares e eficazes.",
                     "optionType": "IMPACT",
                     "optionLevel": "LOW"
                 },
                 {
-                    "optionText": "Treinamentos pontuais ou insuficientes.",
+                    "optionText": "Treinos pontuais ou insuficientes.",
                     "optionType": "IMPACT",
                     "optionLevel": "MEDIUM"
                 },
                 {
-                    "optionText": "Sem treinamentos regulares ou raramente realizados.",
+                    "optionText": "Sem Treinos regulares ou raramente realizados.",
                     "optionType": "IMPACT",
                     "optionLevel": "HIGH"
                 }
@@ -2375,7 +2375,7 @@
             ]
         },
         {
-            "questionText": "São realizados testes regulares e auditorias de segurança para detectar riscos relacionados à engenharia reversa ou exposição do código-fonte?",
+            "questionText": "São realizados testes regulares e auditorias de segurança para detetar riscos relacionados à engenharia reversa ou exposição do código-fonte?",
             "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
             "options": [
                 {
@@ -2459,7 +2459,7 @@
             ]
         },
         {
-            "questionText": "A empresa monitoriza ativamente o tráfego de rede em tempo real para detectar atividades suspeitas ou ataques de negação de serviço?",
+            "questionText": "A empresa monitoriza ativamente o tráfego de rede em tempo real para detetar atividades suspeitas ou ataques de negação de serviço?",
             "categoryName": "Risco de Ataques de Negação de Serviço",
             "options": [
                 {
@@ -2564,7 +2564,7 @@
             ]
         },
         {
-            "questionText": "A empresa monitora ativamente o uso de privilégios internos para detectar atividades suspeitas ou incomuns?",
+            "questionText": "A empresa monitora ativamente o uso de privilégios internos para detetar atividades suspeitas ou incomuns?",
             "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
@@ -2606,7 +2606,7 @@
             ]
         },
         {
-            "questionText": "Existem mecanismos eficazes de auditoria e controlo para prevenir ou detectar rapidamente o abuso de privilégios internos?",
+            "questionText": "Existem mecanismos eficazes de auditoria e controlo para prevenir ou detetar rapidamente o abuso de privilégios internos?",
             "categoryName": " Risco de Uso Indevido de Privilégios Internos",
             "options": [
                 {
