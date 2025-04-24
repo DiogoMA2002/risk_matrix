@@ -5,11 +5,10 @@
       <div class="flex justify-between items-center mb-6">
         <div class="flex items-center">
           <button @click="goBackToCategories"
-                  class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor" v-once>
-              <path stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" d="M15 19l-7-7 7-7" />
+            class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" v-once>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <div class="text-white">
@@ -28,10 +27,11 @@
         <transition name="fade" mode="out-in">
           <div v-if="!isLoading && questions.length > 0" key="questions">
             <div v-for="(question, index) in questions" :key="question.id"
-                 class="mb-6 bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 transition-all duration-300"
-                 v-memo="[question.id, getAnswer(question.id)]">
+              class="mb-6 bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 transition-all duration-300"
+              v-memo="[question.id, getAnswer(question.id)]">
               <div class="flex items-center mb-4">
-                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium mr-3">
+                <div
+                  class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium mr-3">
                   {{ index + 1 }}
                 </div>
                 <p class="text-lg font-semibold text-blue-800">{{ question.questionText }}</p>
@@ -39,14 +39,12 @@
               <!-- Options -->
               <div class="pl-11 space-y-3">
                 <label v-for="option in question.options" :key="option.optionText"
-                       class="block p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                  class="block p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
                   <div class="flex items-center">
-                    <input type="radio"
-                           :name="'question_' + question.id"
-                           :value="option.optionText"
-                           :checked="getAnswer(question.id) === option.optionText"
-                           @change="updateAnswer(question.id, option.optionText)"
-                           class="mr-3 h-4 w-4 text-blue-600" />
+                    <input type="radio" :name="'question_' + question.id" :value="option.optionText"
+                      :checked="getAnswer(question.id) === option.optionText"
+                      @click="handleRadioClick(question.id, option.optionText)" class="mr-3 h-4 w-4 text-blue-600" />
+
                     <span>{{ option.optionText }}</span>
                   </div>
                 </label>
@@ -75,17 +73,20 @@
       <div class="max-w-3xl mx-auto mt-10 px-4" v-once>
         <div class="flex items-center justify-between">
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">1</div>
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">1
+            </div>
             <div class="ml-2 text-white">Informações</div>
           </div>
           <div class="w-16 h-1 bg-blue-400"></div>
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">2</div>
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">2
+            </div>
             <div class="ml-2 text-white">Requisitos</div>
           </div>
           <div class="w-16 h-1 bg-blue-400"></div>
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">3</div>
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">3
+            </div>
             <div class="ml-2 text-white font-bold">Questionário</div>
           </div>
         </div>
@@ -95,39 +96,59 @@
     <!-- Help Button -->
     <div class="fixed bottom-6 right-6">
       <button @click="goToFeedbackForm"
-              class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" v-once>
-          <path stroke-linecap="round" stroke-linejoin="round"
-                stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          v-once>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
     </div>
   </div>
+  
+      <!-- Alert Dialog -->
+      <AlertDialog
+        :show="showAlert"
+        :title="alertTitle"
+        :message="alertMessage"
+        :type="alertType"
+        @confirm="handleAlertConfirm"
+        @cancel="handleAlertCancel"
+      />
 </template>
 
 <script>
 import axios from "axios";
+import AlertDialog from "@/components/Static/AlertDialog.vue";
 
 export default {
   name: "QuestionarioPage",
+  components: { 
+    AlertDialog
+  },
   data() {
     return {
       questions: [],
-      isLoading: true
+      isLoading: true,
+      showAlert: false,
+      alertTitle: "",
+      alertMessage: "",
+      alertType: "alert",
+      alertResolve: null,
+      loading: true
     };
   },
   computed: {
     formattedCategory() {
       const raw = this.$route.params.category || "";
       return raw.replace(/_/g, ' ')
-                .split(' ')
-                .map(word => {
-                  if (!word) return '';
-                  return word.charAt(0).toLocaleUpperCase('pt-PT') + 
-                         word.slice(1).toLocaleLowerCase('pt-PT');
-                })
-                .join(' ');
+        .split(' ')
+        .map(word => {
+          if (!word) return '';
+          return word.charAt(0).toLocaleUpperCase('pt-PT') +
+            word.slice(1).toLocaleLowerCase('pt-PT');
+        })
+        .join(' ');
     },
     answers() {
       const category = this.$route.params.category;
@@ -159,6 +180,29 @@ export default {
         this.isLoading = false;
       }
     },
+    showAlertDialog(title, message, type = "alert") {
+      this.alertTitle = title;
+      this.alertMessage = message;
+      this.alertType = type;
+      this.showAlert = true;
+      return new Promise((resolve) => {
+        this.alertResolve = resolve;
+      });
+    },
+    handleAlertConfirm() {
+      this.showAlert = false;
+      if (this.alertResolve) {
+        this.alertResolve(true);
+        this.alertResolve = null;
+      }
+    },
+    handleAlertCancel() {
+      this.showAlert = false;
+      if (this.alertResolve) {
+        this.alertResolve(false);
+        this.alertResolve = null;
+      }
+    },
     updateAnswer(questionId, value) {
       const category = this.$route.params.category;
       const current = this.getAnswer(questionId);
@@ -176,13 +220,31 @@ export default {
         return typeof answer === "string" && answer.trim() !== "";
       });
     },
-    goBackToCategories() {
+    handleRadioClick(questionId, optionText) {
+      const current = this.getAnswer(questionId);
+      const newValue = current === optionText ? "" : optionText;
+      this.updateAnswer(questionId, newValue);
+    }
+    ,
+   async goBackToCategories() {
+      if (!this.allQuestionsAnswered()) {
+        const proceed = await this.showAlertDialog(
+            "Aviso",
+            "Nem todas as perguntas foram respondidas.\nIsto pode afetar a precisão da avaliação de risco.\nDeseja continuar mesmo assim?",
+            "confirm"
+          );
+          if (!proceed) {
+            return;
+          }
+      }
+
       const { questionnaireId } = this.$route.params;
       this.$router.push({
         name: 'CategoryList',
         query: { selected: questionnaireId }
       });
-    },
+    }
+    ,
     goToFeedbackForm() {
       this.$router.push("/feedback-form");
     }
@@ -197,10 +259,12 @@ body {
   margin: 0;
   padding: 0;
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
