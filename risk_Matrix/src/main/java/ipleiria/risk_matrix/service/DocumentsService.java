@@ -65,7 +65,7 @@ public class DocumentsService {
 
             replacePlaceholders(document, vars);
             addSummarySection(document, severities);
-            addAnswersTable(document, answersByCategory);
+            addAnswersTable(document, answersByCategory,severities);
 
             document.write(out);
             return out.toByteArray();
@@ -99,45 +99,52 @@ public class DocumentsService {
     }
 
     private void addSummarySection(XWPFDocument document, Map<String, Severity> severities) {
-        for (Map.Entry<String, Severity> entry : severities.entrySet()) {
-            XWPFParagraph p = document.createParagraph();
-            XWPFRun run = p.createRun();
-            run.setText(entry.getKey() + ": " + entry.getValue());
-            run.setFontSize(14);
-            run.setFontFamily("Calibri");
-            run.setBold(true);
-        }
+        severities.entrySet().stream()
+                .sorted(Map.Entry.<String, Severity>comparingByValue().reversed())
+                .forEach(entry -> {
+                    XWPFParagraph p = document.createParagraph();
+                    XWPFRun run = p.createRun();
+                    run.setText(entry.getKey() + ": " + entry.getValue());
+                    run.setFontSize(14);
+                    run.setFontFamily("Calibri");
+                    run.setBold(true);
+                });
+
     }
 
-    private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory) {
-        for (Map.Entry<String, List<Answer>> entry : answersByCategory.entrySet()) {
-            String category = entry.getKey();
-            List<Answer> answers = entry.getValue();
+    private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory, Map<String, Severity> severities) {
+        answersByCategory.entrySet().stream()
+                .sorted(Comparator.comparing(
+                        (Map.Entry<String, List<Answer>> e) ->
+                                Objects.requireNonNullElse(severities.get(e.getKey()), Severity.LOW)
+                ).reversed())
+                .forEach(entry -> {
+                    String category = entry.getKey();
+                    List<Answer> answers = entry.getValue();
 
-            XWPFParagraph categoryHeader = document.createParagraph();
-            XWPFRun headerRun = categoryHeader.createRun();
-            headerRun.setText("Categoria: " + category);
-            headerRun.setBold(true);
-            headerRun.setFontSize(14);
-            headerRun.setFontFamily("Calibri");
+                    XWPFParagraph categoryHeader = document.createParagraph();
+                    XWPFRun headerRun = categoryHeader.createRun();
+                    headerRun.setText("Categoria: " + category);
+                    headerRun.setBold(true);
+                    headerRun.setFontSize(14);
+                    headerRun.setFontFamily("Calibri");
 
-            XWPFTable table = document.createTable();
-            XWPFTableRow header = table.getRow(0);
-            header.getCell(0).setText("Pergunta");
-            header.addNewTableCell().setText("Resposta");
-            header.addNewTableCell().setText("Tipo");
-            header.addNewTableCell().setText("Nível");
+                    XWPFTable table = document.createTable();
+                    XWPFTableRow header = table.getRow(0);
+                    header.getCell(0).setText("Pergunta");
+                    header.addNewTableCell().setText("Resposta");
+                    header.addNewTableCell().setText("Tipo");
+                    header.addNewTableCell().setText("Nível");
 
-            for (Answer answer : answers) {
-                XWPFTableRow row = table.createRow();
-                row.getCell(0).setText(answer.getQuestionText());
-                row.getCell(1).setText(answer.getUserResponse());
-                row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
-                row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
-            }
+                    for (Answer answer : answers) {
+                        XWPFTableRow row = table.createRow();
+                        row.getCell(0).setText(answer.getQuestionText());
+                        row.getCell(1).setText(answer.getUserResponse());
+                        row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
+                        row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+                    }
 
-            // Spacing
-            document.createParagraph();
-        }
+                    document.createParagraph();
+                });
     }
 }
