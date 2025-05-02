@@ -31,6 +31,9 @@ public class QuestionOption {
     @Column(nullable = false)
     private OptionLevel optionLevel; // LOW, MEDIUM, HIGH
 
+    @Lob //Informa o JPA para Premitir uma string maior
+    @Column(columnDefinition = "TEXT")
+    private String recommendation;
 
     public QuestionOption() {
     }

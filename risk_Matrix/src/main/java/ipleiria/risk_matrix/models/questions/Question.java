@@ -24,7 +24,6 @@ public class Question {
     @Column(nullable = false, unique = true)
     private String questionText;
 
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
