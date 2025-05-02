@@ -164,6 +164,7 @@ public class QuestionnaireService {
             opt.setOptionText(dto.getOptionText());
             opt.setOptionType(dto.getOptionType());
             opt.setOptionLevel(dto.getOptionLevel());
+            opt.setRecommendation(dto.getRecommendation()); // ✅ novo campo
             opt.setQuestion(question);
             return opt;
         }).collect(Collectors.toList());

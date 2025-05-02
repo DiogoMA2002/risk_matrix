@@ -28,6 +28,9 @@ public class QuestionOptionDTO {
     // Optional – include only if you're capturing severity at the option level
     private Severity severity;
 
+    private String recommendation; // ✅ novo campo
+
+
     public QuestionOptionDTO() {
         // DO NOT DELETE - JACKSON
 
@@ -37,17 +40,21 @@ public class QuestionOptionDTO {
     public QuestionOptionDTO(
             @JsonProperty("optionText") String optionText,
             @JsonProperty("optionType") OptionLevelType optionType,
-            @JsonProperty("optionLevel") OptionLevel optionLevel
+            @JsonProperty("optionLevel") OptionLevel optionLevel,
+            @JsonProperty("recommendation") String recommendation
+
     ) {
         this.optionText = optionText;
         this.optionType = optionType;
         this.optionLevel = optionLevel;
+        this.recommendation = recommendation;
     }
 
     public QuestionOptionDTO(QuestionOption option) {
         this.optionText = option.getOptionText();
         this.optionType = option.getOptionType();
         this.optionLevel = option.getOptionLevel();
+        this.recommendation = option.getRecommendation();
         // Optional: severity if your model has it
         // this.severity = option.getSeverity();
     }
