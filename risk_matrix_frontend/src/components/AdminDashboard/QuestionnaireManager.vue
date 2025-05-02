@@ -209,7 +209,8 @@ export default {
           options: question.options.map(option => ({
             optionText: option.optionText,
             optionType: option.optionType,
-            optionLevel: option.optionLevel
+            optionLevel: option.optionLevel,
+            recommendation: option.recommendation
           }))
         }))
       };

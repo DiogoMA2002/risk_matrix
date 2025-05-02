@@ -72,6 +72,7 @@ public class QuestionService {
         opt.setOptionType(dto.getOptionType());
         opt.setOptionLevel(dto.getOptionLevel());
         opt.setQuestion(question);
+        opt.setRecommendation(dto.getRecommendation()); // ✅ necessário
         return opt;
     }
 
