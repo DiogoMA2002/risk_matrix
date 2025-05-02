@@ -22,6 +22,9 @@ public class Answer {
     @Column(nullable = false)
     private Long questionId;
 
+    @Column
+    private Long questionOptionId;
+
     @Column(nullable = false)
     private String questionText;
 

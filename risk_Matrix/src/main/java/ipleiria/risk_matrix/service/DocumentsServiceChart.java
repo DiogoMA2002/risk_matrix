@@ -217,6 +217,7 @@ public class DocumentsServiceChart {
             header.addNewTableCell().setText("Resposta");
             header.addNewTableCell().setText("Tipo");
             header.addNewTableCell().setText("Nível");
+            header.addNewTableCell().setText("Recomendação"); // ✅ nova coluna
 
             for (Answer answer : answers) {
                 XWPFTableRow row = table.createRow();
@@ -224,6 +225,19 @@ public class DocumentsServiceChart {
                 row.getCell(1).setText(answer.getUserResponse());
                 row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
                 row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+                String recommendation = "-";
+                if (answer.getQuestionOptionId() != null) {
+                    Optional<Question> questionOpt = questionRepository.findById(answer.getQuestionId());
+                    if (questionOpt.isPresent()) {
+                        recommendation = questionOpt.get().getOptions().stream()
+                                .filter(opt -> opt.getId().equals(answer.getQuestionOptionId()))
+                                .map(opt -> opt.getRecommendation() != null ? opt.getRecommendation() : "-")
+                                .findFirst()
+                                .orElse("-");
+                    }
+                }
+
+                row.getCell(4).setText(recommendation);
             }
 
             document.createParagraph();

@@ -53,6 +53,8 @@ public class AnswerService {
         answer.setChosenLevel(selectedOption.getOptionLevel());
         answer.setSubmissionId(Optional.ofNullable(answerDTO.getSubmissionId())
                 .orElse(UUID.randomUUID().toString()));
+        answer.setQuestionOptionId(selectedOption.getId()); // ✅ novo campo
+
 
         answerRepository.save(answer);
         return new AnswerDTO(answer);
