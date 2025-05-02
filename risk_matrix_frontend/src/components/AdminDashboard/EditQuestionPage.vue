@@ -56,50 +56,49 @@
             </select>
           </div>
 
-          <!-- Options -->
-          <div>
-            <h2 class="text-xl font-semibold text-blue-600 mb-3">Opções da Pergunta</h2>
-            <div class="space-y-4">
-              <div v-for="(option, index) in question.options" :key="index" class="p-4 bg-indigo-50 rounded-lg">
-                <div class="flex flex-col md:flex-row md:space-x-4">
-                  <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700">Texto da Opção</label>
-                    <input v-model="option.optionText" type="text" required
-                      class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
-                  </div>
-                  <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700">Tipo</label>
-                    <select v-model="option.optionType" required
-                      class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                      <option value="IMPACT">Impacto</option>
-                      <option value="PROBABILITY">Probabilidade</option>
-                    </select>
-                  </div>
-                  <div class="flex-1">
-                    <label class="block text-sm font-medium text-gray-700">Nível</label>
-                    <select v-model="option.optionLevel" required
-                      class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                      <option value="LOW">Baixo</option>
-                      <option value="MEDIUM">Médio</option>
-                      <option value="HIGH">Alto</option>
-                    </select>
-                  </div>
-                  <div>
-                    <button @click="removeOption(index)" type="button"
-                      class="p-2 rounded-full bg-white text-red-500 hover:bg-red-100 transition" title="Remover Opção">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4H9v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
+          <div v-for="(option, index) in question.options" :key="index" class="p-4 bg-indigo-50 rounded-lg space-y-2">
+            <!-- Primeira linha: opção, tipo, nível e botão de remoção -->
+            <div class="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0">
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Texto da Opção</label>
+                <input v-model="option.optionText" type="text" required
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
               </div>
-              <button @click="addOption" type="button"
-                class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                + Adicionar Opção
-              </button>
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Tipo</label>
+                <select v-model="option.optionType" required
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <option value="IMPACT">Impacto</option>
+                  <option value="PROBABILITY">Probabilidade</option>
+                </select>
+              </div>
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Nível</label>
+                <select v-model="option.optionLevel" required
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                  <option value="LOW">Baixo</option>
+                  <option value="MEDIUM">Médio</option>
+                  <option value="HIGH">Alto</option>
+                </select>
+              </div>
+              <div>
+                <button @click="removeOption(index)" type="button"
+                  class="p-2 rounded-full bg-white text-red-500 hover:bg-red-100 transition" title="Remover Opção">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4H9v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Segunda linha: recomendação -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Recomendação</label>
+              <textarea v-model="option.recommendation" rows="2"
+                class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                placeholder="Digite a recomendação para esta opção (opcional)"></textarea>
             </div>
           </div>
 
@@ -204,10 +203,13 @@ export default {
           options: data.options.map(opt => ({
             optionText: opt.optionText,
             optionLevel: opt.optionLevel,
-            optionType: opt.optionType
+            optionType: opt.optionType,
+            recommendation: opt.recommendation || ""
           }))
         };
-        this.associatedQuestionnaireIds = data.questionnaires?.map(q => q.id) || [];
+        this.associatedQuestionnaireIds = Array.isArray(data.questionnaireIds)
+          ? data.questionnaireIds
+          : (data.questionnaires || []).map(q => q.id);
       } catch (err) {
         this.error = err.response?.data?.message || 'Erro ao carregar os detalhes da pergunta.';
       } finally {
