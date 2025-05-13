@@ -14,13 +14,13 @@
           "optionText": "Comprometimento de contas internas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente políticas de acesso segmentadas para reduzir o risco."
+          "recommendation": "Active bloqueio de conta após tentativas falhas repetidas e monitore credenciais vazadas em fontes externas."
         },
         {
           "optionText": "Exposição total de sistemas críticos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Aja imediatamente: implemente autenticação multifator (MFA) e revise os acessos privilegiados."
+          "recommendation": "Exija MFA resistente a phishing (FIDO2) em TODAS as contas e revogue tokens de sessão ativos imediatamente."
         }
       ]
     },
@@ -37,13 +37,13 @@
           "optionText": "Acesso significativo a sistemas internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reforce a segregação de funções e revise os acessos privilegiados."
+          "recommendation": "Implemente rotação automática de senhas privilegiadas através de cofre PAM e revisão trimestral de acessos."
         },
         {
           "optionText": "Controlo total sobre sistemas e dados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Bloqueie contas comprometidas e ative alertas de login suspeito."
+          "recommendation": "Habilite lista de permissões de IP para administradores e conduza caça a credenciais comprometidas nas 24 h seguintes."
         }
       ]
     },
@@ -60,13 +60,13 @@
           "optionText": "Casos isolados com impacto significativo.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reforce os requisitos de complexidade de senhas e monitorize logins suspeitos."
+          "recommendation": "Active bloqueio de conta após tentativas falhas repetidas e monitore credenciais vazadas em fontes externas."
         },
         {
           "optionText": "A prática é comum e representa um risco elevado.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Aplique políticas de senha forte e ative a MFA para todos os utilizadores."
+          "recommendation": "Exija MFA resistente a phishing (FIDO2) em TODAS as contas e revogue tokens de sessão ativos imediatamente."
         }
       ]
     },
@@ -83,13 +83,13 @@
           "optionText": "Monitorização parcial e análise manual.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente políticas de troca periódica de senhas."
+          "recommendation": "Implemente rotação automática de senhas privilegiadas através de cofre PAM e revisão trimestral de acessos."
         },
         {
           "optionText": "Nenhuma monitorização ativa implementada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Bloqueie o uso de senhas reutilizadas através de um cofre de senhas seguro."
+          "recommendation": "Habilite lista de permissões de IP para administradores e conduza caça a credenciais comprometidas nas 24 h seguintes."
         }
       ]
     },
@@ -106,13 +106,13 @@
           "optionText": "MFA ativado apenas para alguns utilizadores.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente controles de acesso por função."
+          "recommendation": "Active bloqueio de conta após tentativas falhas repetidas e monitore credenciais vazadas em fontes externas."
         },
         {
           "optionText": "Nenhum uso de MFA implementado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente políticas de rotação de credenciais privilegiadas."
+          "recommendation": "Exija MFA resistente a phishing (FIDO2) em TODAS as contas e revogue tokens de sessão ativos imediatamente."
         }
       ]
     },
@@ -129,13 +129,13 @@
           "optionText": "Proteção parcial das credenciais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Ative alertas de login suspeito e autenticação baseada em risco."
+          "recommendation": "Implemente rotação automática de senhas privilegiadas através de cofre PAM e revisão trimestral de acessos."
         },
         {
           "optionText": "Credenciais armazenadas sem proteção adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Adote soluções de PAM (Privileged Access Management)."
+          "recommendation": "Habilite lista de permissões de IP para administradores e conduza caça a credenciais comprometidas nas 24 h seguintes."
         }
       ]
     },
@@ -152,13 +152,13 @@
           "optionText": "Comprometimento parcial de sistemas ou dados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Eduque os colaboradores sobre e-mails suspeitos e phishing."
+          "recommendation": "Ative banners de aviso em e‑mails externos e filtre anexos maliciosos no gateway."
         },
         {
           "optionText": "Acesso total ao sistema e possível perda de dados sensíveis.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Habilite SPF, DKIM e DMARC para proteger o domínio."
+          "recommendation": "Habilite análise sandbox em tempo real de anexos e URL rewriting para bloqueio de domínios recém‑criados."
         }
       ]
     },
@@ -175,13 +175,13 @@
           "optionText": "Acesso a informações sensíveis, mas sem controlo total.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente regras de bloqueio para anexos e links perigosos."
+          "recommendation": "Realize campanhas simuladas de phishing trimestrais focadas em ameaças do setor."
         },
         {
           "optionText": "Controlo total sobre contas críticas e serviços.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente um gateway de segurança de e-mail com análise avançada de ameaças."
+          "recommendation": "Integre inteligência de ameaças ao gateway e aplique quarentena automática a remetentes suspeitos."
         }
       ]
     },
@@ -198,19 +198,19 @@
           "optionText": "Recebem ocasionalmente, mas a maioria reconhece os ataques.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Realize campanhas de simulação de phishing regularmente."
+          "recommendation": "Ative banners de aviso em e‑mails externos e filtre anexos maliciosos no gateway."
         },
         {
           "optionText": "É comum receber e-mails maliciosos, mas os colaboradores não caem nos ataques.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Utilize banners visuais em e-mails externos."
+          "recommendation": "Realize campanhas simuladas de phishing trimestrais focadas em ameaças do setor."
         },
         {
           "optionText": "É comum receber e-mails maliciosos e alguns colaboradores caem nos ataques.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Bloqueie e-mails com linguagem suspeita ou remetentes desconhecidos."
+          "recommendation": "Habilite análise sandbox em tempo real de anexos e URL rewriting para bloqueio de domínios recém‑criados."
         }
       ]
     },
@@ -227,13 +227,13 @@
           "optionText": "Alguns e-mails suspeitos passam pelos filtros.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Realize campanhas de simulação de phishing regularmente."
+          "recommendation": "Ative banners de aviso em e‑mails externos e filtre anexos maliciosos no gateway."
         },
         {
           "optionText": "Os filtros são ineficazes e muitos ataques chegam aos utilizadores.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Ative proteção contra spoofing e monitorização contínua de e-mails."
+          "recommendation": "Integre inteligência de ameaças ao gateway e aplique quarentena automática a remetentes suspeitos."
         }
       ]
     },
@@ -250,13 +250,13 @@
           "optionText": "Formações pouco regulares e abrangentes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Eduque os colaboradores sobre e-mails suspeitos e phishing."
+          "recommendation": "Realize campanhas simuladas de phishing trimestrais focadas em ameaças do setor."
         },
         {
           "optionText": "Nenhuma formação sobre ameaças de e-mail.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Habilite SPF, DKIM e DMARC para proteger o domínio."
+          "recommendation": "Habilite análise sandbox em tempo real de anexos e URL rewriting para bloqueio de domínios recém‑criados."
         }
       ]
     },
@@ -273,13 +273,13 @@
           "optionText": "Parcialmente implementada, mas sem monitorização frequente.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente regras de bloqueio para anexos e links perigosos."
+          "recommendation": "Ative banners de aviso em e‑mails externos e filtre anexos maliciosos no gateway."
         },
         {
           "optionText": "Não implementada ou configurada incorretamente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente um gateway de segurança de e-mail com análise avançada de ameaças."
+          "recommendation": "Integre inteligência de ameaças ao gateway e aplique quarentena automática a remetentes suspeitos."
         }
       ]
     },
@@ -296,13 +296,13 @@
           "optionText": "Operações parcialmente afetadas, atraso moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Estabeleça planos de contingência e revisão de infraestrutura."
+          "recommendation": "Implemente failover activo‑passivo testado mensalmente e backups transacionais autenticados."
         },
         {
           "optionText": "Paragem total ou significativa das operações",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Garanta alta disponibilidade e continuidade operacional com planos de recuperação."
+          "recommendation": "Crie redundância multi‑região com RPO<5 min e orchestration de DR automática."
         }
       ]
     },
@@ -319,13 +319,13 @@
           "optionText": "Danos reputacionais moderados, recuperação possível.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Documente e teste planos de recuperação de desastres."
+          "recommendation": "Use blue‑green deployment para minimizar impacto durante atualizações críticas."
         },
         {
           "optionText": "Graves danos reputacionais, recuperação difícil.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente redundância geográfica para serviços críticos."
+          "recommendation": "Ative DNS de trânsito para cut‑over instantâneo em falhas de plataforma crítica."
         }
       ]
     },
@@ -342,13 +342,13 @@
           "optionText": "Auditorias anuais ou esporádicas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente processos de atualização e auditoria regulares."
+          "recommendation": "Implemente failover activo‑passivo testado mensalmente e backups transacionais autenticados."
         },
         {
           "optionText": "Não são realizadas auditorias ou são muito raras.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Realize avaliações frequentes de segurança e implemente monitorização contínua."
+          "recommendation": "Crie redundância multi‑região com RPO<5 min e orchestration de DR automática."
         }
       ]
     },
@@ -365,13 +365,13 @@
           "optionText": "Formação ocasional (anual ou pontual).",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Automatize alertas para falhas ou indisponibilidade de plataformas."
+          "recommendation": "Use blue‑green deployment para minimizar impacto durante atualizações críticas."
         },
         {
           "optionText": "Sem formação ou formação muito rara.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente gestão centralizada de vulnerabilidades e correções imediatas."
+          "recommendation": "Ative DNS de trânsito para cut‑over instantâneo em falhas de plataforma crítica."
         }
       ]
     },
@@ -388,13 +388,13 @@
           "optionText": "Procedimentos existentes, mas pouco claros.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente redundância de componentes essenciais."
+          "recommendation": "Implemente failover activo‑passivo testado mensalmente e backups transacionais autenticados."
         },
         {
           "optionText": "Procedimentos inexistentes ou não documentados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente balanceadores de carga e failover automático."
+          "recommendation": "Crie redundância multi‑região com RPO<5 min e orchestration de DR automática."
         }
       ]
     },
@@ -411,13 +411,13 @@
           "optionText": "Alguns mecanismos implementados, porém limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Avalie SLA dos serviços críticos e revise contratos."
+          "recommendation": "Use blue‑green deployment para minimizar impacto durante atualizações críticas."
         },
         {
           "optionText": "Sem mecanismos avançados ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Monitore continuamente a disponibilidade com KPIs definidos."
+          "recommendation": "Ative DNS de trânsito para cut‑over instantâneo em falhas de plataforma crítica."
         }
       ]
     },
@@ -434,13 +434,13 @@
           "optionText": "Dados parcialmente recuperáveis, impacto moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Criptografe dados sensíveis em repouso e em trânsito."
+          "recommendation": "Automatize snapshots criptografados a cada 6 h e teste restauração mensal."
         },
         {
           "optionText": "Perda irreversível de dados críticos, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Utilize mecanismos de DLP (Prevenção de Perda de Dados) e backups criptografados."
+          "recommendation": "Criptografe discos com AES‑256, armazene chaves em HSM e aplique políticas DLP em endpoints."
         }
       ]
     },
@@ -457,13 +457,13 @@
           "optionText": "Impacto financeiro moderado, multas ou custos controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente controle de acesso baseado em papéis para repositórios de dados."
+          "recommendation": "Implemente RBAC granular com logging de leitura e escrita em partilhas sensíveis."
         },
         {
           "optionText": "Impacto financeiro elevado, multas graves e custos legais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Revise periodicamente políticas de retenção e descarte seguro de dados."
+          "recommendation": "Replica dados críticos para cofre offline e verifique integridade com hashes SHA‑256."
         }
       ]
     },
@@ -480,13 +480,13 @@
           "optionText": "Backups semanais ou esporádicos.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Automatize processos de backup com verificação de integridade."
+          "recommendation": "Automatize snapshots criptografados a cada 6 h e teste restauração mensal."
         },
         {
           "optionText": "Backups raros, inexistentes ou não testados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Monitore continuamente acessos a bases de dados sensíveis."
+          "recommendation": "Criptografe discos com AES‑256, armazene chaves em HSM e aplique políticas DLP em endpoints."
         }
       ]
     },
@@ -503,13 +503,13 @@
           "optionText": "Atualizações ocasionais ou inconsistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Treine usuários sobre práticas seguras de armazenamento e partilha."
+          "recommendation": "Implemente RBAC granular com logging de leitura e escrita em partilhas sensíveis."
         },
         {
           "optionText": "Sem atualizações ou gestão inadequada das ameaças.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Restrinja exportações de dados não autorizadas com políticas de segurança."
+          "recommendation": "Replica dados críticos para cofre offline e verifique integridade com hashes SHA‑256."
         }
       ]
     },
@@ -526,13 +526,13 @@
           "optionText": "Criptografia básica implementada parcialmente.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Automatize snapshots criptografados a cada 6 h e teste restauração mensal."
         },
         {
           "optionText": "Dados sensíveis sem criptografia ou com criptografia fraca.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Criptografe discos com AES‑256, armazene chaves em HSM e aplique políticas DLP em endpoints."
         }
       ]
     },
@@ -549,13 +549,13 @@
           "optionText": "Política informal ou parcialmente implementada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Implemente RBAC granular com logging de leitura e escrita em partilhas sensíveis."
         },
         {
           "optionText": "Sem política definida ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Replica dados críticos para cofre offline e verifique integridade com hashes SHA‑256."
         }
       ]
     },
@@ -572,13 +572,13 @@
           "optionText": "Impacto moderado, recuperação parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Segmente redes por nível de sensibilidade e monitore o tráfego lateral."
+          "recommendation": "Segmente VLANs por função com ACLs deny‑all e mapeie comunicações necessárias."
         },
         {
           "optionText": "Impacto elevado, paralisação das operações críticas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente sistemas de detecção e resposta a intrusões (IDS/IPS)."
+          "recommendation": "Adote arquitetura Zero Trust com autenticação mTLS entre serviços."
         }
       ]
     },
@@ -595,13 +595,13 @@
           "optionText": "Exposição de alguns dados críticos, impacto moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Limite a propagação de ameaças com firewalls internos."
+          "recommendation": "Implemente NAC 802.1X e bloqueie dispositivos não conformes automaticamente."
         },
         {
           "optionText": "Exposição generalizada de dados sensíveis, alto impacto operacional e legal.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Reforce autenticação interna e desative portas/protocolos desnecessários."
+          "recommendation": "Instale IDS/IPS inline com resposta automática a beaconing ou comportamento anómalo."
         }
       ]
     },
@@ -618,13 +618,13 @@
           "optionText": "Monitorização parcial ou periódica.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Atualize firmwares e sistemas operativos de todos os dispositivos da rede."
+          "recommendation": "Segmente VLANs por função com ACLs deny‑all e mapeie comunicações necessárias."
         },
         {
           "optionText": "Monitorização inexistente ou muito limitada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente políticas de acesso zero trust dentro da rede."
+          "recommendation": "Adote arquitetura Zero Trust com autenticação mTLS entre serviços."
         }
       ]
     },
@@ -641,13 +641,13 @@
           "optionText": "Atualizações esporádicas ou inconsistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Restrinja o uso de equipamentos pessoais em redes internas."
+          "recommendation": "Implemente NAC 802.1X e bloqueie dispositivos não conformes automaticamente."
         },
         {
           "optionText": "Sem atualizações ou muito raras.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Monitore em tempo real dispositivos conectados e comportamento de rede."
+          "recommendation": "Instale IDS/IPS inline com resposta automática a beaconing ou comportamento anómalo."
         }
       ]
     },
@@ -664,13 +664,13 @@
           "optionText": "Segmentação parcial, não totalmente eficaz.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Segmente VLANs por função com ACLs deny‑all e mapeie comunicações necessárias."
         },
         {
           "optionText": "Rede não segmentada ou mal configurada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Adote arquitetura Zero Trust com autenticação mTLS entre serviços."
         }
       ]
     },
@@ -687,13 +687,13 @@
           "optionText": "Política informal ou parcialmente aplicada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Implemente NAC 802.1X e bloqueie dispositivos não conformes automaticamente."
         },
         {
           "optionText": "Ausência de política ou controlo inadequado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Instale IDS/IPS inline com resposta automática a beaconing ou comportamento anómalo."
         }
       ]
     },
@@ -710,13 +710,13 @@
           "optionText": "Impacto moderado, solução parcial disponível.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Solicite relatórios SOC2/ISO 27001 anuais ao provedor e avalie resultados."
         },
         {
           "optionText": "Impacto grave, paralisação completa de operações críticas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Ative monitorização em tempo real de incidentes no provedor e planeie migração em 48 h."
         }
       ]
     },
@@ -733,13 +733,13 @@
           "optionText": "Impacto financeiro moderado, custos adicionais gerenciáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Implemente replicação de workloads críticos em provedor secundário com teste semestral."
         },
         {
           "optionText": "Impacto financeiro elevado, custos e penalidades significativas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Contrate cláusulas contratuais de RTO/RPO agressivas e auditoria de terceiro independente."
         }
       ]
     },
@@ -756,13 +756,13 @@
           "optionText": "Avaliações ocasionais ou informais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Solicite relatórios SOC2/ISO 27001 anuais ao provedor e avalie resultados."
         },
         {
           "optionText": "Sem avaliações regulares ou nunca realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Ative monitorização em tempo real de incidentes no provedor e planeie migração em 48 h."
         }
       ]
     },
@@ -779,13 +779,13 @@
           "optionText": "Alguns possuem certificações básicas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Implemente replicação de workloads críticos em provedor secundário com teste semestral."
         },
         {
           "optionText": "Sem certificações ou não verificadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Contrate cláusulas contratuais de RTO/RPO agressivas e auditoria de terceiro independente."
         }
       ]
     },
@@ -802,13 +802,13 @@
           "optionText": "Plano alternativo parcialmente definido.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Solicite relatórios SOC2/ISO 27001 anuais ao provedor e avalie resultados."
         },
         {
           "optionText": "Sem plano alternativo definido.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Ative monitorização em tempo real de incidentes no provedor e planeie migração em 48 h."
         }
       ]
     },
@@ -825,13 +825,13 @@
           "optionText": "Monitorização básica ou alertas limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Implemente replicação de workloads críticos em provedor secundário com teste semestral."
         },
         {
           "optionText": "Sem monitorização ou alertas eficazes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Contrate cláusulas contratuais de RTO/RPO agressivas e auditoria de terceiro independente."
         }
       ]
     },
@@ -848,13 +848,13 @@
           "optionText": "Impacto moderado, com recuperação parcial.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Automatize patch crítico em janela semanal usando validação canary em 5% dos hosts."
         },
         {
           "optionText": "Impacto severo, indisponibilidade prolongada dos serviços críticos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Isolar serviços vulneráveis atrás de WAF enquanto aplica patch emergencial (<24 h)."
         }
       ]
     },
@@ -871,13 +871,13 @@
           "optionText": "Impacto financeiro moderado, multas ou penalizações possíveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Configure alertas CVSS≥8 para aplicar correção em até 72 h."
         },
         {
           "optionText": "Alto impacto financeiro, penalizações graves e danos legais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Execute varredura autenticada pós‑patch para confirmar correção e ausências de regressão."
         }
       ]
     },
@@ -894,13 +894,13 @@
           "optionText": "Manutenção ocasional ou pouco estruturada.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Automatize patch crítico em janela semanal usando validação canary em 5% dos hosts."
         },
         {
           "optionText": "Sem manutenção preventiva ou inexistente.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Isolar serviços vulneráveis atrás de WAF enquanto aplica patch emergencial (<24 h)."
         }
       ]
     },
@@ -917,13 +917,13 @@
           "optionText": "Monitorização parcial ou inconsistente.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Configure alertas CVSS≥8 para aplicar correção em até 72 h."
         },
         {
           "optionText": "Sem monitorização efetiva.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Execute varredura autenticada pós‑patch para confirmar correção e ausências de regressão."
         }
       ]
     },
@@ -940,13 +940,13 @@
           "optionText": "Redundância parcial implementada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Automatize patch crítico em janela semanal usando validação canary em 5% dos hosts."
         },
         {
           "optionText": "Sem redundância ou inadequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Isolar serviços vulneráveis atrás de WAF enquanto aplica patch emergencial (<24 h)."
         }
       ]
     },
@@ -963,13 +963,13 @@
           "optionText": "Plano parcialmente documentado ou raramente testado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Configure alertas CVSS≥8 para aplicar correção em até 72 h."
         },
         {
           "optionText": "Sem plano formal ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Execute varredura autenticada pós‑patch para confirmar correção e ausências de regressão."
         }
       ]
     },
@@ -986,13 +986,13 @@
           "optionText": "Impacto moderado, comprometimento limitado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente filtros antiphishing nos servidores de e-mail."
+          "recommendation": "Campanhas de phishing simuladas mensais alinhadas a temas atuais."
         },
         {
           "optionText": "Impacto grave, grande comprometimento operacional.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Treine funcionários para identificar engenharia social sofisticada."
+          "recommendation": "Análise sandbox de URL em tempo real com bloqueio de domínios recém‑registados."
         }
       ]
     },
@@ -1009,13 +1009,13 @@
           "optionText": "Impacto financeiro e reputacional moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Evite exposição pública excessiva de e-mails e contatos sensíveis."
+          "recommendation": "Banners dinâmicos em e‑mails externos indicando remetente fora da organização."
         },
         {
           "optionText": "Impacto elevado, graves danos financeiros e de reputação.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Utilize simulações de phishing e autenticação multifator reforçada."
+          "recommendation": "Programa interno de recompensa para reporte rápido de mensagens suspeitas."
         }
       ]
     },
@@ -1032,13 +1032,13 @@
           "optionText": "Formação ocasional, mas insuficiente.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Realize campanhas regulares de conscientização sobre phishing."
+          "recommendation": "Campanhas de phishing simuladas mensais alinhadas a temas atuais."
         },
         {
           "optionText": "Sem formação ou formação raramente realizada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Ative proteção contra spear-phishing com análise de conteúdo e origem."
+          "recommendation": "Análise sandbox de URL em tempo real com bloqueio de domínios recém‑registados."
         }
       ]
     },
@@ -1055,13 +1055,13 @@
           "optionText": "Testes esporádicos ou pouco estruturados.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente alertas visuais para e-mails externos."
+          "recommendation": "Banners dinâmicos em e‑mails externos indicando remetente fora da organização."
         },
         {
           "optionText": "Testes raramente realizados ou inexistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Integre plataformas de threat intelligence para detecção proativa."
+          "recommendation": "Programa interno de recompensa para reporte rápido de mensagens suspeitas."
         }
       ]
     },
@@ -1078,13 +1078,13 @@
           "optionText": "Alguns mecanismos implementados, mas limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Campanhas de phishing simuladas mensais alinhadas a temas atuais."
         },
         {
           "optionText": "Sem mecanismos técnicos ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Análise sandbox de URL em tempo real com bloqueio de domínios recém‑registados."
         }
       ]
     },
@@ -1101,13 +1101,13 @@
           "optionText": "Canal disponível, mas pouco conhecido ou lento.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Banners dinâmicos em e‑mails externos indicando remetente fora da organização."
         },
         {
           "optionText": "Sem canal formal definido ou amplamente desconhecido.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Programa interno de recompensa para reporte rápido de mensagens suspeitas."
         }
       ]
     },
@@ -1124,13 +1124,13 @@
           "optionText": "Comprometimento parcial de serviços internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Restrinja VPN a IPs corporativos, exija MFA push e audite sessões semanalmente."
         },
         {
           "optionText": "Comprometimento extenso, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Migre para ZTNA eliminando senhas em canais remotos e exigindo dispositivos geridos."
         }
       ]
     },
@@ -1147,13 +1147,13 @@
           "optionText": "Impacto moderado, custos adicionais notáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Desative contas inativas e force rotação de certificados a cada 90 dias."
         },
         {
           "optionText": "Impacto severo, custos financeiros elevados e danos reputacionais graves.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Bloqueie credenciais suspeitas e conduza revisão de privilégios de todas as contas remotas."
         }
       ]
     },
@@ -1170,13 +1170,13 @@
           "optionText": "MFA implementado parcialmente ou limitado.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Restrinja VPN a IPs corporativos, exija MFA push e audite sessões semanalmente."
         },
         {
           "optionText": "Sem utilização de MFA.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Migre para ZTNA eliminando senhas em canais remotos e exigindo dispositivos geridos."
         }
       ]
     },
@@ -1193,13 +1193,13 @@
           "optionText": "Auditorias ocasionais ou não automatizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Desative contas inativas e force rotação de certificados a cada 90 dias."
         },
         {
           "optionText": "Sem auditorias ou raramente realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Bloqueie credenciais suspeitas e conduza revisão de privilégios de todas as contas remotas."
         }
       ]
     },
@@ -1216,13 +1216,13 @@
           "optionText": "Soluções implementadas parcialmente.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Restrinja VPN a IPs corporativos, exija MFA push e audite sessões semanalmente."
         },
         {
           "optionText": "Sem soluções técnicas adequadas ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Migre para ZTNA eliminando senhas em canais remotos e exigindo dispositivos geridos."
         }
       ]
     },
@@ -1239,13 +1239,13 @@
           "optionText": "Política informal ou parcialmente implementada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Desative contas inativas e force rotação de certificados a cada 90 dias."
         },
         {
           "optionText": "Sem política definida ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Bloqueie credenciais suspeitas e conduza revisão de privilégios de todas as contas remotas."
         }
       ]
     },
@@ -1262,13 +1262,13 @@
           "optionText": "Impacto moderado, recuperação demorada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Instalar sensores de intrusão e agendar inspeção de UPS/climatização."
         },
         {
           "optionText": "Impacto elevado, paralisação prolongada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Contrato de substituição NBD para peças críticas."
         }
       ]
     },
@@ -1285,13 +1285,13 @@
           "optionText": "Custo moderado, exigindo recursos adicionais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Manter inventário RFID de hardware crítico com auditoria trimestral."
         },
         {
           "optionText": "Alto custo, impactando severamente o orçamento.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Site redundante quente pronto para falhas de datacenter."
         }
       ]
     },
@@ -1308,13 +1308,13 @@
           "optionText": "Segurança física básica ou parcialmente eficaz.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Instalar sensores de intrusão e agendar inspeção de UPS/climatização."
         },
         {
           "optionText": "Segurança insuficiente ou inexistente.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Contrato de substituição NBD para peças críticas."
         }
       ]
     },
@@ -1331,13 +1331,13 @@
           "optionText": "Manutenção preventiva ocasional.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Manter inventário RFID de hardware crítico com auditoria trimestral."
         },
         {
           "optionText": "Sem manutenção preventiva ou rara.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Site redundante quente pronto para falhas de datacenter."
         }
       ]
     },
@@ -1354,13 +1354,13 @@
           "optionText": "Inventário esporádico ou parcialmente completo.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Instalar sensores de intrusão e agendar inspeção de UPS/climatização."
         },
         {
           "optionText": "Inventário inexistente ou muito desatualizado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Contrato de substituição NBD para peças críticas."
         }
       ]
     },
@@ -1377,13 +1377,13 @@
           "optionText": "Plano parcialmente implementado ou pouco testado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Manter inventário RFID de hardware crítico com auditoria trimestral."
         },
         {
           "optionText": "Sem plano definido ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Site redundante quente pronto para falhas de datacenter."
         }
       ]
     },
@@ -1400,13 +1400,13 @@
           "optionText": "Impacto moderado, tempo de recuperação considerável.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Manter matriz de obsolescência e calendário de upgrade."
         },
         {
           "optionText": "Impacto grave, interrupção prolongada das operações.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Projeto de modernização urgente para tecnologias EOL."
         }
       ]
     },
@@ -1423,13 +1423,13 @@
           "optionText": "Impacto financeiro moderado, custos gerenciáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Avaliar compatibilidade e segurança semestralmente."
         },
         {
           "optionText": "Alto impacto financeiro, custos elevados inesperados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Fundo de contingência para upgrade imediato de infra crítica."
         }
       ]
     },
@@ -1446,13 +1446,13 @@
           "optionText": "Avaliações ocasionais ou informais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Manter matriz de obsolescência e calendário de upgrade."
         },
         {
           "optionText": "Sem avaliações regulares ou nunca realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Projeto de modernização urgente para tecnologias EOL."
         }
       ]
     },
@@ -1469,13 +1469,13 @@
           "optionText": "Processo parcial ou não estruturado.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Avaliar compatibilidade e segurança semestralmente."
         },
         {
           "optionText": "Sem processo definido, atualizações raras.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Fundo de contingência para upgrade imediato de infra crítica."
         }
       ]
     },
@@ -1492,13 +1492,13 @@
           "optionText": "Planos parcialmente definidos ou raramente testados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Manter matriz de obsolescência e calendário de upgrade."
         },
         {
           "optionText": "Sem soluções de contingência definidas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Projeto de modernização urgente para tecnologias EOL."
         }
       ]
     },
@@ -1515,13 +1515,13 @@
           "optionText": "Equipa disponível, porém com limitações.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Avaliar compatibilidade e segurança semestralmente."
         },
         {
           "optionText": "Sem equipa específica ou capacitada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Fundo de contingência para upgrade imediato de infra crítica."
         }
       ]
     },
@@ -1538,13 +1538,13 @@
           "optionText": "Impacto moderado, alternativas limitadas disponíveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Monitorizar mudanças regulatórias trimestrais e diversificar fornecedores."
         },
         {
           "optionText": "Impacto alto, sem alternativas imediatas disponíveis.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "War‑room para alterações regulatórias com plano de ação em 30 dias."
         }
       ]
     },
@@ -1561,13 +1561,13 @@
           "optionText": "Custos moderados, adaptação com recursos adicionais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Atualizar planos de continuidade conforme novas legislações."
         },
         {
           "optionText": "Custos elevados, adaptação complexa e onerosa.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Seguro cibernético e comunicação de crise para autoridades e clientes."
         }
       ]
     },
@@ -1584,13 +1584,13 @@
           "optionText": "Avaliações ocasionais ou informais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Monitorizar mudanças regulatórias trimestrais e diversificar fornecedores."
         },
         {
           "optionText": "Sem avaliações ou raramente realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "War‑room para alterações regulatórias com plano de ação em 30 dias."
         }
       ]
     },
@@ -1607,13 +1607,13 @@
           "optionText": "Monitorização parcial ou esporádica.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Atualizar planos de continuidade conforme novas legislações."
         },
         {
           "optionText": "Sem monitorização formal ou eficaz.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Seguro cibernético e comunicação de crise para autoridades e clientes."
         }
       ]
     },
@@ -1630,13 +1630,13 @@
           "optionText": "Planos parcialmente definidos ou raramente testados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Monitorizar mudanças regulatórias trimestrais e diversificar fornecedores."
         },
         {
           "optionText": "Sem planos de continuidade formalizados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "War‑room para alterações regulatórias com plano de ação em 30 dias."
         }
       ]
     },
@@ -1653,13 +1653,13 @@
           "optionText": "Diversificação limitada, algumas dependências críticas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Atualizar planos de continuidade conforme novas legislações."
         },
         {
           "optionText": "Sem diversificação ou alta dependência única.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Seguro cibernético e comunicação de crise para autoridades e clientes."
         }
       ]
     },
@@ -1676,13 +1676,13 @@
           "optionText": "Impacto moderado, exploração parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Integre scanners CIS ao pipeline CI/CD e bloqueie builds não conformes."
         },
         {
           "optionText": "Impacto grave, comprometimento total dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Retire serviços expostos, reimplante a partir de imagem dourada e realize pentest pós‑correção."
         }
       ]
     },
@@ -1699,13 +1699,13 @@
           "optionText": "Impacto moderado, danos gerenciáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Use Terraform/Ansible para manter estado imutável e evitar deriva de configuração."
         },
         {
           "optionText": "Impacto alto, danos significativos e prolongados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Aplique hardening STIG completo e audite permissões de serviço desnecessárias."
         }
       ]
     },
@@ -1722,13 +1722,13 @@
           "optionText": "Revisões esporádicas ou informais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Integre scanners CIS ao pipeline CI/CD e bloqueie builds não conformes."
         },
         {
           "optionText": "Sem revisão ou raramente realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Retire serviços expostos, reimplante a partir de imagem dourada e realize pentest pós‑correção."
         }
       ]
     },
@@ -1745,13 +1745,13 @@
           "optionText": "Procedimentos informais ou parcialmente eficazes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Use Terraform/Ansible para manter estado imutável e evitar deriva de configuração."
         },
         {
           "optionText": "Procedimentos inexistentes ou inadequados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Aplique hardening STIG completo e audite permissões de serviço desnecessárias."
         }
       ]
     },
@@ -1768,13 +1768,13 @@
           "optionText": "Uso ocasional ou parcial das ferramentas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Integre scanners CIS ao pipeline CI/CD e bloqueie builds não conformes."
         },
         {
           "optionText": "Sem ferramentas ou uso inadequado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Retire serviços expostos, reimplante a partir de imagem dourada e realize pentest pós‑correção."
         }
       ]
     },
@@ -1791,13 +1791,13 @@
           "optionText": "Treinos pontuais ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Use Terraform/Ansible para manter estado imutável e evitar deriva de configuração."
         },
         {
           "optionText": "Sem Treinos regulares ou raramente realizados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Aplique hardening STIG completo e audite permissões de serviço desnecessárias."
         }
       ]
     },
@@ -1814,13 +1814,13 @@
           "optionText": "Impacto moderado, demora para substituição.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Adicionar cláusulas de segurança e revisões anuais aos contratos críticos."
         },
         {
           "optionText": "Impacto severo, interrupção significativa.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Homologar fornecedor secundário e plano de migração em 60 dias."
         }
       ]
     },
@@ -1837,13 +1837,13 @@
           "optionText": "Impacto moderado, danos controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Solicitar relatórios SOC2/ISO 27001 e verificar evidências de remediação."
         },
         {
           "optionText": "Impacto elevado, prejuízos financeiros graves e danos à reputação.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Monitorar em tempo real indicadores de breacha ou insolvência em fornecedores chave."
         }
       ]
     },
@@ -1860,13 +1860,13 @@
           "optionText": "Avaliações ocasionais ou parciais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Adicionar cláusulas de segurança e revisões anuais aos contratos críticos."
         },
         {
           "optionText": "Sem avaliações regulares ou nunca realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Homologar fornecedor secundário e plano de migração em 60 dias."
         }
       ]
     },
@@ -1883,13 +1883,13 @@
           "optionText": "Dependência moderada com poucas alternativas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Solicitar relatórios SOC2/ISO 27001 e verificar evidências de remediação."
         },
         {
           "optionText": "Alta dependência com alternativas inexistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Monitorar em tempo real indicadores de breacha ou insolvência em fornecedores chave."
         }
       ]
     },
@@ -1906,13 +1906,13 @@
           "optionText": "Plano informal ou parcialmente testado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Adicionar cláusulas de segurança e revisões anuais aos contratos críticos."
         },
         {
           "optionText": "Sem plano formal ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Homologar fornecedor secundário e plano de migração em 60 dias."
         }
       ]
     },
@@ -1929,13 +1929,13 @@
           "optionText": "Critérios informais ou parcialmente aplicados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Solicitar relatórios SOC2/ISO 27001 e verificar evidências de remediação."
         },
         {
           "optionText": "Sem critérios claros ou raramente aplicados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Monitorar em tempo real indicadores de breacha ou insolvência em fornecedores chave."
         }
       ]
     },
@@ -1952,13 +1952,13 @@
           "optionText": "Impacto moderado, exploração limitada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Documente todas as APIs utilizadas e aplique validação de entrada."
+          "recommendation": "Aplique controlos de medium adequados ao risco identificado."
         },
         {
           "optionText": "Impacto grave, exploração extensa de sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente autenticação forte em todas as integrações externas."
+          "recommendation": "Aplique controlos de high adequados ao risco identificado."
         }
       ]
     },
@@ -1975,13 +1975,13 @@
           "optionText": "Impacto moderado, custos adicionais e danos controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Limite escopos de acesso por API key ou token."
+          "recommendation": "Aplique controlos de medium adequados ao risco identificado."
         },
         {
           "optionText": "Impacto elevado, multas significativas e danos graves à reputação.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Utilize WAF e ferramentas de segurança para APIs públicas."
+          "recommendation": "Aplique controlos de high adequados ao risco identificado."
         }
       ]
     },
@@ -1998,13 +1998,13 @@
           "optionText": "Testes ocasionais ou informais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Audite chamadas e permissões de APIs regularmente."
+          "recommendation": "Aplique controlos de medium adequados ao risco identificado."
         },
         {
           "optionText": "Sem testes regulares ou inexistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Utilize gateways de API com proteção contra abuso e anomalias."
+          "recommendation": "Aplique controlos de high adequados ao risco identificado."
         }
       ]
     },
@@ -2021,13 +2021,13 @@
           "optionText": "Monitorização parcial ou pouco estruturada.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente limitação de taxa e verificação de origem."
+          "recommendation": "Aplique controlos de medium adequados ao risco identificado."
         },
         {
           "optionText": "Sem monitorização formal ou eficaz.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Automatize testes de segurança contínuos em endpoints integrados."
+          "recommendation": "Aplique controlos de high adequados ao risco identificado."
         }
       ]
     },
@@ -2044,13 +2044,13 @@
           "optionText": "Autenticação básica, parcialmente segura.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Aplique controlos de medium adequados ao risco identificado."
         },
         {
           "optionText": "Sem mecanismos robustos ou inadequados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Aplique controlos de high adequados ao risco identificado."
         }
       ]
     },
@@ -2067,13 +2067,13 @@
           "optionText": "Políticas parcialmente definidas ou informais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Aplique controlos de medium adequados ao risco identificado."
         },
         {
           "optionText": "Sem políticas definidas ou raramente aplicadas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Aplique controlos de high adequados ao risco identificado."
         }
       ]
     },
@@ -2090,13 +2090,13 @@
           "optionText": "Impacto moderado, comprometimento parcial.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Automatize patch crítico em janela semanal usando validação canary em 5% dos hosts."
         },
         {
           "optionText": "Impacto grave, comprometimento significativo dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Isolar serviços vulneráveis atrás de WAF enquanto aplica patch emergencial (<24 h)."
         }
       ]
     },
@@ -2113,13 +2113,13 @@
           "optionText": "Impacto moderado, custos adicionais controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Configure alertas CVSS≥8 para aplicar correção em até 72 h."
         },
         {
           "optionText": "Alto impacto, custos elevados e danos reputacionais graves.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Execute varredura autenticada pós‑patch para confirmar correção e ausências de regressão."
         }
       ]
     },
@@ -2136,13 +2136,13 @@
           "optionText": "Atualizações manuais ou aplicadas parcialmente.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Automatize patch crítico em janela semanal usando validação canary em 5% dos hosts."
         },
         {
           "optionText": "Atualizações raras, demoradas ou não realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Isolar serviços vulneráveis atrás de WAF enquanto aplica patch emergencial (<24 h)."
         }
       ]
     },
@@ -2159,13 +2159,13 @@
           "optionText": "Monitorização ocasional, aplicação moderada.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Configure alertas CVSS≥8 para aplicar correção em até 72 h."
         },
         {
           "optionText": "Sem monitorização formal ou aplicação atrasada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Execute varredura autenticada pós‑patch para confirmar correção e ausências de regressão."
         }
       ]
     },
@@ -2182,13 +2182,13 @@
           "optionText": "Ferramentas básicas ou parcialmente eficazes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Automatize patch crítico em janela semanal usando validação canary em 5% dos hosts."
         },
         {
           "optionText": "Sem ferramentas ou ferramentas inadequadas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Isolar serviços vulneráveis atrás de WAF enquanto aplica patch emergencial (<24 h)."
         }
       ]
     },
@@ -2205,13 +2205,13 @@
           "optionText": "Processo informal, parcialmente implementado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Configure alertas CVSS≥8 para aplicar correção em até 72 h."
         },
         {
           "optionText": "Processo inexistente ou raramente aplicado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Execute varredura autenticada pós‑patch para confirmar correção e ausências de regressão."
         }
       ]
     },
@@ -2228,13 +2228,13 @@
           "optionText": "Impacto moderado, exposição parcial controlável.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza o uso de dados sensíveis em ambientes de teste."
+          "recommendation": "Mascarar dados em ambientes de teste e controlar acesso via classificação automática."
         },
         {
           "optionText": "Impacto grave, exposição ampla de informações críticas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Aplique criptografia forte e controle de acesso rigoroso."
+          "recommendation": "Criptografia end‑to‑end e tokenização dos campos sensíveis na base de dados."
         }
       ]
     },
@@ -2251,13 +2251,13 @@
           "optionText": "Impacto moderado, multas e danos reputacionais controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente mascaramento ou anonimização de dados onde aplicável."
+          "recommendation": "Ativar DLP em SaaS corporativos para uploads de dados sensíveis."
         },
         {
           "optionText": "Alto impacto, multas elevadas e danos reputacionais duradouros.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Utilize ferramentas de descoberta e classificação de dados sensíveis."
+          "recommendation": "Deteção de anomalias de exfiltração em gateway de saída e bloqueio imediato."
         }
       ]
     },
@@ -2274,13 +2274,13 @@
           "optionText": "Criptografia parcial ou básica.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Evite partilha de dados por e-mail ou plataformas não autorizadas."
+          "recommendation": "Mascarar dados em ambientes de teste e controlar acesso via classificação automática."
         },
         {
           "optionText": "Sem criptografia ou muito fraca.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Monitore continuamente o tráfego de dados para evitar fugas."
+          "recommendation": "Criptografia end‑to‑end e tokenização dos campos sensíveis na base de dados."
         }
       ]
     },
@@ -2297,13 +2297,13 @@
           "optionText": "Auditorias ocasionais ou informais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Use logs e alertas para detectar possíveis exposições."
+          "recommendation": "Ativar DLP em SaaS corporativos para uploads de dados sensíveis."
         },
         {
           "optionText": "Sem auditorias regulares ou inexistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente políticas de uso restrito e rastreabilidade completa."
+          "recommendation": "Deteção de anomalias de exfiltração em gateway de saída e bloqueio imediato."
         }
       ]
     },
@@ -2320,13 +2320,13 @@
           "optionText": "controlos parciais ou monitorização limitada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Mascarar dados em ambientes de teste e controlar acesso via classificação automática."
         },
         {
           "optionText": "Sem controlos eficazes ou monitorização adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Criptografia end‑to‑end e tokenização dos campos sensíveis na base de dados."
         }
       ]
     },
@@ -2343,13 +2343,13 @@
           "optionText": "Política parcialmente definida ou informal.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Ativar DLP em SaaS corporativos para uploads de dados sensíveis."
         },
         {
           "optionText": "Sem política formal definida.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Deteção de anomalias de exfiltração em gateway de saída e bloqueio imediato."
         }
       ]
     },
@@ -2366,13 +2366,13 @@
           "optionText": "Impacto moderado, investigação comprometida.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Centralize os logs e restrinja o acesso de escrita."
+          "recommendation": "Centralize logs em armazenamento WORM e verifique integridade diária com hash SHA‑256."
         },
         {
           "optionText": "Impacto severo, incapacidade de investigação e resposta adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Use soluções de SIEM para correlação e detecção de manipulações."
+          "recommendation": "Replicar logs críticos para repositório off‑site imutável e alertar em alterações."
         }
       ]
     },
@@ -2389,13 +2389,13 @@
           "optionText": "Impacto moderado, possíveis sanções regulatórias.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente retenção obrigatória e controles de integridade nos registos."
+          "recommendation": "Limite acesso de escrita a identidade de sistema supervisionada."
         },
         {
           "optionText": "Alto impacto, graves consequências legais e reputacionais.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Ative alertas imediatos para alterações em logs críticos."
+          "recommendation": "Ative detecção de manipulação no SIEM com isolamento automático de host ofensivo."
         }
       ]
     },
@@ -2412,13 +2412,13 @@
           "optionText": "Proteção parcial ou limitada dos logs.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Restrinja acessos administrativos a registos sensíveis."
+          "recommendation": "Centralize logs em armazenamento WORM e verifique integridade diária com hash SHA‑256."
         },
         {
           "optionText": "Sem proteção adequada, facilmente manipuláveis.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Crie cópias redundantes dos logs com verificação de integridade."
+          "recommendation": "Replicar logs críticos para repositório off‑site imutável e alertar em alterações."
         }
       ]
     },
@@ -2435,13 +2435,13 @@
           "optionText": "Monitorização parcial ou esporádica.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Habilite trilhas de auditoria imutáveis."
+          "recommendation": "Limite acesso de escrita a identidade de sistema supervisionada."
         },
         {
           "optionText": "Sem monitorização formal ou eficaz.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Automatize a monitorização de alterações não autorizadas."
+          "recommendation": "Ative detecção de manipulação no SIEM com isolamento automático de host ofensivo."
         }
       ]
     },
@@ -2458,13 +2458,13 @@
           "optionText": "Armazenamento central básico, segurança parcial.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Centralize os logs e restrinja o acesso de escrita."
+          "recommendation": "Centralize logs em armazenamento WORM e verifique integridade diária com hash SHA‑256."
         },
         {
           "optionText": "Armazenamento descentralizado ou inseguro.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Use soluções de SIEM para correlação e detecção de manipulações."
+          "recommendation": "Replicar logs críticos para repositório off‑site imutável e alertar em alterações."
         }
       ]
     },
@@ -2481,13 +2481,13 @@
           "optionText": "Política informal ou parcialmente aplicada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente retenção obrigatória e controles de integridade nos registos."
+          "recommendation": "Limite acesso de escrita a identidade de sistema supervisionada."
         },
         {
           "optionText": "Sem política formal ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Ative alertas imediatos para alterações em logs críticos."
+          "recommendation": "Ative detecção de manipulação no SIEM com isolamento automático de host ofensivo."
         }
       ]
     },
@@ -2504,13 +2504,13 @@
           "optionText": "Impacto moderado, exposição parcial de código sensível.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Ofusque o código em aplicações públicas e APIs."
+          "recommendation": "Ofuscar aplicações cliente e validar assinatura de código antes da execução."
         },
         {
           "optionText": "Impacto elevado, exposição ampla de propriedade intelectual e vulnerabilidades críticas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Use ferramentas de proteção contra engenharia reversa e análise de binários."
+          "recommendation": "Implementar anti‑tamper runtime e deteção de debugging em apps móveis."
         }
       ]
     },
@@ -2527,13 +2527,13 @@
           "optionText": "Impacto moderado, custos adicionais gerenciáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Evite armazenar segredos ou chaves no código-fonte."
+          "recommendation": "Monitorar repositórios públicos para segredos expostos acidentalmente."
         },
         {
           "optionText": "Impacto severo, altos custos financeiros e danos reputacionais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Separe a lógica crítica do cliente para o servidor sempre que possível."
+          "recommendation": "Mover lógica crítica para backend e usar pinning de certificados."
         }
       ]
     },
@@ -2550,13 +2550,13 @@
           "optionText": "Proteção parcial, algumas áreas desprotegidas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Realize revisão de código com foco em exposição de lógica sensível."
+          "recommendation": "Ofuscar aplicações cliente e validar assinatura de código antes da execução."
         },
         {
           "optionText": "Sem proteção ou proteção inadequada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Use técnicas anti-debugging e integridade de runtime em apps distribuídos."
+          "recommendation": "Implementar anti‑tamper runtime e deteção de debugging em apps móveis."
         }
       ]
     },
@@ -2573,13 +2573,13 @@
           "optionText": "controlos básicos ou parcialmente eficazes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Evite informações de debug ou erros detalhados em produção."
+          "recommendation": "Monitorar repositórios públicos para segredos expostos acidentalmente."
         },
         {
           "optionText": "Sem controlos ou monitorização insuficiente.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente varreduras regulares de código-fonte exposto online."
+          "recommendation": "Mover lógica crítica para backend e usar pinning de certificados."
         }
       ]
     },
@@ -2596,13 +2596,13 @@
           "optionText": "Política parcial ou informalmente aplicada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Ofusque o código em aplicações públicas e APIs."
+          "recommendation": "Ofuscar aplicações cliente e validar assinatura de código antes da execução."
         },
         {
           "optionText": "Sem política definida ou raramente aplicada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Use ferramentas de proteção contra engenharia reversa e análise de binários."
+          "recommendation": "Implementar anti‑tamper runtime e deteção de debugging em apps móveis."
         }
       ]
     },
@@ -2619,13 +2619,13 @@
           "optionText": "Auditorias ocasionais ou parciais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Evite armazenar segredos ou chaves no código-fonte."
+          "recommendation": "Monitorar repositórios públicos para segredos expostos acidentalmente."
         },
         {
           "optionText": "Sem auditorias regulares ou inexistentes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Separe a lógica crítica do cliente para o servidor sempre que possível."
+          "recommendation": "Mover lógica crítica para backend e usar pinning de certificados."
         }
       ]
     },
@@ -2642,13 +2642,13 @@
           "optionText": "Impacto moderado, serviços parcialmente afetados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Rate‑limiting na camada de aplicação e monitorização de picos >200% baseline."
         },
         {
           "optionText": "Impacto alto, interrupção prolongada de serviços essenciais.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Ativar Anti‑DDoS Always‑On com redirecionamento automático de tráfego malicioso."
         }
       ]
     },
@@ -2665,13 +2665,13 @@
           "optionText": "Impacto moderado, custos adicionais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Assinar serviço de scrubbing externo para mitigação de picos transitórios."
         },
         {
           "optionText": "Alto impacto, grandes perdas financeiras e graves danos reputacionais.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Escalonamento horizontal automático para absorver ataques volumétricos."
         }
       ]
     },
@@ -2688,13 +2688,13 @@
           "optionText": "Proteção parcial ou limitada.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Rate‑limiting na camada de aplicação e monitorização de picos >200% baseline."
         },
         {
           "optionText": "Sem proteção adequada ou inexistente.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Ativar Anti‑DDoS Always‑On com redirecionamento automático de tráfego malicioso."
         }
       ]
     },
@@ -2711,13 +2711,13 @@
           "optionText": "Monitorização parcial ou básica.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Assinar serviço de scrubbing externo para mitigação de picos transitórios."
         },
         {
           "optionText": "Sem monitorização eficaz.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Escalonamento horizontal automático para absorver ataques volumétricos."
         }
       ]
     },
@@ -2734,13 +2734,13 @@
           "optionText": "Plano informal ou raramente testado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Rate‑limiting na camada de aplicação e monitorização de picos >200% baseline."
         },
         {
           "optionText": "Sem plano formal ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Ativar Anti‑DDoS Always‑On com redirecionamento automático de tráfego malicioso."
         }
       ]
     },
@@ -2757,19 +2757,19 @@
           "optionText": "Soluções parcialmente implementadas ou limitadas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Assinar serviço de scrubbing externo para mitigação de picos transitórios."
         },
         {
           "optionText": "Sem soluções adequadas ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Escalonamento horizontal automático para absorver ataques volumétricos."
         }
       ]
     },
     {
       "questionText": "Qual o impacto operacional caso ocorra abuso de privilégios internos por um colaborador autorizado?",
-      "categoryName": " Risco de Uso Indevido de Privilégios Internos",
+      "categoryName": "Risco de Uso Indevido de Privilégios Internos",
       "options": [
         {
           "optionText": "Impacto reduzido, facilmente identificado.",
@@ -2780,19 +2780,19 @@
           "optionText": "Impacto moderado, falhas parciais e controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Habilitar UEBA para desvios de comportamento e relatórios semanais ao SOC."
         },
         {
           "optionText": "Impacto severo, danos operacionais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Desativar contas partilhadas e exigir controlo duplo em sessões sensíveis."
         }
       ]
     },
     {
       "questionText": "Qual seria o impacto financeiro e reputacional decorrente do vazamento ou manipulação de dados por uso indevido de privilégios internos?",
-      "categoryName": " Risco de Uso Indevido de Privilégios Internos",
+      "categoryName": "Risco de Uso Indevido de Privilégios Internos",
       "options": [
         {
           "optionText": "Impacto mínimo, danos rapidamente resolvidos.",
@@ -2803,19 +2803,19 @@
           "optionText": "Impacto moderado, danos controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Gravar sessões privilegiadas em jump server com aprovação just‑in‑time."
         },
         {
           "optionText": "Alto impacto financeiro e graves danos à reputação.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Revisão rápida de privilégios e revogação de exceções temporárias em 24 h."
         }
       ]
     },
     {
       "questionText": "A empresa monitora ativamente o uso de privilégios internos para detetar atividades suspeitas ou incomuns?",
-      "categoryName": " Risco de Uso Indevido de Privilégios Internos",
+      "categoryName": "Risco de Uso Indevido de Privilégios Internos",
       "options": [
         {
           "optionText": "Monitorização contínua e automatizada.",
@@ -2826,19 +2826,19 @@
           "optionText": "Monitorização ocasional ou limitada.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Habilitar UEBA para desvios de comportamento e relatórios semanais ao SOC."
         },
         {
           "optionText": "Sem monitorização formal ou eficaz.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Desativar contas partilhadas e exigir controlo duplo em sessões sensíveis."
         }
       ]
     },
     {
       "questionText": "A concessão de privilégios administrativos ou críticos segue critérios rigorosos e revisões periódicas?",
-      "categoryName": " Risco de Uso Indevido de Privilégios Internos",
+      "categoryName": "Risco de Uso Indevido de Privilégios Internos",
       "options": [
         {
           "optionText": "Revisões regulares e critérios rigorosos.",
@@ -2849,19 +2849,19 @@
           "optionText": "Revisões informais ou ocasionais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reduza a frequência deste risco através de políticas preventivas e controle contínuo."
+          "recommendation": "Gravar sessões privilegiadas em jump server com aprovação just‑in‑time."
         },
         {
           "optionText": "Sem critérios claros ou revisões raramente feitas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente monitoramento contínuo e ações corretivas imediatas para reduzir a probabilidade deste risco."
+          "recommendation": "Revisão rápida de privilégios e revogação de exceções temporárias em 24 h."
         }
       ]
     },
     {
       "questionText": "Existem mecanismos eficazes de auditoria e controlo para prevenir ou detetar rapidamente o abuso de privilégios internos?",
-      "categoryName": " Risco de Uso Indevido de Privilégios Internos",
+      "categoryName": "Risco de Uso Indevido de Privilégios Internos",
       "options": [
         {
           "optionText": "Mecanismos eficazes e constantemente ativos.",
@@ -2872,19 +2872,19 @@
           "optionText": "Mecanismos parciais ou limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Habilitar UEBA para desvios de comportamento e relatórios semanais ao SOC."
         },
         {
           "optionText": "Sem mecanismos adequados ou ineficazes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Desativar contas partilhadas e exigir controlo duplo em sessões sensíveis."
         }
       ]
     },
     {
       "questionText": "Existe uma política formal para gestão, revisão e revogação rápida de privilégios administrativos ou críticos em caso de necessidade?",
-      "categoryName": " Risco de Uso Indevido de Privilégios Internos",
+      "categoryName": "Risco de Uso Indevido de Privilégios Internos",
       "options": [
         {
           "optionText": "Política formal, clara e rigorosamente aplicada.",
@@ -2895,13 +2895,13 @@
           "optionText": "Política informal ou parcialmente aplicada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente medidas de mitigação moderadas para reduzir o impacto associado a esta categoria."
+          "recommendation": "Gravar sessões privilegiadas em jump server com aprovação just‑in‑time."
         },
         {
           "optionText": "Sem política definida ou raramente aplicada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize ações corretivas imediatas para mitigar impactos críticos nesta área."
+          "recommendation": "Revisão rápida de privilégios e revogação de exceções temporárias em 24 h."
         }
       ]
     }
