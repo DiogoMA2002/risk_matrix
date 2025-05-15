@@ -14,13 +14,13 @@
           "optionText": "Comprometimento de contas internas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Habilite políticas de bloqueio após tentativas falhas e configure alertas SIEM de brute‑force."
+          "recommendation": "Reforce as políticas de bloqueio de conta após múltiplas tentativas falhas e otimize os alertas SIEM para deteção específica de ataques de brute-force."
         },
         {
           "optionText": "Exposição total de sistemas críticos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente MFA obrigatório em todas as contas, revogue chaves de API expostas e faça caça à ameaça aos tokens."
+          "recommendation": "Prioritize a implementação de MFA obrigatório em todas as contas de utilizador, especialmente as críticas. Adicionalmente, revogue imediatamente quaisquer chaves de API que possam ter sido expostas e inicie uma caça proativa a tokens de acesso comprometidos."
         }
       ]
     },
@@ -37,13 +37,13 @@
           "optionText": "Acesso significativo a sistemas internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente rotatividade de senhas privilegiadas através de cofre PAM."
+          "recommendation": "Adote uma solução de Privileged Access Management (PAM) para automatizar a rotatividade de senhas de contas privilegiadas, garantindo que o acesso a sistemas internos seja estritamente controlado."
         },
         {
           "optionText": "Controlo total sobre sistemas e dados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Desative logins comprometidos, re‑prove a identidade dos utilizadores e aplique whitelist de IPs administrativos."
+          "recommendation": "Em caso de comprometimento de credenciais de administrador, desative imediatamente os logins afetados. Revalide a identidade de todos os utilizadores com acesso administrativo e restrinja o acesso a esses sistemas através de uma whitelist de IPs rigorosa."
         }
       ]
     },
@@ -60,13 +60,13 @@
           "optionText": "Casos isolados com impacto significativo.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Integre Single Sign‑On com MFA condicional para reduzir pontos de falha."
+          "recommendation": "Considere a integração de uma solução de Single Sign-On (SSO) combinada com Autenticação Multifator (MFA) condicional para centralizar a autenticação e reduzir os pontos de falha associados a senhas fracas ou reutilizadas."
         },
         {
           "optionText": "A prática é comum e representa um risco elevado.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Execute varredura imediata a credenciais vazadas e force reset de senhas em toda a organização."
+          "recommendation": "Se a prática de senhas fracas for comum, execute uma varredura imediata em bases de dados de credenciais vazadas conhecidas e, como medida crítica, force o reset de senhas para todos os utilizadores na organização, promovendo o uso de senhas mais fortes."
         }
       ]
     },
@@ -83,13 +83,13 @@
           "optionText": "Monitorização parcial e análise manual.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Habilite políticas de bloqueio após tentativas falhas e configure alertas SIEM de brute‑force."
+          "recommendation": "Implemente um sistema de monitorização contínua para tentativas de login suspeitas, incluindo a configuração de políticas de bloqueio automático e alertas SIEM detalhados para atividades de brute-force."
         },
         {
           "optionText": "Nenhuma monitorização ativa implementada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente MFA obrigatório em todas as contas, revogue chaves de API expostas e faça caça à ameaça aos tokens."
+          "recommendation": "Para mitigar os riscos de falta de monitorização, implemente com urgência MFA em todas as contas, revogue chaves de API potencialmente comprometidas e realize uma análise forense para identificar tokens de acesso ilícitos."
         }
       ]
     },
@@ -106,13 +106,13 @@
           "optionText": "MFA ativado apenas para alguns utilizadores.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente rotatividade de senhas privilegiadas através de cofre PAM."
+          "recommendation": "Para contas críticas com MFA parcialmente implementado, reforce a segurança implementando a rotatividade automática de senhas privilegiadas utilizando um cofre PAM robusto."
         },
         {
           "optionText": "Nenhum uso de MFA implementado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Desative logins comprometidos, re‑prove a identidade dos utilizadores e aplique whitelist de IPs administrativos."
+          "recommendation": "Se o MFA não estiver implementado, e houver suspeita de comprometimento, desative os logins potencialmente afetados, force a re-autenticação e verificação de identidade dos utilizadores, e implemente uma whitelist de IPs para acessos administrativos como medida de contenção imediata."
         }
       ]
     },
@@ -129,13 +129,13 @@
           "optionText": "Proteção parcial das credenciais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Integre Single Sign‑On com MFA condicional para reduzir pontos de falha."
+          "recommendation": "Para endereçar a proteção parcial de credenciais, integre soluções de Single Sign-On (SSO) com políticas de MFA condicional, visando diminuir a superfície de ataque e os pontos de falha."
         },
         {
           "optionText": "Credenciais armazenadas sem proteção adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Execute varredura imediata a credenciais vazadas e force reset de senhas em toda a organização."
+          "recommendation": "Caso as credenciais estejam armazenadas sem proteção adequada, realize uma varredura urgente para identificar possíveis credenciais comprometidas em fontes públicas e force uma redefinição de senha obrigatória em toda a organização, acompanhada de formação sobre criação de senhas seguras."
         }
       ]
     },
@@ -152,13 +152,13 @@
           "optionText": "Operações parcialmente afetadas, atraso moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Configure backups transacionais e teste scripts de rebuild automático em ambiente de staging."
+          "recommendation": "Para mitigar o impacto de indisponibilidade da plataforma, configure backups transacionais frequentes e teste rigorosamente os scripts de rebuild automático num ambiente de staging dedicado."
         },
         {
           "optionText": "Paragem total ou significativa das operações",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Provisionar instâncias redundantes noutra zona de disponibilidade e habilitar replication‑lag <60s."
+          "recommendation": "Para evitar paragem total das operações devido à indisponibilidade da plataforma, provisione instâncias redundantes em uma zona de disponibilidade geograficamente distinta e assegure uma replicação com lag inferior a 60 segundos."
         }
       ]
     },
@@ -175,13 +175,13 @@
           "optionText": "Danos reputacionais moderados, recuperação possível.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Introduza balanceamento ativo‑ativo para serviços web e verifique tempos de failover mensais."
+          "recommendation": "Para minimizar danos reputacionais devido a vulnerabilidades não corrigidas, introduza balanceamento de carga ativo-ativo para os serviços web críticos e realize verificações mensais dos tempos de failover."
         },
         {
           "optionText": "Graves danos reputacionais, recuperação difícil.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Migrar serviços críticos para arquitetura multi‑região e ativar DNS de recuperação automática."
+          "recommendation": "Para proteger a reputação da empresa contra danos graves, migre os serviços críticos para uma arquitetura multi-região e configure um sistema de DNS com recuperação automática de desastres."
         }
       ]
     },
@@ -198,13 +198,13 @@
           "optionText": "Auditorias anuais ou esporádicas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Configure backups transacionais e teste scripts de rebuild automático em ambiente de staging."
+          "recommendation": "Face a auditorias esporádicas, estabeleça um processo de configuração de backups transacionais robustos e valide regularmente a eficácia dos scripts de rebuild automático em ambiente de staging."
         },
         {
           "optionText": "Não são realizadas auditorias ou são muito raras.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Provisionar instâncias redundantes noutra zona de disponibilidade e habilitar replication‑lag <60s."
+          "recommendation": "Compense a raridade das auditorias de segurança provisionando instâncias redundantes das plataformas críticas noutra zona de disponibilidade e mantendo um replication-lag inferior a 60 segundos."
         }
       ]
     },
@@ -221,13 +221,13 @@
           "optionText": "Formação ocasional (anual ou pontual).",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Introduza balanceamento ativo‑ativo para serviços web e verifique tempos de failover mensais."
+          "recommendation": "Dado que a formação das equipas é ocasional, implemente balanceamento ativo-ativo para os serviços web e crie rotinas de verificação mensal dos tempos de failover para reduzir a dependência do fator humano em crises."
         },
         {
           "optionText": "Sem formação ou formação muito rara.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Migrar serviços críticos para arquitetura multi‑região e ativar DNS de recuperação automática."
+          "recommendation": "Em cenários onde a formação das equipas é rara, mitigue riscos migrando serviços críticos para uma arquitetura multi-região robusta e ativando a recuperação automática via DNS para simplificar a gestão de desastres."
         }
       ]
     },
@@ -244,13 +244,13 @@
           "optionText": "Procedimentos existentes, mas pouco claros.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Configure backups transacionais e teste scripts de rebuild automático em ambiente de staging."
+          "recommendation": "Se os procedimentos de gestão de incidentes são pouco claros, reforce-os configurando backups transacionais e testando scripts de rebuild automático em ambiente de staging para garantir uma recuperação rápida."
         },
         {
           "optionText": "Procedimentos inexistentes ou não documentados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Provisionar instâncias redundantes noutra zona de disponibilidade e habilitar replication‑lag <60s."
+          "recommendation": "Na ausência de procedimentos de gestão de incidentes documentados, provisione instâncias redundantes em outra zona de disponibilidade e habilite uma replicação com lag inferior a 60 segundos como medida de contingência primária."
         }
       ]
     },
@@ -267,13 +267,13 @@
           "optionText": "Alguns mecanismos implementados, porém limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Introduza balanceamento ativo‑ativo para serviços web e verifique tempos de failover mensais."
+          "recommendation": "Com mecanismos de segurança limitados, introduza balanceamento ativo-ativo para os serviços web como uma camada adicional de resiliência e verifique os tempos de failover mensalmente para assegurar a sua eficácia."
         },
         {
           "optionText": "Sem mecanismos avançados ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Migrar serviços críticos para arquitetura multi‑região e ativar DNS de recuperação automática."
+          "recommendation": "Se não existem mecanismos de segurança avançados, considere migrar os serviços críticos para uma arquitetura multi-região e ativar DNS de recuperação automática para aumentar a tolerância a falhas e ataques."
         }
       ]
     },
@@ -290,13 +290,13 @@
           "optionText": "Dados parcialmente recuperáveis, impacto moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Automatize snapshots incrementais com verificação de checksum e retenção de 30 dias."
+          "recommendation": "Para cenários de dados parcialmente recuperáveis, automatize a criação de snapshots incrementais com verificação de checksum para garantir a integridade, e defina uma política de retenção de pelo menos 30 dias."
         },
         {
           "optionText": "Perda irreversível de dados críticos, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Criptografe discos com AES‑256, aplique HSM para chaves e ative DLP sobre canais de saída."
+          "recommendation": "Em caso de risco de perda irreversível de dados críticos, implemente a criptografia de discos utilizando AES-256, utilize um Hardware Security Module (HSM) para a gestão de chaves criptográficas e ative soluções de Data Loss Prevention (DLP) nos canais de saída de dados."
         }
       ]
     },
@@ -313,13 +313,13 @@
           "optionText": "Impacto financeiro moderado, multas ou custos controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente acesso só‑leitura para partilhas de dados históricos e registe acessos anómalos."
+          "recommendation": "Para controlar o impacto financeiro de uma exposição indevida de dados, implemente o princípio de menor privilégio, concedendo acesso só-leitura a partilhas de dados históricos e monitorizando ativamente acessos anómalos."
         },
         {
           "optionText": "Impacto financeiro elevado, multas graves e custos legais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Replica dados críticos em cold‑site off‑line e execute restauração de prova semestralmente."
+          "recommendation": "Para mitigar impactos financeiros elevados de exposição de dados, replique os dados críticos para um cold-site offline, garantindo um air-gap, e execute testes de restauração de prova semestralmente para validar a eficácia do processo."
         }
       ]
     },
@@ -336,13 +336,13 @@
           "optionText": "Backups semanais ou esporádicos.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Automatize snapshots incrementais com verificação de checksum e retenção de 30 dias."
+          "recommendation": "Considerando backups semanais ou esporádicos, implemente la automatização de snapshots incrementais diários, com verificação de checksum e uma política de retenção mínima de 30 dias para melhorar o RPO."
         },
         {
           "optionText": "Backups raros, inexistentes ou não testados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Criptografe discos com AES‑256, aplique HSM para chaves e ative DLP sobre canais de saída."
+          "recommendation": "Se os backups são raros ou não testados, priorize a criptografia robusta de discos com AES-256, gestão segura de chaves com HSM e a implementação de DLP para proteger os dados em repouso e em trânsito, antes de otimizar os backups."
         }
       ]
     },
@@ -359,13 +359,13 @@
           "optionText": "Atualizações ocasionais ou inconsistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente acesso só‑leitura para partilhas de dados históricos e registe acessos anómalos."
+          "recommendation": "Com atualizações de armazenamento inconsistentes, reforce a segurança implementando acesso só-leitura para partilhas de dados históricos menos acedidos e configure o registo detalhado de acessos para deteção de anomalias."
         },
         {
           "optionText": "Sem atualizações ou gestão inadequada das ameaças.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Replica dados críticos em cold‑site off‑line e execute restauração de prova semestralmente."
+          "recommendation": "Na ausência de atualizações adequadas das soluções de armazenamento, garanta a resiliência dos dados replicando os dados críticos para um cold-site off-line e realizando testes de restauração semestrais."
         }
       ]
     },
@@ -382,13 +382,13 @@
           "optionText": "Criptografia básica implementada parcialmente.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Automatize snapshots incrementais com verificação de checksum e retenção de 30 dias."
+          "recommendation": "Se existe apenas criptografia básica, complemente-a automatizando snapshots incrementais com verificação de checksum e uma política de retenção de 30 dias para garantir a recuperabilidade dos dados."
         },
         {
           "optionText": "Dados sensíveis sem criptografia ou com criptografia fraca.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Criptografe discos com AES‑256, aplique HSM para chaves e ative DLP sobre canais de saída."
+          "recommendation": "Para dados sensíveis sem criptografia ou com criptografia fraca, é crucial criptografar todos os discos com AES-256, gerir as chaves de forma segura com HSM e implementar DLP para prevenir fugas de informação através dos canais de saída."
         }
       ]
     },
@@ -405,13 +405,13 @@
           "optionText": "Política informal ou parcialmente implementada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente acesso só‑leitura para partilhas de dados históricos e registe acessos anómalos."
+          "recommendation": "Caso a política de ciclo de vida de dados seja informal, comece por implementar acesso só-leitura para partilhas de dados históricos e ative o registo de acessos anómalos como primeiros passos para uma gestão mais segura."
         },
         {
           "optionText": "Sem política definida ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Replica dados críticos em cold‑site off‑line e execute restauração de prova semestralmente."
+          "recommendation": "Se não existe política de ciclo de vida de dados, implemente urgentemente a replicação de dados críticos para um cold-site off-line seguro e estabeleça uma rotina de testes de restauração semestrais."
         }
       ]
     },
@@ -428,13 +428,13 @@
           "optionText": "Impacto moderado, recuperação parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Segmente VLANs por função, aplique ACLs de micro‑segmentação e bloqueie tráfego Lateral SMB."
+          "recommendation": "Para moderar o impacto de uma interrupção da rede, segmente as VLANs por função departamental ou de serviço, aplique Access Control Lists (ACLs) para micro-segmentação eficaz e bloqueie o tráfego lateral SMB não essencial."
         },
         {
           "optionText": "Impacto elevado, paralisação das operações críticas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Active rede Zero Trust com autenticação mTLS entre serviços, isolando ambientes produtivos."
+          "recommendation": "Para prevenir a paralisação de operações críticas devido a falhas na rede interna, adote uma arquitetura de rede Zero Trust, impondo autenticação mTLS entre todos os serviços e isolando completamente os ambientes produtivos dos de desenvolvimento/teste."
         }
       ]
     },
@@ -451,13 +451,13 @@
           "optionText": "Exposição de alguns dados críticos, impacto moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente NAC baseado em certificação de dispositivo e expulse dispositivos não conformes."
+          "recommendation": "Para mitigar o impacto da exposição de dados críticos por invasão na rede, implemente Network Access Control (NAC) baseado na certificação digital de cada dispositivo e configure a expulsão automática de dispositivos não conformes ou suspeitos."
         },
         {
           "optionText": "Exposição generalizada de dados sensíveis, alto impacto operacional e legal.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Deploy IDS/IPS inline com sandboxamento de payloads e resposta automática a beaconing."
+          "recommendation": "No caso de uma exposição generalizada de dados sensíveis, implemente sistemas de Deteção e Prevenção de Intrusão (IDS/IPS) em modo inline, com capacidade de sandbox para análise de payloads e configure respostas automáticas a atividades de beaconing."
         }
       ]
     },
@@ -474,13 +474,13 @@
           "optionText": "Monitorização parcial ou periódica.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Segmente VLANs por função, aplique ACLs de micro‑segmentação e bloqueie tráfego Lateral SMB."
+          "recommendation": "Em redes com monitorização parcial, implemente a segmentação de VLANs por função, reforce com ACLs de micro-segmentação e adicione o bloqueio de tráfego lateral SMB para conter potenciais ameaças não detetadas."
         },
         {
           "optionText": "Monitorização inexistente ou muito limitada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Active rede Zero Trust com autenticação mTLS entre serviços, isolando ambientes produtivos."
+          "recommendation": "Com monitorização de rede limitada ou inexistente, avance para um modelo de Zero Trust com autenticação mTLS obrigatória entre serviços e crie um isolamento rigoroso dos ambientes produtivos para minimizar a superfície de ataque."
         }
       ]
     },
@@ -497,13 +497,13 @@
           "optionText": "Atualizações esporádicas ou inconsistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente NAC baseado em certificação de dispositivo e expulse dispositivos não conformes."
+          "recommendation": "Face a atualizações esporádicas de dispositivos, implemente NAC baseado em certificação de dispositivo para garantir que apenas endpoints conformes e atualizados acedam à rede, expulsando automaticamente os que não cumprem os requisitos."
         },
         {
           "optionText": "Sem atualizações ou muito raras.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Deploy IDS/IPS inline com sandboxamento de payloads e resposta automática a beaconing."
+          "recommendation": "Se os dispositivos na rede raramente são atualizados, compense implementando IDS/IPS inline com sandbox para análise de payloads suspeitos e configure mecanismos de resposta automática a beaconing para detetar e bloquear malware."
         }
       ]
     },
@@ -520,13 +520,13 @@
           "optionText": "Segmentação parcial, não totalmente eficaz.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Segmente VLANs por função, aplique ACLs de micro‑segmentação e bloqueie tráfego Lateral SMB."
+          "recommendation": "Se a segmentação da rede é parcial, aprimore-a dividindo VLANs por função, aplicando ACLs granulares para micro-segmentação e bloqueando ativamente o tráfego lateral SMB para limitar o raio de ação de um atacante."
         },
         {
           "optionText": "Rede não segmentada ou mal configurada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Active rede Zero Trust com autenticação mTLS entre serviços, isolando ambientes produtivos."
+          "recommendation": "Quando a rede não é segmentada ou está mal configurada, implemente uma estratégia de Zero Trust com autenticação mTLS entre os serviços e isole os ambientes produtivos para garantir que cada recurso seja acedido de forma segura e verificada."
         }
       ]
     },
@@ -543,13 +543,13 @@
           "optionText": "Política informal ou parcialmente aplicada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente NAC baseado em certificação de dispositivo e expulse dispositivos não conformes."
+          "recommendation": "Se a política de acesso à rede é informal, estabeleça controlos robustos implementando NAC baseado em certificação de dispositivo e defina regras claras para a expulsão automática de dispositivos não conformes."
         },
         {
           "optionText": "Ausência de política ou controlo inadequado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Deploy IDS/IPS inline com sandboxamento de payloads e resposta automática a beaconing."
+          "recommendation": "Na ausência de uma política de acesso formal, reforce a segurança da rede implementando IDS/IPS inline com funcionalidade de sandbox para payloads e configure alertas e respostas automáticas a beaconing e outras atividades maliciosas."
         }
       ]
     },
@@ -566,13 +566,13 @@
           "optionText": "Comprometimento parcial de serviços internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Limite RDP/VPN a IPs corporativos e implemente MFA push‑notification resistente a phishing."
+          "recommendation": "Para conter o comprometimento parcial de serviços internos via acesso remoto, limite as conexões RDP/VPN exclusivamente a IPs corporativos previamente autorizados e implemente MFA com push notifications resistentes a phishing."
         },
         {
           "optionText": "Comprometimento extenso, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Bloqueie credenciais afetadas, force re‑inscrição MFA e substitua VPN legacy por ZTNA."
+          "recommendation": "Em caso de comprometimento extenso por acesso remoto, bloqueie imediatamente todas as credenciais afetadas, force uma nova inscrição no sistema MFA para todos os utilizadores remotos e planeie a substituição de VPNs legadas por soluções Zero Trust Network Access (ZTNA)."
         }
       ]
     },
@@ -589,13 +589,13 @@
           "optionText": "Impacto moderado, custos adicionais notáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Audite logs de VPN semanalmente e revogue contas inativas há >30 dias."
+          "recommendation": "Para gerir o impacto financeiro e reputacional de invasões por canais remotos, estabeleça uma rotina de auditoria semanal dos logs de VPN em busca de anomalias e revogue acessos de contas inativas há mais de 30 dias."
         },
         {
           "optionText": "Impacto severo, custos financeiros elevados e danos reputacionais graves.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente tunelamento SSH com chaves hardware e elimine senhas em canal remoto."
+          "recommendation": "Para prevenir impactos severos de invasões remotas, implemente tunelamento SSH seguro utilizando chaves de hardware (como tokens FIDO2/YubiKey) para autenticação e elimine completamente o uso de senhas em canais de acesso remoto."
         }
       ]
     },
@@ -612,13 +612,13 @@
           "optionText": "MFA implementado parcialmente ou limitado.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Limite RDP/VPN a IPs corporativos e implemente MFA push‑notification resistente a phishing."
+          "recommendation": "Se o MFA é implementado parcialmente para acesso remoto, reforce a segurança limitando o acesso RDP/VPN a IPs corporativos validados e utilize notificações push resistentes a phishing como segundo fator de autenticação."
         },
         {
           "optionText": "Sem utilização de MFA.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Bloqueie credenciais afetadas, force re‑inscrição MFA e substitua VPN legacy por ZTNA."
+          "recommendation": "Na ausência de MFA para acesso remoto, e em caso de suspeita de brecha, bloqueie as credenciais potencialmente comprometidas, obrigue todos os utilizadores a reconfigurar o MFA e substitua as VPNs tradicionais por uma arquitetura ZTNA mais segura."
         }
       ]
     },
@@ -635,13 +635,13 @@
           "optionText": "Auditorias ocasionais ou não automatizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Audite logs de VPN semanalmente e revogue contas inativas há >30 dias."
+          "recommendation": "Com auditorias de acesso remoto ocasionais, implemente a revisão semanal sistemática dos logs de VPN e automatize a revogação de contas de acesso remoto inativas por mais de 30 dias."
         },
         {
           "optionText": "Sem auditorias ou raramente realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente tunelamento SSH com chaves hardware e elimine senhas em canal remoto."
+          "recommendation": "Na ausência de auditorias de acesso remoto, adote o tunelamento SSH com chaves de hardware para uma autenticação mais forte e elimine o uso de senhas em todos os canais remotos para dificultar o acesso não autorizado."
         }
       ]
     },
@@ -658,13 +658,13 @@
           "optionText": "Soluções implementadas parcialmente.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Limite RDP/VPN a IPs corporativos e implemente MFA push‑notification resistente a phishing."
+          "recommendation": "Com soluções de VPN parcialmente implementadas, restrinja o acesso RDP/VPN apenas a IPs corporativos e fortaleça la autenticação com MFA via push notifications resistentes a phishing."
         },
         {
           "optionText": "Sem soluções técnicas adequadas ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Bloqueie credenciais afetadas, force re‑inscrição MFA e substitua VPN legacy por ZTNA."
+          "recommendation": "Se as soluções técnicas de acesso remoto são insuficientes, bloqueie imediatamente credenciais suspeitas, force a reinscrição em MFA e modernize a infraestrutura substituindo VPNs legadas por ZTNA."
         }
       ]
     },
@@ -681,13 +681,13 @@
           "optionText": "Política informal ou parcialmente implementada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Audite logs de VPN semanalmente e revogue contas inativas há >30 dias."
+          "recommendation": "Se a política de gestão de acesso remoto é informal, comece por auditar semanalmente os logs da VPN e revogar contas inativas há mais de 30 dias para reduzir a superfície de ataque."
         },
         {
           "optionText": "Sem política definida ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente tunelamento SSH com chaves hardware e elimine senhas em canal remoto."
+          "recommendation": "Se não existe política formal de acesso remoto, implemente como medida de alta segurança o tunelamento SSH com chaves de hardware e a eliminação de autenticação baseada em senha para canais remotos."
         }
       ]
     },
@@ -704,13 +704,13 @@
           "optionText": "Impacto moderado, exploração parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Introduza pipeline CI/CD com validação automática de CIS Benchmarks antes do deploy."
+          "recommendation": "Para mitigar o impacto moderado da exploração de sistemas mal configurados, introduza um pipeline CI/CD que inclua a validação automática das configurações contra os CIS Benchmarks antes de qualquer deploy em produção."
         },
         {
           "optionText": "Impacto grave, comprometimento total dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Desconecte sistemas expostos, aplique hardening STIG completo e execute pentest pós‑correção."
+          "recommendation": "Em caso de comprometimento grave devido a má configuração, desconecte imediatamente os sistemas expostos da rede, aplique um hardening completo seguindo as diretrizes STIG (Security Technical Implementation Guides) e execute um pentest rigoroso após a correção para validar a segurança."
         }
       ]
     },
@@ -727,13 +727,13 @@
           "optionText": "Impacto moderado, danos gerenciáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Utilize Ansible ou Terraform state para evitar deriva de configuração."
+          "recommendation": "Para controlar danos gerenciáveis por exposição de dados devido a configurações inadequadas, utilize ferramentas como Ansible ou Terraform para gerir o estado das configurações (Infrastructure as Code) e evitar a deriva de configuração ao longo do tempo."
         },
         {
           "optionText": "Impacto alto, danos significativos e prolongados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Restabeleça configuração a partir de imagem dourada e audite permissões de serviço."
+          "recommendation": "Para remediar danos significativos e prolongados por configurações inadequadas, restabeleça a configuração dos sistemas afetados a partir de uma 'imagem dourada' (golden image) previamente validada e audite minuciosamente todas as permissões de serviço associadas."
         }
       ]
     },
@@ -750,13 +750,13 @@
           "optionText": "Revisões esporádicas ou informais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Introduza pipeline CI/CD com validação automática de CIS Benchmarks antes do deploy."
+          "recommendation": "Face a revisões esporádicas de configuração, implemente um pipeline CI/CD com validação automática contra CIS Benchmarks para garantir que as configurações de segurança sejam verificadas continuamente antes do deploy."
         },
         {
           "optionText": "Sem revisão ou raramente realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Desconecte sistemas expostos, aplique hardening STIG completo e execute pentest pós‑correção."
+          "recommendation": "Se não há revisões de configuração, e um sistema crítico é comprometido, desconecte-o, aplique hardening STIG completo, e realize um pentest pós-correção antes de o reintegrar."
         }
       ]
     },
@@ -773,13 +773,13 @@
           "optionText": "Procedimentos informais ou parcialmente eficazes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Utilize Ansible ou Terraform state para evitar deriva de configuração."
+          "recommendation": "Com procedimentos informais de configuração, adote Ansible ou Terraform state para garantir a consistência e evitar a deriva de configuração, formalizando a gestão de alterações."
         },
         {
           "optionText": "Procedimentos inexistentes ou inadequados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Restabeleça configuração a partir de imagem dourada e audite permissões de serviço."
+          "recommendation": "Se os procedimentos de configuração para novos sistemas são inadequados, defina um processo que inclua o restabelecimento a partir de uma imagem dourada em caso de falhas e a auditoria sistemática das permissões de serviço antes da entrada em produção."
         }
       ]
     },
@@ -796,13 +796,13 @@
           "optionText": "Uso ocasional ou parcial das ferramentas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Introduza pipeline CI/CD com validação automática de CIS Benchmarks antes do deploy."
+          "recommendation": "Com uso ocasional de ferramentas de verificação, estabeleça um pipeline CI/CD com validação automática obrigatória de configurações contra os CIS Benchmarks antes de cada deploy."
         },
         {
           "optionText": "Sem ferramentas ou uso inadequado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Desconecte sistemas expostos, aplique hardening STIG completo e execute pentest pós‑correção."
+          "recommendation": "Na ausência de ferramentas automatizadas e em caso de exploração de má configuração, desconecte os sistemas afetados, aplique hardening STIG de forma integral e conduza um pentest pós-correção."
         }
       ]
     },
@@ -819,13 +819,13 @@
           "optionText": "Treinos pontuais ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Utilize Ansible ou Terraform state para evitar deriva de configuração."
+          "recommendation": "Se os treinos de configuração segura são pontuais, utilize Ansible ou Terraform state para impor configurações seguras e reduzir a probabilidade de erros humanos que levem à deriva de configuração."
         },
         {
           "optionText": "Sem Treinos regulares ou raramente realizados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Restabeleça configuração a partir de imagem dourada e audite permissões de serviço."
+          "recommendation": "Na ausência de treinos regulares sobre configuração segura, e em caso de incidente, restabeleça a configuração a partir de uma imagem dourada e realize uma auditoria completa das permissões de serviço para identificar e corrigir falhas."
         }
       ]
     },
@@ -842,13 +842,13 @@
           "optionText": "Impacto moderado, comprometimento parcial.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Configure WSUS/Repo local com janela semanal de manutenção e testes automatizados."
+          "recommendation": "Para lidar com o impacto moderado de vulnerabilidades não corrigidas, configure um servidor WSUS (Windows Server Update Services) ou um repositório local para centralizar a distribuição de patches, estabelecendo uma janela semanal de manutenção com testes automatizados pré-implementação."
         },
         {
           "optionText": "Impacto grave, comprometimento significativo dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize patching emergencial em 24h para CVSS≥9 e execute varredura Authenticated após aplicação."
+          "recommendation": "Em caso de impacto grave por exploração de falhas de atualização, estabeleça um SLA para patching emergencial de vulnerabilidades com CVSS score ≥ 9 em menos de 24 horas e execute sempre uma varredura autenticada após a aplicação para confirmar a correção."
         }
       ]
     },
@@ -865,13 +865,13 @@
           "optionText": "Impacto moderado, custos adicionais controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Avalie impacto de patch via canary release em 5% dos hosts antes de roll‑out total."
+          "recommendation": "Para controlar custos adicionais devido a falhas em atualizações, avalie o impacto de cada patch significativo através de um 'canary release' (implementação progressiva) em aproximadamente 5% dos hosts representativos antes de aprovar o roll-out total para toda a organização."
         },
         {
           "optionText": "Alto impacto, custos elevados e danos reputacionais graves.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Isolar serviços vulneráveis atrás de WAF até conclusão de patch e aplicar regra de virtual patching."
+          "recommendation": "Para evitar danos reputacionais graves por falhas de atualização, isole imediatamente os serviços vulneráveis conhecidos atrás de um Web Application Firewall (WAF), aplicando regras de 'virtual patching' como medida de contenção temporária até que o patch definitivo seja aplicado e testado."
         }
       ]
     },
@@ -888,13 +888,13 @@
           "optionText": "Atualizações manuais ou aplicadas parcialmente.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Configure WSUS/Repo local com janela semanal de manutenção e testes automatizados."
+          "recommendation": "Se as atualizações são manuais, implemente WSUS ou um repositório local para automatizar a aplicação de patches críticos, definindo uma janela de manutenção semanal e testes automatizados para validar as atualizações."
         },
         {
           "optionText": "Atualizações raras, demoradas ou não realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize patching emergencial em 24h para CVSS≥9 e execute varredura Authenticated após aplicação."
+          "recommendation": "Se as atualizações são raras ou demoradas, defina uma política de patching emergencial em 24h para vulnerabilidades críticas (CVSS≥9) e realize varreduras autenticadas pós-aplicação para verificar a eficácia."
         }
       ]
     },
@@ -911,13 +911,13 @@
           "optionText": "Monitorização ocasional, aplicação moderada.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Avalie impacto de patch via canary release em 5% dos hosts antes de roll‑out total."
+          "recommendation": "Com monitorização ocasional de vulnerabilidades, implemente 'canary releases' para patches (em 5% dos hosts) para avaliar o impacto e detetar problemas antes do roll-out completo, minimizando riscos."
         },
         {
           "optionText": "Sem monitorização formal ou aplicação atrasada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Isolar serviços vulneráveis atrás de WAF até conclusão de patch e aplicar regra de virtual patching."
+          "recommendation": "Se a aplicação de patches é atrasada, isole os serviços vulneráveis com um WAF e aplique regras de virtual patching para proteção imediata enquanto o patch oficial é testado e implementado."
         }
       ]
     },
@@ -934,13 +934,13 @@
           "optionText": "Ferramentas básicas ou parcialmente eficazes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Configure WSUS/Repo local com janela semanal de manutenção e testes automatizados."
+          "recommendation": "Com ferramentas de patching básicas, melhore a gestão configurando WSUS/Repo local para patches, defina uma janela de manutenção semanal e incorpore testes automatizados para assegurar a estabilidade pós-patch."
         },
         {
           "optionText": "Sem ferramentas ou ferramentas inadequadas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Priorize patching emergencial em 24h para CVSS≥9 e execute varredura Authenticated após aplicação."
+          "recommendation": "Na ausência de ferramentas adequadas para patching, priorize o patching emergencial em 24h para vulnerabilidades CVSS≥9, mesmo que manual, e execute uma varredura autenticada após a aplicação para confirmação."
         }
       ]
     },
@@ -957,13 +957,13 @@
           "optionText": "Processo informal, parcialmente implementado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Avalie impacto de patch via canary release em 5% dos hosts antes de roll‑out total."
+          "recommendation": "Se o processo de validação de patches é informal, formalize-o avaliando o impacto de cada patch através de um canary release em 5% dos hosts antes do roll-out geral, documentando os resultados."
         },
         {
           "optionText": "Processo inexistente ou raramente aplicado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Isolar serviços vulneráveis atrás de WAF até conclusão de patch e aplicar regra de virtual patching."
+          "recommendation": "Caso o processo de patching seja inexistente ou raramente aplicado, utilize um WAF para isolar serviços vulneráveis e aplique regras de virtual patching como uma tática de mitigação de risco crucial e imediata."
         }
       ]
     }
