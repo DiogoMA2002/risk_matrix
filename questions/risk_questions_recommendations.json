@@ -14,13 +14,13 @@
           "optionText": "Comprometimento de contas internas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar sistema de deteção de tentativas de acesso não autorizado com bloqueio automático após 3 falhas."
+          "recommendation": "Active bloqueio de conta após tentativas falhas repetidas e monitore credenciais vazadas em fontes externas."
         },
         {
           "optionText": "Exposição total de sistemas críticos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar autenticação multifator com certificados digitais e revogação imediata de sessões suspeitas."
+          "recommendation": "Exija MFA resistente a phishing (FIDO2) em TODAS as contas e revogue tokens de sessão ativos imediatamente."
         }
       ]
     },
@@ -60,13 +60,13 @@
           "optionText": "Casos isolados com impacto significativo.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Estabelecer política de senhas fortes com verificação de histórico e monitorização de credenciais comprometidas."
+          "recommendation": "Active bloqueio de conta após tentativas falhas repetidas e monitore credenciais vazadas em fontes externas."
         },
         {
           "optionText": "A prática é comum e representa um risco elevado.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar gestor de senhas corporativo com sincronização automática e verificação de força."
+          "recommendation": "Exija MFA resistente a phishing (FIDO2) em TODAS as contas e revogue tokens de sessão ativos imediatamente."
         }
       ]
     },
@@ -83,13 +83,13 @@
           "optionText": "Monitorização parcial e análise manual.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Automatizar análise de logs de autenticação com alertas para padrões suspeitos."
+          "recommendation": "Implemente rotação automática de senhas privilegiadas através de cofre PAM e revisão trimestral de acessos."
         },
         {
           "optionText": "Nenhuma monitorização ativa implementada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar sistema de monitorização contínua com deteção de anomalias e resposta automática."
+          "recommendation": "Habilite lista de permissões de IP para administradores e conduza caça a credenciais comprometidas nas 24 h seguintes."
         }
       ]
     },
@@ -106,13 +106,13 @@
           "optionText": "MFA ativado apenas para alguns utilizadores.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Expandir implementação de MFA para todos os utilizadores com acesso a dados sensíveis."
+          "recommendation": "Active bloqueio de conta após tentativas falhas repetidas e monitore credenciais vazadas em fontes externas."
         },
         {
           "optionText": "Nenhum uso de MFA implementado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar autenticação multifator obrigatória com certificados digitais para todos os acessos."
+          "recommendation": "Exija MFA resistente a phishing (FIDO2) em TODAS as contas e revogue tokens de sessão ativos imediatamente."
         }
       ]
     },
@@ -129,13 +129,13 @@
           "optionText": "Proteção parcial das credenciais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar cofre de senhas com rotação automática e controlo de acesso baseado em funções."
+          "recommendation": "Implemente rotação automática de senhas privilegiadas através de cofre PAM e revisão trimestral de acessos."
         },
         {
           "optionText": "Credenciais armazenadas sem proteção adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Migrar para sistema de gestão de identidades com encriptação de credenciais e auditoria contínua."
+          "recommendation": "Habilite lista de permissões de IP para administradores e conduza caça a credenciais comprometidas nas 24 h seguintes."
         }
       ]
     },
@@ -152,13 +152,13 @@
           "optionText": "Comprometimento parcial de sistemas ou dados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar filtros de correio eletrónico avançados com análise de conteúdo e remetentes."
+          "recommendation": "Ative banners de aviso em e‑mails externos e filtre anexos maliciosos no gateway."
         },
         {
           "optionText": "Acesso total ao sistema e possível perda de dados sensíveis.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar isolamento de anexos em ambiente controlado e verificação de URLs em tempo real."
+          "recommendation": "Habilite análise sandbox em tempo real de anexos e URL rewriting para bloqueio de domínios recém‑criados."
         }
       ]
     },
@@ -198,7 +198,7 @@
           "optionText": "Recebem ocasionalmente, mas a maioria reconhece os ataques.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Realizar formação específica sobre técnicas atuais de phishing e engenharia social."
+          "recommendation": "Ativar avisos visuais em correio eletrónico externo e filtrar anexos potencialmente maliciosos no gateway."
         },
         {
           "optionText": "É comum receber e-mails maliciosos, mas os colaboradores não caem nos ataques.",
@@ -210,7 +210,7 @@
           "optionText": "É comum receber e-mails maliciosos e alguns colaboradores caem nos ataques.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar programa de sensibilização contínua com simulações personalizadas e feedback imediato."
+          "recommendation": "Implementar análise sandbox em tempo real de anexos e reescrita de URLs para bloqueio de domínios recentes."
         }
       ]
     },
@@ -227,13 +227,13 @@
           "optionText": "Alguns e-mails suspeitos passam pelos filtros.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Atualizar regras de filtragem com base em análise de ameaças recentes e padrões de ataque."
+          "recommendation": "Implementar análise comportamental de correio eletrónico e quarentena automática para remetentes desconhecidos."
         },
         {
           "optionText": "Os filtros são ineficazes e muitos ataques chegam aos utilizadores.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar solução de segurança em camadas com análise comportamental e bloqueio proativo."
+          "recommendation": "Integrar feed de inteligência de ameaças no gateway e aplicar filtros baseados em machine learning."
         }
       ]
     },
@@ -250,13 +250,13 @@
           "optionText": "Formações pouco regulares e abrangentes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Desenvolver programa de formação modular com avaliação de competências e atualizações trimestrais."
+          "recommendation": "Desenvolver programa de formação contínua com simulações mensais e feedback personalizado."
         },
         {
           "optionText": "Nenhuma formação sobre ameaças de e-mail.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Criar programa de sensibilização obrigatório com formação inicial e refrescamento mensal."
+          "recommendation": "Criar programa de sensibilização com formação obrigatória trimestral e avaliação de conhecimentos."
         }
       ]
     },
@@ -417,7 +417,7 @@
           "optionText": "Sem mecanismos avançados ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Dar Deploy a uma solução de segurança em camadas com monitorização 24/7 e resposta automática a ameaças."
+          "recommendation": "Deployar solução de segurança em camadas com monitorização 24/7 e resposta automática a ameaças."
         }
       ]
     },
@@ -1084,7 +1084,7 @@
           "optionText": "Sem mecanismos técnicos ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Dar deploy de uma solução de segurança em camadas com análise comportamental e bloqueio proativo de ameaças."
+          "recommendation": "Deployar solução de segurança em camadas com análise comportamental e bloqueio proativo de ameaças."
         }
       ]
     },
@@ -1676,13 +1676,13 @@
           "optionText": "Impacto moderado, exploração parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar sistema de gestão de vulnerabilidades com priorização baseada em risco e plano de remediação estruturado."
+          "recommendation": "Integre scanners CIS ao pipeline CI/CD e bloqueie builds não conformes."
         },
         {
           "optionText": "Impacto grave, comprometimento total dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Ativar resposta imediata a vulnerabilidades críticas com isolamento de sistemas afetados e plano de recuperação detalhado."
+          "recommendation": "Retire serviços expostos, reimplante a partir de imagem dourada e realize pentest pós‑correção."
         }
       ]
     },
@@ -1699,13 +1699,13 @@
           "optionText": "Impacto moderado, danos gerenciáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar gestão de configuração baseada em infraestrutura como código com validação automática."
+          "recommendation": "Use Terraform/Ansible para manter estado imutável e evitar deriva de configuração."
         },
         {
           "optionText": "Impacto alto, danos significativos e prolongados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Aplicar reforço de segurança completo e auditar permissões de serviço desnecessárias."
+          "recommendation": "Aplique hardening STIG completo e audite permissões de serviço desnecessárias."
         }
       ]
     },
@@ -1722,13 +1722,13 @@
           "optionText": "Revisões esporádicas ou informais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar verificação automática de configurações com relatórios semanais de conformidade."
+          "recommendation": "Integrar scanners de conformidade no pipeline de integração contínua e bloquear implementações não conformes."
         },
         {
           "optionText": "Sem revisão ou raramente realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Estabelecer processo de revisão contínua com ferramentas automatizadas e validação manual periódica."
+          "recommendation": "Remover serviços expostos, reimplementar a partir de imagem de referência e realizar teste de penetração pós-correção."
         }
       ]
     },
@@ -1745,13 +1745,13 @@
           "optionText": "Procedimentos informais ou parcialmente eficazes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Criar procedimentos de configuração segura com templates pré-aprovados e validação automática."
+          "recommendation": "Use Terraform/Ansible para manter estado imutável e evitar deriva de configuração."
         },
         {
           "optionText": "Procedimentos inexistentes ou inadequados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Desenvolver e implementar procedimentos de configuração segura com revisão obrigatória e aprovação em duas etapas."
+          "recommendation": "Aplique hardening STIG completo e audite permissões de serviço desnecessárias."
         }
       ]
     },
@@ -1843,7 +1843,7 @@
           "optionText": "Impacto elevado, prejuízos financeiros graves e danos à reputação.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Monitorar em tempo real indicadores de quebras ou insolvência em fornecedores chave."
+          "recommendation": "Monitorar em tempo real indicadores de breacha ou insolvência em fornecedores chave."
         }
       ]
     },
@@ -2504,13 +2504,13 @@
           "optionText": "Impacto moderado, exposição parcial de código sensível.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar proteção contra engenharia reversa com ofuscação de código e validação de integridade em tempo de execução."
+          "recommendation": "Ofuscar aplicações cliente e validar assinatura de código antes da execução."
         },
         {
-          "optionText": "Impacto grave, exposição ampla de propriedade intelectual e vulnerabilidades críticas.",
+          "optionText": "Impacto elevado, exposição ampla de propriedade intelectual e vulnerabilidades críticas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Aplicar proteção multicamada com ofuscação avançada, deteção de manipulação e isolamento de componentes críticos."
+          "recommendation": "Implementar anti‑tamper runtime e deteção de debugging em apps móveis."
         }
       ]
     },
@@ -2642,13 +2642,13 @@
           "optionText": "Impacto moderado, serviços parcialmente afetados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar proteção contra DoS com limitação de taxa adaptativa e monitorização de padrões de tráfego anómalo."
+          "recommendation": "Rate‑limiting na camada de aplicação e monitorização de picos >200% baseline."
         },
         {
           "optionText": "Impacto alto, interrupção prolongada de serviços essenciais.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Ativar proteção anti-DDoS multicamada com mitigação automática e redundância geográfica de serviços críticos."
+          "recommendation": "Ativar Anti‑DDoS Always‑On com redirecionamento automático de tráfego malicioso."
         }
       ]
     },
@@ -2780,13 +2780,13 @@
           "optionText": "Impacto moderado, falhas parciais e controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar sistema de gestão de privilégios com aprovação em duas etapas e monitorização de atividades privilegiadas."
+          "recommendation": "Habilitar UEBA para desvios de comportamento e relatórios semanais ao SOC."
         },
         {
           "optionText": "Impacto severo, danos operacionais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Estabelecer controlo rigoroso de privilégios com aprovação em múltiplas etapas e gravação contínua de sessões críticas."
+          "recommendation": "Desativar contas partilhadas e exigir controlo duplo em sessões sensíveis."
         }
       ]
     },
