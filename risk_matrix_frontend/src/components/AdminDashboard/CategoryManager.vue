@@ -1,63 +1,120 @@
 <template>
-  <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mb-8">
-    <h2 class="text-xl font-semibold mb-4 text-blue-800 flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2m14 0V9a2 2 0 0 0-2-2M5 11V9a2 2 0 0 1 2-2m0 0V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2M7 7h10" />
-      </svg>
-      Gerir Categorias
-    </h2>
-    <div v-if="loading" class="text-center text-gray-500">Carregando categorias...</div>
-    <div v-else-if="!localCategories || localCategories.length === 0" class="text-center text-gray-500">Nenhuma categoria encontrada.</div>
-    <ul v-else class="space-y-3">
-      <li v-for="category in paginatedCategories" :key="category.id" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg shadow-sm">
-        <div v-if="editingCategoryId === category.id" class="flex-grow mr-2">
-          <input 
-            v-model="editingCategoryName" 
-            type="text" 
-            class="w-full px-2 py-1 border border-blue-300 rounded focus:ring-blue-500 focus:border-blue-500"
-            @keyup.enter="saveEdit(category.id)"
-            @keyup.esc="cancelEdit"
-            ref="editInput"
-          />
+  <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mb-6">
+    <header class="mb-6">
+      <h2 class="text-xl font-semibold text-blue-800 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg>
+        Gerenciar Categorias
+      </h2>
+      <div class="flex justify-between items-center mt-4">
+        <div class="flex-1 max-w-md">
+          <div class="relative">
+            <input type="text" v-model="searchQuery"
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              :placeholder="categoryLabels.search"
+              :disabled="loading" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
         </div>
-        <span v-else class="text-gray-800 flex-grow">{{ category.name }}</span>
-        <div class="flex-shrink-0 space-x-2">
-          <template v-if="editingCategoryId === category.id">
-            <button @click="saveEdit(category.id)" class="p-1 text-green-600 hover:text-green-800 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        <button @click="showNewCategoryInput = !showNewCategoryInput"
+          class="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          :disabled="loading">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          {{ categoryLabels.addNew }}
+        </button>
+      </div>
+    </header>
+
+    <!-- New Category Input -->
+    <div v-if="showNewCategoryInput" class="mb-6 p-4 bg-gray-50 rounded-lg">
+      <div class="flex gap-4">
+        <input v-model="newCategory" type="text"
+          class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          :placeholder="categoryLabels.categoryName"
+          :disabled="loading" />
+        <button @click="createCategory"
+          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          :disabled="loading || !newCategory.trim()">
+          <svg v-if="loading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {{ loading ? categoryLabels.loading : categoryLabels.add }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Categories List -->
+    <div v-if="filteredCategories.length === 0" class="text-center py-8 text-gray-500">
+      {{ categoryLabels.noResults }}
+    </div>
+    <div v-else class="space-y-4">
+      <div v-for="category in paginatedCategories" :key="category.id"
+        class="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+        <div class="flex items-center justify-between">
+          <span class="text-gray-900">{{ formatCategoryName(category.name) }}</span>
+          <div class="flex items-center space-x-2">
+            <button @click="startEdit(category)"
+              class="text-blue-600 hover:text-blue-800 focus:ring-2 focus:ring-blue-400 rounded-lg p-1"
+              :disabled="loading">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </button>
-            <button @click="cancelEdit" class="p-1 text-gray-500 hover:text-gray-700 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            <button @click="deleteCategory(category.id)"
+              class="text-red-600 hover:text-red-800 focus:ring-2 focus:ring-red-400 rounded-lg p-1"
+              :disabled="loading">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </button>
-          </template>
-          <template v-else>
-            <button @click="startEdit(category)" class="p-1 text-blue-600 hover:text-blue-800 transition-colors" title="Editar">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </button>
-            <button @click="requestDelete(category.id)" class="p-1 text-red-600 hover:text-red-800 transition-colors" title="Excluir">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          </template>
+          </div>
         </div>
-      </li>
-    </ul>
-    <div v-if="totalPages > 1" class="flex justify-center items-center space-x-2 mt-6 pt-4 border-t border-gray-200">
-      <button @click="prevPage" :disabled="currentPage === 1" 
-              class="px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300">
-        Anterior
-      </button>
-      <span class="text-sm text-gray-700">Página {{ currentPage }} de {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages" 
-              class="px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300">
-        Próxima
+
+        <!-- Edit Form -->
+        <div v-if="editingCategory?.id === category.id" class="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+          <div class="flex gap-4">
+            <input v-model="editName" type="text"
+              class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              :placeholder="categoryLabels.categoryName"
+              :disabled="loading" />
+            <div class="flex gap-2">
+              <button @click="saveEdit"
+                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                :disabled="loading || !editName.trim()">
+                <svg v-if="loading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {{ loading ? categoryLabels.loading : categoryLabels.save }}
+              </button>
+              <button @click="cancelEdit"
+                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:ring-2 focus:ring-gray-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                :disabled="loading">
+                {{ categoryLabels.cancel }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div v-if="totalPages > 1" class="mt-6 flex justify-center space-x-2">
+      <button v-for="page in totalPages" :key="page"
+        @click="changePage(page)"
+        class="px-4 py-2 rounded-lg transition-colors"
+        :class="{
+          'bg-blue-600 text-white': currentPage === page,
+          'bg-gray-200 text-gray-700 hover:bg-gray-300': currentPage !== page
+        }"
+        :disabled="loading">
+        {{ page }}
       </button>
     </div>
   </div>
@@ -69,101 +126,195 @@ export default {
   props: {
     categories: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     loading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      editingCategoryId: null,
-      editingCategoryName: "",
-      localCategories: [],
+      searchQuery: "",
       currentPage: 1,
-      itemsPerPage: 5, // Adjust as needed
+      itemsPerPage: 5,
+      editingCategory: null,
+      editName: "",
+      showNewCategoryInput: false,
+      newCategory: "",
     };
   },
   computed: {
+    filteredCategories() {
+      if (!this.searchQuery.trim()) return this.categories;
+      const query = this.searchQuery.toLowerCase().trim();
+      return this.categories.filter(cat => 
+        cat.name.toLowerCase().includes(query)
+      );
+    },
     totalPages() {
-      return Math.ceil(this.localCategories.length / this.itemsPerPage);
+      return Math.ceil(this.filteredCategories.length / this.itemsPerPage);
     },
     paginatedCategories() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
-      return this.localCategories.slice(start, end);
-    }
-  },
-  watch: {
-    categories: {
-      immediate: true,
-      handler(newVal) {
-        // Ensure it's always an array of objects with id and name
-        this.localCategories = newVal && Array.isArray(newVal) 
-          ? newVal.map(cat => typeof cat === 'object' && cat !== null && cat.id && cat.name ? cat : { id: Date.now() + Math.random(), name: String(cat) }) // Fallback if structure is wrong
-          : [];
-      }
+      return this.filteredCategories.slice(start, end);
     },
-    // Reset page if categories change and current page becomes invalid
-    localCategories() {
-       if (this.currentPage > this.totalPages && this.totalPages > 0) {
-        this.currentPage = this.totalPages; // Go to last page if possible
-      } else if (this.totalPages === 0) {
-          this.currentPage = 1; // Reset to 1 if list becomes empty
-      }
-       // Reset to page 1 if filter/search reduced items below current page (optional)
-       // Consider if filtering logic is added later
-       // if (this.currentPage > 1 && this.paginatedCategories.length === 0) {
-       //   this.currentPage = 1;
-       // }
+    categoryLabels() {
+      return {
+        add: "Adicionar Categoria",
+        edit: "Editar Categoria",
+        delete: "Excluir Categoria",
+        search: "Pesquisar categorias...",
+        noResults: "Nenhuma categoria encontrada",
+        confirmDelete: "Tem certeza que deseja excluir esta categoria?",
+        confirmDeleteWarning: "Esta ação não pode ser desfeita.",
+        cancel: "Cancelar",
+        confirm: "Confirmar",
+        save: "Salvar",
+        addNew: "Adicionar Nova Categoria",
+        editCategory: "Editar Categoria",
+        deleteCategory: "Excluir Categoria",
+        categoryName: "Nome da Categoria",
+        emptyName: "Nome da categoria não pode ser vazio",
+        invalidChars: "Nome da categoria contém caracteres inválidos",
+        duplicate: "Esta categoria já existe",
+        success: "Categoria salva com sucesso!",
+        error: "Erro ao salvar categoria",
+        deleteSuccess: "Categoria excluída com sucesso!",
+        deleteError: "Erro ao excluir categoria",
+        loading: "A processar...",
+      };
     }
   },
   methods: {
+    formatCategoryName(name) {
+      if (!name || typeof name !== 'string') return '';
+      return name
+        .replace(/_/g, " ")
+        .split(" ")
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(" ");
+    },
     startEdit(category) {
-      this.editingCategoryId = category.id;
-      this.editingCategoryName = category.name;
-      // Focus the input field after it becomes visible
-      this.$nextTick(() => {
-         if (this.$refs.editInput && this.$refs.editInput[0]) {
-             this.$refs.editInput[0].focus();
-         } else if (this.$refs.editInput) { // If only one item, refs might not be an array
-             this.$refs.editInput.focus();
-         }
-      });
+      this.editingCategory = category;
+      this.editName = category.name;
     },
     cancelEdit() {
-      this.editingCategoryId = null;
-      this.editingCategoryName = "";
+      this.editingCategory = null;
+      this.editName = "";
     },
-    saveEdit(categoryId) {
-      if (!this.editingCategoryName.trim()) {
-        // Optionally emit an error or show a message
-        console.warn("Category name cannot be empty."); 
+    async saveEdit() {
+      if (!this.editName.trim()) {
+        this.showToast(this.categoryLabels.emptyName, "error");
         return;
       }
-      if (this.editingCategoryId === categoryId) { // Ensure we're saving the right one
-         this.$emit("edit-category", { id: categoryId, name: this.editingCategoryName.trim() });
-         this.cancelEdit(); // Reset editing state after emitting
+
+      const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
+      if (forbidden.test(this.editName.trim())) {
+        this.showToast(this.categoryLabels.invalidChars, "error");
+        return;
+      }
+
+      if (this.categories.some(cat => 
+        cat.id !== this.editingCategory.id && 
+        cat.name.toLowerCase() === this.editName.trim().toLowerCase()
+      )) {
+        this.showToast(this.categoryLabels.duplicate, "error");
+        return;
+      }
+
+      try {
+        await this.$emit("edit-category", {
+          id: this.editingCategory.id,
+          name: this.editName.trim()
+        });
+        this.showToast(this.categoryLabels.success);
+        this.cancelEdit();
+      } catch (error) {
+        this.showToast(this.categoryLabels.error, "error");
       }
     },
-    requestDelete(categoryId) {
-       this.$emit("delete-category", categoryId);
-    },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
+    async deleteCategory(id) {
+      const proceed = await this.showConfirmDialog(
+        this.categoryLabels.confirmDelete,
+        this.categoryLabels.confirmDeleteWarning
+      );
+      
+      if (!proceed) return;
+
+      try {
+        await this.$emit("delete-category", id);
+        this.showToast(this.categoryLabels.deleteSuccess);
+      } catch (error) {
+        this.showToast(this.categoryLabels.deleteError, "error");
       }
     },
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
+    async createCategory() {
+      if (!this.newCategory.trim()) {
+        this.showToast(this.categoryLabels.emptyName, "error");
+        return;
       }
+
+      const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
+      if (forbidden.test(this.newCategory.trim())) {
+        this.showToast(this.categoryLabels.invalidChars, "error");
+        return;
+      }
+
+      if (this.categories.some(cat => 
+        cat.name.toLowerCase() === this.newCategory.trim().toLowerCase()
+      )) {
+        this.showToast(this.categoryLabels.duplicate, "error");
+        return;
+      }
+
+      try {
+        await this.$emit("create-category", this.newCategory.trim());
+        this.showToast(this.categoryLabels.success);
+        this.newCategory = "";
+        this.showNewCategoryInput = false;
+      } catch (error) {
+        this.showToast(this.categoryLabels.error, "error");
+      }
+    },
+    showToast(message, type = 'success') {
+      // Implementation depends on your toast system
+      console.log(`${type}: ${message}`);
+    },
+    async showConfirmDialog(title, message) {
+      // Implementation depends on your dialog system
+      return window.confirm(`${title}\n${message}`);
+    },
+    changePage(page) {
+      this.currentPage = page;
     }
   }
 };
 </script>
 
 <style scoped>
-/* Add any specific styles for CategoryManager if needed */
+/* Add smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Improve focus styles for better accessibility */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+/* Add hover effect for better interactivity */
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
 </style> 

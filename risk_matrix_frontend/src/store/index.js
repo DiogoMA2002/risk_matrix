@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
-
+/* eslint-disable */
 export default createStore({
   state: {
     questions: [],
@@ -9,7 +9,8 @@ export default createStore({
     allAnswers: {},
     categories: [],          
     selectedQuestionnaireId: null,
-    
+    userAnswers: [],
+    isLoadingAnswers: false,
   },
   mutations: {
     setQuestions(state, questions) {
@@ -31,7 +32,7 @@ export default createStore({
       state.allAnswers = answers;
     },
     updateAnswer(state, { category, questionId, answer }) {
-      // If the category doesn’t exist, create it.
+      // If the category doesn't exist, create it.
       if (!state.allAnswers[category]) {
         state.allAnswers[category] = {};
       }
@@ -39,6 +40,12 @@ export default createStore({
     },
     clearAllAnswers(state) {
       state.allAnswers = {};
+    },
+    setUserAnswers(state, answers) {
+      state.userAnswers = answers;
+    },
+    setLoadingAnswers(state, isLoading) {
+      state.isLoadingAnswers = isLoading;
     }
   },
   actions: {
@@ -70,6 +77,83 @@ export default createStore({
         commit('setSelectedQuestionnaire', response.data);
       } catch (error) {
         console.error('Erro ao buscar questionário:', error);
+      }
+    },
+    async fetchUserAnswersByEmail({ commit }, email) {
+      commit('setLoadingAnswers', true);
+      try {
+        const token = localStorage.getItem("jwt");
+        const response = await axios.get(`/api/answers/by-email-with-severity/${email}`, {
+          validateStatus: _status => true,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+
+        if (response.status === 401) {
+          throw new Error("Você não está autorizado.");
+        } else if (response.status >= 200 && response.status < 300) {
+          if (Array.isArray(response.data)) {
+            commit('setUserAnswers', response.data);
+          } else {
+            commit('setUserAnswers', response.data ? [response.data] : []);
+          }
+        } else {
+          throw new Error(`Erro ${response.status} ao buscar respostas por email.`);
+        }
+      } catch (error) {
+        console.error("Error fetching user answers by email:", error);
+        commit('setUserAnswers', []);
+        throw error;
+      } finally {
+        commit('setLoadingAnswers', false);
+      }
+    },
+    async fetchAllUserAnswers({ commit }) {
+      commit('setLoadingAnswers', true);
+      try {
+        const token = localStorage.getItem("jwt");
+        const response = await axios.get("/api/answers/get-all-submissions", {
+          validateStatus: _status => true,
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        
+        if (response.status === 401) {
+          throw new Error("Você não está autorizado.");
+        } else {
+          commit('setUserAnswers', response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching all user answers:", error);
+        commit('setUserAnswers', []);
+        throw error;
+      } finally {
+        commit('setLoadingAnswers', false);
+      }
+    },
+    async filterAnswersByDate({ commit }, { startDate, endDate }) {
+      if (!startDate || !endDate) {
+        throw new Error("Por favor, selecione ambas as datas.");
+      }
+      
+      commit('setLoadingAnswers', true);
+      try {
+        const token = localStorage.getItem("jwt");
+        const response = await axios.get("/api/answers/by-date-range", {
+          params: { startDate, endDate },
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        commit('setUserAnswers', response.data);
+      } catch (error) {
+        console.error("Error filtering answers by date:", error);
+        commit('setUserAnswers', []);
+        throw error;
+      } finally {
+        commit('setLoadingAnswers', false);
       }
     }
   },

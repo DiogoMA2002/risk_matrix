@@ -5,22 +5,23 @@
       <header class="flex justify-between items-center mb-6">
         <div class="flex items-center">
           <button @click="$router.push('/requirements')"
-            class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4">
+            class="p-2 rounded-full bg-white bg-opacity-20 backdrop-blur-sm text-white hover:bg-opacity-30 transition-all duration-300 mr-4 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600"
+            :aria-label="'Voltar à página de requisitos'">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor" v-once>
+              stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <div class="text-white">
             <h1 class="text-2xl font-bold">
               Categorias de Questões
-              <span v-if="selectedQuestionnaire">| {{ selectedQuestionnaire.title }}</span>
+              <span v-if="selectedQuestionnaire" class="text-blue-200">| {{ selectedQuestionnaire.title }}</span>
             </h1>
-            <p class="text-sm opacity-80" v-once>Selecione uma categoria para responder às perguntas</p>
+            <p class="text-sm opacity-80">Selecione uma categoria para responder às perguntas</p>
           </div>
         </div>
         <div class="flex items-center space-x-2 text-white">
-          <img src="@/assets/logoCCC.webp" alt="Logo" class="h-16" v-once>
+          <img src="@/assets/logoCCC.webp" alt="Logo CCC" class="h-16" />
         </div>
       </header>
 
@@ -28,22 +29,22 @@
       <main class="flex flex-col gap-6">
         <!-- Questionnaires Dropdown -->
         <div class="w-full max-w-md mx-auto">
-          <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-4">
-            <h3 class="text-lg font-semibold text-blue-800 mb-3" v-once>Questionários</h3>
+          <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-4 transform transition-all duration-300 hover:shadow-lg">
+            <h3 class="text-lg font-semibold text-blue-800 mb-3">Questionários</h3>
             <div class="relative">
               <select 
                 v-if="!loading" 
-                class="w-full bg-white border border-blue-200 rounded-lg py-2 px-3 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full bg-white border border-blue-200 rounded-lg py-2 px-3 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
                 @change="selectQuestionnaire($event.target.value)"
                 :value="selectedQuestionnaire ? selectedQuestionnaire.id : ''"
-              >
+                :aria-label="'Selecionar questionário'">
                 <option v-for="qnr in questionnaires" :key="qnr.id" :value="qnr.id">
                   {{ qnr.title }}
                 </option>
               </select>
               <div v-else class="h-10 bg-blue-100 rounded animate-pulse"></div>
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-blue-800">
-                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
               </div>
@@ -63,7 +64,7 @@
                   :answered-count="answeredCount(cat)"
                   :total-count="totalCount(cat)"
                   @click="goToCategory(cat)"
-                  class="w-full"
+                  class="w-full transform transition-all duration-300 hover:scale-105"
                 />
               </div>
               <div v-else-if="!loading" class="text-center p-8 bg-white bg-opacity-70 rounded-lg text-blue-800">
@@ -83,16 +84,35 @@
 
           <!-- Action Buttons -->
           <div class="mt-8 flex flex-wrap justify-center gap-4">
-            <ActionButton icon="send" text="Enviar Todas as Respostas" color="blue" @click="submitAllAnswers" />
-            <ActionButton icon="export" text="Exportar Progresso" color="green" @click="exportToJSON" />
-            <ActionButton icon="import" text="Importar Progresso" color="red" @click="triggerImport" />
-            <input type="file" ref="importFile" accept="application/json" class="hidden" @change="importFromJSON" />
+            <ActionButton 
+              icon="send" 
+              text="Enviar Todas as Respostas" 
+              color="blue" 
+              @click="submitAllAnswers"
+              :disabled="isSubmitting"
+              :loading="isSubmitting" />
+            <ActionButton 
+              icon="export" 
+              text="Exportar Progresso" 
+              color="green" 
+              @click="exportToJSON" />
+            <ActionButton 
+              icon="import" 
+              text="Importar Progresso" 
+              color="red" 
+              @click="triggerImport" />
+            <input 
+              type="file" 
+              ref="importFile" 
+              accept="application/json" 
+              class="hidden" 
+              @change="importFromJSON" />
           </div>
         </section>
       </main>
 
       <!-- Progress -->
-      <footer class="max-w-3xl mx-auto mt-10 px-4" v-once>
+      <footer class="max-w-3xl mx-auto mt-10 px-4">
         <div class="flex items-center justify-between">
           <ProgressStep number="1" text="Informações" />
           <div class="w-16 h-1 bg-blue-400"></div>
@@ -105,11 +125,10 @@
       <!-- Help Button -->
       <div class="fixed bottom-6 right-6">
         <button @click="goToFeedbackForm"
-          class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor" v-once>
-            <path stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          :aria-label="'Ir para o formulário de feedback'">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </button>
       </div>
@@ -151,7 +170,8 @@ export default {
       alertMessage: "",
       alertType: "alert",
       alertResolve: null,
-      loading: true
+      loading: true,
+      isSubmitting: false
     };
   },
   computed: {
@@ -186,7 +206,6 @@ export default {
   },
   methods: {
     ...mapActions(["fetchQuestionnaires", "fetchQuestionnaireById"]),
-    // Helper method to display alerts and confirmations
     showAlertDialog(title, message, type = "alert") {
       this.alertTitle = title;
       this.alertMessage = message;
@@ -253,6 +272,7 @@ export default {
       }
 
       try {
+        this.isSubmitting = true;
         // First confirmation - ask if they want to export
         const wantToExport = await this.showAlertDialog(
           "Exportar Respostas",
@@ -310,6 +330,8 @@ export default {
       } catch (error) {
         console.error("Erro ao enviar respostas:", error);
         await this.showAlertDialog("Erro", "Ocorreu um erro ao enviar as respostas.", "error");
+      } finally {
+        this.isSubmitting = false;
       }
     },
     async exportToJSON(shouldClearAfterExport = true) {
@@ -444,14 +466,38 @@ export default {
 };
 </script>
 
-<style>
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+<style scoped>
+/* Add smooth transitions for better interactivity */
+button {
+  transition: all 0.2s ease-in-out;
 }
 
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Improve focus styles for better accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+/* Add hover animations for cards */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Fade transition */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -460,5 +506,19 @@ body {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 </style>

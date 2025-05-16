@@ -8,21 +8,22 @@
         @delete-questionnaire="deleteQuestionnaire" @import-questionnaire="importQuestionnaire"
         @export-questionnaire="exportQuestionnaire" />
 
-      <CategoryManager :categories="categories" :loading="isLoadingCategories" @edit-category="handleEditCategory"
+      <CategoryManager 
+        :categories="categories" 
+        :loading="isLoadingCategories" 
+        @create-category="handleCreateCategory"
+        @edit-category="handleEditCategory"
         @delete-category="handleDeleteCategory" />
 
-
       <QuestionForm :categories="categories" :questionnaires="questionnaires" :optionTypes="optionTypes"
-        :optionLevels="optionLevels" @add-question="addQuestion" @create-category="handleCreateCategory" />
+        :optionLevels="optionLevels" @add-question="addQuestion" />
 
       <QuestionsList :questions="questions" :categories="categories" @delete-question="deleteQuestion"
         @filter-questions="filterQuestionsByCategory" />
 
         <FeedbackList :feedbacks="feedbacks" @fetch-feedback="fetchFeedback" />
 
-      <UserAnswersList :user-answers="userAnswers" @fetch-by-email="fetchUserAnswersByEmail"
-        @fetch-all="fetchAllUserAnswers" @filter-by-date="filterAnswersByDate"
-        @download-report="downloadSubmissionDocx" />
+      <UserAnswersList @download-report="downloadSubmissionDocx" />
 
       <AlertDialog :show="showAlert" :title="alertTitle" :message="alertMessage" :type="alertType"
         @confirm="handleAlertConfirm" @cancel="handleAlertCancel" />
@@ -60,7 +61,6 @@ export default {
   },
   data() {
     return {
-      userAnswers: [],
       feedbacks: [],
       isLoading: false,
       isLoadingCategories: false,
@@ -126,6 +126,7 @@ export default {
         await this.showAlertDialog("Erro", "Nome da categoria não pode ser vazio.", "error");
         return;
       }
+
       // Basic validation (similar to QuestionForm, maybe centralize later)
       const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
       if (forbidden.test(newCategoryName.trim())) {
@@ -134,11 +135,12 @@ export default {
       }
 
       // Prevent duplicates (case-insensitive check)
-      if (this.fullCategories.some(cat => cat.name.toLowerCase() === newCategoryName.trim().toLowerCase())) {
+      if (this.categories.some(cat => cat.name.toLowerCase() === newCategoryName.trim().toLowerCase())) {
         await this.showAlertDialog("Erro", `A categoria '${newCategoryName.trim()}' já existe.`, "error");
         return;
       }
 
+      this.isLoadingCategories = true;
       try {
         const token = localStorage.getItem("jwt");
         const response = await axios.post("/api/categories",
@@ -149,12 +151,19 @@ export default {
             }
           }
         );
-        await this.showAlertDialog("Sucesso", `Categoria '${response.data.name}' criada com sucesso!`);
-        await this.fetchCategories(); // Refresh the list
+        
+        // Refresh categories list
+        await this.$store.dispatch("fetchCategories");
+        
+        // Return the created category data
+        return response.data;
       } catch (error) {
         console.error("Error creating category:", error);
         const errorMsg = error.response?.data?.message || "Erro ao criar categoria.";
         await this.showAlertDialog("Erro", errorMsg, "error");
+        throw error; // Re-throw the error to be handled by the child component
+      } finally {
+        this.isLoadingCategories = false;
       }
     },
     async handleEditCategory({ id, name }) {
@@ -215,6 +224,9 @@ export default {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
+
+        // Refresh the answers list after download
+        await this.$store.dispatch("fetchAllUserAnswers");
       } catch (error) {
         console.error("Erro ao descarregar relatório:", error);
         await this.showAlertDialog("Erro", "Falha ao descarregar relatório.", "error");
@@ -401,128 +413,42 @@ export default {
         await this.showAlertDialog("Erro", "Falha ao exportar questionário.", "error");
       }
     },
-    async fetchUserAnswersByEmail(email) {
-      if (!email) {
-        await this.showAlertDialog("Aviso", "Por favor, insira um email para filtrar.", "error");
-        return;
-      }
-      this.isLoading = true;
-      try {
-        const token = localStorage.getItem("jwt");
-        const response = await axios.get(`/api/answers/by-email-with-severity/${email}`, {
-          validateStatus: _status => true,
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        });
-
-        if (response.status === 401) {
-          await this.showAlertDialog("Erro", "Você não está autorizado.", "error");
-          this.userAnswers = [];
-        } else if (response.status >= 200 && response.status < 300) {
-          // Ensure we assign the array directly if the response data is an array
-          if (Array.isArray(response.data)) {
-            this.userAnswers = response.data; // <<< Change this line
-          } else {
-            // Handle unexpected non-array response
-            console.warn("Expected an array from /api/answers/by-email-with-severity, but received:", response.data);
-            this.userAnswers = response.data ? [response.data] : []; // Fallback: wrap if single object received
-          }
-        } else {
-          console.error("Error fetching user answers by email, status:", response.status);
-          this.userAnswers = [];
-          await this.showAlertDialog("Erro", `Erro ${response.status} ao buscar respostas por email.`, "error");
-        }
-
-      } catch (error) {
-        console.error("Error fetching user answers by email (network/request failed):", error);
-        this.userAnswers = [];
-        await this.showAlertDialog("Erro", "Erro de rede ao buscar respostas por email.", "error");
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    async fetchAllUserAnswers() {
-      this.isLoading = true;
-      try {
-        const token = localStorage.getItem("jwt");
-        const response = await axios.get("/api/answers/get-all-submissions", {
-          validateStatus: _status => true,
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        });
-        if (response.status === 401) {
-          await this.showAlertDialog("Erro", "Você não está autorizado.", "error");
-        } else {
-          this.userAnswers = response.data;
-        }
-      } catch (error) {
-        console.error("Error fetching all user answers:", error);
-        await this.showAlertDialog("Erro", "Erro ao buscar todas as respostas.", "error");
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    async filterAnswersByDate({ startDate, endDate }) {
-      if (!startDate || !endDate) {
-        await this.showAlertDialog("Aviso", "Por favor, selecione ambas as datas.", "error");
-        return;
-      }
-      try {
-        const token = localStorage.getItem("jwt");
-        const response = await axios.get("/api/answers/by-date-range", {
-          params: { startDate, endDate },
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        });
-        this.userAnswers = response.data;
-      } catch (error) {
-        console.error("Error filtering answers by date:", error);
-        await this.showAlertDialog("Erro", "Erro ao filtrar respostas por data.", "error");
-      }
-    },
-
-    // Feedback methods remain here since they are not yet Vuex-based
     async fetchFeedback(filters = {}) {
-  this.isLoading = true;
-  try {
-    const token = localStorage.getItem("jwt");
-    let url = "/api/feedback";
+      this.isLoading = true;
+      try {
+        const token = localStorage.getItem("jwt");
+        let url = "/api/feedback";
 
-    const query = [];
+        const query = [];
 
-    if (filters.email?.trim()) {
-      query.push(`email=${encodeURIComponent(filters.email.trim())}`);
+        if (filters.email?.trim()) {
+          query.push(`email=${encodeURIComponent(filters.email.trim())}`);
+        }
+        if (filters.type?.trim()) {
+          query.push(`type=${encodeURIComponent(filters.type.trim())}`);
+        }
+        if (filters.startDate && filters.endDate) {
+          query.push(`startDate=${filters.startDate}T00:00:00`);
+          query.push(`endDate=${filters.endDate}T23:59:59`);
+        }
+
+        if (query.length > 0) {
+          url = `/api/feedback/filter?${query.join("&")}`;
+        }
+
+        const response = await axios.get(url, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        this.feedbacks = response.data;
+      } catch (error) {
+        console.error("Erro ao buscar feedbacks:", error);
+        this.feedbacks = [];
+        await this.showAlertDialog("Erro", "Erro ao carregar feedbacks.", "error");
+      } finally {
+        this.isLoading = false;
+      }
     }
-    if (filters.type?.trim()) {
-      query.push(`type=${encodeURIComponent(filters.type.trim())}`);
-    }
-    if (filters.startDate && filters.endDate) {
-      query.push(`startDate=${filters.startDate}T00:00:00`);
-      query.push(`endDate=${filters.endDate}T23:59:59`);
-    }
-
-    if (query.length > 0) {
-      url = `/api/feedback/filter?${query.join("&")}`;
-    }
-
-    const response = await axios.get(url, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    this.feedbacks = response.data;
-  } catch (error) {
-    console.error("Erro ao buscar feedbacks:", error);
-    this.feedbacks = [];
-    await this.showAlertDialog("Erro", "Erro ao carregar feedbacks.", "error");
-  } finally {
-    this.isLoading = false;
-  }
-}
-
-
   },
 };
 </script>
