@@ -253,6 +253,18 @@ export default {
       }
 
       try {
+        // First confirmation - ask if they want to export
+        const wantToExport = await this.showAlertDialog(
+          "Exportar Respostas",
+          "Deseja exportar as respostas antes de enviar?",
+          "confirm"
+        );
+
+        if (wantToExport) {
+          await this.exportToJSON(false); // Don't clear after export when part of submission
+        }
+
+        // Second confirmation - proceed with submission
         const proceed = await this.showAlertDialog(
           "Confirmar Envio",
           "Tem a certeza que deseja enviar todas as respostas? Após enviar, o progresso guardado será limpo e você será redirecionado à página principal.",
@@ -300,7 +312,7 @@ export default {
         await this.showAlertDialog("Erro", "Ocorreu um erro ao enviar as respostas.", "error");
       }
     },
-    async exportToJSON() {
+    async exportToJSON(shouldClearAfterExport = true) {
       try {
         const proceed = await this.showAlertDialog(
           "Exportar Progresso",
@@ -336,7 +348,10 @@ export default {
         link.download = "progress.json";
         link.click();
         URL.revokeObjectURL(url);
-        this.$store.commit("clearAllAnswers");
+
+        if (shouldClearAfterExport) {
+          this.$store.commit("clearAllAnswers");
+        }
 
       } catch (error) {
         await this.showAlertDialog("Erro", "Ocorreu um erro ao exportar o progresso.");

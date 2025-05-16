@@ -2,6 +2,7 @@ package ipleiria.risk_matrix.service;
 
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.models.answers.Answer;
+import ipleiria.risk_matrix.models.questions.OptionLevel;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.repository.AnswerRepository;
@@ -32,6 +33,9 @@ public class DocumentsService {
         if (answers == null || answers.isEmpty()) {
             throw new IllegalArgumentException("No answers found for submission ID: " + submissionId);
         }
+
+        // Store email for later deletion
+        String email = answers.getFirst().getEmail();
 
         Map<String, List<Answer>> answersByCategory = new HashMap<>();
         for (Answer ans : answers) {
@@ -69,7 +73,12 @@ public class DocumentsService {
             addAnswersTable(document, answersByCategory,severities);
 
             document.write(out);
-            return out.toByteArray();
+            byte[] result = out.toByteArray();
+
+            // Delete all answers for this email after generating the document
+            answerRepository.deleteAll(answers);
+
+            return result;
         }
     }
 
@@ -104,13 +113,42 @@ public class DocumentsService {
                 .sorted(Map.Entry.<String, Severity>comparingByValue().reversed())
                 .forEach(entry -> {
                     XWPFParagraph p = document.createParagraph();
-                    XWPFRun run = p.createRun();
-                    run.setText(entry.getKey() + ": " + entry.getValue());
-                    run.setFontSize(14);
-                    run.setFontFamily("Calibri");
-                    run.setBold(true);
+                    
+                    // First run for category name
+                    XWPFRun categoryRun = p.createRun();
+                    categoryRun.setText(entry.getKey() + ": ");
+                    categoryRun.setFontSize(14);
+                    categoryRun.setFontFamily("Calibri");
+                    categoryRun.setBold(true);
+                    
+                    // Second run for severity level with color
+                    XWPFRun severityRun = p.createRun();
+                    severityRun.setText(entry.getValue().toString());
+                    severityRun.setFontSize(14);
+                    severityRun.setFontFamily("Calibri");
+                    severityRun.setBold(true);
+                    
+                    // Add color based on severity
+                    switch (entry.getValue()) {
+                        case Severity.CRITICAL:
+                            severityRun.setColor("8B0000"); // Dark Red
+                            break;
+                        case Severity.HIGH:
+                            severityRun.setColor("FF0000"); // Red
+                            break;
+                        case Severity.MEDIUM:
+                            severityRun.setColor("FFA500"); // Orange
+                            break;
+                        case Severity.LOW:
+                            severityRun.setColor("008000"); // Green
+                            break;
+                        case Severity.UNKNOWN:
+                            severityRun.setColor("808080"); // Gray
+                            break;
+                        default:
+                            severityRun.setColor("000000"); // Black
+                    }
                 });
-
     }
 
     private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory, Map<String, Severity> severities) {
@@ -122,6 +160,7 @@ public class DocumentsService {
                 .forEach(entry -> {
                     String category = entry.getKey();
                     List<Answer> answers = entry.getValue();
+                    Severity categorySeverity = severities.get(category);
 
                     XWPFParagraph categoryHeader = document.createParagraph();
                     XWPFRun headerRun = categoryHeader.createRun();
@@ -129,6 +168,27 @@ public class DocumentsService {
                     headerRun.setBold(true);
                     headerRun.setFontSize(14);
                     headerRun.setFontFamily("Calibri");
+                    
+                    // Color the category header based on severity
+                    switch (categorySeverity) {
+                        case Severity.CRITICAL:
+                            headerRun.setColor("8B0000"); // Dark Red
+                            break;
+                        case Severity.HIGH:
+                            headerRun.setColor("FF0000"); // Red
+                            break;
+                        case Severity.MEDIUM:
+                            headerRun.setColor("FFA500"); // Orange
+                            break;
+                        case Severity.LOW:
+                            headerRun.setColor("008000"); // Green
+                            break;
+                        case Severity.UNKNOWN:
+                            headerRun.setColor("808080"); // Gray
+                            break;
+                        default:
+                            headerRun.setColor("000000"); // Black
+                    }
 
                     XWPFTable table = document.createTable();
                     XWPFTableRow header = table.getRow(0);
@@ -136,14 +196,31 @@ public class DocumentsService {
                     header.addNewTableCell().setText("Resposta");
                     header.addNewTableCell().setText("Tipo");
                     header.addNewTableCell().setText("Nível");
-                    header.addNewTableCell().setText("Recomendação"); // ✅ nova coluna
+                    header.addNewTableCell().setText("Recomendação");
 
                     for (Answer answer : answers) {
                         XWPFTableRow row = table.createRow();
                         row.getCell(0).setText(answer.getQuestionText());
                         row.getCell(1).setText(answer.getUserResponse());
                         row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
-                        row.getCell(3).setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+                        
+                        // Color the level cell based on the chosen level
+                        XWPFTableCell levelCell = row.getCell(3);
+                        levelCell.setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+                        if (answer.getChosenLevel() != null) {
+                            switch (answer.getChosenLevel()) {
+                                case OptionLevel.HIGH:
+                                    levelCell.setColor("FF0000"); // Red
+                                    break;
+                                case OptionLevel.MEDIUM:
+                                    levelCell.setColor("FFA500"); // Orange
+                                    break;
+                                case OptionLevel.LOW:
+                                    levelCell.setColor("008000"); // Green
+                                    break;
+                            }
+                        }
+                        
                         String recommendation = "-";
                         if (answer.getQuestionOptionId() != null) {
                             Optional<Question> questionOpt = questionRepository.findById(answer.getQuestionId());
