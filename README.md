@@ -1,4 +1,3 @@
-Here is the cleaned-up README in Markdown format:
 
 # Risk Matrix
 
