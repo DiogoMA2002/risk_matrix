@@ -6,7 +6,7 @@
 
       <QuestionnaireManager :questionnaires="questionnaires" @add-questionnaire="addQuestionnaire"
         @delete-questionnaire="deleteQuestionnaire" @import-questionnaire="importQuestionnaire"
-        @export-questionnaire="exportQuestionnaire" />
+        @export-questionnaire="exportQuestionnaire" @edit-questionnaire="editQuestionnaire" />
 
       <CategoryManager 
         :categories="categories" 
@@ -448,6 +448,9 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    editQuestionnaire(id) {
+      this.$router.push({ name: 'EditQuestionnaire', params: { questionnaireId: id } });
     }
   },
 };
