@@ -3,6 +3,7 @@ package ipleiria.risk_matrix.config;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +11,11 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final String jwtSecret = "f6568a73b70f52979a313374043159476a286926019a80f5a777a2a95a6f60fc";
-    private final long jwtExpirationMs = 86400000; // 1 day
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${app.jwt.expirationMs}")
+    private long jwtExpirationMs;
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
