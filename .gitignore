@@ -136,3 +136,8 @@ dist
 *.ipr
 
 .venv
+
+# Ignore environment files
+.env
+application-dev.properties
+application-prod.properties
