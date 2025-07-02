@@ -4,7 +4,6 @@ import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.service.AnswerService;
 import ipleiria.risk_matrix.service.DocumentsService;
-import ipleiria.risk_matrix.service.DocumentsServiceChart;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,13 +20,11 @@ public class AnswerController {
 
     private final AnswerService answerService;
     private final DocumentsService documentsService;
-    private final DocumentsServiceChart documentsServiceChart;
 
 
-    public AnswerController(AnswerService answerService, DocumentsService documentsService, DocumentsServiceChart documentsServiceChart) {
+    public AnswerController(AnswerService answerService, DocumentsService documentsService) {
         this.answerService = answerService;
         this.documentsService = documentsService;
-        this.documentsServiceChart = documentsServiceChart;
     }
 
     @PostMapping("/submit-multiple")

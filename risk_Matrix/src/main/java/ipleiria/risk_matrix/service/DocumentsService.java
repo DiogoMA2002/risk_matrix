@@ -35,7 +35,6 @@ public class DocumentsService {
         }
 
         // Store email for later deletion
-        String email = answers.getFirst().getEmail();
 
         Map<String, List<Answer>> answersByCategory = new HashMap<>();
         for (Answer ans : answers) {
