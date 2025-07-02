@@ -103,51 +103,44 @@ public class DocumentsService {
 
             XWPFRun newRun = paragraph.createRun();
             newRun.setText(replaced);
-            newRun.setFontFamily("Calibri");
+            newRun.setFontFamily("Verdana");
         }
     }
 
     private void addSummarySection(XWPFDocument document, Map<String, Severity> severities) {
+
+        // Texto base
+        XWPFParagraph summary = document.createParagraph();
+        XWPFRun textRun = summary.createRun();
+        textRun.setFontSize(11);
+        textRun.setFontFamily("Verdana");
+        textRun.setText("Este relatório apresenta os resultados da avaliação de risco realizada com base nas respostas submetidas. Foram analisadas várias áreas críticas de segurança da informação, como autenticação, backups, rede e acesso remoto. Abaixo apresenta-se um resumo das categorias avaliadas e os respetivos níveis de risco atribuídos:");
+
+        // Lista de categorias com severidade (já tens isto, mantém)
         severities.entrySet().stream()
                 .sorted(Map.Entry.<String, Severity>comparingByValue().reversed())
                 .forEach(entry -> {
                     XWPFParagraph p = document.createParagraph();
-                    
-                    // First run for category name
                     XWPFRun categoryRun = p.createRun();
-                    categoryRun.setText(entry.getKey() + ": ");
-                    categoryRun.setFontSize(14);
+                    categoryRun.setText("- " + entry.getKey() + ": " + entry.getValue());
+                    categoryRun.setFontSize(12);
                     categoryRun.setFontFamily("Calibri");
-                    categoryRun.setBold(true);
-                    
-                    // Second run for severity level with color
-                    XWPFRun severityRun = p.createRun();
-                    severityRun.setText(entry.getValue().toString());
-                    severityRun.setFontSize(14);
-                    severityRun.setFontFamily("Calibri");
-                    severityRun.setBold(true);
-                    
-                    // Add color based on severity
+
                     switch (entry.getValue()) {
-                        case Severity.CRITICAL:
-                            severityRun.setColor("8B0000"); // Dark Red
-                            break;
-                        case Severity.HIGH:
-                            severityRun.setColor("FF0000"); // Red
-                            break;
-                        case Severity.MEDIUM:
-                            severityRun.setColor("FFA500"); // Orange
-                            break;
-                        case Severity.LOW:
-                            severityRun.setColor("008000"); // Green
-                            break;
-                        case Severity.UNKNOWN:
-                            severityRun.setColor("808080"); // Gray
-                            break;
-                        default:
-                            severityRun.setColor("000000"); // Black
+                        case CRITICAL -> categoryRun.setColor("8B0000");
+                        case HIGH -> categoryRun.setColor("FF0000");
+                        case MEDIUM -> categoryRun.setColor("FFA500");
+                        case LOW -> categoryRun.setColor("008000");
+                        case UNKNOWN -> categoryRun.setColor("808080");
                     }
                 });
+
+        // Conclusão
+        XWPFParagraph outro = document.createParagraph();
+        XWPFRun outroRun = outro.createRun();
+        outroRun.setFontSize(11);
+        outroRun.setFontFamily("Verdana");
+        outroRun.setText("Recomenda-se a priorização das categorias com risco mais elevado. As recomendações específicas estão detalhadas por domínio no relatório abaixo, e visam mitigar vulnerabilidades identificadas com base em boas práticas de cibersegurança adaptadas à realidade das PME.");
     }
 
     private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory, Map<String, Severity> severities) {
