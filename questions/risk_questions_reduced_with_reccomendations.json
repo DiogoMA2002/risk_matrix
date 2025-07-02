@@ -14,7 +14,7 @@
           "optionText": "Comprometimento de contas internas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reforce as políticas de bloqueio de conta após múltiplas tentativas falhas e otimize os alertas SIEM para deteção específica de ataques de brute-force."
+          "recommendation": "Configure bloqueio automático de conta após mu tentativas falhas e ative alertas por email para tentativas de login suspeitas."
         },
         {
           "optionText": "Exposição total de sistemas críticos.",
@@ -66,7 +66,7 @@
           "optionText": "A prática é comum e representa um risco elevado.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Se a prática de senhas fracas for comum, execute uma varredura imediata em bases de dados de credenciais vazadas conhecidas e, como medida crítica, force o reset de senhas para todos os utilizadores na organização, promovendo o uso de senhas mais fortes."
+          "recommendation": "Centralize a autenticação com as contas existentes (ex: Microsoft 365 ou Google Workspace) e implemente MFA obrigatório para serviços críticos. Para contas privilegiadas, utilize um gestor de senhas com registo de acessos e revisão periódica."
         }
       ]
     },
@@ -181,7 +181,7 @@
           "optionText": "Graves danos reputacionais, recuperação difícil.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Para proteger a reputação da empresa contra danos graves, migre os serviços críticos para uma arquitetura multi-região e configure um sistema de DNS com recuperação automática de desastres."
+          "recommendation": "Crie instâncias redundantes em localizações alternativas (ex: segundo datacenter ou região cloud) e documente procedimentos manuais de failover previamente testados."
         }
       ]
     },
@@ -457,7 +457,7 @@
           "optionText": "Exposição generalizada de dados sensíveis, alto impacto operacional e legal.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "No caso de uma exposição generalizada de dados sensíveis, implemente sistemas de Deteção e Prevenção de Intrusão (IDS/IPS) em modo inline, com capacidade de sandbox para análise de payloads e configure respostas automáticas a atividades de beaconing."
+          "recommendation": "No caso de uma exposição generalizada de dados sensíveis. Implemente um firewall com funcionalidades básicas de deteção de intrusão (IDS) e configure alertas para comportamentos de rede anómalos, como tráfego fora do horário normal ou varrimento de portas."
         }
       ]
     },
@@ -572,7 +572,7 @@
           "optionText": "Comprometimento extenso, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Em caso de comprometimento extenso por acesso remoto, bloqueie imediatamente todas as credenciais afetadas, force uma nova inscrição no sistema MFA para todos os utilizadores remotos e planeie a substituição de VPNs legadas por soluções Zero Trust Network Access (ZTNA)."
+          "recommendation": "Em caso de comprometimento extenso por acesso remoto, bloqueie imediatamente todas as credenciais afetadas, force uma nova inscrição no sistema MFA para todos os utilizadores remotos. Melhore a segurança das VPNs existentes limitando o acesso apenas a IPs autorizados, ativando MFA resistente a phishing e desativando contas inativas automaticamente."
         }
       ]
     },
@@ -595,7 +595,7 @@
           "optionText": "Impacto severo, custos financeiros elevados e danos reputacionais graves.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Para prevenir impactos severos de invasões remotas, implemente tunelamento SSH seguro utilizando chaves de hardware (como tokens FIDO2/YubiKey) para autenticação e elimine completamente o uso de senhas em canais de acesso remoto."
+          "recommendation": "Ative a autenticação SSH com chaves públicas protegidas por passphrase e complemente com autenticação MFA por aplicação móvel (TOTP/push) sempre que possível."
         }
       ]
     },
@@ -733,7 +733,7 @@
           "optionText": "Impacto alto, danos significativos e prolongados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Para remediar danos significativos e prolongados por configurações inadequadas, restabeleça a configuração dos sistemas afetados a partir de uma 'imagem dourada' (golden image) previamente validada e audite minuciosamente todas as permissões de serviço associadas."
+          "recommendation": "Mantenha uma cópia de referência de configurações seguras (ex: exportação de configuração do sistema ou backup do disco) e faça revisões periódicas das permissões de utilizadores e serviços críticos."
         }
       ]
     },
@@ -865,7 +865,7 @@
           "optionText": "Impacto moderado, custos adicionais controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para controlar custos adicionais devido a falhas em atualizações, avalie o impacto de cada patch significativo através de um 'canary release' (implementação progressiva) em aproximadamente 5% dos hosts representativos antes de aprovar o roll-out total para toda a organização."
+          "recommendation": "Teste atualizações de segurança em 1 ou 2 sistemas representativos antes da aplicação generalizada, e valide o comportamento funcional básico após o patch."
         },
         {
           "optionText": "Alto impacto, custos elevados e danos reputacionais graves.",
@@ -966,6 +966,422 @@
           "recommendation": "Caso o processo de patching seja inexistente ou raramente aplicado, utilize um WAF para isolar serviços vulneráveis e aplique regras de virtual patching como uma tática de mitigação de risco crucial e imediata."
         }
       ]
-    }
+    },
+    {
+      "questionText": "Com que frequência os colaboradores recebem formação em cibersegurança, incluindo phishing e engenharia social?",
+      "categoryName": "Risco Humano e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Formação obrigatória e regular (mínimo anual).",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Formação pontual ou irregular.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Caso a formação seja irregular, implemente sessões trimestrais com simulações de phishing realistas e relatórios de métricas de cliques para reforçar a consciencialização de riscos."
+        },
+        {
+          "optionText": "Sem formação estruturada em cibersegurança.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Na ausência de formação, agende imediatamente sessões de sensibilização com foco em ataques de engenharia social e distribua resumos visuais com boas práticas nos canais internos da empresa."
+        }
+      ]
+    },
+    {
+      "questionText": "Com que frequência os colaboradores são expostos a simulações de phishing ou testes sociais?",
+      "categoryName": "Risco Humano e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Simulações regulares e bem planeadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Simulações esporádicas ou genéricas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Agende campanhas de simulação com análise por departamento e partilha de lições aprendidas, priorizando os sectores mais vulneráveis a ataques sociais."
+        },
+        {
+          "optionText": "Não são realizadas simulações.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implemente simulações trimestrais com mensagens realistas adaptadas ao contexto interno da organização, monitorizando taxas de cliques por perfil de utilizador."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto caso um colaborador fornecesse credenciais ou dados sensíveis devido a um ataque de engenharia social?",
+      "categoryName": "Risco Humano e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Impacto limitado, sem acesso relevante concedido.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado com exposição de dados internos.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente segmentação lógica de acessos, para que nenhum colaborador tenha acesso total a sistemas críticos, mesmo que as credenciais sejam comprometidas."
+        },
+        {
+          "optionText": "Impacto elevado, com acesso a sistemas ou dados críticos.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Ative o princípio do menor privilégio, elimine contas genéricas e force MFA em todas as contas com acesso administrativo ou sensível."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto reputacional caso a empresa fosse publicamente vítima de um ataque de engenharia social bem-sucedido?",
+      "categoryName": "Risco Humano e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, comunicação controlada.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Danos reputacionais moderados com impacto na confiança de clientes.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Prepare previamente um plano de resposta à comunicação externa, com mensagens orientadas à contenção de reputação em casos de incidentes humanos ou sociais."
+        },
+        {
+          "optionText": "Grave perda de reputação e confiança do mercado.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Estabeleça uma equipa de resposta a incidentes com treino específico em engenharia social e defina procedimentos de comunicação imediata e contenção pública."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem procedimentos formais para verificação de identidade antes de partilhar dados sensíveis?",
+      "categoryName": "Risco Humano e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Procedimentos claros e aplicados consistentemente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Procedimentos existentes mas aplicados de forma inconsistente.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente políticas de verificação dupla para pedidos sensíveis e forme as equipas para validar sempre a identidade do remetente através de canal alternativo."
+        },
+        {
+          "optionText": "Ausência de procedimentos formais ou práticas de verificação.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Defina e comunique internamente uma política de verificação obrigatória para qualquer pedido que envolva dados ou ações sensíveis, mesmo que pareça legítimo."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa tem uma política clara de reporte de tentativas suspeitas de engenharia social?",
+      "categoryName": "Risco Humano e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Política formal, com canais de reporte acessíveis e ativos.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Existem canais informais ou pouco divulgados para reporte.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Crie um canal dedicado (ex: phishing@empresa.pt) e promova campanhas internas para incentivar o reporte imediato de contactos suspeitos."
+        },
+        {
+          "optionText": "Sem política definida nem incentivo ao reporte.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implemente uma política clara e simples de reporte e garanta que os colaboradores saibam que nunca serão penalizados por alertar para um contacto suspeito."
+        }
+      ]
+    },
+
+    {
+      "questionText": "Com que frequência são avaliados os riscos de segurança dos fornecedores que acedem a sistemas ou dados da empresa?",
+      "categoryName": "Risco de Terceiros e Fornecedores",
+      "options": [
+        {
+          "optionText": "Avaliações regulares (mínimo anual) com critérios definidos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Avaliações ocasionais ou dependentes de incidentes.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente um calendário de avaliações periódicas com critérios objetivos de risco, priorizando fornecedores com acesso a sistemas críticos ou dados sensíveis."
+        },
+        {
+          "optionText": "Sem avaliações formais de risco a fornecedores.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Crie um processo formal de onboarding com avaliação de segurança mínima obrigatória antes de qualquer integração técnica com fornecedores."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o grau de dependência de fornecedores externos para operações críticas da empresa?",
+      "categoryName": "Risco de Terceiros e Fornecedores",
+      "options": [
+        {
+          "optionText": "Baixa dependência, com alternativas internas disponíveis.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Dependência parcial em áreas específicas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Estabeleça planos de contingência com fornecedores alternativos e mantenha um inventário atualizado dos serviços críticos subcontratados."
+        },
+        {
+          "optionText": "Alta dependência, sem alternativas claras.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Formalize contratos com SLAs de continuidade de negócio e requisitos mínimos de segurança, incluindo direito de auditoria a fornecedores críticos."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto caso um fornecedor com acesso a sistemas da empresa fosse comprometido?",
+      "categoryName": "Risco de Terceiros e Fornecedores",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, sem acesso a ativos críticos.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, acesso limitado a dados internos.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente segmentação de rede e controlo de permissões por fornecedor, com logs de auditoria ativos e revisão periódica dos acessos concedidos."
+        },
+        {
+          "optionText": "Impacto elevado, com acesso a sistemas críticos ou dados sensíveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Adote uma arquitetura Zero Trust para fornecedores, exigindo MFA, autenticação por certificado digital e segmentação rigorosa de acesso."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto reputacional caso uma violação de dados fosse causada por um fornecedor externo?",
+      "categoryName": "Risco de Terceiros e Fornecedores",
+      "options": [
+        {
+          "optionText": "Impacto reputacional mínimo, com comunicação controlada.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Danos reputacionais moderados, com implicações contratuais.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Inclua cláusulas contratuais específicas para reporte rápido de incidentes e responsabilidade partilhada por danos reputacionais."
+        },
+        {
+          "optionText": "Graves danos reputacionais, com perda de confiança do mercado.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Exija a todos os fornecedores críticos uma certificação mínima (ex: ISO 27001) e o reporte obrigatório de incidentes em até 24h, com testes de resposta partilhados."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem políticas formais para controlo de acessos de fornecedores a sistemas internos?",
+      "categoryName": "Risco de Terceiros e Fornecedores",
+      "options": [
+        {
+          "optionText": "Políticas formais aplicadas com controlo rigoroso de acessos.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Políticas parciais ou mal aplicadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente sessões obrigatórias de onboarding de fornecedores com validação de identidade e acesso baseado em necessidade funcional documentada."
+        },
+        {
+          "optionText": "Sem políticas definidas ou acessos concedidos informalmente.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Estabeleça uma política obrigatória de onboarding técnico com MFA, logs ativos e revisão mensal de acessos atribuídos a fornecedores externos."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa avalia requisitos mínimos de segurança antes de contratar fornecedores com acesso a dados ou sistemas?",
+      "categoryName": "Risco de Terceiros e Fornecedores",
+      "options": [
+        {
+          "optionText": "Requisitos definidos e aplicados consistentemente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Requisitos definidos mas aplicados parcialmente.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Estabeleça uma checklist mínima de segurança para contratação, incluindo política de gestão de incidentes, controlo de acessos e proteção de dados pessoais."
+        },
+        {
+          "optionText": "Sem avaliação de requisitos de segurança antes da contratação.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Torne obrigatória a verificação de práticas de segurança do fornecedor antes da contratação, incluindo histórico de incidentes e validação de controlos técnicos declarados."
+        }
+      ]
+    },
+    
+  {
+    "questionText": "Com que frequência a empresa realiza avaliações de conformidade com regulamentações como o RGPD ou outras aplicáveis?",
+    "categoryName": "Risco Legal e Regulatório",
+    "options": [
+      {
+        "optionText": "Avaliações formais regulares (pelo menos anuais).",
+        "optionType": "PROBABILITY",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Avaliações esporádicas ou informais.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Implemente uma auditoria anual obrigatória de conformidade legal, com reporte à administração e plano de ação associado às lacunas identificadas."
+      },
+      {
+        "optionText": "Sem avaliações de conformidade documentadas.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "HIGH",
+        "recommendation": "Estabeleça um processo formal de auditoria com recurso a consultoria jurídica externa para revisão da conformidade com RGPD, telecomunicações e obrigações contratuais."
+      }
+    ]
+  },
+  {
+    "questionText": "Com que frequência os contratos com fornecedores e parceiros são revistos para garantir cláusulas de conformidade legal e segurança?",
+    "categoryName": "Risco Legal e Regulatório",
+    "options": [
+      {
+        "optionText": "Revisões contratuais formais e regulares (mínimo anual).",
+        "optionType": "PROBABILITY",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Revisões pontuais ou apenas na renovação contratual.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Defina um processo de revisão contratual anual focado em cláusulas de confidencialidade, notificação de incidentes e tratamento de dados pessoais."
+      },
+      {
+        "optionText": "Contratos raramente revistos quanto à conformidade legal.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "HIGH",
+        "recommendation": "Implemente um repositório central de contratos com revisão jurídica obrigatória em ciclos definidos e validação de cláusulas de segurança digital."
+      }
+    ]
+  },
+  {
+    "questionText": "Qual seria o impacto legal caso dados pessoais de clientes fossem expostos devido a um incidente de segurança?",
+    "categoryName": "Risco Legal e Regulatório",
+    "options": [
+      {
+        "optionText": "Impacto legal mínimo, com notificações e medidas corretivas eficazes.",
+        "optionType": "IMPACT",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Multas moderadas e exigência de medidas corretivas adicionais.",
+        "optionType": "IMPACT",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Implemente políticas formais de Data Protection Impact Assessment (DPIA) para sistemas que tratem dados pessoais, com envolvimento do DPO e equipa técnica desde o design inicial."
+      },
+      {
+        "optionText": "Multas elevadas, investigações legais e danos reputacionais graves.",
+        "optionType": "IMPACT",
+        "optionLevel": "HIGH",
+        "recommendation": "Implemente controlos de acesso restrito a dados pessoais, logs de acesso auditáveis e encriptação end-to-end. Mantenha registos de todas as ações de conformidade para auditoria legal posterior."
+      }
+    ]
+  },
+  {
+    "questionText": "Qual seria o impacto financeiro e operacional caso a empresa falhe uma auditoria de conformidade legal (ex: RGPD, fiscal, sectorial)?",
+    "categoryName": "Risco Legal e Regulatório",
+    "options": [
+      {
+        "optionText": "Impacto mínimo, com correções rápidas e sem sanções.",
+        "optionType": "IMPACT",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Impacto moderado, com penalizações financeiras geríveis.",
+        "optionType": "IMPACT",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Crie um plano de conformidade com nomeação de responsáveis por domínio legal (ex: privacidade, fiscal, sectorial) e registe as ações em andamento num sistema com alertas de não conformidade."
+      },
+      {
+        "optionText": "Impacto elevado, com paralisação de atividades ou litígios.",
+        "optionType": "IMPACT",
+        "optionLevel": "HIGH",
+        "recommendation": "Implemente uma matriz de conformidade cruzando requisitos legais com áreas técnicas e operacionais, com relatórios mensais de progresso e escalonamento automático para a direção em caso de não conformidade crítica."
+      }
+    ]
+  },
+  {
+    "questionText": "A empresa mantém registos formais e atualizados de todas as finalidades de tratamento de dados pessoais?",
+    "categoryName": "Risco Legal e Regulatório",
+    "options": [
+      {
+        "optionText": "Registos completos e atualizados, com processos validados.",
+        "optionType": "IMPACT",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Registos parciais ou desatualizados.",
+        "optionType": "IMPACT",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Implemente uma solução técnica integrada com as bases de dados da empresa que permita atualizar automaticamente os registos de atividades de tratamento, com supervisão do DPO."
+      },
+      {
+        "optionText": "Sem registo formal de atividades de tratamento.",
+        "optionType": "IMPACT",
+        "optionLevel": "HIGH",
+        "recommendation": "Estabeleça uma política obrigatória de registo de atividades de tratamento antes da introdução de novos sistemas ou processos que envolvam dados pessoais, incluindo categorias, base legal e transferências internacionais."
+      }
+    ]
+  },
+  {
+    "questionText": "A empresa possui uma política formal de gestão de consentimento e direitos dos titulares de dados?",
+    "categoryName": "Risco Legal e Regulatório",
+    "options": [
+      {
+        "optionText": "Política documentada, acessível e operacional.",
+        "optionType": "IMPACT",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Política informal ou com aplicação inconsistente.",
+        "optionType": "IMPACT",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Desenvolva e publique uma política clara sobre o exercício de direitos dos titulares, com prazos, contactos e mecanismos técnicos de apoio ao processo (ex: portal de privacidade)."
+      },
+      {
+        "optionText": "Sem política clara de gestão de consentimentos e direitos.",
+        "optionType": "IMPACT",
+        "optionLevel": "HIGH",
+        "recommendation": "Implemente uma solução técnica que permita registar e gerir o consentimento de forma granular, auditar o histórico e responder automaticamente a pedidos de acesso, retificação ou eliminação."
+      }
+    ]
+  }
   ]
 }
