@@ -6,76 +6,50 @@ import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.models.questions.Severity;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RiskUtils {
 
     public static OptionLevel medianLevel(List<OptionLevel> levels) {
         if (levels == null || levels.isEmpty()) {
-            return null; // or handle "no data" scenario
+            return null;
         }
 
         List<Integer> numeric = levels.stream()
-                .map(RiskUtils::levelToInt)
+                .map(OptionLevel::getValue)
                 .sorted()
                 .toList();
 
         int size = numeric.size();
         if (size % 2 == 1) {
-            // Odd
-            return intToLevel(numeric.get(size / 2));
+            return OptionLevel.fromValue(numeric.get(size / 2));
         } else {
-            // Even
             int left = numeric.get(size / 2 - 1);
             int right = numeric.get(size / 2);
-            int avg = (left + right) / 2;
-            return intToLevel(avg);
+            int avg = Math.round((left + right) / 2.0f); // Fix: proper rounding
+            return OptionLevel.fromValue(avg);
         }
     }
 
-    // Convert OptionLevel -> int
-    public static int levelToInt(OptionLevel level) {
-        return switch (level) {
-            case LOW -> 1;
-            case MEDIUM -> 2;
-            case HIGH -> 3;
-        };
-    }
-
-    // Convert int -> OptionLevel
-    public static OptionLevel intToLevel(int val) {
-        return switch (val) {
-            case 1 -> OptionLevel.LOW;
-            case 2 -> OptionLevel.MEDIUM;
-            case 3 -> OptionLevel.HIGH;
-            default -> null;
-        };
-    }
-
-    // Cross IMPACT x PROBABILITY -> Severity
+    // Compute severity using a matrix approach
     public static Severity computeSeverity(OptionLevel impact, OptionLevel probability) {
-        // If either is null, default to LOW
         if (impact == null || probability == null) {
-            return Severity.LOW;
+            return Severity.UNKNOWN; // Changed from LOW to UNKNOWN for safety
         }
 
-        return switch (impact) {
-            case HIGH -> switch (probability) {
-                case HIGH -> Severity.CRITICAL;
-                case MEDIUM -> Severity.HIGH;
-                case LOW -> Severity.MEDIUM;
-            };
-            case MEDIUM -> switch (probability) {
-                case HIGH -> Severity.HIGH;
-                case MEDIUM -> Severity.MEDIUM;
-                case LOW -> Severity.LOW;
-            };
-            case LOW -> switch (probability) {
-                case HIGH -> Severity.MEDIUM;
-                case MEDIUM, LOW -> Severity.LOW;
-            };
+        int i = impact.getValue();
+        int p = probability.getValue();
+
+        // Matrix: [impact][probability]
+        Severity[][] matrix = {
+                // LOW     MEDIUM    HIGH     ← probability
+                {Severity.LOW, Severity.LOW, Severity.MEDIUM},     // LOW impact
+                {Severity.LOW, Severity.MEDIUM, Severity.HIGH},    // MEDIUM impact
+                {Severity.MEDIUM, Severity.HIGH, Severity.CRITICAL} // HIGH impact
         };
+
+        return matrix[i - 1][p - 1];
     }
+
     public static Severity computeCategorySeverity(List<AnswerDTO> answers) {
         List<AnswerDTO> filteredAnswers = answers.stream()
                 .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
@@ -100,6 +74,5 @@ public class RiskUtils {
         return computeSeverity(medianImpact, medianProbability);
     }
 
-    // Private constructor to prevent instantiation
     private RiskUtils() {}
 }
