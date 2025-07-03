@@ -40,7 +40,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Mensagem</label>
           <textarea
             v-model="userFeedback"
-            placeholder="Digite sua mensagem"
+            placeholder="Escreva sua mensagem"
             class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
             rows="4"
           ></textarea>

@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen overflow-y-auto bg-gradient-to-br from-blue-600 to-indigo-100 font-sans">
     <div class="container mx-auto px-4 py-6 max-w-7xl">
-      <HeaderComponent title="Painel Administrativo" subtitle="Gerencie questões, questionários e feedbacks" back-to="/"
+      <HeaderComponent title="Painel Administrativo" subtitle="Gestao de questões, questionários e feedbacks" back-to="/"
         :show-user-button="true" />
 
       <QuestionnaireManager :questionnaires="questionnaires" @add-questionnaire="addQuestionnaire"
@@ -174,7 +174,7 @@ export default {
 
       const trimmedName = name.trim();
 
-      // Prevent duplicates (excluding the one being edited)
+      // Prevent duplicates (ding the one being edited)
       if (this.categories.some(cat => cat.id !== id && cat.name.toLowerCase() === trimmedName.toLowerCase())) {
         await this.showAlertDialog("Erro", `Já existe uma categoria com o nome '${trimmedName}'.`, "error");
         return;
@@ -235,8 +235,8 @@ export default {
     ,
     async handleDeleteCategory(id) {
       const proceed = await this.showAlertDialog(
-        "Confirmar Exclusão",
-        "Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.",
+        "Confirmar Eliminação",
+        "Tem certeza que deseja eliminar esta categoria? Esta ação não pode ser desfeita.",
         "confirm"
       );
       if (!proceed) return;
@@ -249,14 +249,14 @@ export default {
           }
         });
 
-        await this.showAlertDialog("Sucesso", "Categoria excluída com sucesso!");
+        await this.showAlertDialog("Sucesso", "Categoria eliminada com sucesso!");
         await this.$store.dispatch("fetchCategories"); // Refresh categories via Vuex
         await this.$store.dispatch("fetchQuestions");   // Refresh questions in case any used the category
       } catch (error) {
-        console.error("Erro ao excluir categoria:", error);
-        let errorMsg = "Erro ao excluir categoria.";
+        console.error("Erro ao eliminar categoria:", error);
+        let errorMsg = "Erro ao eliminar categoria.";
         if (error.response?.status === 409) {
-          errorMsg = "Não é possível excluir a categoria pois ela está associada a questões existentes.";
+          errorMsg = "Não é possível eliminar a categoria pois ela está associada a questões existentes.";
         } else if (error.response?.data?.message) {
           errorMsg = error.response.data.message;
         }
@@ -299,8 +299,8 @@ export default {
     },
     async deleteQuestion(id) {
       const proceed = await this.showAlertDialog(
-        "Confirmar Exclusão",
-        "Tem certeza que deseja excluir esta questão?",
+        "Confirmar Eliminação",
+        "Tem certeza que deseja eliminar esta questão?",
         "confirm"
       );
       if (!proceed) return;
@@ -311,10 +311,10 @@ export default {
           headers: { Authorization: `Bearer ${token}` },
         });
         await this.$store.dispatch("fetchQuestions");
-        await this.showAlertDialog("Sucesso", "Questão excluída com sucesso!", "success");
+        await this.showAlertDialog("Sucesso", "Questão eliminada com sucesso!", "success");
       } catch (error) {
-        console.error("Erro ao excluir questão:", error);
-        await this.showAlertDialog("Erro", "Erro ao excluir questão.", "error");
+        console.error("Erro ao eliminar questão:", error);
+        await this.showAlertDialog("Erro", "Erro ao eliminar questão.", "error");
       }
     },
     async addQuestionnaire(newTitle) {
@@ -340,8 +340,8 @@ export default {
     },
     async deleteQuestionnaire(id) {
       const proceed = await this.showAlertDialog(
-        "Confirmar Exclusão",
-        "Tem certeza que deseja excluir este questionário?",
+        "Confirmar Eliminação",
+        "Tem certeza que deseja eliminar este questionário?",
         "confirm"
       );
       if (!proceed) return;
@@ -357,13 +357,13 @@ export default {
             this.$store.dispatch("fetchQuestionnaires"),
             this.$store.dispatch("fetchQuestions")
           ]);
-          await this.showAlertDialog("Sucesso", "Questionário excluído com sucesso!", "success");
+          await this.showAlertDialog("Sucesso", "Questionário eliminado com sucesso!", "success");
         } else {
           throw new Error(`HTTP ${response.status}`);
         }
       } catch (error) {
-        console.error("Erro ao excluir questionário:", error);
-        await this.showAlertDialog("Erro", "Erro ao excluir questionário.", "error");
+        console.error("Erro ao eliminar questionário:", error);
+        await this.showAlertDialog("Erro", "Erro ao eliminar questionário.", "error");
       }
     },
     async importQuestionnaire(jsonData) {

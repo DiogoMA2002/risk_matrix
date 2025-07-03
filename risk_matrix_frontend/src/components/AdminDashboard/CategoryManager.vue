@@ -5,7 +5,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
         </svg>
-        Gerenciar Categorias
+        Gerir Categorias
       </h2>
       <div class="flex justify-between items-center mt-4">
         <div class="flex-1 max-w-md">
@@ -164,25 +164,25 @@ export default {
       return {
         add: "Adicionar Categoria",
         edit: "Editar Categoria",
-        delete: "Excluir Categoria",
+        delete: "Eliminar Categoria",
         search: "Pesquisar categorias...",
         noResults: "Nenhuma categoria encontrada",
-        confirmDelete: "Tem certeza que deseja excluir esta categoria?",
+        confirmDelete: "Tem certeza que deseja eliminar esta categoria?",
         confirmDeleteWarning: "Esta ação não pode ser desfeita.",
         cancel: "Cancelar",
         confirm: "Confirmar",
         save: "Salvar",
         addNew: "Adicionar Nova Categoria",
         editCategory: "Editar Categoria",
-        deleteCategory: "Excluir Categoria",
+        deleteCategory: "Eliminar Categoria",
         categoryName: "Nome da Categoria",
         emptyName: "Nome da categoria não pode ser vazio",
         invalidChars: "Nome da categoria contém caracteres inválidos",
         duplicate: "Esta categoria já existe",
         success: "Categoria salva com sucesso!",
-        error: "Erro ao salvar categoria",
-        deleteSuccess: "Categoria excluída com sucesso!",
-        deleteError: "Erro ao excluir categoria",
+        error: "Erro ao guardar categoria",
+        deleteSuccess: "Categoria eliminada com sucesso!",
+        deleteError: "Erro ao eliminar categoria",
         loading: "A processar...",
       };
     }

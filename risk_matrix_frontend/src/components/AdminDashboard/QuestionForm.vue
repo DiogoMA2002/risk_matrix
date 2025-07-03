@@ -21,7 +21,7 @@
         </label>
         <textarea id="question-text" v-model="newQuestion" rows="3"
           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-          placeholder="Digite o texto da questão"
+          placeholder="Escreva o texto da questão"
           :disabled="isLoading"
           :aria-label="'Texto da questão'"></textarea>
       </div>
@@ -64,7 +64,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">Texto da Opção</label>
               <input v-model="option.optionText" type="text"
                 class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                placeholder="Digite o texto da opção"
+                placeholder="Escreva o texto da opção"
                 :disabled="isLoading"
                 :aria-label="'Texto da opção'" />
             </div>

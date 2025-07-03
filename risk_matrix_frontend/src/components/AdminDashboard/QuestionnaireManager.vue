@@ -158,7 +158,7 @@ export default {
     },
     labels() {
       return {
-        title: 'Gerenciar Questionários',
+        title: 'Gerir Questionários',
         search: 'Pesquisar questionários...',
         noResults: 'Nenhum questionário encontrado',
         loading: 'A carregar questionários...',
@@ -167,7 +167,7 @@ export default {
         export: 'Exportar',
         importTitle: 'Importar Questionário',
         cancel: 'Cancelar',
-        save: 'Salvar',
+        save: 'Guardar',
         titleLabel: 'Título',
         emptyTitle: 'Título não pode ser vazio',
         success: 'Operação realizada com sucesso!',
@@ -178,7 +178,7 @@ export default {
         importNoFile: 'Nenhum arquivo selecionado.',
         importNotJson: 'Por favor, selecione um arquivo JSON.',
         edit: 'Editar',
-        delete: 'Excluir'
+        delete: 'Eliminar'
       };
     }
   },

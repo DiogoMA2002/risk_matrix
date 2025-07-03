@@ -61,7 +61,7 @@
       <!-- Email Filter -->
       <div class="flex-1">
         <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Email</label>
-        <input v-model="filters.email" type="email" placeholder="Digite o email" 
+        <input v-model="filters.email" type="email" placeholder="Escreva o email" 
           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all duration-300" />
       </div>
       

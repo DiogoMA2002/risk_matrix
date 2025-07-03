@@ -71,7 +71,7 @@
           Filtrar por Email
           <span class="text-xs text-gray-500">(Ctrl + F)</span>
         </label>
-        <input id="email-filter" v-model="filters.email" type="email" placeholder="Digite o email"
+        <input id="email-filter" v-model="filters.email" type="email" placeholder="Escreva o email"
           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
           :aria-label="'Filtrar por email'" />
       </div>

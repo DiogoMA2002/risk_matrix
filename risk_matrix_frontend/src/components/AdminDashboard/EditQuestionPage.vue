@@ -98,7 +98,7 @@
               <label class="block text-sm font-medium text-gray-700">Recomendação</label>
               <textarea v-model="option.recommendation" rows="2"
                 class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="Digite a recomendação para esta opção (opcional)"></textarea>
+                placeholder="Escreva a recomendação para esta opção (opcional)"></textarea>
             </div>
           </div>
 
