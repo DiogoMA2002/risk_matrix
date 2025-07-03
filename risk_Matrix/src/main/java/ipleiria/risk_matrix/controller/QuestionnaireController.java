@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/questionnaires")
+@RequestMapping("/api/questionnaires")
 public class QuestionnaireController {
 
     private final QuestionnaireService questionnaireService;
