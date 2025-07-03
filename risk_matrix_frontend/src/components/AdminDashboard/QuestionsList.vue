@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Filter Section -->
-    <div class="mb-6 bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-4">
+    <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-t-xl shadow-md p-4">
       <label class="block text-sm font-medium text-gray-700 mb-2">Filtrar por Categoria</label>
       <select 
         v-model="selectedFilterCategory" 
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Questions List -->
-    <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mb-8">
+    <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-b-xl shadow-md p-6 mb-8 -mt-px">
       <h2 class="text-xl font-semibold mb-6 text-blue-800 flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -30,7 +30,9 @@
           <li v-for="question in paginatedQuestions" :key="question.id" 
               class="py-4 px-4 flex justify-between items-center hover:bg-blue-50 transition-colors duration-200 rounded-lg group">
             <div class="flex-1">
-              <p class="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">{{ question.questionText }}</p>
+              <p class="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
+                {{ question.questionText }}
+              </p>
               <span class="text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full inline-block mt-2">
                 {{ formatCategoryName(question.category) }}
               </span>
