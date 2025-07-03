@@ -41,9 +41,9 @@ public class SecurityConfig {
                         .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**","/questions/**", "/suggestions/**", "/answers/submit", "/answers/submit-multiple",
-                                "/questionnaires/**","/feedback","/categories/**").permitAll()
-                        .requestMatchers("/admin/**", "/feedback/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**","/api/questions/**", "/api/suggestions/**", "/api/answers/submit", "/api/answers/submit-multiple",
+                                "/api/questionnaires/**","/api/feedback","/api/categories/**").permitAll()
+                        .requestMatchers("/api/admin/**", "/api/feedback/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
