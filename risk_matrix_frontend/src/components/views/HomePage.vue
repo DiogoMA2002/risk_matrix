@@ -1,18 +1,7 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-100 font-sans">
     <!-- Admin access button -->
-    <div class="absolute top-4 right-4">
-      <button
-        @click="goToAdmin"
-        class="px-4 py-2 bg-white bg-opacity-20 backdrop-blur-sm text-white rounded-md font-medium transition-all duration-300 hover:bg-opacity-30 shadow-sm flex items-center space-x-1 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600"
-        :aria-label="'Ir para o painel de administração'"
-      >
-        <span>Painel de Admin</span>
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-    </div>
+ 
 
     <!-- Logo and branding -->
     <div class="w-full flex justify-center pt-10">
@@ -144,13 +133,6 @@ async function proceed() {
   }
 }
 
-function goToAdmin() {
-  const token = localStorage.getItem('jwt')
-  const target = token ? '/admin' : '/login'
-  if (route.path !== target) {
-    router.push(target)
-  }
-}
 
 function goToFeedbackForm() {
   if (route.path !== '/feedback-form') {
