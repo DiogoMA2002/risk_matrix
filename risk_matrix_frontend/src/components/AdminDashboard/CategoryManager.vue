@@ -167,8 +167,6 @@ export default {
         delete: "Eliminar Categoria",
         search: "Pesquisar categorias...",
         noResults: "Nenhuma categoria encontrada",
-        confirmDelete: "Tem certeza que deseja eliminar esta categoria?",
-        confirmDeleteWarning: "Esta ação não pode ser desfeita.",
         cancel: "Cancelar",
         confirm: "Confirmar",
         save: "Salvar",
@@ -176,13 +174,6 @@ export default {
         editCategory: "Editar Categoria",
         deleteCategory: "Eliminar Categoria",
         categoryName: "Nome da Categoria",
-        emptyName: "Nome da categoria não pode ser vazio",
-        invalidChars: "Nome da categoria contém caracteres inválidos",
-        duplicate: "Esta categoria já existe",
-        success: "Categoria salva com sucesso!",
-        error: "Erro ao guardar categoria",
-        deleteSuccess: "Categoria eliminada com sucesso!",
-        deleteError: "Erro ao eliminar categoria",
         loading: "A processar...",
       };
     }
@@ -206,13 +197,11 @@ export default {
     },
     async saveEdit() {
       if (!this.editName.trim()) {
-        this.showToast(this.categoryLabels.emptyName, "error");
         return;
       }
 
       const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
       if (forbidden.test(this.editName.trim())) {
-        this.showToast(this.categoryLabels.invalidChars, "error");
         return;
       }
 
@@ -220,7 +209,6 @@ export default {
         cat.id !== this.editingCategory.id && 
         cat.name.toLowerCase() === this.editName.trim().toLowerCase()
       )) {
-        this.showToast(this.categoryLabels.duplicate, "error");
         return;
       }
 
@@ -229,63 +217,44 @@ export default {
           id: this.editingCategory.id,
           name: this.editName.trim()
         });
-        this.showToast(this.categoryLabels.success);
         this.cancelEdit();
       } catch (error) {
-        this.showToast(this.categoryLabels.error, "error");
+        console.error("Error in CategoryManager saveEdit:", error);
       }
     },
     async deleteCategory(id) {
-      const proceed = await this.showConfirmDialog(
-        this.categoryLabels.confirmDelete,
-        this.categoryLabels.confirmDeleteWarning
-      );
-      
-      if (!proceed) return;
-
       try {
         await this.$emit("delete-category", id);
-        this.showToast(this.categoryLabels.deleteSuccess);
       } catch (error) {
-        this.showToast(this.categoryLabels.deleteError, "error");
+        // Error handling is done in the parent component
+        console.error("Error in CategoryManager deleteCategory:", error);
       }
     },
     async createCategory() {
       if (!this.newCategory.trim()) {
-        this.showToast(this.categoryLabels.emptyName, "error");
         return;
       }
 
       const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
       if (forbidden.test(this.newCategory.trim())) {
-        this.showToast(this.categoryLabels.invalidChars, "error");
         return;
       }
 
       if (this.categories.some(cat => 
         cat.name.toLowerCase() === this.newCategory.trim().toLowerCase()
       )) {
-        this.showToast(this.categoryLabels.duplicate, "error");
         return;
       }
 
       try {
         await this.$emit("create-category", this.newCategory.trim());
-        this.showToast(this.categoryLabels.success);
         this.newCategory = "";
         this.showNewCategoryInput = false;
       } catch (error) {
-        this.showToast(this.categoryLabels.error, "error");
+        console.error("Error in CategoryManager createCategory:", error);
       }
     },
-    showToast(message, type = 'success') {
-      // Implementation depends on your toast system
-      console.log(`${type}: ${message}`);
-    },
-    async showConfirmDialog(title, message) {
-      // Implementation depends on your dialog system
-      return window.confirm(`${title}\n${message}`);
-    },
+
     changePage(page) {
       this.currentPage = page;
     }

@@ -287,7 +287,7 @@ export default {
   },
   async mounted() {
     await Promise.all([
-      this.$store.dispatch('fetchQuestionnaires'),
+              this.$store.dispatch('fetchQuestionnairesForAdmin'),
       this.$store.dispatch('fetchQuestions'),
       this.$store.dispatch('fetchCategories'),
       this.fetchQuestionDetails()

@@ -64,6 +64,19 @@ export default createStore({
         })
         .catch(error => console.error('Erro ao buscar questionários:', error))
     },
+    fetchQuestionnairesForAdmin({ commit }) {
+      const token = localStorage.getItem("jwt");
+      return axios.get('/api/questionnaires/admin', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(response => {
+          commit('setQuestionnaires', response.data)
+          if (response.data.length > 0) {
+            commit('setSelectedQuestionnaire', response.data[0])
+          }
+        })
+        .catch(error => console.error('Erro ao buscar questionários para admin:', error))
+    },
     fetchCategories({ commit }) {                
       return axios.get('/api/categories')
         .then(response => {
@@ -77,6 +90,17 @@ export default createStore({
         commit('setSelectedQuestionnaire', response.data);
       } catch (error) {
         console.error('Erro ao buscar questionário:', error);
+      }
+    },
+    async fetchQuestionnaireByIdForAdmin({ commit }, id) {
+      try {
+        const token = localStorage.getItem("jwt");
+        const response = await axios.get(`/api/questionnaires/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        commit('setSelectedQuestionnaire', response.data);
+      } catch (error) {
+        console.error('Erro ao buscar questionário para admin:', error);
       }
     },
     async fetchUserAnswersByEmail({ commit }, email) {

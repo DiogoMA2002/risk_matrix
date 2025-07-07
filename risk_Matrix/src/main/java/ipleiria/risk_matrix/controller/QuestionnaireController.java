@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ipleiria.risk_matrix.dto.QuestionDTO;
 import ipleiria.risk_matrix.dto.QuestionnaireDTO;
+import ipleiria.risk_matrix.dto.QuestionUserDTO;
+import ipleiria.risk_matrix.dto.QuestionnaireUserDTO;
 import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
@@ -55,7 +57,15 @@ public class QuestionnaireController {
     }
 
     @GetMapping
-    public List<QuestionnaireDTO> getAllQuestionnaires() {
+    public List<QuestionnaireUserDTO> getAllQuestionnaires() {
+        return questionnaireService.getAllQuestionnaires().stream()
+                .map(QuestionnaireUserDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<QuestionnaireDTO> getAllQuestionnairesForAdmin() {
         return questionnaireService.getAllQuestionnaires().stream()
                 .map(QuestionnaireDTO::new)
                 .collect(Collectors.toList());
@@ -69,7 +79,23 @@ public class QuestionnaireController {
     }
 
     @GetMapping("/{questionnaireId}/category/{categoryName}")
-    public List<Question> getQuestionsByQuestionnaireAndCategory(
+    public List<QuestionUserDTO> getQuestionsByQuestionnaireAndCategory(
+            @PathVariable Long questionnaireId,
+            @PathVariable String categoryName
+    ) {
+        Questionnaire q = questionnaireRepository.findById(questionnaireId)
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found with ID: " + questionnaireId));
+
+        return q.getQuestions().stream()
+                .filter(question -> question.getCategory() != null &&
+                        question.getCategory().getName().equalsIgnoreCase(categoryName))
+                .map(QuestionUserDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{questionnaireId}/category/{categoryName}/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Question> getQuestionsByQuestionnaireAndCategoryForAdmin(
             @PathVariable Long questionnaireId,
             @PathVariable String categoryName
     ) {
@@ -133,12 +159,30 @@ public class QuestionnaireController {
     }
 
     @GetMapping("/{id}/questions")
-    public List<Question> getAllQuestionsForQuestionnaire(@PathVariable Long id) {
+    public List<QuestionUserDTO> getAllQuestionsForQuestionnaire(@PathVariable Long id) {
+        return questionnaireService.getAllQuestionsForQuestionnaire(id)
+                .stream()
+                .map(QuestionUserDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}/questions/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Question> getAllQuestionsForQuestionnaireForAdmin(@PathVariable Long id) {
         return questionnaireService.getAllQuestionsForQuestionnaire(id);
     }
 
     @GetMapping("/search")
-    public List<QuestionnaireDTO> searchQuestionnaires(@RequestParam(required = false) String title) {
+    public List<QuestionnaireUserDTO> searchQuestionnaires(@RequestParam(required = false) String title) {
+        return questionnaireService.searchQuestionnaires(title)
+                .stream()
+                .map(QuestionnaireUserDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/search/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<QuestionnaireDTO> searchQuestionnairesForAdmin(@RequestParam(required = false) String title) {
         return questionnaireService.searchQuestionnaires(title)
                 .stream()
                 .map(QuestionnaireDTO::new)
