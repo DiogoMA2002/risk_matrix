@@ -138,7 +138,7 @@
           "recommendation": "Migre credenciais para cofre de senhas com HSM, substitua armazenamento em texto claro e force reset de todas as senhas após migração."
         }
       ]
-    }
+    },
 	
 	{
       "questionText": "Qual seria o impacto operacional caso ocorra um ataque bem-sucedido de phishing direcionado a funcionários?",
@@ -277,7 +277,7 @@
           "recommendation": "Criar hotline 24/7 e endereço dedicado abuse@empresa.com com SLA de triagem de 15 min, divulgado em intranet e onboarding."
         }
       ]
-    }
+    },
 	{
       "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado?",
       "categoryName": "Risco em Sistemas e Plataformas Críticas",
