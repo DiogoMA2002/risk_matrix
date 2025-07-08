@@ -122,7 +122,7 @@
               </div>
               <div class="ml-3">
                 <p class="text-sm text-gray-600">
-                  <strong>Importante:</strong> Por questões de segurança e privacidade, após a submissão das respostas, todos os dados inseridos serão automaticamente eliminados do sistema. As respostas serão analisadas pela administração e um relatório será gerado posteriormente. Recomendamos que você mantenha um registro das suas respostas caso precise consultá-las no futuro.
+<strong>Importante:</strong> Por questões de segurança e privacidade, todos os dados inseridos serão automaticamente eliminados do sistema <u>após a geração do relatório</u>. As respostas serão analisadas pela administração e um relatório será gerado posteriormente. Recomendamos que mantenha um registo das suas respostas caso precise consultá-las no futuro.
                 </p>
               </div>
             </div>
