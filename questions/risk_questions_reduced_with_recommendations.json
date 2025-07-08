@@ -14,13 +14,13 @@
           "optionText": "Comprometimento de contas internas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Configure bloqueio automático de conta após mu tentativas falhas e ative alertas por email para tentativas de login suspeitas."
+          "recommendation": "Configure bloqueio automático de conta após múltiplas tentativas falhadas e ative alertas por email para logins suspeitos."
         },
         {
           "optionText": "Exposição total de sistemas críticos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Prioritize a implementação de MFA obrigatório em todas as contas de utilizador, especialmente as críticas. Adicionalmente, revogue imediatamente quaisquer chaves de API que possam ter sido expostas e inicie uma caça proativa a tokens de acesso comprometidos."
+          "recommendation": "Implemente MFA obrigatório em todas as contas críticas, revogue imediatamente chaves de API comprometidas e monitorize tokens de acesso ativos para sinais de abuso."
         }
       ]
     },
@@ -37,13 +37,13 @@
           "optionText": "Acesso significativo a sistemas internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Adote uma solução de Privileged Access Management (PAM) para automatizar a rotatividade de senhas de contas privilegiadas, garantindo que o acesso a sistemas internos seja estritamente controlado."
+          "recommendation": "Implemente rotação automática de senhas de contas administrativas e restrinja os acessos com controlo centralizado, idealmente com uma solução leve de Privileged Access Management (PAM)."
         },
         {
           "optionText": "Controlo total sobre sistemas e dados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Em caso de comprometimento de credenciais de administrador, desative imediatamente os logins afetados. Revalide a identidade de todos os utilizadores com acesso administrativo e restrinja o acesso a esses sistemas através de uma whitelist de IPs rigorosa."
+          "recommendation": "Desative imediatamente as credenciais comprometidas, revalide os acessos administrativos e restrinja o login a partir de IPs autorizados."
         }
       ]
     },
@@ -60,13 +60,13 @@
           "optionText": "Casos isolados com impacto significativo.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Considere a integração de uma solução de Single Sign-On (SSO) combinada com Autenticação Multifator (MFA) condicional para centralizar a autenticação e reduzir os pontos de falha associados a senhas fracas ou reutilizadas."
+          "recommendation": "Implemente Single Sign-On (SSO) com MFA para centralizar a autenticação e reduzir o risco associado à reutilização de senhas fracas."
         },
         {
           "optionText": "A prática é comum e representa um risco elevado.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Centralize a autenticação com as contas existentes (ex: Microsoft 365 ou Google Workspace) e implemente MFA obrigatório para serviços críticos. Para contas privilegiadas, utilize um gestor de senhas com registo de acessos e revisão periódica."
+          "recommendation": "Centralize a autenticação com SSO (ex: Microsoft 365 ou Google Workspace), aplique MFA obrigatório e use um gestor de senhas com registo de acessos para contas privilegiadas."
         }
       ]
     },
@@ -83,13 +83,13 @@
           "optionText": "Monitorização parcial e análise manual.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente um sistema de monitorização contínua para tentativas de login suspeitas, incluindo a configuração de políticas de bloqueio automático e alertas SIEM detalhados para atividades de brute-force."
+          "recommendation": "Implemente monitorização contínua com bloqueio automático após falhas repetidas e configure alertas para logins suspeitos em horários ou locais invulgares."
         },
         {
           "optionText": "Nenhuma monitorização ativa implementada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Para mitigar os riscos de falta de monitorização, implemente com urgência MFA em todas as contas, revogue chaves de API potencialmente comprometidas e realize uma análise forense para identificar tokens de acesso ilícitos."
+          "recommendation": "Implemente monitorização básica de acessos com alertas automáticos e bloqueio por falhas repetidas. Aplique MFA obrigatório como camada adicional de proteção."
         }
       ]
     },
@@ -106,13 +106,13 @@
           "optionText": "MFA ativado apenas para alguns utilizadores.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para contas críticas com MFA parcialmente implementado, reforce a segurança implementando a rotatividade automática de senhas privilegiadas utilizando um cofre PAM robusto."
+          "recommendation": "Ative MFA obrigatório em todas as contas críticas e, se possível, complemente com um cofre de senhas para contas privilegiadas."
         },
         {
           "optionText": "Nenhum uso de MFA implementado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Se o MFA não estiver implementado, e houver suspeita de comprometimento, desative os logins potencialmente afetados, force a re-autenticação e verificação de identidade dos utilizadores, e implemente uma whitelist de IPs para acessos administrativos como medida de contenção imediata."
+          "recommendation": "Implemente MFA com urgência em todas as contas críticas. Desative logins suspeitos, force a revalidação da identidade e restrinja o acesso por IPs autorizados até garantir segurança."
         }
       ]
     },
@@ -129,13 +129,13 @@
           "optionText": "Proteção parcial das credenciais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para endereçar a proteção parcial de credenciais, integre soluções de Single Sign-On (SSO) com políticas de MFA condicional, visando diminuir a superfície de ataque e os pontos de falha."
+          "recommendation": "Garanta que todas as senhas são armazenadas com hashes robustas (ex: bcrypt ou Argon2) e proteja acessos privilegiados com cofre de senhas seguro."
         },
         {
           "optionText": "Credenciais armazenadas sem proteção adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Caso as credenciais estejam armazenadas sem proteção adequada, realize uma varredura urgente para identificar possíveis credenciais comprometidas em fontes públicas e force uma redefinição de senha obrigatória em toda a organização, acompanhada de formação sobre criação de senhas seguras."
+          "recommendation": "Elimine imediatamente qualquer armazenamento inseguro de senhas, aplique hashing robusto (ex: bcrypt, Argon2) e force a redefinição geral das credenciais. Realize formação básica sobre gestão segura de senhas."
         }
       ]
     },
@@ -152,7 +152,7 @@
           "optionText": "Operações parcialmente afetadas, atraso moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para mitigar o impacto de indisponibilidade da plataforma, configure backups transacionais frequentes e teste rigorosamente os scripts de rebuild automático num ambiente de staging dedicado."
+          "recommendation": "Implemente backups frequentes e teste regularmente a recuperação num ambiente de testes para minimizar interrupções."
         },
         {
           "optionText": "Paragem total ou significativa das operações",
@@ -198,13 +198,13 @@
           "optionText": "Auditorias anuais ou esporádicas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Face a auditorias esporádicas, estabeleça um processo de configuração de backups transacionais robustos e valide regularmente a eficácia dos scripts de rebuild automático em ambiente de staging."
+          "recommendation": "Mantenha backups fiáveis e valide periodicamente os scripts de recuperação num ambiente de testes controlado."
         },
         {
           "optionText": "Não são realizadas auditorias ou são muito raras.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Compense a raridade das auditorias de segurança provisionando instâncias redundantes das plataformas críticas noutra zona de disponibilidade e mantendo um replication-lag inferior a 60 segundos."
+          "recommendation": "Implemente scans automáticos de vulnerabilidades e políticas mínimas de hardening para reduzir o risco de falhas não detetadas."
         }
       ]
     },
@@ -290,13 +290,13 @@
           "optionText": "Dados parcialmente recuperáveis, impacto moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para cenários de dados parcialmente recuperáveis, automatize a criação de snapshots incrementais com verificação de checksum para garantir a integridade, e defina uma política de retenção de pelo menos 30 dias."
+          "recommendation": "Automatize snapshots incrementais com verificação de integridade (checksums) e mantenha uma política de retenção mínima de 30 dias para garantir recuperação fiável."
         },
         {
           "optionText": "Perda irreversível de dados críticos, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Em caso de risco de perda irreversível de dados críticos, implemente a criptografia de discos utilizando AES-256, utilize um Hardware Security Module (HSM) para a gestão de chaves criptográficas e ative soluções de Data Loss Prevention (DLP) nos canais de saída de dados."
+          "recommendation": "Implemente backups automáticos fora do local (offsite), com testes regulares de recuperação, e use sistemas redundantes de armazenamento com replicação geográfica para evitar perda irreversível de dados críticos."
         }
       ]
     },
@@ -405,13 +405,13 @@
           "optionText": "Política informal ou parcialmente implementada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Caso a política de ciclo de vida de dados seja informal, comece por implementar acesso só-leitura para partilhas de dados históricos e ative o registo de acessos anómalos como primeiros passos para uma gestão mais segura."
+          "recommendation": "Defina prazos de retenção por tipo de dado e aplique regras automáticas de arquivamento e eliminação segura para dados antigos ou obsoletos."
         },
         {
           "optionText": "Sem política definida ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Se não existe política de ciclo de vida de dados, implemente urgentemente a replicação de dados críticos para um cold-site off-line seguro e estabeleça uma rotina de testes de restauração semestrais."
+          "recommendation": "Implemente uma política formal de retenção e eliminação de dados, com procedimentos de destruição segura (ex: shredding digital ou sanitização) e registo de conformidade para dados sensíveis."
         }
       ]
     },
@@ -428,13 +428,13 @@
           "optionText": "Impacto moderado, recuperação parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para moderar o impacto de uma interrupção da rede, segmente as VLANs por função departamental ou de serviço, aplique Access Control Lists (ACLs) para micro-segmentação eficaz e bloqueie o tráfego lateral SMB não essencial."
+          "recommendation": "Implemente VLANs separadas por função e restrinja o tráfego desnecessário entre segmentos com regras de firewall ou ACLs simples."
         },
         {
           "optionText": "Impacto elevado, paralisação das operações críticas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Para prevenir a paralisação de operações críticas devido a falhas na rede interna, adote uma arquitetura de rede Zero Trust, impondo autenticação mTLS entre todos os serviços e isolando completamente os ambientes produtivos dos de desenvolvimento/teste."
+          "recommendation": "Implemente isolamento de ambientes críticos (produção, desenvolvimento, testes) e políticas de acesso mínimo, aplicando princípios de Zero Trust sempre que possível."
         }
       ]
     },
@@ -451,13 +451,13 @@
           "optionText": "Exposição de alguns dados críticos, impacto moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para mitigar o impacto da exposição de dados críticos por invasão na rede, implemente Network Access Control (NAC) baseado na certificação digital de cada dispositivo e configure a expulsão automática de dispositivos não conformes ou suspeitos."
+          "recommendation": "Implemente controlo de acesso à rede com autenticação de dispositivos fiáveis e alerte ou bloqueie ligações não autorizadas."
         },
         {
           "optionText": "Exposição generalizada de dados sensíveis, alto impacto operacional e legal.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "No caso de uma exposição generalizada de dados sensíveis. Implemente um firewall com funcionalidades básicas de deteção de intrusão (IDS) e configure alertas para comportamentos de rede anómalos, como tráfego fora do horário normal ou varrimento de portas."
+          "recommendation": "Implemente firewall com deteção de intrusão (IDS) e configure alertas para tráfego anómalo, como varrimentos de portas ou acessos fora do horário habitual. Restrinja o acesso aos dados mais sensíveis por função."
         }
       ]
     },
@@ -474,13 +474,13 @@
           "optionText": "Monitorização parcial ou periódica.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Em redes com monitorização parcial, implemente a segmentação de VLANs por função, reforce com ACLs de micro-segmentação e adicione o bloqueio de tráfego lateral SMB para conter potenciais ameaças não detetadas."
+          "recommendation": "Ative logs detalhados em switches e firewalls e implemente alertas automáticos para eventos fora do padrão, mesmo que não haja monitorização contínua."
         },
         {
           "optionText": "Monitorização inexistente ou muito limitada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Com monitorização de rede limitada ou inexistente, avance para um modelo de Zero Trust com autenticação mTLS obrigatória entre serviços e crie um isolamento rigoroso dos ambientes produtivos para minimizar a superfície de ataque."
+          "recommendation": "Implemente uma solução IDS/IPS leve, como Zeek ou Suricata, e configure alertas básicos para detectar comportamentos suspeitos de rede em tempo real."
         }
       ]
     },
@@ -520,13 +520,13 @@
           "optionText": "Segmentação parcial, não totalmente eficaz.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Se a segmentação da rede é parcial, aprimore-a dividindo VLANs por função, aplicando ACLs granulares para micro-segmentação e bloqueando ativamente o tráfego lateral SMB para limitar o raio de ação de um atacante."
+          "recommendation": "Melhore a segmentação com VLANs por função, aplique ACLs simples entre segmentos e bloqueie o tráfego lateral SMB para reduzir a propagação de ataques."
         },
         {
           "optionText": "Rede não segmentada ou mal configurada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Quando a rede não é segmentada ou está mal configurada, implemente uma estratégia de Zero Trust com autenticação mTLS entre os serviços e isole os ambientes produtivos para garantir que cada recurso seja acedido de forma segura e verificada."
+          "recommendation": "Implemente uma segmentação rigorosa com VLANs isoladas para ambientes críticos (produção, backups, administração) e restrinja o acesso com regras de firewall e autenticação por utilizador ou dispositivo."
         }
       ]
     },
@@ -543,13 +543,13 @@
           "optionText": "Política informal ou parcialmente aplicada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Se a política de acesso à rede é informal, estabeleça controlos robustos implementando NAC baseado em certificação de dispositivo e defina regras claras para a expulsão automática de dispositivos não conformes."
+          "recommendation": "Defina regras de acesso com base em grupos de dispositivos autorizados e autenticação por utilizador, e aplique bloqueio automático de dispositivos desconhecidos na rede."
         },
         {
           "optionText": "Ausência de política ou controlo inadequado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Na ausência de uma política de acesso formal, reforce a segurança da rede implementando IDS/IPS inline com funcionalidade de sandbox para payloads e configure alertas e respostas automáticas a beaconing e outras atividades maliciosas."
+          "recommendation": "Implemente controlos obrigatórios de autenticação por dispositivo e utilizador em todos os pontos de acesso à rede, e restrinja o acesso a serviços internos com base em perfis de risco."
         }
       ]
     },
@@ -566,13 +566,13 @@
           "optionText": "Comprometimento parcial de serviços internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para conter o comprometimento parcial de serviços internos via acesso remoto, limite as conexões RDP/VPN exclusivamente a IPs corporativos previamente autorizados e implemente MFA com push notifications resistentes a phishing."
+          "recommendation": "Para conter o risco de acesso remoto indevido, limite RDP e VPN a IPs corporativos autorizados e ative MFA com notificações push resistentes a phishing."
         },
         {
           "optionText": "Comprometimento extenso, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Em caso de comprometimento extenso por acesso remoto, bloqueie imediatamente todas as credenciais afetadas, force uma nova inscrição no sistema MFA para todos os utilizadores remotos. Melhore a segurança das VPNs existentes limitando o acesso apenas a IPs autorizados, ativando MFA resistente a phishing e desativando contas inativas automaticamente."
+          "recommendation": "Bloqueie de imediato as credenciais comprometidas e reforce o sistema de MFA com nova inscrição obrigatória. Restrinja o acesso VPN a IPs autorizados, ative MFA resistente a phishing e desative contas inativas automaticamente."
         }
       ]
     },
@@ -589,13 +589,13 @@
           "optionText": "Impacto moderado, custos adicionais notáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para gerir o impacto financeiro e reputacional de invasões por canais remotos, estabeleça uma rotina de auditoria semanal dos logs de VPN em busca de anomalias e revogue acessos de contas inativas há mais de 30 dias."
+          "recommendation": "Audite semanalmente os logs de VPN para detetar acessos anómalos e revogue contas inativas há mais de 30 dias para reduzir o risco e os custos associados."
         },
         {
           "optionText": "Impacto severo, custos financeiros elevados e danos reputacionais graves.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Ative a autenticação SSH com chaves públicas protegidas por passphrase e complemente com autenticação MFA por aplicação móvel (TOTP/push) sempre que possível."
+          "recommendation": "Implemente autenticação forte (SSH com chaves + MFA) para todos os canais remotos e active alertas para acessos fora do padrão. Mantenha um plano de resposta a incidentes que inclua notificação a clientes e medidas de contenção imediatas."
         }
       ]
     },
@@ -635,13 +635,13 @@
           "optionText": "Auditorias ocasionais ou não automatizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Com auditorias de acesso remoto ocasionais, implemente a revisão semanal sistemática dos logs de VPN e automatize a revogação de contas de acesso remoto inativas por mais de 30 dias."
+          "recommendation": "Implemente revisão semanal dos logs de VPN e automatize a revogação de acessos remotos inativos há mais de 30 dias para reduzir riscos não detetados."
         },
         {
           "optionText": "Sem auditorias ou raramente realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Na ausência de auditorias de acesso remoto, adote o tunelamento SSH com chaves de hardware para uma autenticação mais forte e elimine o uso de senhas em todos os canais remotos para dificultar o acesso não autorizado."
+          "recommendation": "Implemente autenticação forte sem senha (ex: SSH com chave física ou MFA resistente a phishing) para todos os acessos remotos e crie um processo mensal de auditoria manual dos logs enquanto não for possível automatizar."
         }
       ]
     },
@@ -658,13 +658,13 @@
           "optionText": "Soluções implementadas parcialmente.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Com soluções de VPN parcialmente implementadas, restrinja o acesso RDP/VPN apenas a IPs corporativos e fortaleça la autenticação com MFA via push notifications resistentes a phishing."
+          "recommendation": "Se a VPN estiver parcialmente implementada, restrinja RDP/VPN a IPs corporativos e reforce a autenticação com MFA por push notifications resistentes a phishing."
         },
         {
           "optionText": "Sem soluções técnicas adequadas ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Se as soluções técnicas de acesso remoto são insuficientes, bloqueie imediatamente credenciais suspeitas, force a reinscrição em MFA e modernize a infraestrutura substituindo VPNs legadas por ZTNA."
+          "recommendation": "Se as soluções técnicas forem insuficientes, bloqueie acessos suspeitos, force reinscrição em MFA e avalie a substituição das VPNs legadas por soluções de Zero Trust (ZTNA) para maior controlo e segmentação."
         }
       ]
     },
@@ -704,13 +704,13 @@
           "optionText": "Impacto moderado, exploração parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para mitigar o impacto moderado da exploração de sistemas mal configurados, introduza um pipeline CI/CD que inclua a validação automática das configurações contra os CIS Benchmarks antes de qualquer deploy em produção."
+          "recommendation": "Implemente validação automatizada das configurações de sistemas antes do deploy, usando benchmarks de segurança como os CIS Benchmarks, integrados no processo de mudança ou atualização."
         },
         {
           "optionText": "Impacto grave, comprometimento total dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Em caso de comprometimento grave devido a má configuração, desconecte imediatamente os sistemas expostos da rede, aplique um hardening completo seguindo as diretrizes STIG (Security Technical Implementation Guides) e execute um pentest rigoroso após a correção para validar a segurança."
+          "recommendation": "Desconecte imediatamente os sistemas afetados, aplique medidas de hardening com base em boas práticas como CIS ou STIG, e realize um teste de intrusão após a correção para validar a segurança."
         }
       ]
     },
@@ -727,13 +727,13 @@
           "optionText": "Impacto moderado, danos gerenciáveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para controlar danos gerenciáveis por exposição de dados devido a configurações inadequadas, utilize ferramentas como Ansible ou Terraform para gerir o estado das configurações (Infrastructure as Code) e evitar a deriva de configuração ao longo do tempo."
+          "recommendation": "Use ferramentas gerir configurações como código e evitar alterações manuais que possam expor dados sensíveis."
         },
         {
           "optionText": "Impacto alto, danos significativos e prolongados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Mantenha uma cópia de referência de configurações seguras (ex: exportação de configuração do sistema ou backup do disco) e faça revisões periódicas das permissões de utilizadores e serviços críticos."
+          "recommendation": "Implemente o princípio do menor privilégio, audite regularmente as permissões em serviços críticos e utilize ferramentas de monitorização para detetar exposições indevidas de dados sensíveis em tempo útil."
         }
       ]
     },
@@ -819,13 +819,13 @@
           "optionText": "Treinos pontuais ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Se os treinos de configuração segura são pontuais, utilize Ansible ou Terraform state para impor configurações seguras e reduzir a probabilidade de erros humanos que levem à deriva de configuração."
+          "recommendation": "Estabeleça um ciclo básico de formação técnica anual sobre configuração segura e complemente com o uso de Ansible ou Terraform para aplicar padrões consistentes e reduzir erros humanos."
         },
         {
-          "optionText": "Sem Treinos regulares ou raramente realizados.",
+          "optionText": "Sem treinos regulares ou raramente realizados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Na ausência de treinos regulares sobre configuração segura, e em caso de incidente, restabeleça a configuração a partir de uma imagem dourada e realize uma auditoria completa das permissões de serviço para identificar e corrigir falhas."
+          "recommendation": "Após um incidente causado por configuração inadequada, restaure os sistemas a partir de uma configuração segura validada e promova formação técnica urgente para corrigir lacunas nas equipas operacionais."
         }
       ]
     },
@@ -957,13 +957,13 @@
           "optionText": "Processo informal, parcialmente implementado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Se o processo de validação de patches é informal, formalize-o avaliando o impacto de cada patch através de um canary release em 5% dos hosts antes do roll-out geral, documentando os resultados."
+          "recommendation": "Formalize o processo testando os patches primeiro em sistemas não críticos e documentando os resultados antes de aplicar ao ambiente de produção."
         },
         {
           "optionText": "Processo inexistente ou raramente aplicado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Caso o processo de patching seja inexistente ou raramente aplicado, utilize um WAF para isolar serviços vulneráveis e aplique regras de virtual patching como uma tática de mitigação de risco crucial e imediata."
+          "recommendation": "Implemente um WAF e active regras de virtual patching para mitigar vulnerabilidades conhecidas até que a aplicação dos patches seja possível."
         }
       ]
     },
@@ -1244,144 +1244,144 @@
         }
       ]
     },
-    
-  {
-    "questionText": "Com que frequência a empresa realiza avaliações de conformidade com regulamentações como o RGPD ou outras aplicáveis?",
-    "categoryName": "Risco Legal e Regulatório",
-    "options": [
-      {
-        "optionText": "Avaliações formais regulares (pelo menos anuais).",
-        "optionType": "PROBABILITY",
-        "optionLevel": "LOW"
-      },
-      {
-        "optionText": "Avaliações esporádicas ou informais.",
-        "optionType": "PROBABILITY",
-        "optionLevel": "MEDIUM",
-        "recommendation": "Implemente uma auditoria anual obrigatória de conformidade legal, com reporte à administração e plano de ação associado às lacunas identificadas."
-      },
-      {
-        "optionText": "Sem avaliações de conformidade documentadas.",
-        "optionType": "PROBABILITY",
-        "optionLevel": "HIGH",
-        "recommendation": "Estabeleça um processo formal de auditoria com recurso a consultoria jurídica externa para revisão da conformidade com RGPD, telecomunicações e obrigações contratuais."
-      }
-    ]
-  },
-  {
-    "questionText": "Com que frequência os contratos com fornecedores e parceiros são revistos para garantir cláusulas de conformidade legal e segurança?",
-    "categoryName": "Risco Legal e Regulatório",
-    "options": [
-      {
-        "optionText": "Revisões contratuais formais e regulares (mínimo anual).",
-        "optionType": "PROBABILITY",
-        "optionLevel": "LOW"
-      },
-      {
-        "optionText": "Revisões pontuais ou apenas na renovação contratual.",
-        "optionType": "PROBABILITY",
-        "optionLevel": "MEDIUM",
-        "recommendation": "Defina um processo de revisão contratual anual focado em cláusulas de confidencialidade, notificação de incidentes e tratamento de dados pessoais."
-      },
-      {
-        "optionText": "Contratos raramente revistos quanto à conformidade legal.",
-        "optionType": "PROBABILITY",
-        "optionLevel": "HIGH",
-        "recommendation": "Implemente um repositório central de contratos com revisão jurídica obrigatória em ciclos definidos e validação de cláusulas de segurança digital."
-      }
-    ]
-  },
-  {
-    "questionText": "Qual seria o impacto legal caso dados pessoais de clientes fossem expostos devido a um incidente de segurança?",
-    "categoryName": "Risco Legal e Regulatório",
-    "options": [
-      {
-        "optionText": "Impacto legal mínimo, com notificações e medidas corretivas eficazes.",
-        "optionType": "IMPACT",
-        "optionLevel": "LOW"
-      },
-      {
-        "optionText": "Multas moderadas e exigência de medidas corretivas adicionais.",
-        "optionType": "IMPACT",
-        "optionLevel": "MEDIUM",
-        "recommendation": "Implemente políticas formais de Data Protection Impact Assessment (DPIA) para sistemas que tratem dados pessoais, com envolvimento do DPO e equipa técnica desde o design inicial."
-      },
-      {
-        "optionText": "Multas elevadas, investigações legais e danos reputacionais graves.",
-        "optionType": "IMPACT",
-        "optionLevel": "HIGH",
-        "recommendation": "Implemente controlos de acesso restrito a dados pessoais, logs de acesso auditáveis e encriptação end-to-end. Mantenha registos de todas as ações de conformidade para auditoria legal posterior."
-      }
-    ]
-  },
-  {
-    "questionText": "Qual seria o impacto financeiro e operacional caso a empresa falhe uma auditoria de conformidade legal (ex: RGPD, fiscal, sectorial)?",
-    "categoryName": "Risco Legal e Regulatório",
-    "options": [
-      {
-        "optionText": "Impacto mínimo, com correções rápidas e sem sanções.",
-        "optionType": "IMPACT",
-        "optionLevel": "LOW"
-      },
-      {
-        "optionText": "Impacto moderado, com penalizações financeiras geríveis.",
-        "optionType": "IMPACT",
-        "optionLevel": "MEDIUM",
-        "recommendation": "Crie um plano de conformidade com nomeação de responsáveis por domínio legal (ex: privacidade, fiscal, sectorial) e registe as ações em andamento num sistema com alertas de não conformidade."
-      },
-      {
-        "optionText": "Impacto elevado, com paralisação de atividades ou litígios.",
-        "optionType": "IMPACT",
-        "optionLevel": "HIGH",
-        "recommendation": "Implemente uma matriz de conformidade cruzando requisitos legais com áreas técnicas e operacionais, com relatórios mensais de progresso e escalonamento automático para a direção em caso de não conformidade crítica."
-      }
-    ]
-  },
-  {
-    "questionText": "A empresa mantém registos formais e atualizados de todas as finalidades de tratamento de dados pessoais?",
-    "categoryName": "Risco Legal e Regulatório",
-    "options": [
-      {
-        "optionText": "Registos completos e atualizados, com processos validados.",
-        "optionType": "IMPACT",
-        "optionLevel": "LOW"
-      },
-      {
-        "optionText": "Registos parciais ou desatualizados.",
-        "optionType": "IMPACT",
-        "optionLevel": "MEDIUM",
-        "recommendation": "Implemente uma solução técnica integrada com as bases de dados da empresa que permita atualizar automaticamente os registos de atividades de tratamento, com supervisão do DPO."
-      },
-      {
-        "optionText": "Sem registo formal de atividades de tratamento.",
-        "optionType": "IMPACT",
-        "optionLevel": "HIGH",
-        "recommendation": "Estabeleça uma política obrigatória de registo de atividades de tratamento antes da introdução de novos sistemas ou processos que envolvam dados pessoais, incluindo categorias, base legal e transferências internacionais."
-      }
-    ]
-  },
-  {
-    "questionText": "A empresa possui uma política formal de gestão de consentimento e direitos dos titulares de dados?",
-    "categoryName": "Risco Legal e Regulatório",
-    "options": [
-      {
-        "optionText": "Política documentada, acessível e operacional.",
-        "optionType": "IMPACT",
-        "optionLevel": "LOW"
-      },
-      {
-        "optionText": "Política informal ou com aplicação inconsistente.",
-        "optionType": "IMPACT",
-        "optionLevel": "MEDIUM",
-        "recommendation": "Desenvolva e publique uma política clara sobre o exercício de direitos dos titulares, com prazos, contactos e mecanismos técnicos de apoio ao processo (ex: portal de privacidade)."
-      },
-      {
-        "optionText": "Sem política clara de gestão de consentimentos e direitos.",
-        "optionType": "IMPACT",
-        "optionLevel": "HIGH",
-        "recommendation": "Implemente uma solução técnica que permita registar e gerir o consentimento de forma granular, auditar o histórico e responder automaticamente a pedidos de acesso, retificação ou eliminação."
-      }
-    ]
-  }
+
+    {
+      "questionText": "Com que frequência a empresa realiza avaliações de conformidade com regulamentações como o RGPD ou outras aplicáveis?",
+      "categoryName": "Risco Legal e Regulatório",
+      "options": [
+        {
+          "optionText": "Avaliações formais regulares (pelo menos anuais).",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Avaliações esporádicas ou informais.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente uma auditoria anual obrigatória de conformidade legal, com reporte à administração e plano de ação associado às lacunas identificadas."
+        },
+        {
+          "optionText": "Sem avaliações de conformidade documentadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Estabeleça um processo formal de auditoria com recurso a consultoria jurídica externa para revisão da conformidade com RGPD, telecomunicações e obrigações contratuais."
+        }
+      ]
+    },
+    {
+      "questionText": "Com que frequência os contratos com fornecedores e parceiros são revistos para garantir cláusulas de conformidade legal e segurança?",
+      "categoryName": "Risco Legal e Regulatório",
+      "options": [
+        {
+          "optionText": "Revisões contratuais formais e regulares (mínimo anual).",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Revisões pontuais ou apenas na renovação contratual.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Defina um processo de revisão contratual anual focado em cláusulas de confidencialidade, notificação de incidentes e tratamento de dados pessoais."
+        },
+        {
+          "optionText": "Contratos raramente revistos quanto à conformidade legal.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implemente um repositório central de contratos com revisão jurídica obrigatória em ciclos definidos e validação de cláusulas de segurança digital."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto legal caso dados pessoais de clientes fossem expostos devido a um incidente de segurança?",
+      "categoryName": "Risco Legal e Regulatório",
+      "options": [
+        {
+          "optionText": "Impacto legal mínimo, com notificações e medidas corretivas eficazes.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Multas moderadas e exigência de medidas corretivas adicionais.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente políticas formais de Data Protection Impact Assessment (DPIA) para sistemas que tratem dados pessoais, com envolvimento do DPO e equipa técnica desde o design inicial."
+        },
+        {
+          "optionText": "Multas elevadas, investigações legais e danos reputacionais graves.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implemente controlos de acesso restrito a dados pessoais, logs de acesso auditáveis e encriptação end-to-end. Mantenha registos de todas as ações de conformidade para auditoria legal posterior."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro e operacional caso a empresa falhe uma auditoria de conformidade legal (ex: RGPD, fiscal, sectorial)?",
+      "categoryName": "Risco Legal e Regulatório",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, com correções rápidas e sem sanções.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com penalizações financeiras geríveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Crie um plano de conformidade com nomeação de responsáveis por domínio legal (ex: privacidade, fiscal, sectorial) e registe as ações em andamento num sistema com alertas de não conformidade."
+        },
+        {
+          "optionText": "Impacto elevado, com paralisação de atividades ou litígios.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implemente uma matriz de conformidade cruzando requisitos legais com áreas técnicas e operacionais, com relatórios mensais de progresso e escalonamento automático para a direção em caso de não conformidade crítica."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa mantém registos formais e atualizados de todas as finalidades de tratamento de dados pessoais?",
+      "categoryName": "Risco Legal e Regulatório",
+      "options": [
+        {
+          "optionText": "Registos completos e atualizados, com processos validados.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Registos parciais ou desatualizados.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente uma solução técnica integrada com as bases de dados da empresa que permita atualizar automaticamente os registos de atividades de tratamento, com supervisão do DPO."
+        },
+        {
+          "optionText": "Sem registo formal de atividades de tratamento.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Estabeleça uma política obrigatória de registo de atividades de tratamento antes da introdução de novos sistemas ou processos que envolvam dados pessoais, incluindo categorias, base legal e transferências internacionais."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa possui uma política formal de gestão de consentimento e direitos dos titulares de dados?",
+      "categoryName": "Risco Legal e Regulatório",
+      "options": [
+        {
+          "optionText": "Política documentada, acessível e operacional.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Política informal ou com aplicação inconsistente.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Desenvolva e publique uma política clara sobre o exercício de direitos dos titulares, com prazos, contactos e mecanismos técnicos de apoio ao processo (ex: portal de privacidade)."
+        },
+        {
+          "optionText": "Sem política clara de gestão de consentimentos e direitos.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implemente uma solução técnica que permita registar e gerir o consentimento de forma granular, auditar o histórico e responder automaticamente a pedidos de acesso, retificação ou eliminação."
+        }
+      ]
+    }
   ]
 }
