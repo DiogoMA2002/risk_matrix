@@ -1,0 +1,2214 @@
+{
+  "title": "Avaliação de Riscos de Segurança",
+  "questions": [
+    {
+      "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
+      "categoryName": "Risco de Acesso e Autenticação",
+      "options": [
+        {
+          "optionText": "Acesso limitado a dados não sensíveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Comprometimento de contas internas.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Revogue imediatamente as credenciais afetadas, exija mudança de senha com MFA e restrinja o acesso dessas contas até conclusão da investigação."
+        },
+        {
+          "optionText": "Exposição total de sistemas críticos.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Inicie modo de contenção de crise, force reset de todas as senhas privilegiadas, ative autenticação forte para todos os utilizadores e execute varredura de indicadores de compromisso em sistemas críticos."
+        }
+      ]
+    },
+    {
+      "questionText": "Se um atacante conseguir comprometer credenciais de administrador, qual seria o impacto?",
+      "categoryName": "Risco de Acesso e Autenticação",
+      "options": [
+        {
+          "optionText": "Impacto restrito a um pequeno conjunto de permissões.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Acesso significativo a sistemas internos.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implemente contas de administrador com privilégios mínimos necessários (principle of least privilege) e registre todas as ações em cofre de sessão para auditoria."
+        },
+        {
+          "optionText": "Controlo total sobre sistemas e dados.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Habilite break-glass accounts protegidas por hardware token, desconecte as máquinas afetadas da rede e execute análise forense de logs para determinar alcance do compromisso."
+        }
+      ]
+    },
+    {
+      "questionText": "Com que frequência os utilizadores utilizam senhas fracas ou reutilizadas?",
+      "categoryName": "Risco de Acesso e Autenticação",
+      "options": [
+        {
+          "optionText": "Casos isolados sem impacto significativo.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Casos isolados com impacto significativo.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Active política de verificação contra listas de senhas comprometidas e force rotação trimestral para contas que falhem a verificação."
+        },
+        {
+          "optionText": "A prática é comum e representa um risco elevado.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Exija autenticação multifator para todos, implemente Single Sign-On com requisitos de complexidade elevados e bloqueie senhas reutilizadas via serviço de verificação contínua."
+        }
+      ]
+    },
+    {
+      "questionText": "A organização monitoriza tentativas de login suspeitas e falhas repetidas?",
+      "categoryName": "Risco de Acesso e Autenticação",
+      "options": [
+        {
+          "optionText": "Monitorização contínua com alertas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Monitorização parcial e análise manual.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Integre logs de autenticação num SIEM e defina alertas automáticos para cinco falhas consecutivas a partir do mesmo endereço IP em 10 min."
+        },
+        {
+          "optionText": "Nenhuma monitorização ativa implementada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar sistema de deteção de intrusão focado em login, habilitar bloqueio temporário após múltiplas falhas e gerar relatórios diários de tentativas anómalas."
+        }
+      ]
+    },
+    {
+      "questionText": "A autenticação multifator (MFA) está ativada para todas as contas críticas?",
+      "categoryName": "Risco de Acesso e Autenticação",
+      "options": [
+        {
+          "optionText": "MFA obrigatório para todas as contas.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "MFA ativado apenas para alguns utilizadores.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Expanda o MFA para grupos de alto risco primeiro (administradores, finanças) e defina prazo de 30 dias para cobertura total."
+        },
+        {
+          "optionText": "Nenhum uso de MFA implementado.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Adote MFA de imediato para todos os utilizadores, começando por aplicações críticas; bloqueie acesso externo até a ativação estar concluída."
+        }
+      ]
+    },
+    {
+      "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de senhas)?",
+      "categoryName": "Risco de Acesso e Autenticação",
+      "options": [
+        {
+          "optionText": "Armazenamento seguro com criptografia forte.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Proteção parcial das credenciais.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Atualize o algoritmo de hashing para Argon2id ou bcrypt com sal único e aplique política de rotação de hash legacy."
+        },
+        {
+          "optionText": "Credenciais armazenadas sem proteção adequada.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Migre credenciais para cofre de senhas com HSM, substitua armazenamento em texto claro e force reset de todas as senhas após migração."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto operacional caso ocorra um ataque bem-sucedido de phishing direcionado a funcionários?",
+      "categoryName": "Risco de Comunicação e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, incidente rapidamente contido.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, comprometimento limitado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Forçar troca imediata de senha e revogação de sessões da conta afetada, além de varrer e-mails do mesmo remetente com script de remoção server-side."
+        },
+        {
+          "optionText": "Impacto grave, grande comprometimento operacional.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Ativar playbook IR: isolar máquinas comprometidas, bloquear domínio malicioso em gateway, iniciar contenção de movimento lateral via EDR e notificar C-ISO em <30 min."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto financeiro e reputacional caso dados sensíveis sejam comprometidos através de engenharia social?",
+      "categoryName": "Risco de Comunicação e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Impacto financeiro e reputacional reduzido.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto financeiro e reputacional moderado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Aplicar etiquetagem automática de confidencialidade nos anexos enviados externamente e exigir criptografia TLS 1.3 mTLS em transferências de ficheiros sensíveis."
+        },
+        {
+          "optionText": "Impacto elevado, graves danos financeiros e de reputação.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar CASB com controle de exfiltração, tokenização de dados pessoais e contrato de resposta a incidentes com firma de PR para divulgação controlada."
+        }
+      ]
+    },
+    {
+      "questionText": "Os colaboradores recebem formação periódica sobre como identificar e reagir a tentativas de phishing e engenharia social?",
+      "categoryName": "Risco de Comunicação e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Formação regular e eficaz.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Formação ocasional, mas insuficiente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Introduzir micro-learnings mensais de 5 min com quiz automático; colaboradores abaixo de 80 % devem repetir o módulo."
+        },
+        {
+          "optionText": "Sem formação ou formação raramente realizada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Lançar programa obrigatório de segurança com certificação interna e acompanhamento de desempenho por gestor de equipa."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa realiza testes frequentes de simulação de phishing e engenharia social para medir a conscientização?",
+      "categoryName": "Risco de Comunicação e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Testes frequentes e estruturados.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Testes esporádicos ou pouco estruturados.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Programar campanhas trimestrais variando cenários (link, anexo, QR) e enviar relatório de taxa de clique ao comité de risco."
+        },
+        {
+          "optionText": "Testes raramente realizados ou inexistentes.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Adquirir plataforma de phishing-as-a-service e estabelecer KPI de redução anual de cliques em 50 %."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa possui mecanismos técnicos eficazes (anti-phishing, filtros de e-mail, etc.) para mitigar ataques sociais?",
+      "categoryName": "Risco de Comunicação e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Mecanismos eficazes implementados e atualizados.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguns mecanismos implementados, mas limitados.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Adicionar verificação de URL em tempo real e sandboxing de anexos com machine-learning no Secure Email Gateway."
+        },
+        {
+          "optionText": "Sem mecanismos técnicos ou insuficientes.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar solução de proteção de e-mail cloud-native com detecção de BEC e análise de linguagem natural antes de entrega ao utilizador."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um canal claro e rápido para reportar incidentes ou tentativas suspeitas de ataques sociais?",
+      "categoryName": "Risco de Comunicação e Engenharia Social",
+      "options": [
+        {
+          "optionText": "Canal claro, eficaz e amplamente conhecido.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Canal disponível, mas pouco conhecido ou lento.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Incluir botão “Reportar Phishing” no cliente de e-mail e divulgar durante reuniões de equipa com meta de resposta <1 h."
+        },
+        {
+          "optionText": "Sem canal formal definido ou amplamente desconhecido.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar hotline 24/7 e endereço dedicado abuse@empresa.com com SLA de triagem de 15 min, divulgado em intranet e onboarding."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
+      "options": [
+        {
+          "optionText": "Pouco impacto na operação diária.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Operações parcialmente afetadas, atraso moderado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Configure failover activo-passivo para a plataforma, teste restauração mensalmente e defina RTO máximo de 4 h em runbook de continuidade."
+        },
+        {
+          "optionText": "Paragem total ou significativa das operações",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Acione o plano de DR: fazer failover para região secundária, activar comunicação de crise com clientes e manter painel de status público até resolução completa."
+        }
+      ]
+    },
+    {
+      "questionText": "Com que frequência são feitas auditorias às plataformas internas para identificar vulnerabilidades ou falhas de segurança?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
+      "options": [
+        {
+          "optionText": "Auditorias regulares (mínimo trimestral).",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Auditorias anuais ou esporádicas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Agendar varreduras de vulnerabilidade trimestrais e teste de penetração anual conduzido por equipa externa certificada."
+        },
+        {
+          "optionText": "Não são realizadas auditorias ou são muito raras.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Contratar de imediato um Red Team externo, implementar ferramenta de varredura contínua e enviar relatórios diários ao SOC."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional caso um sistema crítico esteja mal configurado e seja explorado por atacantes?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, incidente facilmente contido.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, exploração parcial dos sistemas.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Executar playbook de hardening CIS via Ansible, corrigir permissões incorretas e reiniciar o serviço numa janela de manutenção controlada."
+        },
+        {
+          "optionText": "Impacto grave, comprometimento total dos sistemas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Isolar o host comprometido da rede, restaurar a configuração a partir do backup baseline aprovado e ativar monitorização contínua de deriva de configuração em hosts semelhantes."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes de sua implantação?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
+      "options": [
+        {
+          "optionText": "Procedimentos formais e rigorosos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Procedimentos informais ou parcialmente eficazes.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Publicar checklist de hardening obrigatório e exigir aprovação de segurança antes do 'go-live' em change-management."
+        },
+        {
+          "optionText": "Procedimentos inexistentes ou inadequados.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implantar gate de CI que bloqueie promoção para produção se o scan de configuração falhar e treinar engenheiros em IaC seguro."
+        }
+      ]
+    },
+    {
+      "questionText": "As plataformas críticas são protegidas por mecanismos avançados de segurança, como firewalls, sistemas IDS/IPS ou proteção anti-malware?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
+      "options": [
+        {
+          "optionText": "Mecanismos completos e atualizados.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguns mecanismos implementados, porém limitados.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Actualizar firewall para NGFW com inspeção TLS e instalar IDS/IPS inline com assinatura em tempo real."
+        },
+        {
+          "optionText": "Sem mecanismos avançados ou insuficientes.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar microsegmentação zero-trust, EDR em hosts e serviço MDR 24/7 para resposta rápida a intrusões."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa utiliza ferramentas automatizadas para identificação rápida de configurações inseguras ou inadequadas?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
+      "options": [
+        {
+          "optionText": "Uso regular e automatizado.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Uso ocasional ou parcial das ferramentas.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Expandir cobertura do scanner (por exemplo, AWS Config ou Azure Policy) a 100 % dos recursos e configurar alertas no Slack de TI."
+        },
+        {
+          "optionText": "Sem ferramentas ou uso inadequado.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Adquirir solução CSPM com correção automática em modo ‘enforce’ para qualquer desvio crítico detectado."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto para a empresa caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
+      "options": [
+        {
+          "optionText": "Dados facilmente recuperáveis, baixo impacto operacional.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Dados parcialmente recuperáveis, impacto moderado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Introduzir backups incrementais a cada 4 h com verificação de checksum e executar testes de restauração mensais para as bases de dados críticas."
+        },
+        {
+          "optionText": "Perda irreversível de dados críticos, impacto operacional grave.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Replicar dados críticos em storage imutável noutra região, garantir cópia offline semanal (air-gap) e definir RPO/RTO <1 h em plano de recuperação."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro caso ocorresse uma exposição indevida de dados confidenciais armazenados pela empresa?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
+      "options": [
+        {
+          "optionText": "Impacto financeiro mínimo, sem penalizações significativas.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto financeiro moderado, multas ou custos controláveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Aplicar classificação automática de dados e políticas DLP que bloqueiem uploads não autorizados para a cloud pública."
+        },
+        {
+          "optionText": "Impacto financeiro elevado, multas graves e custos legais significativos.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Encriptar dados sensíveis com chaves geridas por HSM, ativar mascaramento dinâmico e executar varreduras de conformidade RGPD trimestrais."
+        }
+      ]
+    },
+    {
+      "questionText": "Com que frequência são realizados backups dos dados críticos armazenados pela empresa?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
+      "options": [
+        {
+          "optionText": "Backups automáticos e diários.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Backups semanais ou esporádicos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Migrar para política de snapshot diário automatizado com retenção de 30 dias e alertas de falha de tarefa de backup."
+        },
+        {
+          "optionText": "Backups raros, inexistentes ou não testados.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar solução de backup contínuo (CDP) com verificação automática de integridade e relatório de testes de restauração quinzenal."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem mecanismos robustos de criptografia aplicados ao armazenamento de dados sensíveis?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
+      "options": [
+        {
+          "optionText": "Criptografia forte implementada e testada.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Criptografia básica implementada parcialmente.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Migrar para criptografia AES-256 em repouso com rotação automática de chaves e logs de acesso ao cofre KMS."
+        },
+        {
+          "optionText": "Dados sensíveis sem criptografia ou com criptografia fraca.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Interromper novos carregamentos de dados até concluir criptografia total, aplicar tokenização de campos confidenciais e validar compliance através de auditoria externa."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa possui mecanismos eficazes de controlo de acesso e monitorização em tempo real dos dados sensíveis?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
+      "options": [
+        {
+          "optionText": "controlo rigoroso e monitorização contínua.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "controlos parciais ou monitorização limitada.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implementar CASB com classificação automática de ficheiros e alertas de exfiltração via e-mail ou SaaS."
+        },
+        {
+          "optionText": "Sem controlos eficazes ou monitorização adequada.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Adotar modelo Zero-Trust NAC, exigir MFA para qualquer acesso privilegiado e bloquear transferências de ficheiros não-autorizadas até integração total."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe uma política clara para gestão do ciclo de vida e descarte seguro dos dados armazenados?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
+      "options": [
+        {
+          "optionText": "Política formal documentada e implementada.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Política informal ou parcialmente implementada.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Consolidar num único documento a matriz de retenção e a tabela de classificação de dados, definir prazos automáticos de expurgo e aprovar workflow de descarte com dupla validação."
+        },
+        {
+          "optionText": "Sem política definida ou inexistente.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Elaborar e aprovar em <30 dias uma política de ciclo de vida alinhada ao NIST 800-88, incluindo destruição certificada de suportes físicos, logging de descarte e auditoria semestral."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional caso a rede interna ou serviços críticos sofram uma interrupção significativa?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Impacto reduzido, sistemas rapidamente recuperáveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, serviços parcialmente afetados.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Instalar comutadores core redundantes e configurar rate-limiting para suportar picos inesperados, garantindo RTO < 4 h."
+        },
+        {
+          "optionText": "Impacto elevado, interrupção prolongada dos serviços essenciais.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Ativar proteção always-on contra DDoS, provisionar SD-WAN com failover automático e garantir continuidade via runbook dedicado."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto de uma invasão à rede interna com exfiltração de dados ou interrupção por ataque DoS?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Dados não críticos expostos, impacto operacional mínimo.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Exposição de alguns dados críticos ou serviços temporariamente inacessíveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Habilitar firewalls internos, segmentação por VLAN, e configurar autoscaling em endpoints críticos."
+        },
+        {
+          "optionText": "Exposição generalizada de dados sensíveis ou paralisação das operações.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Isolar VLANs afetadas, ativar mitigação de DoS com provedor externo e notificar reguladores em até 72 h."
+        }
+      ]
+    },
+    {
+      "questionText": "A infraestrutura de rede da empresa está protegida contra ameaças e ataques DoS?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Proteção robusta e atualizada, com firewalls e filtros anti-DDoS.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Proteção parcial ou limitada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Atualizar firmware dos firewalls e implementar mitigação volumétrica com apoio do ISP."
+        },
+        {
+          "optionText": "Sem proteção adequada ou inexistente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Fechar contrato com scrubbing center e aplicar BGP Flowspec para descartar tráfego malicioso."
+        }
+      ]
+    },
+    {
+      "questionText": "A rede interna é monitorizada em tempo real e segmentada para mitigar a propagação de ameaças?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Monitorização contínua e segmentação eficaz aplicadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Monitorização e segmentação parciais.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Exportar NetFlow para SIEM, aplicar ACLs inter-VLAN e criar alertas de tráfego anómalo."
+        },
+        {
+          "optionText": "Sem segmentação eficaz ou monitorização ativa.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar NDR com deteção baseada em IA e microsegmentação com Zero Trust."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um plano formal para resposta e mitigação rápida a incidentes de rede e ataques DoS?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Plano documentado e testado regularmente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Plano informal ou raramente testado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Executar exercícios tabletop semestrais e atualizar runbooks de resposta automática."
+        },
+        {
+          "optionText": "Ausência de plano formal.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Desenvolver DRP específico para rede e ataques DoS com exercícios obrigatórios trimestrais."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem soluções técnicas implementadas para assegurar a resiliência e continuidade da rede?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Soluções robustas e totalmente implementadas (balanceamento, redundância, failover).",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Soluções parcialmente implementadas ou limitadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Adotar balanceamento de carga L7, Anycast DNS e health-checks automatizados."
+        },
+        {
+          "optionText": "Sem soluções técnicas adequadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Replicar serviços em várias regiões cloud e ativar failover automático com DNS de baixa latência."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional caso ocorra indisponibilidade prolongada de um provedor externo crítico (ex.: cloud, fornecedor de serviços)?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, rapidamente mitigado.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, solução parcial disponível.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Replicar workloads críticos em segunda região do mesmo provedor e executar teste de failover semestral com RTO máximo de 4 h."
+        },
+        {
+          "optionText": "Impacto grave, paralisação completa de operações críticas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Habilitar arquitetura multi-cloud active-active, com traffic manager que execute cut-over automático para provedor secundário em ≤30 min."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa avalia regularmente os níveis de segurança e continuidade operacional dos fornecedores críticos?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
+      "options": [
+        {
+          "optionText": "Avaliações frequentes e estruturadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Avaliações ocasionais ou parciais.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Programar auditoria anual baseada em ISO 27001/SOC 2 e revisão de testes de continuidade (DR) com amostra dos relatórios de failover."
+        },
+        {
+          "optionText": "Sem avaliações regulares ou nunca realizadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Instituir questionário SIG-Lite trimestral obrigatório; bloquear novos pedidos se o fornecedor não apresentar evidências de segurança ou planos de continuidade atualizados."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro se dados confidenciais armazenados em infraestrutura externa fossem comprometidos?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
+      "options": [
+        {
+          "optionText": "Impacto financeiro reduzido.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto financeiro moderado, custos adicionais gerenciáveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Negociar cobertura de seguro cibernético, exigir armazenamento criptografado com chaves HSM dedicadas e auditoria SOC 2 anual."
+        },
+        {
+          "optionText": "Impacto financeiro elevado, custos e penalidades significativas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Adotar confidential computing, tokenizar dados sensíveis e implementar plano de resposta a violação que inclua comunicação a reguladores em <72 h."
+        }
+      ]
+    },
+    {
+      "questionText": "Os fornecedores externos possuem certificações reconhecidas de segurança e continuidade operacional?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
+      "options": [
+        {
+          "optionText": "Todos possuem certificações reconhecidas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguns possuem certificações básicas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Exigir que fornecedores obtenham ISO 27017 e CSA STAR em até 90 dias e apresentar plano de melhoria de maturidade."
+        },
+        {
+          "optionText": "Sem certificações ou não verificadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Iniciar processo de substituição progressiva por provedores com ISO 27001/Tier III comprovado e mitigar dependência em 6 meses."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem planos alternativos (backup) em caso de falha ou indisponibilidade de serviços externos essenciais?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
+      "options": [
+        {
+          "optionText": "Plano alternativo claro e testado regularmente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Plano alternativo parcialmente definido.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Documentar runbook de migração para provedor secundário, executar exercício de mesa a cada 6 meses e alinhar KPIs de recuperação."
+        },
+        {
+          "optionText": "Sem plano alternativo definido.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar backup off-site diário e criar instâncias em cloud secundária prontas para ativação em ≤24 h."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa possui mecanismos claros de monitorização contínua e alerta sobre incidentes em infraestruturas externas?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
+      "options": [
+        {
+          "optionText": "Monitorização ativa e alertas automatizados.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Monitorização básica ou alertas limitados.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Integrar API de status do provedor no SIEM e criar alertas de latência >200 ms ou erros 5xx acima da linha de base em 10 min."
+        },
+        {
+          "optionText": "Sem monitorização ou alertas eficazes.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Adotar ferramenta NOC 24/7 com sondas externas independentes, acionar escalonamento automático e dashboard público de disponibilidade."
+        }
+      ]
+    },
+    {
+      "questionText": "Com que frequência são aplicados patches de segurança aos sistemas críticos da organização?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Patches aplicados regularmente (ex: mensalmente) e validados.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Patches aplicados de forma irregular ou sem validação.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implementar política de patching mensal com teste em ambiente de staging antes da aplicação em produção."
+        },
+        {
+          "optionText": "Patches raramente aplicados ou inexistentes.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Mapear sistemas desatualizados, definir prioridade de atualização por criticidade e aplicar correções em até 15 dias úteis."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto potencial de um sistema crítico não receber atualizações de segurança em tempo útil?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, sistema isolado ou protegido por outras camadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, sistema com dados sensíveis mas com mitigação parcial.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever arquitetura para segmentar acesso e ativar monitorização contínua enquanto a atualização não for possível."
+        },
+        {
+          "optionText": "Impacto severo, sistema exposto e essencial à operação.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Aplicar mitigação temporária (ex: firewall, WAF), agendar janelas emergenciais e notificar equipas responsáveis."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um inventário atualizado de versões e patches aplicados aos sistemas da organização?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Inventário automatizado e atualizado em tempo real.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Inventário parcial ou atualizado manualmente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Integrar solução de ITAM com scanner de vulnerabilidades e agendamento de auditorias mensais."
+        },
+        {
+          "optionText": "Sem inventário ou desatualizado.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Levantar inventário completo com ferramentas como GLPI ou Lansweeper e rever a cada 30 dias."
+        }
+      ]
+    },
+    {
+      "questionText": "Os sistemas legados recebem suporte adequado para atualizações de segurança?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Todos os sistemas legados são mantidos com suporte ativo ou mitigação.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguns sistemas legados carecem de suporte ou atualizações frequentes.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Isolar sistemas legados em zonas de acesso controlado e limitar exposição até migração definitiva."
+        },
+        {
+          "optionText": "Vários sistemas legados operam sem qualquer suporte.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Descontinuar sistemas obsoletos ou migrar urgentemente para versões suportadas."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um processo formal e documentado para gestão de atualizações e patches?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Processo definido, revisto e aplicado regularmente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Processo informal ou não aplicado de forma consistente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Documentar processo de gestão de patches alinhado ao ITIL e comunicar às equipas operacionais."
+        },
+        {
+          "optionText": "Sem processo formal para gestão de atualizações.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Elaborar política de updates em até 30 dias, incluir níveis de criticidade e tempos máximos de aplicação."
+        }
+      ]
+    },
+    {
+      "questionText": "Os updates são testados antes da aplicação em ambientes produtivos?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Todos os updates são testados em ambiente de staging.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguns updates são aplicados sem testes prévios.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Criar ambiente de pré-produção replicado e estabelecer critérios obrigatórios de validação antes do rollout."
+        },
+        {
+          "optionText": "Nenhum update é testado previamente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Instituir ciclo de DevTest integrado ao CI/CD e criar rollback automatizado em caso de falha pós-update."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional e competitivo caso partes críticas do source code sejam expostas ou obtidas por concorrentes ou atacantes?",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "options": [
+        {
+          "optionText": "Impacto limitado, informações não críticas expostas.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, exposição parcial de código sensível.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Executar rotação imediata de segredos no repositório, ativar varredura automática de vazamentos (GitGuardian / Gitleaks) e refatorar rapidamente os módulos expostos para remover lógica competitiva."
+        },
+        {
+          "optionText": "Impacto elevado, exposição ampla de propriedade intelectual e vulnerabilidades críticas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Disparar processo de takedown DMCA, revogar todo o acesso privilegiado ao repositório, fracionar o código em micro-serviços com segredos de runtime no servidor e acionar a equipa jurídica para proteção de patente."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro e reputacional decorrente da exploração bem-sucedida de vulnerabilidades identificadas através de engenharia reversa?",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "options": [
+        {
+          "optionText": "Impacto reduzido, fácil mitigação e danos limitados.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, custos adicionais gerenciáveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Emitir hot-patch fora de banda em < 24 h, acionar mitigadores de exploit (ASLR/DEP) no build e lançar bug-bounty privado para deteção de falhas semelhantes."
+        },
+        {
+          "optionText": "Impacto severo, altos custos financeiros e danos reputacionais significativos.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Iniciar plano de comunicação de crise, forçar atualização de clientes vulneráveis via mecanismo ‘auto-update’, activar cobertura de ciber-seguro e anunciar roadmap público de segurança para restaurar confiança."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa utiliza mecanismos técnicos para dificultar ou impedir a engenharia reversa do código-fonte e software sensível (ex: ofuscação)?",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "options": [
+        {
+          "optionText": "Proteção robusta, amplamente implementada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Proteção parcial, algumas áreas desprotegidas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Introduzir control-flow flattening e encryptar recursos em build mobile/desktop, liberando chaves de descriptografia apenas em memória no runtime."
+        },
+        {
+          "optionText": "Sem proteção ou proteção inadequada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Adotar packer comercial (e.g., Themida, DexGuard) com verificação de integridade do binário e exigir attestation por hardware root-of-trust antes da execução."
+        }
+      ]
+    },
+    {
+      "questionText": "O código-fonte crítico ou sensível é armazenado e protegido por controlos rigorosos de acesso e monitorização ativa?",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "options": [
+        {
+          "optionText": "controlos rigorosos e monitorização constante.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "controlos básicos ou parcialmente eficazes.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Habilitar Just-In-Time access no GitHub/GitLab, com expiração automática e aprovação dupla para pull requests em branches protegidas."
+        },
+        {
+          "optionText": "Sem controlos ou monitorização insuficiente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Migrar repositório para instância autogerida atrás de VPN, gravar sessões SSH e bloquear tokens pessoais não rotativos."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe uma política formal para a proteção eficaz do código-fonte e propriedade intelectual, incluindo medidas contra engenharia reversa?",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "options": [
+        {
+          "optionText": "Política clara, documentada e amplamente aplicada.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Política parcial ou informalmente aplicada.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Adicionar ao SDLC um anexo de gestão de IP que cubra distribuição de binários, storing de símbolos de debug e retenção de logs de build, com aprovação do board até ao próximo trimestre."
+        },
+        {
+          "optionText": "Sem política definida ou raramente aplicada.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar charter de proteção intelectual, designar data owner por produto, exigir NDA e escrow de código para todos os fornecedores externos."
+        }
+      ]
+    },
+    {
+      "questionText": "São realizados testes regulares e auditorias de segurança para detetar riscos relacionados à engenharia reversa ou exposição do código-fonte?",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "options": [
+        {
+          "optionText": "Auditorias regulares e eficazes.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Auditorias ocasionais ou parciais.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Agendar varreduras SAST/DAST trimestrais com SLA de correção de 15 dias e armazenar resultados versionados no Jira Security."
+        },
+        {
+          "optionText": "Sem auditorias regulares ou inexistentes.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Contratar red team anual focado em engenharia reversa de binários e publicar relatório executivo para a administração com plano de remediação datado."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional caso ocorra abuso de privilégios internos por um colaborador autorizado?",
+      "categoryName": "Risco Interno e de Auditoria",
+      "options": [
+        {
+          "optionText": "Impacto reduzido, identificado e contido rapidamente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com falhas controláveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Aplicar acessos temporários aprovados com registo da atividade, e limitar o tempo de privilégio ao necessário."
+        },
+        {
+          "optionText": "Impacto elevado, com danos sérios nos sistemas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Suspender imediatamente as contas envolvidas, rever os acessos concedidos e centralizar todas as sessões privilegiadas num sistema com registo obrigatório."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro e reputacional se dados fossem manipulados ou vazados por uso indevido de privilégios internos?",
+      "categoryName": "Risco Interno e de Auditoria",
+      "options": [
+        {
+          "optionText": "Impacto mínimo e resolvido rapidamente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com gestão interna de crise.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Controlar a exportação de dados por utilizadores privilegiados e exigir validação prévia para grandes transferências."
+        },
+        {
+          "optionText": "Impacto grave, com perdas financeiras e reputacionais.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Exigir dupla aprovação para alterações a dados críticos e manter registo imutável de todas as ações sensíveis."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa monitoriza o uso de privilégios internos para detetar atividades suspeitas?",
+      "categoryName": "Risco Interno e de Auditoria",
+      "options": [
+        {
+          "optionText": "Sim, com monitorização contínua e alertas automáticos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Monitorização existe, mas é limitada ou ocasional.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever registos de acessos privilegiados semanalmente e gerar alertas básicos em caso de comportamentos fora do normal."
+        },
+        {
+          "optionText": "Não existe qualquer tipo de controlo ou análise.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Ativar alertas para acessos fora do horário e transferências anormais de dados por contas privilegiadas."
+        }
+      ]
+    },
+    {
+      "questionText": "A atribuição de privilégios é feita com critérios claros e revisão periódica?",
+      "categoryName": "Risco Interno e de Auditoria",
+      "options": [
+        {
+          "optionText": "Sim, com validação e revisão regular dos acessos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Os critérios existem, mas não são aplicados de forma consistente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever acessos privilegiados trimestralmente e exigir aprovação dupla para novas permissões."
+        },
+        {
+          "optionText": "Não existem critérios nem revisão de acessos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Limitar acessos administrativos a tempo definido e eliminar permissões que não estejam documentadas."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto se os registos de atividades (logs) forem apagados ou alterados para ocultar ações maliciosas?",
+      "categoryName": "Risco Interno e de Auditoria",
+      "options": [
+        {
+          "optionText": "Impacto reduzido, com capacidade de investigação mantida.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com investigação dificultada.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Guardar cópias dos logs em locais protegidos e cruzar dados com backups de eventos para verificar alterações."
+        },
+        {
+          "optionText": "Impacto elevado, sem possibilidade de rastrear a origem do incidente.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Isolar os sistemas afetados, recuperar logs de segurança a partir de backups protegidos e solicitar apoio externo se necessário."
+        }
+      ]
+    },
+    {
+      "questionText": "Os registos críticos da empresa estão protegidos contra alteração ou eliminação indevida?",
+      "categoryName": "Risco Interno e de Auditoria",
+      "options": [
+        {
+          "optionText": "Sim, com proteção contra alterações não autorizadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguma proteção existe, mas é limitada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Aplicar permissões restritas e enviar cópias dos logs críticos para um local seguro fora da rede de produção."
+        },
+        {
+          "optionText": "Não existe proteção eficaz dos registos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Redirecionar logs para armazenamento externo com proteção contra escrita e eliminar acesso direto por utilizadores não autorizados."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional caso ocorra dano físico em equipamentos críticos, como servidores ou dispositivos de rede?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, com substituição rápida possível.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com tempo de recuperação considerável.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Manter algumas peças sobressalentes (como fontes ou discos) e um guia rápido de reposição para acelerar a recuperação."
+        },
+        {
+          "optionText": "Impacto elevado, com paralisação prolongada da empresa.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Avaliar ter um sistema de reserva ou backups fora do local e testar procedimentos de recuperação física pelo menos uma vez por ano."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe segurança física adequada para proteger os equipamentos críticos da empresa?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Sim, com controlo de acessos e vigilância eficaz.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Segurança básica ou aplicada apenas parcialmente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Instalar fechaduras com controlo de acesso e, se possível, câmara de vigilância nas áreas sensíveis."
+        },
+        {
+          "optionText": "Não existe controlo de acesso ou vigilância adequada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Garantir que os servidores estão numa sala fechada e acessível apenas a pessoas autorizadas."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro para substituir equipamentos críticos danificados ou roubados?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Custo baixo, facilmente suportado pelo orçamento.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Custo moderado, com impacto no orçamento mensal.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Negociar condições com fornecedores para reposição rápida e prever algum fundo para imprevistos."
+        },
+        {
+          "optionText": "Custo elevado, com grande impacto no orçamento.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Ter um seguro empresarial que cubra danos e roubos e prever uma reserva anual para contingências."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional se uma tecnologia essencial falhar inesperadamente?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Impacto limitado, com soluções de substituição rápidas.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com necessidade de intervenção técnica.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Testar alternativas (ex.: backups automáticos ou acesso remoto) e garantir que os procedimentos estão documentados."
+        },
+        {
+          "optionText": "Impacto elevado, com interrupção prolongada.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar redundância (por exemplo, dois equipamentos em paralelo) e testar o funcionamento regularmente."
+        }
+      ]
+    },
+    {
+      "questionText": "As tecnologias usadas são avaliadas quanto a riscos e compatibilidade?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Sim, com avaliações periódicas de segurança e atualização.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Avaliações pontuais ou informais.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Verificar semestralmente se há atualizações críticas e validar se os sistemas ainda são compatíveis com os restantes."
+        },
+        {
+          "optionText": "Não são feitas avaliações de segurança ou compatibilidade.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Fazer checklist simples dos sistemas principais e atualizar componentes com falhas conhecidas de segurança."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe uma equipa ou responsável para responder rapidamente a falhas técnicas críticas?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Sim, com formação e disponibilidade imediata.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Há alguém disponível, mas com limitações de tempo ou conhecimento.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Identificar um técnico de referência e garantir que recebe formação básica e tem acesso à documentação dos sistemas."
+        },
+        {
+          "optionText": "Não existe responsável técnico claro ou com competências para reagir rapidamente.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Estabelecer contacto com técnico externo de confiança e manter plano de ação em caso de falha crítica."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional caso uma API crítica seja explorada por um atacante?",
+      "categoryName": "Risco de Segurança em APIs e Integrações",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, incidente resolvido rapidamente sem danos relevantes.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, mas controlado com medidas simples.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Limitar chamadas por IP (ex.: 100 por minuto), desativar métodos não utilizados e trocar as chaves de acesso rapidamente."
+        },
+        {
+          "optionText": "Impacto grave, com falha generalizada dos serviços ou fuga de dados.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Desativar temporariamente a API afetada, aplicar correção urgente e revogar credenciais dos utilizadores afetados."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro e reputacional caso dados sensíveis fossem expostos devido a falhas numa API?",
+      "categoryName": "Risco de Segurança em APIs e Integrações",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, sem exposição relevante de dados.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com custos legais e reputacionais controláveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Evitar exposição de dados sensíveis através de mascaramento nas respostas e exigir ligações seguras (ex.: TLS mútuo)."
+        },
+        {
+          "optionText": "Impacto elevado, com sanções e danos à imagem da empresa.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Notificar a CNPD em até 72h, acionar plano de comunicação e armazenar os dados críticos em sistemas encriptados."
+        }
+      ]
+    },
+    {
+      "questionText": "As APIs são testadas regularmente quanto a falhas de segurança?",
+      "categoryName": "Risco de Segurança em APIs e Integrações",
+      "options": [
+        {
+          "optionText": "Sim, os testes são frequentes e bem documentados.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Testes esporádicos ou pouco profundos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Realizar testes semestrais com foco nos principais riscos do OWASP API Top 10 e usar scanners automáticos gratuitos."
+        },
+        {
+          "optionText": "As APIs não são testadas regularmente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Incluir verificação de segurança no processo de desenvolvimento e bloquear versões não testadas antes de ir para produção."
+        }
+      ]
+    },
+    {
+      "questionText": "As integrações externas são monitorizadas para detetar comportamentos anómalos?",
+      "categoryName": "Risco de Segurança em APIs e Integrações",
+      "options": [
+        {
+          "optionText": "Sim, com monitorização contínua e alertas configurados.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Monitorização parcial ou pouco eficaz.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Criar alertas simples para detetar picos de tráfego e encaminhar logs para o sistema de monitorização ou SIEM."
+        },
+        {
+          "optionText": "Não existe qualquer tipo de monitorização.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Usar API Gateway com firewall de aplicações (WAF) para bloquear automaticamente chamadas suspeitas."
+        }
+      ]
+    },
+    {
+      "questionText": "As APIs críticas usam autenticação e controlo de acesso adequados?",
+      "categoryName": "Risco de Segurança em APIs e Integrações",
+      "options": [
+        {
+          "optionText": "Sim, com mecanismos modernos e bem configurados.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Utilizam autenticação básica ou pouco segura.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implementar OAuth 2.0 com controlo de permissões (scopes) e definir validade curta para os tokens."
+        },
+        {
+          "optionText": "Sem autenticação adequada ou com falhas críticas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Bloquear chamadas anónimas, exigir autenticação forte e ativar a revogação de tokens comprometidos."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem políticas formais sobre gestão e segurança de APIs?",
+      "categoryName": "Risco de Segurança em APIs e Integrações",
+      "options": [
+        {
+          "optionText": "Sim, com regras claras para segurança e documentação.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Existem boas práticas informais, mas não padronizadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Documentar as regras de desenvolvimento seguro e exigir aprovação dupla para alterações nas APIs."
+        },
+        {
+          "optionText": "Sem políticas definidas ou com aplicação inconsistente.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Definir regras básicas (ex.: autenticação, controlo de versões) e recusar alterações que não as cumpram."
+        }
+      ]
+    },
+    {
+      "questionText": "A organização está em conformidade com as principais leis e normas de proteção de dados (ex.: RGPD)?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "options": [
+        {
+          "optionText": "Sim, com conformidade comprovada por auditoria ou parecer externo.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Está parcialmente em conformidade, com algumas lacunas por resolver.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Realizar uma autoavaliação de conformidade com apoio de um consultor ou checklist da CNPD e definir plano de ação."
+        },
+        {
+          "optionText": "Não está em conformidade nem realizou avaliação recente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Solicitar apoio externo para avaliação do cumprimento do RGPD e nomear um responsável interno (mesmo que não DPO)."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro e reputacional se a empresa fosse sancionada por não conformidade?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "options": [
+        {
+          "optionText": "Impacto reduzido e facilmente controlável.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com possíveis danos à imagem local.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever contratos e políticas internas com apoio de advogado e preparar modelo de comunicação preventiva."
+        },
+        {
+          "optionText": "Impacto grave, incluindo multas e danos de reputação significativos.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Reservar orçamento para situações emergentes e definir plano de resposta com apoio jurídico e de comunicação."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um processo definido para revisão e atualização das políticas de privacidade e conformidade?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "options": [
+        {
+          "optionText": "Sim, com revisão documentada e regular.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Há revisão ocasional ou informal das políticas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Definir um calendário anual de revisão e aprovar alterações com a direção e apoio legal, se necessário."
+        },
+        {
+          "optionText": "Não existe qualquer processo de revisão.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Atribuir a um responsável interno a tarefa de atualizar e validar anualmente as políticas com o apoio de recursos disponíveis."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa fornece formação sobre conformidade legal (ex.: RGPD, ética) aos colaboradores?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "options": [
+        {
+          "optionText": "Sim, realiza formação obrigatória anual para todos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Faz formações ocasionais ou apenas para certas equipas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Criar módulo simples de formação online ou presencial para todos os colaboradores com verificação de participação."
+        },
+        {
+          "optionText": "Não realiza qualquer formação formal.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Incluir tópicos de conformidade no onboarding e promover sessões curtas de sensibilização ao longo do ano."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um canal seguro e anónimo para denúncias de irregularidades legais ou éticas?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "options": [
+        {
+          "optionText": "Sim, existe canal ativo, seguro e conhecido por todos.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "O canal existe, mas é pouco utilizado ou divulgado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Reforçar a comunicação sobre o canal existente e garantir anonimato técnico mesmo que com solução simples (ex.: email dedicado)."
+        },
+        {
+          "optionText": "Não existe canal de denúncia com garantias.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar um canal interno simples, com garantias mínimas de anonimato, e definir processo de seguimento confidencial."
+        }
+      ]
+    },
+    {
+      "questionText": "Os contratos com fornecedores incluem cláusulas de conformidade legal e regulatória?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "options": [
+        {
+          "optionText": "Sim, todos os contratos têm cláusulas claras e validadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguns contratos têm cláusulas genéricas, sem validação jurídica.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Atualizar modelo de contrato com cláusulas mínimas de conformidade e solicitar validação jurídica externa ou institucional."
+        },
+        {
+          "optionText": "Não há cláusulas específicas nem revisão contratual regular.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Fazer levantamento dos contratos ativos e incluir cláusulas de proteção de dados e segurança na próxima renovação."
+        }
+      ]
+    },
+    {
+      "questionText": "A organização possui capacidades de monitorização contínua dos sistemas críticos?",
+      "categoryName": "Risco de Monitorização e Resposta",
+      "options": [
+        {
+          "optionText": "Sim, tem monitorização contínua com alertas automáticos nos sistemas principais.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Monitorização parcial ou apenas nalguns sistemas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Utilizar ferramentas gratuitas ou de baixo custo para monitorizar os sistemas mais importantes da empresa."
+        },
+        {
+          "optionText": "Não existe monitorização eficaz dos sistemas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar soluções simples de monitorização (ex.: Wazuh, Zabbix) para os principais servidores e equipamentos."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto para a empresa se não detetar ou responder a tempo a um incidente de segurança?",
+      "categoryName": "Risco de Monitorização e Resposta",
+      "options": [
+        {
+          "optionText": "Impacto reduzido, com capacidade de resposta rápida.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com alguns atrasos na resposta.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Definir tempos de resposta esperados (SLA) e treinar responsáveis internos para ações imediatas."
+        },
+        {
+          "optionText": "Impacto elevado, sem resposta estruturada ou eficaz.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar um plano básico de resposta a incidentes e realizar simulações para preparar a equipa."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe uma equipa responsável pela resposta a incidentes de segurança?",
+      "categoryName": "Risco de Monitorização e Resposta",
+      "options": [
+        {
+          "optionText": "Sim, existe uma equipa identificada e com formação.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Há uma equipa informal, com pouca preparação.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Designar elementos responsáveis e garantir formação mínima para resposta a ciberincidentes."
+        },
+        {
+          "optionText": "Não existe equipa ou responsáveis definidos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar uma equipa com papéis definidos e estabelecer procedimentos de resposta simples."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa testa regularmente os seus procedimentos de resposta a incidentes?",
+      "categoryName": "Risco de Monitorização e Resposta",
+      "options": [
+        {
+          "optionText": "Sim, realiza testes e simulações com regularidade.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Faz testes esporádicos ou incompletos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Fazer exercícios simples de simulação (ex.: ataque de phishing ou ransomware) com a equipa responsável."
+        },
+        {
+          "optionText": "Nunca testou os procedimentos de resposta.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Definir um plano anual com pelo menos um teste prático com envolvimento da gestão e colaboradores."
+        }
+      ]
+    },
+    {
+      "questionText": "Os sistemas de monitorização estão integrados com os processos de resposta a incidentes?",
+      "categoryName": "Risco de Monitorização e Resposta",
+      "options": [
+        {
+          "optionText": "Sim, os alertas estão ligados a processos de resposta automáticos ou definidos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Há alguma ligação entre alertas e resposta, mas de forma manual.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Criar ligação entre os alertas principais (ex.: antivírus, firewall) e um responsável de resposta designado."
+        },
+        {
+          "optionText": "Não há qualquer integração entre os sistemas e o plano de resposta.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Definir um processo simples de reação a alertas críticos e garantir que todos os envolvidos conhecem os seus papéis."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa consegue detetar ataques antes que causem danos significativos?",
+      "categoryName": "Risco de Monitorização e Resposta",
+      "options": [
+        {
+          "optionText": "Sim, tem deteção rápida e atua antes do impacto.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Deteta apenas após algum impacto ou interrupção.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Melhorar a deteção de anomalias e treinar os colaboradores para identificar sinais de ataque."
+        },
+        {
+          "optionText": "Só deteta o ataque depois de já ter causado prejuízo.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar solução de monitorização de endpoints (ex.: EDR) e configurar alertas prioritários."
+        }
+      ]
+    },
+    {
+      "questionText": "A organização possui visibilidade centralizada sobre os ativos tecnológicos em uso?",
+      "categoryName": "Risco de Visibilidade e Reporting",
+      "options": [
+        {
+          "optionText": "Sim, tem visibilidade centralizada e atualizada dos ativos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Tem visibilidade parcial ou com base em inventários manuais.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Utilizar ferramentas gratuitas de descoberta de rede para manter inventário atualizado."
+        },
+        {
+          "optionText": "Não tem visibilidade clara dos equipamentos e sistemas em uso.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar registo obrigatório de novos ativos e realizar varredura mensal para detetar equipamentos desconhecidos."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa consegue reportar eventos de segurança à gestão e às autoridades, se necessário?",
+      "categoryName": "Risco de Visibilidade e Reporting",
+      "options": [
+        {
+          "optionText": "Sim, tem relatórios claros, regulares e alinhados com a lei.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Tem relatórios irregulares ou incompletos.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Criar relatórios mensais com indicadores simples de segurança e garantir alinhamento com o RGPD."
+        },
+        {
+          "optionText": "Não possui qualquer mecanismo de reporting estruturado.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Definir responsável por comunicação de incidentes e usar modelos prontos para reportes obrigatórios."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa consegue identificar rapidamente ativos em risco ou fora de conformidade?",
+      "categoryName": "Risco de Visibilidade e Reporting",
+      "options": [
+        {
+          "optionText": "Sim, tem alertas que ajudam a detetar riscos em tempo útil.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Deteta problemas com algum atraso ou de forma manual.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Usar ferramentas simples de monitorização e definir alertas básicos para comportamentos anómalos."
+        },
+        {
+          "optionText": "Só identifica riscos quando o problema já causou impacto.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar rotina de verificação semanal dos sistemas e registos de segurança."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um processo claro para os colaboradores reportarem anomalias ou incidentes de segurança?",
+      "categoryName": "Risco de Visibilidade e Reporting",
+      "options": [
+        {
+          "optionText": "Sim, todos conhecem o processo e sabem como reportar.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "O processo existe mas não está bem divulgado.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Promover formação interna e criar um canal simples de contacto para reporte de incidentes."
+        },
+        {
+          "optionText": "Não existe processo nem canal específico.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Definir um email ou contacto interno para reporte e explicar o procedimento a todos os colaboradores."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa gere métricas que ajudam a avaliar a sua segurança de forma contínua?",
+      "categoryName": "Risco de Visibilidade e Reporting",
+      "options": [
+        {
+          "optionText": "Sim, analisa métricas de segurança com regularidade.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Tem algumas métricas, mas são analisadas raramente.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Definir 3 a 5 indicadores simples (ex.: número de incidentes, tempo de resolução) e analisá-los mensalmente."
+        },
+        {
+          "optionText": "Não utiliza métricas de segurança.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar um pequeno painel com dados básicos (ex.: backups, falhas, acessos) e acompanhar com frequência."
+        }
+      ]
+    },
+    {
+      "questionText": "A gestão revê os relatórios de segurança e toma decisões com base nesses dados?",
+      "categoryName": "Risco de Visibilidade e Reporting",
+      "options": [
+        {
+          "optionText": "Sim, há revisão regular e ações resultantes documentadas.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Revisão esporádica e sem impacto prático.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Agendar reunião mensal com a direção para discutir riscos e medidas com base nos relatórios existentes."
+        },
+        {
+          "optionText": "A gestão não participa na análise de relatórios de segurança.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar um grupo de trabalho que envolva a gestão e defina prioridades com base em dados reais."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa fornece formação regular em cibersegurança a todos os colaboradores?",
+      "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
+      "options": [
+        {
+          "optionText": "Sim, existe formação obrigatória e atualizada anualmente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Formação ocasional ou dirigida apenas a alguns colaboradores.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implementar formação anual com conteúdos adaptados a diferentes funções (ex.: administrativos, técnicos)."
+        },
+        {
+          "optionText": "A empresa não fornece formação formal em cibersegurança.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Incluir formação básica no onboarding e promover sessões práticas regulares com simulações."
+        }
+      ]
+    },
+    {
+      "questionText": "Quão integrada está a cibersegurança na cultura organizacional da empresa?",
+      "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
+      "options": [
+        {
+          "optionText": "A segurança faz parte da cultura; todos compreendem o seu papel.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Apenas algumas áreas estão sensibilizadas para a segurança.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Promover campanhas de sensibilização e valorizar boas práticas com incentivos internos."
+        },
+        {
+          "optionText": "A segurança é vista como responsabilidade exclusiva da área de informática.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar pontos focais de segurança em cada área e realizar reuniões bimestrais de alinhamento."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem critérios claros para a gestão de acessos aquando da entrada e saída de colaboradores?",
+      "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
+      "options": [
+        {
+          "optionText": "Sim, os critérios são claros e aplicados de forma consistente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Existem critérios informais ou com aplicação variável.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Definir fluxos simples de aprovação e remoção de acessos em colaboração com os recursos humanos."
+        },
+        {
+          "optionText": "Não existem critérios definidos ou processo formal.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar uma checklist obrigatória para entrada e saída de colaboradores com revogação de acessos."
+        }
+      ]
+    },
+    {
+      "questionText": "Os colaboradores sabem como agir em caso de incidente de segurança?",
+      "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
+      "options": [
+        {
+          "optionText": "Sim, as responsabilidades são bem definidas e comunicadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Parcialmente, algumas responsabilidades não são claras.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Divulgar plano de resposta e realizar simulações periódicas com as equipas."
+        },
+        {
+          "optionText": "Não, os colaboradores desconhecem o que fazer em caso de incidente.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Incluir formação obrigatória com cenários práticos de incidentes durante o onboarding."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa tem um canal para denúncia de comportamentos suspeitos ou violações de segurança?",
+      "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
+      "options": [
+        {
+          "optionText": "Sim, existe um canal claro e os denunciantes estão protegidos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Existe um canal informal ou pouco divulgado.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Criar um canal digital simples e seguro com opção de anonimato e seguimento de casos."
+        },
+        {
+          "optionText": "Não existe qualquer canal ou cultura de denúncia.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Estabelecer uma política de denúncia interna e promover sessões sobre ética e segurança."
+        }
+      ]
+    },
+    {
+      "questionText": "A liderança da empresa está envolvida nas iniciativas de cibersegurança?",
+      "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
+      "options": [
+        {
+          "optionText": "Sim, dá o exemplo e acompanha regularmente os riscos e medidas.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Participação ocasional ou pouco ativa.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Apresentar relatórios simples e regulares à gestão com prioridades de segurança."
+        },
+        {
+          "optionText": "Não há envolvimento visível da liderança.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar um grupo de trabalho com elementos da direção e responsáveis pela segurança da informação."
+        }
+      ]
+    },
+
+    {
+      "questionText": "A empresa realiza testes de segurança (como testes de intrusão ou simulações de ataque)?",
+      "categoryName": "Risco Experimental ou Outros",
+      "options": [
+        {
+          "optionText": "Sim, realiza testes básicos com apoio externo sempre que necessário.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Realiza apenas testes informais ou pontuais.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Considerar a contratação de um teste de segurança anual focado nos ativos mais críticos da empresa."
+        },
+        {
+          "optionText": "Nunca realizou qualquer teste de segurança.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Realizar pelo menos uma auditoria de segurança básica para identificar vulnerabilidades prioritárias."
+        }
+      ]
+    },
+    {
+      "questionText": "A organização avalia regularmente o seu nível de maturidade em cibersegurança?",
+      "categoryName": "Risco Experimental ou Outros",
+      "options": [
+        {
+          "optionText": "Sim, com base em modelos simples adaptados à realidade da empresa.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Apenas ocasionalmente e sem uma metodologia definida.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Utilizar um modelo simplificado (ex.: CIS Controls) para autoavaliação anual."
+        },
+        {
+          "optionText": "Nunca foi feita qualquer avaliação estruturada.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Agendar uma autoavaliação com base em ferramentas gratuitas ou apoio institucional (ex.: CNCS)."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa testa tecnologias simples de segurança (ex.: registo de acessos, bloqueios automáticos)?",
+      "categoryName": "Risco Experimental ou Outros",
+      "options": [
+        {
+          "optionText": "Sim, testa regularmente ferramentas de segurança adequadas à sua dimensão.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Tem algumas iniciativas pontuais.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Testar ferramentas gratuitas como antivírus com relatórios, firewalls básicas ou alertas de acesso."
+        },
+        {
+          "optionText": "Não utiliza tecnologias experimentais ou de teste.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Explorar ferramentas open-source de segurança com apoio de comunidades ou associações locais."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa partilha ou recebe informação sobre ameaças (ex.: através de fóruns, newsletters ou CERTs)?",
+      "categoryName": "Risco Experimental ou Outros",
+      "options": [
+        {
+          "optionText": "Sim, está ligada a redes de partilha como o CERT.PT ou associações do setor.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Recebe informação informalmente ou de forma esporádica.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Subscrever newsletters de cibersegurança (ex.: CNCS) e participar em eventos ou sessões gratuitas online."
+        },
+        {
+          "optionText": "Não tem qualquer ligação com redes de threat intelligence.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Inscrever-se gratuitamente no CERT.PT e acompanhar alertas relevantes para o seu setor."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa tem um plano de continuidade de negócio e recuperação de desastres? É testado?",
+      "categoryName": "Risco Experimental ou Outros",
+      "options": [
+        {
+          "optionText": "Sim, tem um plano simples e realiza testes de forma periódica.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Existe plano, mas raramente é revisto ou testado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Agendar simulações simples com os principais responsáveis (ex.: falha de sistema, perda de dados)."
+        },
+        {
+          "optionText": "Não existe plano ou está completamente desatualizado.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar um plano básico com foco nos serviços essenciais (ex.: backups, acessos, contactos de emergência)."
+        }
+      ]
+    },
+    {
+      "questionText": "A empresa tem alguma iniciativa de melhoria contínua ou inovação em segurança?",
+      "categoryName": "Risco Experimental ou Outros",
+      "options": [
+        {
+          "optionText": "Sim, com pequenas melhorias implementadas de forma regular.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Há sugestões pontuais, mas sem processo definido.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Dedicar tempo trimestral para rever práticas de segurança e acolher sugestões de melhoria da equipa."
+        },
+        {
+          "optionText": "Não existem iniciativas formais ou informais nesta área.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Incluir um ponto de segurança nas reuniões mensais e promover boas práticas com toda a equipa."
+        }
+      ]
+    }
+  ]
+}

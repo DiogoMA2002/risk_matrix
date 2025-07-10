@@ -76,7 +76,7 @@ export default {
   async created() {
     await Promise.all([
       this.$store.dispatch("fetchQuestions"),
-      this.$store.dispatch("fetchQuestionnaires"),
+      this.$store.dispatch("fetchQuestionnairesForAdmin"),
       this.$store.dispatch("fetchCategories"),
       this.fetchFeedback()
     ]);
@@ -286,7 +286,7 @@ export default {
 
         await Promise.all([
           this.$store.dispatch("fetchQuestions"),
-          this.$store.dispatch("fetchQuestionnaireById", questionData.selectedQuestionnaires[0])
+          this.$store.dispatch("fetchQuestionnaireByIdForAdmin", questionData.selectedQuestionnaires[0])
         ]);
 
         await this.showAlertDialog("Sucesso", "Questão adicionada com sucesso!", "success");
@@ -329,7 +329,7 @@ export default {
         await axios.post("/api/questionnaires/create", { title: newTitle }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        await this.$store.dispatch("fetchQuestionnaires");
+        await this.$store.dispatch("fetchQuestionnairesForAdmin");
         await this.showAlertDialog("Sucesso", "Questionário criado com sucesso!", "success");
       } catch (error) {
         console.error("Erro ao criar questionário:", error);
@@ -354,7 +354,7 @@ export default {
 
         if ([200, 204].includes(response.status)) {
           await Promise.all([
-            this.$store.dispatch("fetchQuestionnaires"),
+            this.$store.dispatch("fetchQuestionnairesForAdmin"),
             this.$store.dispatch("fetchQuestions")
           ]);
           await this.showAlertDialog("Sucesso", "Questionário eliminado com sucesso!", "success");
@@ -379,7 +379,7 @@ export default {
         });
 
         await Promise.all([
-          this.$store.dispatch("fetchQuestionnaires"),
+          this.$store.dispatch("fetchQuestionnairesForAdmin"),
           this.$store.dispatch("fetchQuestions")
         ]);
 
