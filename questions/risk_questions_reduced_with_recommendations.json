@@ -227,7 +227,7 @@
           "optionText": "Sem formação ou formação muito rara.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Em cenários onde a formação das equipas é rara, mitigue riscos migrando serviços críticos para uma arquitetura multi-região robusta e ativando a recuperação automática via DNS para simplificar a gestão de desastres."
+          "recommendation": "Priorize a alta disponibilidade de serviços críticos através de soluções com failover automático, como DNS com monitorização, e considere uma arquitetura multi-zona ou multi-região apenas onde o impacto da indisponibilidade justifique o investimento."
         }
       ]
     },
