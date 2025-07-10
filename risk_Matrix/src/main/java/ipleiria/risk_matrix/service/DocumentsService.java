@@ -190,7 +190,13 @@ public class DocumentsService {
                     header.addNewTableCell().setText("Nível");
                     header.addNewTableCell().setText("Recomendação");
 
-                    for (Answer answer : answers) {
+                    for (Answer answer : answers.stream()
+                            .sorted(Comparator.comparing(
+                                    a -> Optional.ofNullable(a.getChosenLevel()).orElse(OptionLevel.LOW),
+                                    Comparator.reverseOrder()
+                            ))
+                            .toList()) {
+
                         XWPFTableRow row = table.createRow();
                         row.getCell(0).setText(answer.getQuestionText());
                         row.getCell(1).setText(answer.getUserResponse());
