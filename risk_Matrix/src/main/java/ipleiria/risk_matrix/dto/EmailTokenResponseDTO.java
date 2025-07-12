@@ -1,5 +1,10 @@
 package ipleiria.risk_matrix.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class EmailTokenResponseDTO {
     
     private String token;
@@ -15,36 +20,5 @@ public class EmailTokenResponseDTO {
         this.role = role;
         this.expiresAt = expiresAt;
     }
-    
-    public String getToken() {
-        return token;
-    }
-    
-    public void setToken(String token) {
-        this.token = token;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public String getRole() {
-        return role;
-    }
-    
-    public void setRole(String role) {
-        this.role = role;
-    }
-    
-    public long getExpiresAt() {
-        return expiresAt;
-    }
-    
-    public void setExpiresAt(long expiresAt) {
-        this.expiresAt = expiresAt;
-    }
-} 
+
+}

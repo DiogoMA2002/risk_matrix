@@ -2,7 +2,11 @@ package ipleiria.risk_matrix.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class EmailTokenRequestDTO {
     
     @NotBlank(message = "Email is required")
@@ -14,12 +18,5 @@ public class EmailTokenRequestDTO {
     public EmailTokenRequestDTO(String email) {
         this.email = email;
     }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-} 
+
+}

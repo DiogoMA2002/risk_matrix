@@ -141,3 +141,9 @@ dist
 .env
 application-dev.properties
 application-prod.properties
+
+# Database files
+src/DB/
+*.mv.db
+*.trace.db
+*.lock.db
