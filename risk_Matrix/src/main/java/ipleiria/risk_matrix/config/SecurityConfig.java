@@ -20,9 +20,11 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final PublicJwtFilter publicJwtFilter;
 
-    public SecurityConfig(JwtFilter jwtFilter) {
+    public SecurityConfig(JwtFilter jwtFilter, PublicJwtFilter publicJwtFilter) {
         this.jwtFilter = jwtFilter;
+        this.publicJwtFilter = publicJwtFilter;
     }
 
     @Bean
@@ -41,13 +43,16 @@ public class SecurityConfig {
                         .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/questions/**", "/api/suggestions/**", "/api/answers/submit", "/api/answers/submit-multiple",
-                                "/api/questionnaires/**", "/api/feedback", "/api/categories/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/admin/**", "/api/feedback/**").hasRole("ADMIN")
+                        .requestMatchers("/api/questions/**", "/api/suggestions/**", "/api/answers/submit", "/api/answers/submit-multiple",
+                                "/api/questionnaires/**", "/api/categories/**").hasAnyRole("ADMIN", "PUBLIC")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         
+        // Add both filters - public filter first, then admin filter
+        http.addFilterBefore(publicJwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -5,6 +5,8 @@ import ipleiria.risk_matrix.dto.AdminRegisterDTO;
 import ipleiria.risk_matrix.dto.AuthRequestDTO;
 import ipleiria.risk_matrix.dto.AuthResponseDTO;
 import ipleiria.risk_matrix.dto.ChangePasswordRequestDTO;
+import ipleiria.risk_matrix.dto.EmailTokenRequestDTO;
+import ipleiria.risk_matrix.dto.EmailTokenResponseDTO;
 import ipleiria.risk_matrix.models.users.AdminUser;
 import ipleiria.risk_matrix.models.users.PasswordHistory;
 import ipleiria.risk_matrix.repository.AdminUserRepository;
@@ -61,6 +63,26 @@ public class AuthController {
             return ResponseEntity.ok(new AuthResponseDTO(jwt));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais Inválidas");
+        }
+    }
+
+    @PostMapping("/request-token")
+    public ResponseEntity<?> requestToken(@Valid @RequestBody EmailTokenRequestDTO request) {
+        try {
+            String token = jwtUtil.generatePublicToken(request.getEmail());
+            long expiresAt = System.currentTimeMillis() + jwtUtil.getPublicTokenExpirationMs();
+            
+            EmailTokenResponseDTO response = new EmailTokenResponseDTO(
+                token, 
+                request.getEmail(), 
+                "public", 
+                expiresAt
+            );
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao gerar token: " + e.getMessage());
         }
     }
 

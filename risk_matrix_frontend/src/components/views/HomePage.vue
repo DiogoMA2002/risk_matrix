@@ -70,19 +70,6 @@
       </div>
     </div>
 
-    <!-- Help Button -->
-    <div class="fixed bottom-6 right-6">
-      <button 
-        @click="goToFeedbackForm" 
-        class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        :aria-label="'Ir para o formulário de feedback'"
-      >
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </button>
-    </div>
 
     <!-- Logos -->
     <div class="fixed bottom-6 left-6">
@@ -120,7 +107,26 @@ async function proceed() {
   try {
     isLoading.value = true
     emailError.value = ''
+    
+    // Request token from backend
+    const response = await fetch('/api/auth/request-token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email.value })
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to get token')
+    }
+
+    const tokenData = await response.json()
+    
+    // Store email and token
     localStorage.setItem('userEmail', email.value)
+    localStorage.setItem('publicToken', tokenData.token)
+    localStorage.setItem('tokenExpiresAt', tokenData.expiresAt.toString())
     
     if (route.path !== '/risk-info') {
       await router.push('/risk-info')
@@ -134,11 +140,6 @@ async function proceed() {
 }
 
 
-function goToFeedbackForm() {
-  if (route.path !== '/feedback-form') {
-    router.push('/feedback-form')
-  }
-}
 </script>
 
 <style scoped>

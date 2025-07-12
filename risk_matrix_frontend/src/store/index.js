@@ -65,10 +65,7 @@ export default createStore({
         .catch(error => console.error('Erro ao buscar questionários:', error))
     },
     fetchQuestionnairesForAdmin({ commit }) {
-      const token = localStorage.getItem("jwt");
-      return axios.get('/api/questionnaires/admin', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      return axios.get('/api/questionnaires/admin')
         .then(response => {
           commit('setQuestionnaires', response.data)
           if (response.data.length > 0) {
@@ -94,10 +91,7 @@ export default createStore({
     },
     async fetchQuestionnaireByIdForAdmin({ commit }, id) {
       try {
-        const token = localStorage.getItem("jwt");
-        const response = await axios.get(`/api/questionnaires/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await axios.get(`/api/questionnaires/${id}`);
         commit('setSelectedQuestionnaire', response.data);
       } catch (error) {
         console.error('Erro ao buscar questionário para admin:', error);
@@ -106,12 +100,8 @@ export default createStore({
     async fetchUserAnswersByEmail({ commit }, email) {
       commit('setLoadingAnswers', true);
       try {
-        const token = localStorage.getItem("jwt");
         const response = await axios.get(`/api/answers/by-email-with-severity/${email}`, {
           validateStatus: _status => true,
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
         });
 
         if (response.status === 401) {
@@ -136,12 +126,8 @@ export default createStore({
     async fetchAllUserAnswers({ commit }) {
       commit('setLoadingAnswers', true);
       try {
-        const token = localStorage.getItem("jwt");
         const response = await axios.get("/api/answers/get-all-submissions", {
           validateStatus: _status => true,
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
         });
         
         if (response.status === 401) {
@@ -164,12 +150,8 @@ export default createStore({
       
       commit('setLoadingAnswers', true);
       try {
-        const token = localStorage.getItem("jwt");
         const response = await axios.get("/api/answers/by-date-range", {
           params: { startDate, endDate },
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
         });
         commit('setUserAnswers', response.data);
       } catch (error) {

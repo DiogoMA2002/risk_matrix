@@ -1,21 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
-function isTokenExpired(token) {
-  if (!token) return true;
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return true;
-
-    const decoded = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
-    const exp = decoded.exp;
-    if (typeof exp !== 'number') return true;
-
-    return Math.floor(Date.now() / 1000) >= exp;
-  } catch (err) {
-    console.error('Token error:', err);
-    return true;
-  }
-}
+import { TokenManager } from '@/utils/tokenManager'
 
 const routes = [
   { path: '/', component: () => import('@/components/views/HomePage.vue') },
@@ -51,12 +35,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('jwt');
   const completedRiskInfo = localStorage.getItem('completedRiskInfo') === 'true';
   const completedRequirements = localStorage.getItem('completedRequirements') === 'true';
 
   const isAdminRoute = to.meta.requiresAdmin === true;
-  const isTokenInvalid = !token || isTokenExpired(token);
 
   const email = localStorage.getItem('userEmail');
 
@@ -66,9 +48,9 @@ router.beforeEach((to, from, next) => {
     return next('/');
   }
 
-  if (isAdminRoute && isTokenInvalid) {
-    localStorage.removeItem('jwt');
-    console.log('JWT invalid, redirecting to login.');
+  if (isAdminRoute && !TokenManager.hasAdminToken()) {
+    TokenManager.clearTokens();
+    console.log('Admin token invalid, redirecting to login.');
     return next('/login');
   }
 
