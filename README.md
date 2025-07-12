@@ -48,9 +48,25 @@ A comprehensive web platform for identifying, assessing, and managing business r
    ```bash
    git clone https://github.com/DiogoMA2002/risk_matrix.git
    cd risk_matrix
+   ```
 
+2. Set up environment variables:
 
-2. Set up the backend:
+   ```bash
+   cd risk_Matrix
+   cp .env.example .env
+   ```
+
+   Edit the `.env` file and set your JWT secret:
+   ```bash
+   JWT_SECRET=your_secure_jwt_secret_here_make_it_long_and_random
+   JWT_EXPIRATION_MS=86400000
+   JWT_PUBLIC_EXPIRATION_MS=3600000
+   ```
+
+   **Important**: Never commit your `.env` file to version control!
+
+3. Set up the backend:
 
    ```bash
    cd risk_Matrix
@@ -59,7 +75,7 @@ A comprehensive web platform for identifying, assessing, and managing business r
 
    The backend server will start on `http://localhost:8080`
 
-3. Set up the frontend:
+4. Set up the frontend:
 
    ```bash
    cd risk_matrix_frontend
