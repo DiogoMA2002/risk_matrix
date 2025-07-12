@@ -89,8 +89,10 @@ import axios from 'axios'
             username: this.username,
             password: this.password
           })
-  
+
           localStorage.setItem('jwt', res.data.token)
+          localStorage.setItem('adminRefreshToken', res.data.refreshToken)
+          localStorage.setItem('adminRefreshExpiresAt', (Date.now() + res.data.expiresIn).toString())
           this.$router.push('/admin') // redirect on success
         } catch (err) {
           this.error = 'Credenciais inválidas'

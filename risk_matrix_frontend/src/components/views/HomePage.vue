@@ -123,10 +123,12 @@ async function proceed() {
 
     const tokenData = await response.json()
     
-    // Store email and token
+    // Store email and tokens
     localStorage.setItem('userEmail', email.value)
     localStorage.setItem('publicToken', tokenData.token)
+    localStorage.setItem('publicRefreshToken', tokenData.refreshToken)
     localStorage.setItem('tokenExpiresAt', tokenData.expiresAt.toString())
+    localStorage.setItem('publicRefreshExpiresAt', tokenData.refreshExpiresAt.toString())
     
     if (route.path !== '/risk-info') {
       await router.push('/risk-info')

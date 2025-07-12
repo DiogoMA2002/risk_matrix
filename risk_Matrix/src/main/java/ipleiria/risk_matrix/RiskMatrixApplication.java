@@ -29,9 +29,9 @@ public class RiskMatrixApplication {
                 admin.setPassword(passwordEncoder.encode(defaultPassword)); // encrypt password
                 adminRepo.save(admin);
 
-                System.out.println("✅ Default admin created: " + defaultUsername + " / " + defaultPassword);
+                System.out.println("Default admin created: " + defaultUsername + " / " + defaultPassword);
             } else {
-                System.out.println("ℹ️ Default admin already exists.");
+                System.out.println("Default admin already exists.");
             }
         };
     }
