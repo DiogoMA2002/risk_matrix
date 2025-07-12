@@ -295,7 +295,7 @@ export default {
         }
         
         const payload = [];
-        const userEmail = localStorage.getItem("userEmail") || "fallback@example.com";
+        const userEmail = localStorage.getItem("userEmail");
         const submissionId = uuidv4();
         const selectedQuestionIds = this.selectedQuestionnaire && this.selectedQuestionnaire.questions
           ? this.selectedQuestionnaire.questions.map(q => q.id)

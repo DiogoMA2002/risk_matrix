@@ -58,6 +58,14 @@ router.beforeEach((to, from, next) => {
   const isAdminRoute = to.meta.requiresAdmin === true;
   const isTokenInvalid = !token || isTokenExpired(token);
 
+  const email = localStorage.getItem('userEmail');
+
+  const requiresEmail = ['/risk-info', '/requirements', '/category'].includes(to.path) ||
+    to.name === 'Questionary';
+  if (requiresEmail && (!email || email.trim() === '')) {
+    return next('/');
+  }
+
   if (isAdminRoute && isTokenInvalid) {
     localStorage.removeItem('jwt');
     console.log('JWT invalid, redirecting to login.');
