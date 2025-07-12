@@ -71,14 +71,14 @@ public class AuthController {
         try {
             String token = jwtUtil.generatePublicToken(request.getEmail());
             long expiresAt = System.currentTimeMillis() + jwtUtil.getPublicTokenExpirationMs();
-            
+
             EmailTokenResponseDTO response = new EmailTokenResponseDTO(
-                token, 
-                request.getEmail(), 
-                "public", 
-                expiresAt
+                    token,
+                    request.getEmail(),
+                    "public",
+                    expiresAt
             );
-            
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

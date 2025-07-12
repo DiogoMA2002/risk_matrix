@@ -37,7 +37,7 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", "public");
         claims.put("email", email);
-        
+
         return Jwts.builder()
                 .setSubject(email)
                 .setClaims(claims)
@@ -62,7 +62,7 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        
+
         return claims.get("email", String.class);
     }
 
@@ -72,7 +72,7 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        
+
         return claims.get("role", String.class);
     }
 

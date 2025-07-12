@@ -32,14 +32,14 @@ public class PublicJwtFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
-            
+
             try {
                 if (jwtUtil.validateToken(jwt)) {
                     String role = jwtUtil.extractRole(jwt);
-                    
+
                     if ("public".equals(role)) {
                         String email = jwtUtil.extractEmail(jwt);
-                        
+
                         // Create UserDetails for public user
                         UserDetails userDetails = User.builder()
                                 .username(email)
