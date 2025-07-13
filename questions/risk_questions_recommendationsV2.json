@@ -14,13 +14,13 @@
           "optionText": "Comprometimento de contas internas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Revogue imediatamente as credenciais afetadas, exija mudança de senha com MFA e restrinja o acesso dessas contas até conclusão da investigação."
+          "recommendation": "Revogue imediatamente as credenciais afetadas, exija mudança de senha com MFA e restrinja o acesso dessas contas até à conclusão da investigação."
         },
         {
           "optionText": "Exposição total de sistemas críticos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Inicie modo de contenção de crise, force reset de todas as senhas privilegiadas, ative autenticação forte para todos os utilizadores e execute varredura de indicadores de compromisso em sistemas críticos."
+          "recommendation": "Ative o plano de resposta a incidentes, force reset de todas as credenciais privilegiadas, exija MFA reforçado e execute scan por indicadores de compromisso em sistemas críticos."
         }
       ]
     },
@@ -37,13 +37,13 @@
           "optionText": "Acesso significativo a sistemas internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente contas de administrador com privilégios mínimos necessários (principle of least privilege) e registre todas as ações em cofre de sessão para auditoria."
+          "recommendation": "Implemente contas administrativas com o mínimo de privilégios necessários e registe as sessões através de cofre ou logging centralizado para auditoria."
         },
         {
           "optionText": "Controlo total sobre sistemas e dados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Habilite break-glass accounts protegidas por hardware token, desconecte as máquinas afetadas da rede e execute análise forense de logs para determinar alcance do compromisso."
+          "recommendation": "Implemente contas de emergência (break-glass) protegidas com MFA físico, isole os sistemas comprometidos da rede e realize análise forense aos registos críticos."
         }
       ]
     },
@@ -60,13 +60,13 @@
           "optionText": "Casos isolados com impacto significativo.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Active política de verificação contra listas de senhas comprometidas e force rotação trimestral para contas que falhem a verificação."
+          "recommendation": "Active verificação periódica contra listas de senhas comprometidas e force alteração trimestral de contas que falhem a validação."
         },
         {
           "optionText": "A prática é comum e representa um risco elevado.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Exija autenticação multifator para todos, implemente Single Sign-On com requisitos de complexidade elevados e bloqueie senhas reutilizadas via serviço de verificação contínua."
+          "recommendation": "Implemente MFA obrigatório para todos os utilizadores, ative Single Sign-On com regras de complexidade elevadas e bloqueie reutilização de senhas através de serviço de validação contínua."
         }
       ]
     },
@@ -83,13 +83,13 @@
           "optionText": "Monitorização parcial e análise manual.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Integre logs de autenticação num SIEM e defina alertas automáticos para cinco falhas consecutivas a partir do mesmo endereço IP em 10 min."
+          "recommendation": "Integre logs de autenticação numa ferramenta centralizada (ex: SIEM open-source) e configure alertas automáticos para falhas repetidas."
         },
         {
           "optionText": "Nenhuma monitorização ativa implementada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar sistema de deteção de intrusão focado em login, habilitar bloqueio temporário após múltiplas falhas e gerar relatórios diários de tentativas anómalas."
+          "recommendation": "Implemente deteção de acessos anómalos com alertas por IP ou localidade, active bloqueios temporários após múltiplas falhas e analise registos diariamente."
         }
       ]
     },
@@ -98,7 +98,7 @@
       "categoryName": "Risco de Acesso e Autenticação",
       "options": [
         {
-          "optionText": "MFA obrigatório para todas as contas.",
+          "optionText": "MFA obrigatório para todas as contas críticas.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
@@ -106,13 +106,13 @@
           "optionText": "MFA ativado apenas para alguns utilizadores.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Expanda o MFA para grupos de alto risco primeiro (administradores, finanças) e defina prazo de 30 dias para cobertura total."
+          "recommendation": "Expanda gradualmente a aplicação do MFA, começando por contas privilegiadas e áreas financeiras, com objetivo de cobertura total em 30 dias."
         },
         {
           "optionText": "Nenhum uso de MFA implementado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Adote MFA de imediato para todos os utilizadores, começando por aplicações críticas; bloqueie acesso externo até a ativação estar concluída."
+          "recommendation": "Implemente MFA em todos os utilizadores, com prioridade para aplicações expostas à internet; bloqueie acessos externos até à ativação estar concluída."
         }
       ]
     },
@@ -129,13 +129,13 @@
           "optionText": "Proteção parcial das credenciais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Atualize o algoritmo de hashing para Argon2id ou bcrypt com sal único e aplique política de rotação de hash legacy."
+          "recommendation": "Atualize o algoritmo de hashing para Argon2id ou bcrypt com sal único e implemente política de atualização de hashes antigos."
         },
         {
           "optionText": "Credenciais armazenadas sem proteção adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Migre credenciais para cofre de senhas com HSM, substitua armazenamento em texto claro e force reset de todas as senhas após migração."
+          "recommendation": "Migre credenciais para cofre de senhas com suporte a criptografia forte (HSM ou equivalente) e force a redefinição de senhas após a migração."
         }
       ]
     },
@@ -152,13 +152,13 @@
           "optionText": "Impacto moderado, comprometimento limitado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Forçar troca imediata de senha e revogação de sessões da conta afetada, além de varrer e-mails do mesmo remetente com script de remoção server-side."
+          "recommendation": "Estabelecer processo mínimo de contenção para ataques de phishing: reset de senha, encerramento de sessões, análise de mensagens recebidas e registo de incidente."
         },
         {
           "optionText": "Impacto grave, grande comprometimento operacional.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Ativar playbook IR: isolar máquinas comprometidas, bloquear domínio malicioso em gateway, iniciar contenção de movimento lateral via EDR e notificar C-ISO em <30 min."
+          "recommendation": "Criar plano interno simplificado para resposta a phishing com medidas de contenção rápida, isolamento manual e comunicação a partes afetadas. Treinar equipas para ativação imediata quando necessário."
         }
       ]
     },
@@ -175,13 +175,13 @@
           "optionText": "Impacto financeiro e reputacional moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Aplicar etiquetagem automática de confidencialidade nos anexos enviados externamente e exigir criptografia TLS 1.3 mTLS em transferências de ficheiros sensíveis."
+          "recommendation": "Aplicar regras básicas de classificação de dados, evitar envio de anexos sensíveis sem encriptação e usar proteção mínima como passwords ou TLS nativo do e-mail."
         },
         {
           "optionText": "Impacto elevado, graves danos financeiros e de reputação.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar CASB com controle de exfiltração, tokenização de dados pessoais e contrato de resposta a incidentes com firma de PR para divulgação controlada."
+          "recommendation": "Adotar controlo de dados em cloud (DLP ou CASB, se possível), tokenizar dados críticos e definir um plano de comunicação de crise simples, com contactos e passos definidos."
         }
       ]
     },
@@ -198,18 +198,18 @@
           "optionText": "Formação ocasional, mas insuficiente.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Introduzir micro-learnings mensais de 5 min com quiz automático; colaboradores abaixo de 80 % devem repetir o módulo."
+          "recommendation": "Enviar mensalmente dicas práticas por e-mail ou vídeo curto, com pequeno questionário. Sugerir reforço a quem demonstrar dificuldades."
         },
         {
           "optionText": "Sem formação ou formação raramente realizada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Lançar programa obrigatório de segurança com certificação interna e acompanhamento de desempenho por gestor de equipa."
+          "recommendation": "Realizar sessão anual obrigatória (presencial ou online), com registo de presenças e conteúdo adaptado à realidade da empresa. Incluir também no onboarding."
         }
       ]
     },
     {
-      "questionText": "A empresa realiza testes frequentes de simulação de phishing e engenharia social para medir a conscientização?",
+      "questionText": "A empresa realiza testes frequentes de simulação de phishing e engenharia social para medir a consciencialização?",
       "categoryName": "Risco de Comunicação e Engenharia Social",
       "options": [
         {
@@ -221,13 +221,13 @@
           "optionText": "Testes esporádicos ou pouco estruturados.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Programar campanhas trimestrais variando cenários (link, anexo, QR) e enviar relatório de taxa de clique ao comité de risco."
+          "recommendation": "Realizar campanhas trimestrais de simulação (ex: e-mails de phishing simples) e partilhar resultados com as equipas para aprendizagem contínua."
         },
         {
           "optionText": "Testes raramente realizados ou inexistentes.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Adquirir plataforma de phishing-as-a-service e estabelecer KPI de redução anual de cliques em 50 %."
+          "recommendation": "Usar ferramenta gratuita ou acessível para simular phishing e estabelecer meta de melhoria contínua na taxa de cliques ou denúncias."
         }
       ]
     },
@@ -244,13 +244,13 @@
           "optionText": "Alguns mecanismos implementados, mas limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Adicionar verificação de URL em tempo real e sandboxing de anexos com machine-learning no Secure Email Gateway."
+          "recommendation": "Ativar bloqueio de anexos suspeitos e filtragem de links perigosos no serviço de e-mail — preferencialmente usando funcionalidades nativas já disponíveis."
         },
         {
           "optionText": "Sem mecanismos técnicos ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar solução de proteção de e-mail cloud-native com detecção de BEC e análise de linguagem natural antes de entrega ao utilizador."
+          "recommendation": "Ativar SPF, DKIM e DMARC no domínio da organização. Complementar com gateway de e-mail seguro, se a solução atual não suportar filtros robustos."
         }
       ]
     },
@@ -264,16 +264,16 @@
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Canal disponível, mas pouco conhecido ou lento.",
+          "optionText": "Canal disponível, mas pouco conhecido ou com resposta lenta.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Incluir botão “Reportar Phishing” no cliente de e-mail e divulgar durante reuniões de equipa com meta de resposta <1 h."
+          "recommendation": "Criar endereço simples (ex: phishing@empresa.com) e promovê-lo de forma contínua via e-mails internos, formação e intranet."
         },
         {
           "optionText": "Sem canal formal definido ou amplamente desconhecido.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Criar hotline 24/7 e endereço dedicado abuse@empresa.com com SLA de triagem de 15 min, divulgado em intranet e onboarding."
+          "recommendation": "Definir e divulgar um contacto interno (e-mail ou telefone) como ponto oficial de reporte, visível no onboarding e disponível em local acessível a todos."
         }
       ]
     },
@@ -290,13 +290,13 @@
           "optionText": "Operações parcialmente afetadas, atraso moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Configure failover activo-passivo para a plataforma, teste restauração mensalmente e defina RTO máximo de 4 h em runbook de continuidade."
+          "recommendation": "Definir plano de recuperação com ambiente secundário (mesmo que parcial/manual), testar recuperação periodicamente e documentar tempo máximo aceitável de paragem (RTO)."
         },
         {
           "optionText": "Paragem total ou significativa das operações",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Acione o plano de DR: fazer failover para região secundária, activar comunicação de crise com clientes e manter painel de status público até resolução completa."
+          "recommendation": "Estabelecer plano de continuidade com foco em restauro funcional mínimo (ex: backup ou sistema alternativo), plano de comunicação interna e estrutura simples para informar clientes ou parceiros prioritários."
         }
       ]
     },
@@ -313,13 +313,13 @@
           "optionText": "Auditorias anuais ou esporádicas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Agendar varreduras de vulnerabilidade trimestrais e teste de penetração anual conduzido por equipa externa certificada."
+          "recommendation": "Agendar varreduras de vulnerabilidades com ferramentas gratuitas (ex: OpenVAS) e realizar uma simulação de intrusão pontual com apoio externo."
         },
         {
           "optionText": "Não são realizadas auditorias ou são muito raras.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Contratar de imediato um Red Team externo, implementar ferramenta de varredura contínua e enviar relatórios diários ao SOC."
+          "recommendation": "Implementar scanner open-source (ex: Lynis, trivy) com execução periódica e agendar uma auditoria externa básica pelo menos uma vez por ano."
         }
       ]
     },
@@ -336,18 +336,18 @@
           "optionText": "Impacto moderado, exploração parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Executar playbook de hardening CIS via Ansible, corrigir permissões incorretas e reiniciar o serviço numa janela de manutenção controlada."
+          "recommendation": "Aplicar práticas básicas de hardening (ex: CIS benchmarks) e manter checklist técnica com revisões periódicas das permissões e configurações essenciais."
         },
         {
           "optionText": "Impacto grave, comprometimento total dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Isolar o host comprometido da rede, restaurar a configuração a partir do backup baseline aprovado e ativar monitorização contínua de deriva de configuração em hosts semelhantes."
+          "recommendation": "Definir um plano de restauro técnico com configuração segura documentada, mecanismos de isolamento manual e ações rápidas para limitar propagação (mesmo sem ferramentas avançadas)."
         }
       ]
     },
     {
-      "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes de sua implantação?",
+      "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes da sua implantação?",
       "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
@@ -359,13 +359,13 @@
           "optionText": "Procedimentos informais ou parcialmente eficazes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Publicar checklist de hardening obrigatório e exigir aprovação de segurança antes do 'go-live' em change-management."
+          "recommendation": "Criar uma checklist básica de segurança (ex: firewall ativa, permissões mínimas, serviços desnecessários desativados) e validar antes do go-live."
         },
         {
           "optionText": "Procedimentos inexistentes ou inadequados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implantar gate de CI que bloqueie promoção para produção se o scan de configuração falhar e treinar engenheiros em IaC seguro."
+          "recommendation": "Criar modelo mínimo de configuração segura, promover a revisão entre pares antes da produção e guardar documentação de referência acessível à equipa."
         }
       ]
     },
@@ -382,13 +382,13 @@
           "optionText": "Alguns mecanismos implementados, porém limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Actualizar firewall para NGFW com inspeção TLS e instalar IDS/IPS inline com assinatura em tempo real."
+          "recommendation": "Reforçar firewalls existentes e ativar deteção de tráfego suspeito com soluções acessíveis como Suricata ou Snort. Rever regras com base em logs reais."
         },
         {
           "optionText": "Sem mecanismos avançados ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar microsegmentação zero-trust, EDR em hosts e serviço MDR 24/7 para resposta rápida a intrusões."
+          "recommendation": "Instalar EDR gratuito ou económico (ex: Microsoft Defender Business), ativar logging na firewall e designar responsável para tratar alertas críticos de forma prioritária."
         }
       ]
     },
@@ -405,16 +405,17 @@
           "optionText": "Uso ocasional ou parcial das ferramentas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Expandir cobertura do scanner (por exemplo, AWS Config ou Azure Policy) a 100 % dos recursos e configurar alertas no Slack de TI."
+          "recommendation": "Incluir scripts de verificação como parte da manutenção mensal, usando ferramentas simples (ex: lynis, checklists validadas internamente)."
         },
         {
           "optionText": "Sem ferramentas ou uso inadequado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Adquirir solução CSPM com correção automática em modo ‘enforce’ para qualquer desvio crítico detectado."
+          "recommendation": "Adotar verificação periódica com ferramenta open-source (manual ou automática), priorizando correção imediata das falhas com impacto elevado."
         }
       ]
     },
+
     {
       "questionText": "Qual o impacto para a empresa caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
       "categoryName": "Risco de Proteção e Armazenamento de Dados",
@@ -428,13 +429,13 @@
           "optionText": "Dados parcialmente recuperáveis, impacto moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Introduzir backups incrementais a cada 4 h com verificação de checksum e executar testes de restauração mensais para as bases de dados críticas."
+          "recommendation": "Adotar backups incrementais frequentes (ex: 4h) e testar mensalmente a restauração de dados críticos para garantir recuperação parcial eficaz."
         },
         {
           "optionText": "Perda irreversível de dados críticos, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Replicar dados críticos em storage imutável noutra região, garantir cópia offline semanal (air-gap) e definir RPO/RTO <1 h em plano de recuperação."
+          "recommendation": "Estabelecer plano de proteção com cópia imutável em região separada e backup offline semanal (air-gap). Definir objetivos claros de RTO/RPO para os dados essenciais."
         }
       ]
     },
@@ -451,13 +452,13 @@
           "optionText": "Impacto financeiro moderado, multas ou custos controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Aplicar classificação automática de dados e políticas DLP que bloqueiem uploads não autorizados para a cloud pública."
+          "recommendation": "Implementar classificação básica de dados e aplicar políticas simples de prevenção de fuga de dados (DLP), mesmo que com ferramentas nativas da suite em uso."
         },
         {
           "optionText": "Impacto financeiro elevado, multas graves e custos legais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Encriptar dados sensíveis com chaves geridas por HSM, ativar mascaramento dinâmico e executar varreduras de conformidade RGPD trimestrais."
+          "recommendation": "Usar encriptação com gestão de chaves segura (ex: KMS com logs), tokenizar dados críticos e definir plano básico de resposta e comunicação em caso de incidente RGPD."
         }
       ]
     },
@@ -474,13 +475,13 @@
           "optionText": "Backups semanais ou esporádicos.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Migrar para política de snapshot diário automatizado com retenção de 30 dias e alertas de falha de tarefa de backup."
+          "recommendation": "Migrar para backups automáticos diários com retenção mínima de 30 dias e alertas simples para falhas ou execuções incompletas."
         },
         {
           "optionText": "Backups raros, inexistentes ou não testados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implementar solução de backup contínuo (CDP) com verificação automática de integridade e relatório de testes de restauração quinzenal."
+          "recommendation": "Implementar política de backup diário com verificação automática e testar mensalmente a recuperação de ficheiros críticos. Priorizar repositório externo ou cloud."
         }
       ]
     },
@@ -497,13 +498,13 @@
           "optionText": "Criptografia básica implementada parcialmente.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Migrar para criptografia AES-256 em repouso com rotação automática de chaves e logs de acesso ao cofre KMS."
+          "recommendation": "Atualizar para criptografia AES-256 com rotação de chaves e monitorizar acessos ao cofre de chaves com alertas básicos de anomalia."
         },
         {
           "optionText": "Dados sensíveis sem criptografia ou com criptografia fraca.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Interromper novos carregamentos de dados até concluir criptografia total, aplicar tokenização de campos confidenciais e validar compliance através de auditoria externa."
+          "recommendation": "Bloquear novos carregamentos até aplicar criptografia adequada nos dados sensíveis e planear auditoria simples para verificar conformidade inicial."
         }
       ]
     },
@@ -512,21 +513,21 @@
       "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
-          "optionText": "controlo rigoroso e monitorização contínua.",
+          "optionText": "Controlo rigoroso e monitorização contínua.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "controlos parciais ou monitorização limitada.",
+          "optionText": "Controlos parciais ou monitorização limitada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar CASB com classificação automática de ficheiros e alertas de exfiltração via e-mail ou SaaS."
+          "recommendation": "Reforçar permissões com base no princípio do menor privilégio e ativar alertas básicos (ex: acessos fora de horário) em serviços cloud com suporte nativo."
         },
         {
           "optionText": "Sem controlos eficazes ou monitorização adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Adotar modelo Zero-Trust NAC, exigir MFA para qualquer acesso privilegiado e bloquear transferências de ficheiros não-autorizadas até integração total."
+          "recommendation": "Implementar autenticação multifator (MFA), ativar logging de acessos sensíveis e bloquear transferências de dados sem aprovação explícita quando aplicável."
         }
       ]
     },
@@ -543,13 +544,13 @@
           "optionText": "Política informal ou parcialmente implementada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Consolidar num único documento a matriz de retenção e a tabela de classificação de dados, definir prazos automáticos de expurgo e aprovar workflow de descarte com dupla validação."
+          "recommendation": "Consolidar a matriz de retenção com prazos e regras claras, definir rotina mensal para descarte digital e prever validação simples antes da eliminação de dados críticos."
         },
         {
           "optionText": "Sem política definida ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Elaborar e aprovar em <30 dias uma política de ciclo de vida alinhada ao NIST 800-88, incluindo destruição certificada de suportes físicos, logging de descarte e auditoria semestral."
+          "recommendation": "Elaborar uma política simples de ciclo de vida alinhada ao RGPD e adotar método prático de destruição segura de dados (ex: wipe de disco, shredder físico, log de descarte)."
         }
       ]
     },
@@ -980,7 +981,7 @@
           "optionText": "Impacto moderado, exposição parcial de código sensível.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Executar rotação imediata de segredos no repositório, ativar varredura automática de vazamentos (GitGuardian / Gitleaks) e refatorar rapidamente os módulos expostos para remover lógica competitiva."
+          "recommendation": "Executar rotação imediata de segredos no repositório, ativar scan automática de vazamentos (GitGuardian / Gitleaks) e refatorar rapidamente os módulos expostos para remover lógica competitiva."
         },
         {
           "optionText": "Impacto elevado, exposição ampla de propriedade intelectual e vulnerabilidades críticas.",
@@ -1095,7 +1096,7 @@
           "optionText": "Auditorias ocasionais ou parciais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Agendar varreduras SAST/DAST trimestrais com SLA de correção de 15 dias e armazenar resultados versionados no Jira Security."
+          "recommendation": "Agendar scans SAST/DAST trimestrais com SLA de correção de 15 dias e armazenar resultados versionados no Jira Security."
         },
         {
           "optionText": "Sem auditorias regulares ou inexistentes.",
@@ -1814,7 +1815,7 @@
           "optionText": "Não tem visibilidade clara dos equipamentos e sistemas em uso.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Criar registo obrigatório de novos ativos e realizar varredura mensal para detetar equipamentos desconhecidos."
+          "recommendation": "Criar registo obrigatório de novos ativos e realizar scan mensal para detetar equipamentos desconhecidos."
         }
       ]
     },
