@@ -1,144 +1,145 @@
 {
   "title": "Avaliação de Riscos de Segurança",
   "questions": [
-    {
-      "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
-      "categoryName": "Risco de Acesso e Autenticação",
-      "options": [
-        {
-          "optionText": "Acesso limitado a dados não sensíveis.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Comprometimento de contas internas.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Revogue imediatamente as credenciais afetadas, exija mudança de senha com MFA e restrinja o acesso dessas contas até à conclusão da investigação."
-        },
-        {
-          "optionText": "Exposição total de sistemas críticos.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Ative o plano de resposta a incidentes, force reset de todas as credenciais privilegiadas, exija MFA reforçado e execute scan por indicadores de compromisso em sistemas críticos."
-        }
-      ]
-    },
-    {
-      "questionText": "Se um atacante conseguir comprometer credenciais de administrador, qual seria o impacto?",
-      "categoryName": "Risco de Acesso e Autenticação",
-      "options": [
-        {
-          "optionText": "Impacto restrito a um pequeno conjunto de permissões.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Acesso significativo a sistemas internos.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Implemente contas administrativas com o mínimo de privilégios necessários e registe as sessões através de cofre ou logging centralizado para auditoria."
-        },
-        {
-          "optionText": "Controlo total sobre sistemas e dados.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente contas de emergência (break-glass) protegidas com MFA físico, isole os sistemas comprometidos da rede e realize análise forense aos registos críticos."
-        }
-      ]
-    },
-    {
-      "questionText": "Com que frequência os utilizadores utilizam senhas fracas ou reutilizadas?",
-      "categoryName": "Risco de Acesso e Autenticação",
-      "options": [
-        {
-          "optionText": "Casos isolados sem impacto significativo.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Casos isolados com impacto significativo.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Active verificação periódica contra listas de senhas comprometidas e force alteração trimestral de contas que falhem a validação."
-        },
-        {
-          "optionText": "A prática é comum e representa um risco elevado.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente MFA obrigatório para todos os utilizadores, ative Single Sign-On com regras de complexidade elevadas e bloqueie reutilização de senhas através de serviço de validação contínua."
-        }
-      ]
-    },
-    {
-      "questionText": "A organização monitoriza tentativas de login suspeitas e falhas repetidas?",
-      "categoryName": "Risco de Acesso e Autenticação",
-      "options": [
-        {
-          "optionText": "Monitorização contínua com alertas.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Monitorização parcial e análise manual.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Integre logs de autenticação numa ferramenta centralizada (ex: SIEM open-source) e configure alertas automáticos para falhas repetidas."
-        },
-        {
-          "optionText": "Nenhuma monitorização ativa implementada.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente deteção de acessos anómalos com alertas por IP ou localidade, active bloqueios temporários após múltiplas falhas e analise registos diariamente."
-        }
-      ]
-    },
-    {
-      "questionText": "A autenticação multifator (MFA) está ativada para todas as contas críticas?",
-      "categoryName": "Risco de Acesso e Autenticação",
-      "options": [
-        {
-          "optionText": "MFA obrigatório para todas as contas críticas.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "MFA ativado apenas para alguns utilizadores.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Expanda gradualmente a aplicação do MFA, começando por contas privilegiadas e áreas financeiras, com objetivo de cobertura total em 30 dias."
-        },
-        {
-          "optionText": "Nenhum uso de MFA implementado.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente MFA em todos os utilizadores, com prioridade para aplicações expostas à internet; bloqueie acessos externos até à ativação estar concluída."
-        }
-      ]
-    },
-    {
-      "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de senhas)?",
-      "categoryName": "Risco de Acesso e Autenticação",
-      "options": [
-        {
-          "optionText": "Armazenamento seguro com criptografia forte.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Proteção parcial das credenciais.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Atualize o algoritmo de hashing para Argon2id ou bcrypt com sal único e implemente política de atualização de hashes antigos."
-        },
-        {
-          "optionText": "Credenciais armazenadas sem proteção adequada.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Migre credenciais para cofre de senhas com suporte a criptografia forte (HSM ou equivalente) e force a redefinição de senhas após a migração."
-        }
-      ]
-    },
+
+  {
+    "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
+    "categoryName": "Risco de Acesso e Autenticação",
+    "options": [
+      {
+        "optionText": "Acesso limitado a dados não sensíveis.",
+        "optionType": "IMPACT",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Comprometimento de contas internas.",
+        "optionType": "IMPACT",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Estabelecer processo para revogação imediata de credenciais, aplicação de MFA e verificação de uso indevido com base em logs de autenticação."
+      },
+      {
+        "optionText": "Exposição total de sistemas críticos.",
+        "optionType": "IMPACT",
+        "optionLevel": "HIGH",
+        "recommendation": "Definir plano de resposta a compromissos de conta privilegiada, incluindo redefinição urgente de acessos, isolamento de sistemas críticos e rastreio de atividade maliciosa."
+      }
+    ]
+  },
+  {
+    "questionText": "Se um atacante conseguir comprometer credenciais de administrador, qual seria o impacto?",
+    "categoryName": "Risco de Acesso e Autenticação",
+    "options": [
+      {
+        "optionText": "Impacto restrito a um pequeno conjunto de permissões.",
+        "optionType": "IMPACT",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Acesso significativo a sistemas internos.",
+        "optionType": "IMPACT",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Aplicar modelo de menor privilégio, utilizar cofre de senhas para sessões privilegiadas e ativar logging centralizado com alertas para ações sensíveis."
+      },
+      {
+        "optionText": "Controlo total sobre sistemas e dados.",
+        "optionType": "IMPACT",
+        "optionLevel": "HIGH",
+        "recommendation": "Definir contas de emergência com MFA físico e regras específicas, validar procedimentos de isolamento de sistemas e rever eventos privilegiados em logs críticos."
+      }
+    ]
+  },
+  {
+    "questionText": "Com que frequência os utilizadores utilizam senhas fracas ou reutilizadas?",
+    "categoryName": "Risco de Acesso e Autenticação",
+    "options": [
+      {
+        "optionText": "Casos isolados sem impacto significativo.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Casos isolados com impacto significativo.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Verificar senhas contra listas expostas (ex: HaveIBeenPwned), forçar mudança em contas vulneráveis e sensibilizar para boas práticas."
+      },
+      {
+        "optionText": "A prática é comum e representa um risco elevado.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "HIGH",
+        "recommendation": "Tornar MFA obrigatório, ativar políticas de complexidade mínima e impedir reutilização de senhas com validação contínua ou controlo nativo da solução usada."
+      }
+    ]
+  },
+  {
+    "questionText": "A organização monitoriza tentativas de login suspeitas e falhas repetidas?",
+    "categoryName": "Risco de Acesso e Autenticação",
+    "options": [
+      {
+        "optionText": "Monitorização contínua com alertas.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Monitorização parcial e análise manual.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Recolher logs de autenticação num dashboard central e configurar alertas simples para padrões anómalos."
+      },
+      {
+        "optionText": "Nenhuma monitorização ativa implementada.",
+        "optionType": "PROBABILITY",
+        "optionLevel": "HIGH",
+        "recommendation": "Ativar bloqueio automático após falhas sucessivas, alertas por localização ou IP anómalo e rever logs básicos diariamente ou após incidentes."
+      }
+    ]
+  },
+  {
+    "questionText": "A autenticação multifator (MFA) está ativada para todas as contas críticas?",
+    "categoryName": "Risco de Acesso e Autenticação",
+    "options": [
+      {
+        "optionText": "MFA obrigatório para todas as contas críticas.",
+        "optionType": "IMPACT",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "MFA ativado apenas para alguns utilizadores.",
+        "optionType": "IMPACT",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Priorizar MFA para contas com acesso a sistemas sensíveis e serviços expostos à internet, e aplicar política de cobertura total num prazo realista (ex: 30 dias)."
+      },
+      {
+        "optionText": "Nenhum uso de MFA implementado.",
+        "optionType": "IMPACT",
+        "optionLevel": "HIGH",
+        "recommendation": "Implementar MFA obrigatório de forma faseada, bloqueando acessos externos sem MFA ativo. Usar soluções gratuitas integradas nas plataformas já utilizadas."
+      }
+    ]
+  },
+  {
+    "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de senhas)?",
+    "categoryName": "Risco de Acesso e Autenticação",
+    "options": [
+      {
+        "optionText": "Armazenamento seguro com criptografia forte.",
+        "optionType": "IMPACT",
+        "optionLevel": "LOW"
+      },
+      {
+        "optionText": "Proteção parcial das credenciais.",
+        "optionType": "IMPACT",
+        "optionLevel": "MEDIUM",
+        "recommendation": "Atualizar para hashing seguro com sal único e migrar gradualmente credenciais antigas com política de expiração."
+      },
+      {
+        "optionText": "Credenciais armazenadas sem proteção adequada.",
+        "optionType": "IMPACT",
+        "optionLevel": "HIGH",
+        "recommendation": "Migrar credenciais para um cofre com encriptação forte (KMS ou HSM) e forçar redefinição de senha para todos os utilizadores após transição."
+      }
+    ]
+  },
     {
       "questionText": "Qual seria o impacto operacional caso ocorra um ataque bem-sucedido de phishing direcionado a funcionários?",
       "categoryName": "Risco de Comunicação e Engenharia Social",
@@ -711,7 +712,7 @@
           "optionText": "Impacto grave, paralisação completa de operações críticas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Habilitar arquitetura multi-cloud active-active, com traffic manager que execute cut-over automático para provedor secundário em ≤30 min."
+          "recommendation": "Habilitar arquitetura multi-cloud Ative-Ative, com traffic manager que execute cut-over automático para provedor secundário em ≤30 min."
         }
       ]
     },
@@ -1010,7 +1011,7 @@
           "optionText": "Impacto severo, altos custos financeiros e danos reputacionais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Iniciar plano de comunicação de crise, forçar atualização de clientes vulneráveis via mecanismo ‘auto-update’, activar cobertura de ciber-seguro e anunciar roadmap público de segurança para restaurar confiança."
+          "recommendation": "Iniciar plano de comunicação de crise, forçar atualização de clientes vulneráveis via mecanismo ‘auto-update’, ativar cobertura de ciber-seguro e anunciar roadmap público de segurança para restaurar confiança."
         }
       ]
     },
