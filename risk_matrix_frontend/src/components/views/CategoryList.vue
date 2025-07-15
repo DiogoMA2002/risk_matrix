@@ -84,23 +84,38 @@
 
           <!-- Action Buttons -->
           <div class="mt-8 flex flex-wrap justify-center gap-4">
-            <ActionButton 
-              icon="send" 
-              text="Enviar Todas as Respostas" 
-              color="blue" 
+            <button
               @click="submitAllAnswers"
               :disabled="isSubmitting"
-              :loading="isSubmitting" />
-            <ActionButton 
-              icon="export" 
-              text="Exportar Progresso" 
-              color="green" 
-              @click="exportToJSON" />
-            <ActionButton 
-              icon="import" 
-              text="Importar Progresso" 
-              color="red" 
-              @click="triggerImport" />
+              class="action-btn bg-blue-600 hover:bg-blue-700 focus:ring-blue-400"
+              aria-label="Enviar Todas as Respostas"
+            >
+              <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span v-if="!isSubmitting">Submeter</span>
+              <span v-else class="loader"></span>
+            </button>
+            <button
+              @click="exportToJSON()"
+              class="action-btn bg-green-600 hover:bg-green-700 focus:ring-green-400"
+              aria-label="Exportar Progresso"
+            >
+              <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Exportar
+            </button>
+            <button
+              @click="triggerImport"
+              class="action-btn bg-purple-600 hover:bg-purple-700 focus:ring-purple-400"
+              aria-label="Importar Progresso"
+            >
+              <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+              </svg>
+              Importar
+            </button>
             <input 
               type="file" 
               ref="importFile" 
@@ -150,7 +165,6 @@
 import axios from "axios";
 import { mapState, mapActions } from "vuex";
 import CategoryCard from "@/components/Questionnaire/CategoryCard.vue";
-import ActionButton from "@/components/Static/ActionButton.vue";
 import ProgressStep from "@/components/Static/Progress.vue";
 import AlertDialog from "@/components/Static/AlertDialog.vue";
 import { v4 as uuidv4 } from 'uuid';
@@ -159,7 +173,6 @@ export default {
   name: "CategoryList",
   components: { 
     CategoryCard,
-    ActionButton,
     ProgressStep,
     AlertDialog
   },
@@ -520,5 +533,39 @@ select:focus-visible {
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+.action-btn:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.loader {
+  border: 2px solid #fff;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
 }
 </style>

@@ -18,7 +18,7 @@ CREATE TABLE categories (
 
 CREATE TABLE questions (
     id SERIAL PRIMARY KEY,
-    question_text VARCHAR(255) NOT NULL UNIQUE,
+    question_text VARCHAR(255) NOT NULL,
     category_id BIGINT,
     CONSTRAINT fk_category FOREIGN KEY(category_id) REFERENCES categories(id)
 );
