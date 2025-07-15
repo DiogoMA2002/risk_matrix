@@ -87,12 +87,7 @@ public class QuestionnaireService {
             Category category = resolveCategoryByName(qdto.getCategoryName());
             String questionText = validateQuestionText(qdto.getQuestionText());
 
-            Optional<Question> existing = questionRepository.findByQuestionText(questionText);
-            if (existing.isPresent()) {
-                resolvedQuestions.add(existing.get());
-                continue;
-            }
-
+            // Always create a new Question, do not deduplicate by text
             Question question = new Question();
             question.setQuestionText(questionText);
             question.setCategory(category);
