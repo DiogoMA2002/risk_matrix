@@ -92,7 +92,6 @@ public class QuestionnaireService {
             question.setQuestionText(questionText);
             question.setCategory(category);
 
-            question.setCategoryLabel(qdto.getCategoryLabel());
             question.setDescription(qdto.getDescription());
 
 
@@ -117,7 +116,6 @@ public class QuestionnaireService {
         Question question = new Question();
         question.setQuestionText(validateQuestionText(dto.getQuestionText()));
         question.setCategory(resolveCategoryByName(dto.getCategoryName()));
-        question.setCategoryLabel(dto.getCategoryLabel());
         question.setDescription(dto.getDescription());
         question.getQuestionnaires().add(questionnaire);
         questionnaire.getQuestions().add(question);

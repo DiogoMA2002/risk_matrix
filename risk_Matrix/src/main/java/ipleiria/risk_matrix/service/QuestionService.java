@@ -57,8 +57,6 @@ public class QuestionService {
         question.setCategory(category);
 
         String description = dto.getDescription();
-        String CategoryLabel = dto.getCategoryLabel();
-        question.setCategoryLabel(CategoryLabel);
         question.setDescription(description);
 
         List<QuestionOption> options = dto.getOptions() != null ? dto.getOptions().stream()
@@ -171,7 +169,6 @@ public class QuestionService {
         Category category = resolveOrCreateCategory(dto.getCategoryName());
         existing.setCategory(category);
 
-        existing.setCategoryLabel(dto.getCategoryLabel());
         existing.setDescription(dto.getDescription());
 
         existing.getOptions().clear();

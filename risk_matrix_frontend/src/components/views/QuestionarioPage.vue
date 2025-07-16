@@ -29,11 +29,6 @@
             <div v-for="(question, index) in questions" :key="question.id"
               class="mb-6 bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 transition-all duration-300"
               v-memo="[question.id, getAnswer(question.id)]">
-              
-              <!-- Category Label -->
-              <div class="text-sm text-white bg-blue-700 inline-block px-3 py-1 rounded-full mb-2">
-                {{ question.categoryLabel }}
-              </div>
 
               <!-- Question Text + Description -->
               <div class="flex items-start mb-4">

@@ -36,9 +36,6 @@ public class QuestionDTO {
     @Size(min = 1, message = "Pelo menos uma opção deve ser fornecida.")
     private List<@Valid QuestionOptionDTO> options;
 
-    @NotBlank(message = "O rótulo da categoria (label) é obrigatório.")
-    private String categoryLabel;
-
     private String description;
 
     public QuestionDTO() {
@@ -58,8 +55,6 @@ public class QuestionDTO {
         if (question.getCategory() != null) {
             this.categoryName = question.getCategory().getName();
         }
-
-        this.categoryLabel = question.getCategoryLabel();
         this.description = question.getDescription();
 
         this.options = question.getOptions().stream()
