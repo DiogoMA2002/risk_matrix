@@ -93,19 +93,28 @@
       </div>
     </div>
 
-    <!-- Help Button -->
-    <div class="fixed bottom-6 right-6">
+    <!-- Help Button and Glossário Button -->
+    <div class="fixed bottom-6 right-6 flex flex-col items-end gap-3 z-50">
       <button @click="goToFeedbackForm"
-        class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-          v-once>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        class="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-blue-600"
+        aria-label="Ir para o formulário de feedback">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </button>
+      <button
+        @click="showGlossary = true"
+        class="p-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full shadow-lg hover:from-blue-600 hover:to-blue-800 transition font-semibold text-base border-4 border-white focus:outline-none focus:ring-4 focus:ring-blue-300 flex items-center gap-2"
+        aria-label="Abrir Glossário"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20V6m8 6H4m16 0a8 8 0 11-16 0 8 8 0 0116 0z" />
+        </svg>
+        Glossário
+      </button>
     </div>
-  </div>
-  
+    <GlossaryDrawer :open="showGlossary" @close="showGlossary = false" title="Glossário" />
+
       <!-- Alert Dialog -->
       <AlertDialog
         :show="showAlert"
@@ -115,16 +124,19 @@
         @confirm="handleAlertConfirm"
         @cancel="handleAlertCancel"
       />
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 import AlertDialog from "@/components/Static/AlertDialog.vue";
+import GlossaryDrawer from '@/components/Static/GlossaryDrawer.vue';
 
 export default {
   name: "QuestionarioPage",
   components: { 
-    AlertDialog
+    AlertDialog,
+    GlossaryDrawer
   },
   data() {
     return {
@@ -135,7 +147,8 @@ export default {
       alertMessage: "",
       alertType: "alert",
       alertResolve: null,
-      loading: true
+      loading: true,
+      showGlossary: false
     };
   },
   computed: {
