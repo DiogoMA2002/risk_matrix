@@ -24,6 +24,30 @@
           "recommendation": "Implemente MFA obrigatório em todas as contas críticas, revogue imediatamente chaves de API comprometidas e monitorize tokens de acesso ativos para sinais de abuso."
         }
       ]
+    },
+    {
+      "questionText": "Se um atacante conseguir comprometer credenciais de administrador, qual seria o impacto?",
+      "categoryName": "Risco de Autenticação",
+      "description": "asdasdasdasd de serviços de rede.",
+      "options": [
+        {
+          "optionText": "Impacto restrito a um pequeno conjunto de permissões.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Acesso significativo a sistemas internos.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Aplicar modelo de menor privilégio, utilizar cofre de senhas para sessões privilegiadas e ativar logging centralizado com alertas para ações sensíveis."
+        },
+        {
+          "optionText": "Controlo total sobre sistemas e dados.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Definir contas de emergência com MFA físico e regras específicas, validar procedimentos de isolamento de sistemas e rever eventos privilegiados em logs críticos."
+        }
+      ]
     }
   ]
 }

@@ -275,6 +275,7 @@ export default {
         const token = localStorage.getItem("jwt");
         const payload = {
           questionText: questionData.newQuestion,
+          description: questionData.description || null,
           categoryName: questionData.selectedCategory,
           options: questionData.newOptions,
           questionnaireIds: questionData.selectedQuestionnaires,

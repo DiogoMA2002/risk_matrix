@@ -168,6 +168,7 @@ public class QuestionService {
 
         Category category = resolveOrCreateCategory(dto.getCategoryName());
         existing.setCategory(category);
+        
 
         existing.setDescription(dto.getDescription());
 

@@ -28,7 +28,6 @@ public class Question {
     @JoinColumn(name = "category_id")
     private Category category;
 
-
     @Column()
     private String description; // Descrição opcional da pergunta
 

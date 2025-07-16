@@ -117,6 +117,15 @@
             </div>
           </div>
 
+          <!-- Description -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Descrição (opcional)</label>
+            <textarea v-model="question.description" rows="2"
+              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              placeholder="Descrição da pergunta (opcional)">
+            </textarea>
+          </div>
+
           <!-- Save buttons -->
           <div class="mt-6 flex justify-between items-center">
             <button type="button" @click="cancelEdit"
@@ -166,6 +175,7 @@ export default {
         id: null,
         questionText: '',
         categoryName: '',
+        description: '', 
         options: [],
       },
       associatedQuestionnaireIds: [],
@@ -200,6 +210,7 @@ export default {
           id: data.id,
           questionText: data.questionText,
           categoryName: data.category?.name || '',
+          description: data.description || '', 
           options: data.options.map(opt => ({
             optionText: opt.optionText,
             optionLevel: opt.optionLevel,
@@ -251,6 +262,7 @@ export default {
           id: this.question.id,
           questionText: this.question.questionText,
           categoryName: finalCategory,
+          description: this.question.description || "", 
           options: this.question.options.map(opt => ({
             optionText: opt.optionText,
             optionLevel: opt.optionLevel,

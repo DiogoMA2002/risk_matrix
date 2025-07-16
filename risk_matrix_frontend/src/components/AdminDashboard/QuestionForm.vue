@@ -131,6 +131,18 @@
         </button>
       </div>
 
+      <!-- Optional Description -->
+      <div>
+        <label for="description-text" class="block text-sm font-medium text-gray-700 mb-1">
+          Descrição (opcional)
+        </label>
+        <textarea id="description-text" v-model="description" rows="2"
+          class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          placeholder="Descrição adicional sobre a questão (opcional)"
+          :disabled="isLoading"
+          :aria-label="'Descrição da questão'"></textarea>
+      </div>
+
       <!-- Submit Button -->
       <div class="pt-4">
         <button @click="submitQuestion"
@@ -221,6 +233,7 @@ export default {
   data() {
     return {
       newQuestion: "",
+      description: "", // nova propriedade
       selectedCategory: "",
       selectedQuestionnaires: [],
       newOptions: [this.createDefaultOption()],
@@ -320,6 +333,7 @@ export default {
       try {
         const questionData = {
           newQuestion: this.newQuestion.trim(),
+          description: this.description.trim() || null, // inclui a descrição, se existir
           selectedCategory: this.selectedCategory.trim(),
           newOptions: this.newOptions.map(opt => ({
             optionText: opt.optionText.trim(),
@@ -341,6 +355,7 @@ export default {
     },
     resetForm() {
       this.newQuestion = "";
+      this.description = "";
       this.selectedCategory = "";
       this.selectedQuestionnaires = [];
       this.newOptions = [this.createDefaultOption()];
