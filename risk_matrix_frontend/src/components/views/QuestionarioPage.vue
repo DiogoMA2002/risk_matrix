@@ -29,13 +29,24 @@
             <div v-for="(question, index) in questions" :key="question.id"
               class="mb-6 bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 transition-all duration-300"
               v-memo="[question.id, getAnswer(question.id)]">
-              <div class="flex items-center mb-4">
+              
+              <!-- Category Label -->
+              <div class="text-sm text-white bg-blue-700 inline-block px-3 py-1 rounded-full mb-2">
+                {{ question.categoryLabel }}
+              </div>
+
+              <!-- Question Text + Description -->
+              <div class="flex items-start mb-4">
                 <div
                   class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium mr-3">
                   {{ index + 1 }}
                 </div>
-                <p class="text-lg font-semibold text-blue-800">{{ question.questionText }}</p>
+                <div>
+                  <p class="text-lg font-semibold text-blue-800">{{ question.questionText }}</p>
+                  <p v-if="question.description" class="text-sm text-gray-600 mt-1">{{ question.description }}</p>
+                </div>
               </div>
+
               <!-- Options -->
               <div class="pl-11 space-y-3">
                 <label v-for="option in question.options" :key="option.optionText"
@@ -44,12 +55,12 @@
                     <input type="radio" :name="'question_' + question.id" :value="option.optionText"
                       :checked="getAnswer(question.id) === option.optionText"
                       @click="handleRadioClick(question.id, option.optionText)" class="mr-3 h-4 w-4 text-blue-600" />
-
                     <span>{{ option.optionText }}</span>
                   </div>
                 </label>
               </div>
             </div>
+
           </div>
           <div v-else key="loading" class="space-y-6">
             <!-- Skeleton for 3 questions -->

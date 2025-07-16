@@ -15,6 +15,8 @@ public class QuestionUserDTO {
     private Long id;
     private String questionText;
     private Category category;
+    private String description;      // novo
+    private String categoryLabel;    // novo
     private List<QuestionOptionUserDTO> options;
 
     public QuestionUserDTO() {
@@ -25,6 +27,8 @@ public class QuestionUserDTO {
         this.id = question.getId();
         this.questionText = question.getQuestionText();
         this.category = question.getCategory();
+        this.description = question.getDescription();               // novo
+        this.categoryLabel = question.getCategoryLabel();           // novo
         this.options = question.getOptions().stream()
                 .map(QuestionOptionUserDTO::new)
                 .collect(Collectors.toList());

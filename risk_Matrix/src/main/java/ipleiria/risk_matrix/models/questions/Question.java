@@ -28,6 +28,12 @@ public class Question {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(nullable = false)
+    private String categoryLabel; // Ex: "Redes", "Sistemas Operativos"
+
+    @Column()
+    private String description; // Descrição opcional da pergunta
+
     // Remove the old ManyToOne relationship to Questionnaire
     // and replace it with a ManyToMany mapping.
     @ManyToMany(mappedBy = "questions")
