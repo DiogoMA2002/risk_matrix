@@ -4,6 +4,7 @@
     {
       "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
       "categoryName": "Risco de Autenticação",
+	  "description": "Avalia o impacto potencial caso um atacante use credenciais roubadas para aceder a sistemas essenciais da organização. 'Credenciais comprometidas' referem-se a utilizadores ou senhas que caíram nas mãos de terceiros.",
       "options": [
         {
           "optionText": "Acesso limitado a dados não sensíveis.",
@@ -73,6 +74,7 @@
     {
       "questionText": "A organização monitoriza tentativas de login suspeitas e falhas repetidas?",
       "categoryName": "Risco de Autenticação",
+	  "description": "Verifica se há mecanismos automáticos de deteção de acessos anómalos. Monitorizar falhas de login pode ajudar a identificar ataques em curso.",
       "options": [
         {
           "optionText": "Monitorização contínua com alertas.",
@@ -119,6 +121,7 @@
     {
       "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de senhas)?",
       "categoryName": "Risco de Autenticação",
+	  "description": "Verifica se as senhas são armazenadas com segurança, utilizando técnicas modernas como hashing forte. Um vault é uma solução segura para guardar credenciais.",
       "options": [
         {
           "optionText": "Armazenamento seguro com criptografia forte.",
@@ -140,8 +143,9 @@
       ]
     },
     {
-      "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado?\n",
-      "categoryName": "Risco da Plataforma da Empresa",
+	  "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado?\n",
+	  "categoryName": "Risco da Plataforma da Empresa",
+	  "description": "Avalia o impacto na continuidade operacional caso a plataforma essencial (ex: ERP, CRM ou sistema interno) fique inativa por muito tempo. 'Plataforma crítica' refere-se a sistemas cuja falha compromete diretamente as operações da empresa.",
       "options": [
         {
           "optionText": "Pouco impacto na operação diária.",
@@ -188,6 +192,7 @@
     {
       "questionText": "Com que frequência são feitas auditorias às plataformas internas para identificar vulnerabilidades ou falhas de segurança?",
       "categoryName": "Risco da Plataforma da Empresa",
+	  "description": "'Auditorias' incluem scans automáticos, testes de penetração ou revisões manuais.",
       "options": [
         {
           "optionText": "Auditorias regulares (mínimo trimestral).",
@@ -211,6 +216,7 @@
     {
       "questionText": "As equipas responsáveis pelas plataformas são treinadas regularmente sobre práticas seguras de administração e configuração?",
       "categoryName": "Risco da Plataforma da Empresa",
+	  "description": "Configurações incorretas são uma causa comum de falhas de segurança, e o conhecimento atualizado é essencial.",
       "options": [
         {
           "optionText": "Formação contínua e atualizada regularmente.",
@@ -280,6 +286,7 @@
     {
       "questionText": "Qual o impacto para a empresa caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
       "categoryName": "Risco de Armazenamento de Dados",
+	  "description": "Avalia o impacto de uma falha grave nos sistemas de armazenamento, como avarias físicas ou erros de configuração, que resultem na perda irreversível de dados essenciais para o negócio.",
       "options": [
         {
           "optionText": "Dados facilmente recuperáveis, baixo impacto operacional.",
@@ -303,6 +310,7 @@
     {
       "questionText": "Qual seria o impacto financeiro caso ocorresse uma exposição indevida de dados confidenciais armazenados pela empresa?",
       "categoryName": "Risco de Armazenamento de Dados",
+	  "description": "Examina as possíveis consequências financeiras, incluindo multas legais ou perda de contratos, decorrentes da exposição de dados sensíveis como dados de clientes ou informação financeira.",
       "options": [
         {
           "optionText": "Impacto financeiro mínimo, sem penalizações significativas.",
@@ -326,6 +334,7 @@
     {
       "questionText": "Com que frequência são realizados backups dos dados críticos armazenados pela empresa?",
       "categoryName": "Risco de Armazenamento de Dados",
+	  "description": "Backups frequentes reduzem o risco de perda de dados em caso de falha técnica ou ataque.",
       "options": [
         {
           "optionText": "Backups automáticos e diários.",
@@ -349,6 +358,7 @@
     {
       "questionText": "As soluções de armazenamento utilizadas pela empresa são regularmente atualizadas e protegidas contra ameaças conhecidas?",
       "categoryName": "Risco de Armazenamento de Dados",
+	  "description": "Verifica se os sistemas de armazenamento recebem atualizações de segurança e têm mecanismos de proteção ativos contra vulnerabilidades conhecidas, evitando que sejam alvos fáceis de ataques.",
       "options": [
         {
           "optionText": "Atualizações regulares e gestão ativa de ameaças.",
@@ -441,6 +451,7 @@
     {
       "questionText": "Qual seria o impacto caso ocorresse uma invasão na rede interna com comprometimento de dados confidenciais?",
       "categoryName": "Risco da Rede Interna",
+	  "description": "Examina as consequências de um ataque bem-sucedido dentro da rede da empresa, onde o atacante acede ou rouba dados sensíveis. Este cenário pode envolver malware, ransomware ou engenharia social.",
       "options": [
         {
           "optionText": "Dados não críticos expostos, baixo impacto operacional.",
@@ -464,6 +475,7 @@
     {
       "questionText": "A rede interna é regularmente monitorizada em tempo real para identificação de atividades suspeitas?",
       "categoryName": "Risco da Rede Interna",
+	  "description": "Avalia se existem ferramentas e práticas para vigiar a rede em tempo real, identificando comportamentos anómalos ou sinais de ataque, como ligações suspeitas ou tentativas de acesso indevido.",
       "options": [
         {
           "optionText": "Monitorização constante e automatizada.",
@@ -487,6 +499,7 @@
     {
       "questionText": "Os dispositivos conectados à rede interna são regularmente atualizados e protegidos contra vulnerabilidades conhecidas?",
       "categoryName": "Risco da Rede Interna",
+	  "description": "Verifica se os computadores, servidores, impressoras e outros equipamentos ligados à rede recebem atualizações de segurança para prevenir exploração de falhas conhecidas.",
       "options": [
         {
           "optionText": "Atualizações regulares e automatizadas.",
@@ -510,6 +523,7 @@
     {
       "questionText": "Existem mecanismos eficazes de segmentação da rede interna para limitar a propagação de ameaças?",
       "categoryName": "Risco da Rede Interna",
+	  "description": "Avalia se a rede está dividida em segmentos (ex: produção, backups, utilizadores) para impedir que uma ameaça se propague livremente. Técnicas como VLANs e ACLs ajudam a limitar o movimento lateral de atacantes.",
       "options": [
         {
           "optionText": "Segmentação efetiva implementada e testada.",
@@ -533,6 +547,7 @@
     {
       "questionText": "Existe uma política clara para gestão segura de acessos e autenticação dos dispositivos internos na rede?",
       "categoryName": "Risco da Rede Interna",
+	  "description": "Analisa se existem regras formais sobre quem e o quê pode aceder à rede, incluindo controlo de dispositivos autorizados e autenticação dos utilizadores, de forma a evitar acessos indevidos.",
       "options": [
         {
           "optionText": "Política formal implementada e monitorizada.",

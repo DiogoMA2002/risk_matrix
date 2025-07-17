@@ -1,6 +1,7 @@
 [
   { "term": "MFA (Autenticação Multifator", "definition": "Método de autenticação que requer dois ou mais fatores distintos (por exemplo, senha e código no telemóvel) para aceder a um sistema." },
   { "term": "SSO (Single Sign-On)", "definition": "Mecanismo que permite aos utilizadores aceder a múltiplos sistemas com uma única autenticação." },
+  {"term": "Sistema crítico", "definition": "Sistema cuja falha ou indisponibilidade causa impacto significativo nas operações, segurança, cumprimento legal ou reputação da organização. Requer elevados níveis de disponibilidade, integridade e proteção."},
   { "term": "Privilégios administrativos / Privilégio mínimo", "definition": "Contas com permissões elevadas devem ser usadas com restrições, aplicando sempre o princípio de menor privilégio." },
   { "term": "Gestão de credenciais", "definition": "Processos e ferramentas para guardar, proteger e rodar senhas ou chaves de acesso." },
   { "term": "Zero Trust", "definition": "Modelo de segurança que assume que nenhum utilizador ou dispositivo é confiável por defeito, exigindo validação contínua." },
