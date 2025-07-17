@@ -26,6 +26,12 @@ const routes = [
     name: 'EditQuestionnaire',
     component: () => import('@/components/AdminDashboard/EditQuestionnairePage.vue'),
     meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  // 404 catch-all route - must be last
+  { 
+    path: '/:pathMatch(.*)*', 
+    name: 'NotFound',
+    component: () => import('@/components/views/NotFound.vue') 
   }
 ]
 
