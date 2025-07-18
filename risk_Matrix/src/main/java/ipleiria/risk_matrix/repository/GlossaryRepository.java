@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GlossaryRepository extends JpaRepository<GlossaryEntry, Long> {
-    boolean existsByTerm(String term);
-} 
+}

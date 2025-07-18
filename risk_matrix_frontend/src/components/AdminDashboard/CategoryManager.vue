@@ -2,11 +2,13 @@
   <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mb-6">
     <header class="mb-6">
       <h2 class="text-xl font-semibold text-blue-800 flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
         </svg>
         Gerir Categorias
       </h2>
+      <!-- Subtitle if needed -->
+      <!-- <p class="text-sm text-gray-600">Gerencie as categorias disponíveis.</p> -->
       <div class="flex justify-between items-center mt-4">
         <div class="flex-1 max-w-md">
           <div class="relative">

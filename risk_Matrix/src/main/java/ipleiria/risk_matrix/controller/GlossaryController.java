@@ -2,7 +2,6 @@ package ipleiria.risk_matrix.controller;
 
 import ipleiria.risk_matrix.models.glossary.GlossaryEntry;
 import ipleiria.risk_matrix.service.GlossaryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,8 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/glossary")
 public class GlossaryController {
-    @Autowired
-    private GlossaryService glossaryService;
+    private final GlossaryService glossaryService;
+
+    public GlossaryController(GlossaryService glossaryService) {
+        this.glossaryService = glossaryService;
+    }
 
     @GetMapping
     public List<GlossaryEntry> getAllEntries() {

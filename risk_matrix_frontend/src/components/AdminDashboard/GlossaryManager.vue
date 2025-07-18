@@ -1,12 +1,12 @@
 <template>
-  <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 w-full mt-8 font-sans text-base">
+  <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mb-8 w-full mt-8">
     <div class="flex items-center mb-6 gap-3">
-      <svg class="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg class="h-6 w-6 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20V6m8 6H4m16 0a8 8 0 11-16 0 8 8 0 0116 0z" />
       </svg>
       <div>
-        <h2 class="text-2xl font-bold text-blue-700">Gerir Glossário</h2>
-        <p class="text-gray-500 text-sm">Adicione, edite, elimine, importe ou exporte termos do glossário.</p>
+        <h2 class="text-xl font-semibold text-blue-800 flex items-center">Gerir Glossário</h2>
+        <p class="text-sm text-gray-600">Adicione, edite, elimine, importe ou exporte termos do glossário.</p>
       </div>
     </div>
     <div class="flex flex-wrap gap-2 mb-6 items-end">

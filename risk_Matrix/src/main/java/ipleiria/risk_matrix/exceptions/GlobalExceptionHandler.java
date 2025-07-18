@@ -18,6 +18,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.dao.DataIntegrityViolationException;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -174,4 +181,45 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
+        log.warn("Data integrity violation: {}", ex.getMessage());
+        return buildError(HttpStatus.CONFLICT, "Data integrity violation", "DATA_INTEGRITY_VIOLATION", request);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
+        log.warn("Constraint violation: {}", ex.getMessage());
+        return buildError(HttpStatus.BAD_REQUEST, "Constraint violation: " + ex.getMessage(), "CONSTRAINT_VIOLATION", request);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpServletRequest request) {
+        log.warn("Missing request parameter: {}", ex.getMessage());
+        return buildError(HttpStatus.BAD_REQUEST, "Missing request parameter: " + ex.getParameterName(), "MISSING_REQUEST_PARAMETER", request);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+        log.warn("Type mismatch: {}", ex.getMessage());
+        return buildError(HttpStatus.BAD_REQUEST, "Type mismatch for parameter: " + ex.getName(), "TYPE_MISMATCH", request);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex, HttpServletRequest request) {
+        log.warn("File upload size exceeded: {}", ex.getMessage());
+        return buildError(HttpStatus.PAYLOAD_TOO_LARGE, "File upload size exceeded", "MAX_UPLOAD_SIZE_EXCEEDED", request);
+    }
+
+    @ExceptionHandler(ipleiria.risk_matrix.exceptions.exception.RateLimitExceededException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleRateLimitExceeded(ipleiria.risk_matrix.exceptions.exception.RateLimitExceededException ex, HttpServletRequest request) {
+        log.warn("Rate limit exceeded: {}", ex.getMessage());
+        return buildError(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage(), "RATE_LIMIT_EXCEEDED", request);
+    }
 }

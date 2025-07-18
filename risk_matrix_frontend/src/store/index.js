@@ -11,6 +11,7 @@ export default createStore({
     selectedQuestionnaireId: null,
     userAnswers: [],
     isLoadingAnswers: false,
+    error: null, // global error state
   },
   mutations: {
     setQuestions(state, questions) {
@@ -46,55 +47,73 @@ export default createStore({
     },
     setLoadingAnswers(state, isLoading) {
       state.isLoadingAnswers = isLoading;
+    },
+    setError(state, error) {
+      state.error = error;
+    },
+    clearError(state) {
+      state.error = null;
     }
   },
   actions: {
-    fetchQuestions({ commit }) {
-      return axios.get('/api/questions')
-        .then(response => commit('setQuestions', response.data))
-        .catch(error => console.error('Erro ao buscar perguntas:', error))
+    async fetchQuestions({ commit }) {
+      try {
+        const response = await axios.get('/api/questions');
+        commit('setQuestions', response.data);
+        commit('clearError');
+      } catch (error) {
+        commit('setError', 'Erro ao buscar perguntas.');
+      }
     },
-    fetchQuestionnaires({ commit }) {
-      return axios.get('/api/questionnaires')
-        .then(response => {
-          commit('setQuestionnaires', response.data)
-          if (response.data.length > 0) {
-            commit('setSelectedQuestionnaire', response.data[0])
-          }
-        })
-        .catch(error => console.error('Erro ao buscar questionários:', error))
+    async fetchQuestionnaires({ commit }) {
+      try {
+        const response = await axios.get('/api/questionnaires');
+        commit('setQuestionnaires', response.data);
+        if (response.data.length > 0) {
+          commit('setSelectedQuestionnaire', response.data[0]);
+        }
+        commit('clearError');
+      } catch (error) {
+        commit('setError', 'Erro ao buscar questionários.');
+      }
     },
-    fetchQuestionnairesForAdmin({ commit }) {
-      return axios.get('/api/questionnaires/admin')
-        .then(response => {
-          commit('setQuestionnaires', response.data)
-          if (response.data.length > 0) {
-            commit('setSelectedQuestionnaire', response.data[0])
-          }
-        })
-        .catch(error => console.error('Erro ao buscar questionários para admin:', error))
+    async fetchQuestionnairesForAdmin({ commit }) {
+      try {
+        const response = await axios.get('/api/questionnaires/admin');
+        commit('setQuestionnaires', response.data);
+        if (response.data.length > 0) {
+          commit('setSelectedQuestionnaire', response.data[0]);
+        }
+        commit('clearError');
+      } catch (error) {
+        commit('setError', 'Erro ao buscar questionários para admin.');
+      }
     },
-    fetchCategories({ commit }) {                
-      return axios.get('/api/categories')
-        .then(response => {
-          commit('setCategories', response.data.filter(cat => cat.name))
-        })
-        .catch(error => console.error('Erro ao buscar categorias:', error))
+    async fetchCategories({ commit }) {                
+      try {
+        const response = await axios.get('/api/categories');
+        commit('setCategories', response.data.filter(cat => cat.name));
+        commit('clearError');
+      } catch (error) {
+        commit('setError', 'Erro ao buscar categorias.');
+      }
     },
     async fetchQuestionnaireById({ commit }, id) {
       try {
         const response = await axios.get(`/api/questionnaires/${id}`);
         commit('setSelectedQuestionnaire', response.data);
+        commit('clearError');
       } catch (error) {
-        console.error('Erro ao buscar questionário:', error);
+        commit('setError', 'Erro ao buscar questionário.');
       }
     },
     async fetchQuestionnaireByIdForAdmin({ commit }, id) {
       try {
         const response = await axios.get(`/api/questionnaires/${id}`);
         commit('setSelectedQuestionnaire', response.data);
+        commit('clearError');
       } catch (error) {
-        console.error('Erro ao buscar questionário para admin:', error);
+        commit('setError', 'Erro ao buscar questionário para admin.');
       }
     },
     async fetchUserAnswersByEmail({ commit }, email) {
@@ -115,9 +134,10 @@ export default createStore({
         } else {
           throw new Error(`Erro ${response.status} ao buscar respostas por email.`);
         }
+        commit('clearError');
       } catch (error) {
-        console.error("Error fetching user answers by email:", error);
         commit('setUserAnswers', []);
+        commit('setError', error.message || 'Erro ao buscar respostas por email.');
         throw error;
       } finally {
         commit('setLoadingAnswers', false);
@@ -135,9 +155,10 @@ export default createStore({
         } else {
           commit('setUserAnswers', response.data);
         }
+        commit('clearError');
       } catch (error) {
-        console.error("Error fetching all user answers:", error);
         commit('setUserAnswers', []);
+        commit('setError', error.message || 'Erro ao buscar todas as respostas.');
         throw error;
       } finally {
         commit('setLoadingAnswers', false);
@@ -145,6 +166,7 @@ export default createStore({
     },
     async filterAnswersByDate({ commit }, { startDate, endDate }) {
       if (!startDate || !endDate) {
+        commit('setError', 'Por favor, selecione ambas as datas.');
         throw new Error("Por favor, selecione ambas as datas.");
       }
       
@@ -154,9 +176,10 @@ export default createStore({
           params: { startDate, endDate },
         });
         commit('setUserAnswers', response.data);
+        commit('clearError');
       } catch (error) {
-        console.error("Error filtering answers by date:", error);
         commit('setUserAnswers', []);
+        commit('setError', error.message || 'Erro ao filtrar respostas por data.');
         throw error;
       } finally {
         commit('setLoadingAnswers', false);

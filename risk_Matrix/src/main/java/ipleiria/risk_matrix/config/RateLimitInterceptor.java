@@ -11,6 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 
 import java.util.regex.Pattern;
+import ipleiria.risk_matrix.exceptions.exception.RateLimitExceededException;
 
 @Component
 public class RateLimitInterceptor implements HandlerInterceptor {
@@ -49,19 +50,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         } else {
             // Rate limit exceeded
             logger.warn("Rate limit exceeded for endpoint: {} by client: {}", endpoint, clientId);
-            response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
-            response.setContentType("application/json");
-            
-            // Calculate actual reset time
-            long resetTime = calculateResetTime(bucket, bucketInfo.getRateLimitRule());
-            
-            String errorMessage = String.format(
-                "{\"error\":\"Rate limit exceeded\",\"message\":\"Too many requests. Please try again later.\",\"endpoint\":\"%s\",\"resetTime\":%d}",
-                endpoint, resetTime
-            );
-            
-            response.getWriter().write(errorMessage);
-            return false;
+            throw new RateLimitExceededException("Too many requests. Please try again later.");
         }
     }
 

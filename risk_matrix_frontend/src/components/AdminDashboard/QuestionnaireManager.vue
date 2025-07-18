@@ -2,11 +2,13 @@
   <div class="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6 mb-6">
     <header class="mb-6">
       <h2 class="text-xl font-semibold text-blue-800 flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
         {{ labels.title }}
       </h2>
+      <!-- Subtitle if needed -->
+      <!-- <p class="text-sm text-gray-600">Gerencie os questionários disponíveis.</p> -->
       <div class="flex flex-wrap gap-2 mt-4">
         <!-- Search -->
         <div class="flex-1 min-w-[250px] relative">
