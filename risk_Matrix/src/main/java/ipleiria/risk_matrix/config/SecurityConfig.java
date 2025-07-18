@@ -44,7 +44,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**", "/api/feedback/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**", "/api/feedback/**", "/api/glossary/export", "/api/glossary/import", "/api/glossary", "/api/glossary/**").hasRole("ADMIN")
+                        .requestMatchers("/api/glossary").permitAll()
                         .requestMatchers("/api/questions/**", "/api/suggestions/**", "/api/answers/submit", "/api/answers/submit-multiple",
                                 "/api/questionnaires/**", "/api/categories/**").hasAnyRole("ADMIN", "PUBLIC")
                         .anyRequest().authenticated()

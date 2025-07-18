@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import glossary from '@/assets/glossary.json';
+import axios from 'axios';
 export default {
   name: 'GlossaryDrawer',
   props: {
@@ -47,17 +47,32 @@ export default {
   },
   data() {
     return {
-      search: ''
+      search: '',
+      glossary: [],
+      loading: false,
+      error: null
     };
   },
   computed: {
     filteredTerms() {
-      if (!this.search) return glossary;
+      if (!this.search) return this.glossary;
       const s = this.search.toLowerCase();
-      return glossary.filter(item =>
+      return this.glossary.filter(item =>
         item.term.toLowerCase().includes(s) ||
         item.definition.toLowerCase().includes(s)
       );
+    }
+  },
+  async mounted() {
+    this.loading = true;
+    try {
+      const response = await axios.get('/api/glossary');
+      this.glossary = response.data;
+    } catch (err) {
+      this.error = 'Erro ao carregar o glossário.';
+      this.glossary = [];
+    } finally {
+      this.loading = false;
     }
   }
 };

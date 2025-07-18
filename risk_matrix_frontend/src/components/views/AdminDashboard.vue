@@ -1,19 +1,15 @@
 <template>
   <div class="h-screen overflow-y-auto bg-gradient-to-br from-blue-600 to-indigo-100 font-sans">
     <div class="container mx-auto px-4 py-6 max-w-7xl">
-      <HeaderComponent title="Painel Administrativo" subtitle="Gestao de questões, questionários e feedbacks" back-to="/"
-        :show-user-button="true" />
+      <HeaderComponent title="Painel Administrativo" subtitle="Gestao de questões, questionários e feedbacks"
+        back-to="/" :show-user-button="true" />
 
       <QuestionnaireManager :questionnaires="questionnaires" @add-questionnaire="addQuestionnaire"
         @delete-questionnaire="deleteQuestionnaire" @import-questionnaire="importQuestionnaire"
         @export-questionnaire="exportQuestionnaire" @edit-questionnaire="editQuestionnaire" />
 
-      <CategoryManager 
-        :categories="categories" 
-        :loading="isLoadingCategories" 
-        @create-category="handleCreateCategory"
-        @edit-category="handleEditCategory"
-        @delete-category="handleDeleteCategory" />
+      <CategoryManager :categories="categories" :loading="isLoadingCategories" @create-category="handleCreateCategory"
+        @edit-category="handleEditCategory" @delete-category="handleDeleteCategory" />
 
       <QuestionForm :categories="categories" :questionnaires="questionnaires" :optionTypes="optionTypes"
         :optionLevels="optionLevels" @add-question="addQuestion" />
@@ -21,7 +17,9 @@
       <QuestionsList :questions="questions" :categories="categories" @delete-question="deleteQuestion"
         @filter-questions="filterQuestionsByCategory" />
 
-        <FeedbackList :feedbacks="feedbacks" @fetch-feedback="fetchFeedback" />
+      <FeedbackList :feedbacks="feedbacks" @fetch-feedback="fetchFeedback" />
+
+      <GlossaryManager />
 
       <UserAnswersList @download-report="downloadSubmissionDocx" />
 
@@ -43,6 +41,7 @@ import QuestionsList from "@/components/AdminDashboard/QuestionsList.vue";
 import FeedbackList from "@/components/AdminDashboard/FeedbackList.vue";
 import UserAnswersList from "@/components/AdminDashboard/UserAnswersList.vue";
 import AlertDialog from "@/components/Static/AlertDialog.vue";
+import GlossaryManager from "@/components/AdminDashboard/GlossaryManager.vue";
 
 export default {
   name: "AdminDashboard",
@@ -55,6 +54,7 @@ export default {
     FeedbackList,
     UserAnswersList,
     AlertDialog,
+    GlossaryManager
   },
   computed: {
     ...mapState(["questions", "questionnaires", "categories"]),
@@ -151,10 +151,10 @@ export default {
             }
           }
         );
-        
+
         // Refresh categories list
         await this.$store.dispatch("fetchCategories");
-        
+
         // Return the created category data
         return response.data;
       } catch (error) {
