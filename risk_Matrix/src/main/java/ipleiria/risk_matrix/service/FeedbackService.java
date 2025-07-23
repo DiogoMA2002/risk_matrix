@@ -22,19 +22,30 @@ public class FeedbackService {
 
     public Feedback saveFeedback(Feedback feedback) {
         if (feedback == null) {
-            throw new IllegalArgumentException("Feedback object must not be null.");
+            throw new IllegalArgumentException("Feedback não pode ser null.");
         }
 
         String feedbackText = feedback.getUserFeedback();
         if (feedbackText == null || feedbackText.trim().isEmpty()) {
-            throw new IllegalArgumentException("Feedback content cannot be empty.");
+            throw new IllegalArgumentException("Feedback não pode estar vazio.");
         }
 
         int wordCount = feedbackText.trim().split("\\s+").length;
         if (wordCount > MAX_WORDS) {
-            throw new FeedbackTooLongException("Feedback cannot exceed " + MAX_WORDS + " words.");
+            throw new FeedbackTooLongException("Feedback não pode  exceder " + MAX_WORDS + " palavras.");
+        }
+        FeedbackType type = feedback.getFeedbackType();
+        if (type == null) {
+            throw new IllegalArgumentException("Feedback não pode ser null.");
         }
 
+        // Optional: double-check enum validity (defensive)
+        boolean valid = switch (type) {
+            case HELP, SUGGESTION -> true;
+        };
+        if (!valid) {
+            throw new IllegalArgumentException("Inválido Feedback: " + type);
+        }
         return feedbackRepository.save(feedback);
     }
 
