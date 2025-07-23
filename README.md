@@ -23,7 +23,7 @@ A comprehensive web platform for identifying, assessing, and managing business r
 
 ### Backend
 
-- Java 17  
+- Java 23  
 - Spring Boot  
 - H2 Database (in-memory, configurable)  
 - RESTful API architecture  

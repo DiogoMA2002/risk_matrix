@@ -140,7 +140,7 @@ public class DocumentsService {
         XWPFRun outroRun = outro.createRun();
         outroRun.setFontSize(11);
         outroRun.setFontFamily("Verdana");
-        outroRun.setText("Recomenda-se a priorização das categorias com risco mais elevado. As recomendações específicas estão detalhadas por domínio no relatório abaixo, e visam mitigar vulnerabilidades identificadas com base em boas práticas de cibersegurança adaptadas à realidade das PME.");
+        outroRun.setText("Recomenda-se a priorização das categorias com risco mais elevado. As recomendações específicas estão detalhadas por domínio no relatório abaixo, e visam mitigar vulnerabilidades identificadas com base em boas práticas de cibersegurança adaptadas.");
     }
 
     private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory, Map<String, Severity> severities) {
