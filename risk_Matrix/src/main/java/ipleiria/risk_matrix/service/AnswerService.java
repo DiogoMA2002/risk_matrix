@@ -5,9 +5,7 @@ import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidOptionException;
 import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.models.answers.Answer;
-import ipleiria.risk_matrix.models.questions.Question;
-import ipleiria.risk_matrix.models.questions.QuestionOption;
-import ipleiria.risk_matrix.models.questions.Severity;
+import ipleiria.risk_matrix.models.questions.*;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
@@ -46,8 +44,8 @@ public class AnswerService {
                     String availableOptions = question.getOptions().stream()
                             .map(opt -> "'" + opt.getOptionText() + "'")
                             .collect(Collectors.joining(", "));
-                    return new InvalidOptionException("Invalid response: '" + answerDTO.getUserResponse() + 
-                            "'. Available options for question " + answerDTO.getQuestionId() + 
+                    return new InvalidOptionException("Invalid response: '" + answerDTO.getUserResponse() +
+                            "'. Available options for question " + answerDTO.getQuestionId() +
                             " are: " + availableOptions);
                 });
 
@@ -81,13 +79,20 @@ public class AnswerService {
     }
 
     public List<AnswerDTO> submitMultipleAnswers(List<AnswerDTO> answers) {
+        if (answers == null || answers.isEmpty()) {
+            throw new IllegalArgumentException("A lista de respostas não pode estar vazia.");
+        }
+
         String submissionId = UUID.randomUUID().toString();
+
         return answers.stream()
                 .map(ans -> {
                     ans.setSubmissionId(submissionId);
                     return submitAnswer(ans);
                 }).toList();
     }
+
+
 
     public List<UserAnswersDTO> getUserSubmissionsWithSeverities(String email) {
         List<AnswerDTO> answers = getAnswersByEmail(email);
