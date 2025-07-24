@@ -12,9 +12,16 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("http://localhost:*", "http://172.22.21.71", "https://172.22.21.71", "http://mr.dei.estg.ipleiria.pt",
-                                "https://mr.dei.estg.ipleiria.pt")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+                        .allowedOriginPatterns(
+                                "http://localhost:*",
+                                "http://172.22.21.71",
+                                "https://172.22.21.71",
+                                "http://mr.dei.estg.ipleiria.pt",
+                                "https://mr.dei.estg.ipleiria.pt"
+                        )
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
