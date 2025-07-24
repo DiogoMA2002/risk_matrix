@@ -39,10 +39,11 @@ public class Feedback {
     private String email;
 
     @NotNull(message = "Feedback type is required")
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "feedback_type", nullable = false, columnDefinition = "feedback_type_enum")
+    @Convert(converter = FeedbackTypeConverter.class)
     @Setter
     private FeedbackType feedbackType;
+
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

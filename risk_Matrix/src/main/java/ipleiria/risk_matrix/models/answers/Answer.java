@@ -31,13 +31,15 @@ public class Answer {
     @Column(nullable = false)
     private String userResponse;
 
-    // Indicate which type of question (Impact or Probability)
-    @Enumerated(EnumType.STRING)
+    @Column(name = "question_type", columnDefinition = "question_type_enum")
+    @Convert(converter = OptionLevelTypeConverter.class)
     private OptionLevelType questionType;
 
-    // The user’s chosen level (LOW, MEDIUM, HIGH)
-    @Enumerated(EnumType.STRING)
+
+    @Column(name = "chosen_level", columnDefinition = "varchar(255)") // or your enum name if you use a PostgreSQL enum
+    @Convert(converter = OptionLevelConverter.class)
     private OptionLevel chosenLevel;
+
 
     @Column(nullable = false)
     private String email;

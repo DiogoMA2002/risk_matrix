@@ -17,7 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // Add rate limiting interceptor for all API endpoints
         registry.addInterceptor(rateLimitInterceptor)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/health", "/api/actuator/**"); // Exclude health checks
+                .addPathPatterns("/api/**");
     }
 } 
