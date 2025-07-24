@@ -1,6 +1,7 @@
 package ipleiria.risk_matrix.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,12 +43,25 @@ public class SecurityConfig {
                         .contentTypeOptions(HeadersConfigurer.ContentTypeOptionsConfig::disable)
                         .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
+                // Autorização por endpoint
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**", "/api/feedback/**", "/api/glossary/export", "/api/glossary/import", "/api/glossary", "/api/glossary/**").hasRole("ADMIN")
-                        .requestMatchers("/api/glossary").permitAll()
-                        .requestMatchers("/api/questions/**", "/api/suggestions/**", "/api/answers/submit", "/api/answers/submit-multiple",
-                                "/api/questionnaires/**", "/api/categories/**").hasAnyRole("ADMIN", "PUBLIC")
+
+                        .requestMatchers(HttpMethod.GET, "/api/glossary/**").hasAnyRole("ADMIN", "PUBLIC")
+                        .requestMatchers(HttpMethod.POST, "/api/feedback/**").hasAnyRole("ADMIN", "PUBLIC")
+                        .requestMatchers(HttpMethod.GET, "/api/feedback/**").hasRole("ADMIN")
+
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/glossary/**").hasRole("ADMIN")
+
+                        .requestMatchers("/api/questions/**",
+                                "/api/suggestions/**",
+                                "/api/answers/submit",
+                                "/api/answers/submit-multiple",
+                                "/api/questionnaires/**",
+                                "/api/categories/**"
+                        ).hasAnyRole("ADMIN", "PUBLIC")
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
