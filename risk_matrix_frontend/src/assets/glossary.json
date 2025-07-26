@@ -1,40 +1,182 @@
 [
-  { "term": "MFA (Autenticação Multifator)", "definition": "Método de autenticação que requer dois ou mais fatores distintos (por exemplo, senha e código no telemóvel) para aceder a um sistema." },
-  { "term": "SSO (Single Sign-On)", "definition": "Mecanismo que permite aos utilizadores aceder a múltiplos sistemas com uma única autenticação." },
-  {"term": "Sistema crítico", "definition": "Sistema cuja falha ou indisponibilidade causa impacto significativo nas operações, segurança, cumprimento legal ou reputação da organização. Requer elevados níveis de disponibilidade, integridade e proteção."},
-  { "term": "Privilégios administrativos / Privilégio mínimo", "definition": "Contas com permissões elevadas devem ser usadas com restrições, aplicando sempre o princípio de menor privilégio." },
-  { "term": "Gestão de credenciais", "definition": "Processos e ferramentas para guardar, proteger e rodar senhas ou chaves de acesso." },
-  { "term": "Zero Trust", "definition": "Modelo de segurança que assume que nenhum utilizador ou dispositivo é confiável por defeito, exigindo validação contínua." },
-  { "term": "Alta disponibilidade", "definition": "Capacidade de um sistema continuar a funcionar mesmo em caso de falha, minimizando interrupções." },
-  { "term": "Failover", "definition": "Processo automático ou manual que transfere serviços para um sistema secundário quando o principal falha." },
-  { "term": "Backup incremental / Offsite / Imutável / Air-gap", "definition": "Tipos de cópias de segurança com diferentes graus de isolamento, frequência e proteção contra ransomware." },
-  { "term": "Hardening", "definition": "Redução da superfície de ataque de sistemas através de configurações seguras e remoção de serviços desnecessários." },
-  { "term": "Imagem dourada (golden image)", "definition": "Versão padrão e segura de um sistema usada como base para novas instalações." },
-  { "term": "Phishing / Spear phishing", "definition": "Tentativas de enganar utilizadores para revelar dados sensíveis ou aceder a sistemas, geralmente via e-mail." },
-  { "term": "Simulações de phishing", "definition": "Testes controlados para avaliar a capacidade dos colaboradores de identificar mensagens fraudulentas." },
-  { "term": "Engenharia social", "definition": "Manipulação psicológica de pessoas para obter informação confidencial ou aceder a sistemas." },
-  { "term": "DLP (Data Loss Prevention)", "definition": "Tecnologia que previne a saída não autorizada de dados sensíveis da organização." },
-  { "term": "Segmentação de rede / VLAN", "definition": "Separação lógica de uma rede em sub-redes isoladas para limitar o impacto de ataques." },
-  { "term": "IDS / IPS", "definition": "Sistemas de deteção e prevenção de intrusões que monitorizam tráfego em tempo real." },
-  { "term": "NAC (Network Access Control)", "definition": "Controlo que permite ou bloqueia o acesso à rede com base no estado e identidade do dispositivo." },
-  { "term": "VPN / ZTNA", "definition": "Tecnologias de acesso remoto seguro; ZTNA vai além da VPN ao aplicar regras mais granulares." },
-  { "term": "RGPD", "definition": "Regulamento Europeu de Proteção de Dados que define obrigações legais sobre tratamento de dados pessoais." },
-  { "term": "DPIA", "definition": "Avaliação de Impacto na Proteção de Dados, obrigatória em certos tratamentos de dados pessoais." },
-  { "term": "Política de retenção de dados", "definition": "Conjunto de regras sobre quanto tempo os dados são mantidos e como são eliminados." },
-  { "term": "Canal de denúncia", "definition": "Mecanismo confidencial para reportar violações legais ou de segurança." },
-  { "term": "Tokenização", "definition": "Substituição de dados sensíveis por identificadores irreversíveis para proteger a informação." },
-  { "term": "Autenticação de APIs", "definition": "Processo para garantir que apenas utilizadores autorizados acedem às APIs." },
-  { "term": "CASB", "definition": "Ferramenta que monitoriza e protege o uso de aplicações cloud dentro da organização." },
-  { "term": "SIEM", "definition": "Plataforma que agrega e analisa logs para deteção de incidentes de segurança." },
-  { "term": "EDR / XDR", "definition": "Ferramentas de deteção e resposta a ameaças em endpoints (EDR) ou de forma alargada (XDR)." },
-  { "term": "Logs / Registos imutáveis", "definition": "Registos de eventos que devem ser protegidos contra alterações para garantir valor forense." },
-  { "term": "Plano de resposta a incidentes", "definition": "Conjunto de procedimentos para lidar com incidentes de segurança." },
-  { "term": "Indicadores de compromisso (IoCs)", "definition": "Sinais técnicos de que um sistema pode ter sido comprometido." },
-  { "term": "CIS Benchmarks", "definition": "Recomendações técnicas para configuração segura de sistemas." },
-  { "term": "STIG", "definition": "Guias técnicos rigorosos para configuração segura, mantidos pelo governo dos EUA." },
-  { "term": "CVSS", "definition": "Sistema padrão para classificar a gravidade de vulnerabilidades." },
-  { "term": "RTO / RPO", "definition": "Objetivos de tempo de recuperação (RTO) e perda de dados aceitável (RPO)." },
-  { "term": "Mitigação temporária / Virtual patching", "definition": "Medidas provisórias para proteger sistemas até que um patch oficial seja aplicado." },
-  { "term": "Microserviços", "definition": "Arquitetura que divide aplicações em componentes independentes para facilitar segurança e escalabilidade." },
-  { "term": "Ofuscação de código", "definition": "Técnica para tornar o código-fonte mais difícil de entender ou reverter." }
+  {
+    "term": "MFA (Autenticação Multifator)",
+    "definition": "Método de autenticação que requer dois ou mais fatores distintos (por exemplo, senha e código no telemóvel) para aceder a um sistema."
+  },
+  {
+    "term": "SSO (Single Sign-On)",
+    "definition": "Mecanismo que permite aos utilizadores aceder a múltiplos sistemas com uma única autenticação."
+  },
+  {
+    "term": "Sistema crítico",
+    "definition": "Sistema cuja falha ou indisponibilidade causa impacto significativo nas operações, segurança, cumprimento legal ou reputação da organização. Requer elevados níveis de disponibilidade, integridade e proteção."
+  },
+  {
+    "term": "Privilégios administrativos / Privilégio mínimo",
+    "definition": "Contas com permissões elevadas devem ser usadas com restrições, aplicando sempre o princípio de menor privilégio."
+  },
+  {
+    "term": "Gestão de credenciais",
+    "definition": "Processos e ferramentas para guardar, proteger e rodar senhas ou chaves de acesso."
+  },
+  {
+    "term": "Zero Trust",
+    "definition": "Modelo de segurança que assume que nenhum utilizador ou dispositivo é confiável por defeito, exigindo validação contínua."
+  },
+  {
+    "term": "Alta disponibilidade",
+    "definition": "Capacidade de um sistema continuar a funcionar mesmo em caso de falha, minimizando interrupções."
+  },
+  {
+    "term": "Failover",
+    "definition": "Processo automático ou manual que transfere serviços para um sistema secundário quando o principal falha."
+  },
+  {
+    "term": "Backup incremental / Offsite / Imutável / Air-gap",
+    "definition": "Tipos de cópias de segurança com diferentes graus de isolamento, frequência e proteção contra ransomware."
+  },
+  {
+    "term": "Hardening",
+    "definition": "Redução da superfície de ataque de sistemas através de configurações seguras e remoção de serviços desnecessários."
+  },
+  {
+    "term": "Imagem dourada (golden image)",
+    "definition": "Versão padrão e segura de um sistema usada como base para novas instalações."
+  },
+  {
+    "term": "Phishing / Spear phishing",
+    "definition": "Tentativas de enganar utilizadores para revelar dados sensíveis ou aceder a sistemas, geralmente via e-mail."
+  },
+  {
+    "term": "Simulações de phishing",
+    "definition": "Testes controlados para avaliar a capacidade dos colaboradores de identificar mensagens fraudulentas."
+  },
+  {
+    "term": "Engenharia social",
+    "definition": "Manipulação psicológica de pessoas para obter informação confidencial ou aceder a sistemas."
+  },
+  {
+    "term": "DLP (Data Loss Prevention)",
+    "definition": "Tecnologia que previne a saída não autorizada de dados sensíveis da organização."
+  },
+  {
+    "term": "Segmentação de rede / VLAN",
+    "definition": "Separação lógica de uma rede em sub-redes isoladas para limitar o impacto de ataques."
+  },
+  {
+    "term": "IDS / IPS",
+    "definition": "Sistemas de deteção e prevenção de intrusões que monitorizam tráfego em tempo real."
+  },
+  {
+    "term": "NAC (Network Access Control)",
+    "definition": "Controlo que permite ou bloqueia o acesso à rede com base no estado e identidade do dispositivo."
+  },
+  {
+    "term": "VPN / ZTNA",
+    "definition": "Tecnologias de acesso remoto seguro; ZTNA vai além da VPN ao aplicar regras mais granulares."
+  },
+  {
+    "term": "RGPD",
+    "definition": "Regulamento Europeu de Proteção de Dados que define obrigações legais sobre tratamento de dados pessoais."
+  },
+  {
+    "term": "DPIA",
+    "definition": "Avaliação de Impacto na Proteção de Dados, obrigatória em certos tratamentos de dados pessoais."
+  },
+  {
+    "term": "Política de retenção de dados",
+    "definition": "Conjunto de regras sobre quanto tempo os dados são mantidos e como são eliminados."
+  },
+  {
+    "term": "Canal de denúncia",
+    "definition": "Mecanismo confidencial para reportar violações legais ou de segurança."
+  },
+  {
+    "term": "Tokenização",
+    "definition": "Substituição de dados sensíveis por identificadores irreversíveis para proteger a informação."
+  },
+  {
+    "term": "Autenticação de APIs",
+    "definition": "Processo para garantir que apenas utilizadores autorizados acedem às APIs."
+  },
+  {
+    "term": "CASB",
+    "definition": "Ferramenta que monitoriza e protege o uso de aplicações cloud dentro da organização."
+  },
+  {
+    "term": "SIEM",
+    "definition": "Plataforma que agrega e analisa logs para deteção de incidentes de segurança."
+  },
+  {
+    "term": "EDR / XDR",
+    "definition": "Ferramentas de deteção e resposta a ameaças em endpoints (EDR) ou de forma alargada (XDR)."
+  },
+  {
+    "term": "Logs / Registos imutáveis",
+    "definition": "Registos de eventos que devem ser protegidos contra alterações para garantir valor forense."
+  },
+  {
+    "term": "Plano de resposta a incidentes",
+    "definition": "Conjunto de procedimentos para lidar com incidentes de segurança."
+  },
+  {
+    "term": "Indicadores de compromisso (IoCs)",
+    "definition": "Sinais técnicos de que um sistema pode ter sido comprometido."
+  },
+  {
+    "term": "CIS Benchmarks",
+    "definition": "Recomendações técnicas para configuração segura de sistemas."
+  },
+  {
+    "term": "STIG",
+    "definition": "Guias técnicos rigorosos para configuração segura, mantidos pelo governo dos EUA."
+  },
+  {
+    "term": "CVSS",
+    "definition": "Sistema padrão para classificar a gravidade de vulnerabilidades."
+  },
+  {
+    "term": "RTO / RPO",
+    "definition": "Objetivos de tempo de recuperação (RTO) e perda de dados aceitável (RPO)."
+  },
+  {
+    "term": "Mitigação temporária / Virtual patching",
+    "definition": "Medidas provisórias para proteger sistemas até que um patch oficial seja aplicado."
+  },
+  {
+    "term": "Microserviços",
+    "definition": "Arquitetura que divide aplicações em componentes independentes para facilitar segurança e escalabilidade."
+  },
+  {
+    "term": "Ofuscação de código",
+    "definition": "Técnica para tornar o código-fonte mais difícil de entender ou reverter."
+  },
+  {
+    "term": "DoS",
+    "definition": "Ataque que visa tornar um sistema ou serviço indisponível através da sobrecarga dos seus recursos."
+  },
+  {
+    "term": "DDoS",
+    "definition": "Ataque distribuído que utiliza múltiplos sistemas para realizar um DoS simultâneo, ampliando o impacto."
+  },
+  {
+    "term": "Patches",
+    "definition": "Atualizações que corrigem vulnerabilidades, falhas ou melhoram a segurança e desempenho de um software."
+  },
+  {
+    "term": "Sistemas Legados",
+    "definition": "Sistemas antigos ainda em operação, frequentemente com limitações técnicas, falta de suporte e riscos de segurança."
+  },
+  {
+    "term": "Código Fonte",
+    "definition": "Conjunto de instruções escritas em linguagem de programação que define o funcionamento de um software."
+  },
+  {
+    "term": "Engenharia Reversa",
+    "definition": "Processo de análise de software ou hardware para descobrir o seu funcionamento interno, geralmente sem acesso ao código-fonte."
+  },
+  {
+    "term": "API",
+    "definition": "Conjunto de interfaces que permite a comunicação entre diferentes sistemas, aplicações ou componentes de software."
+  }
 ]
