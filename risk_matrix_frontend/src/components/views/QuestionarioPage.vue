@@ -14,7 +14,15 @@
           <div class="text-white">
             <h1 class="text-2xl font-bold">Questionário de Risco | {{ formattedCategory }}</h1>
             <p class="text-sm opacity-80" v-once>Responda às perguntas para avaliar os riscos</p>
+                <!-- Botão Não aplicavel -->
+              <button
+                @click="aplicarNaoAplicavelATodas"
+                class="mt-2 bg-white text-blue-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-100 transition"
+              >
+                Categoria Não Aplicável
+              </button>
           </div>
+          
         </div>
         <div class="flex items-center space-x-2 text-white">
           <img src="@/assets/logo.webp" alt="Logo" class="h-10" v-once>
@@ -73,6 +81,15 @@
             </div>
           </div>
         </transition>
+        <!-- Botão Confirmar Respostas no fim da página -->
+        <div class="max-w-4xl mx-auto mt-10 flex justify-end px-4">
+          <button
+            @click="goBackToCategories"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow transition duration-300"
+          >
+            Confirmar Respostas
+          </button>
+        </div>
       </div>
 
       <!-- Progress indicator -->
@@ -262,8 +279,22 @@ export default {
         name: 'CategoryList',
         query: { selected: questionnaireId }
       });
-    }
-    ,
+    },
+    aplicarNaoAplicavelATodas() {
+      const naoAplicavelText = "Não Aplicável";
+      const category = this.$route.params.category;
+
+      this.questions.forEach((question) => {
+        const naoAplicavelOption = question.options.find(opt => opt.optionText === naoAplicavelText);
+        if (naoAplicavelOption) {
+          this.$store.commit("updateAnswer", {
+            category,
+            questionId: question.id,
+            answer: naoAplicavelOption.optionText
+          });
+        }
+      });
+    },    
     goToFeedbackForm() {
       this.$router.push("/feedback-form");
     }

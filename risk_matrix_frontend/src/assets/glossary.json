@@ -178,5 +178,37 @@
   {
     "term": "API",
     "definition": "Conjunto de interfaces que permite a comunicação entre diferentes sistemas, aplicações ou componentes de software."
+  },
+  {
+    "term": "NIS2",
+    "definition": "Diretiva europeia que reforça os requisitos de cibersegurança para operadores de serviços essenciais e entidades digitais, impondo medidas técnicas, operacionais e de notificação de incidentes."
+  },
+  {
+    "term": "RGPD",
+    "definition": "Regulamento Geral sobre a Proteção de Dados da União Europeia que estabelece regras para a recolha, tratamento e armazenamento de dados pessoais, garantindo os direitos dos titulares dos dados."
+  },
+  {
+    "term": "ISO/IEC 27001",
+    "definition": "Norma internacional que define requisitos para um Sistema de Gestão de Segurança da Informação (SGSI), focando na proteção de ativos e gestão de riscos."
+  },
+  {
+    "term": "ISO/IEC 27701",
+    "definition": "Extensão da norma ISO/IEC 27001 focada na gestão de privacidade da informação, estabelecendo diretrizes para conformidade com o RGPD e outros regulamentos de privacidade."
+  },
+  {
+    "term": "SOC 2",
+    "definition": "Norma desenvolvida pelo AICPA que avalia os controlos internos de uma organização relacionados a segurança, disponibilidade, integridade do processamento, confidencialidade e privacidade de dados."
+  },
+  {
+    "term": "PCI-DSS",
+    "definition": "Conjunto de requisitos de segurança para organizações que armazenam, processam ou transmitem dados de cartões de pagamento, com foco na proteção contra fraude e roubo de dados."
+  },
+  {
+    "term": "HIPAA",
+    "definition": "Lei norte-americana que define regras para a proteção de dados de saúde e informações médicas identificáveis, aplicável a entidades e prestadores de serviços na área da saúde."
+  },
+  {
+    "term": "ENS (Esquema Nacional de Segurança)",
+    "definition": "Norma espanhola que estabelece os princípios e requisitos de cibersegurança para o setor público e entidades que fornecem serviços digitais essenciais em Espanha."
   }
 ]
