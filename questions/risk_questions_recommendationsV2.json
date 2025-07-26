@@ -630,21 +630,27 @@
       "categoryName": "Risco de Rede e Disponibilidade",
       "options": [
         {
-          "optionText": "Monitorização contínua e segmentação eficaz aplicadas.",
+          "optionText": "A rede é segmentada e monitorizada em tempo real com alertas automáticos.",
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Monitorização e segmentação parciais.",
+          "optionText": "A rede está segmentada, mas não existe monitorização ativa.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implementar registo e análise de tráfego entre segmentos da rede, aplicar regras de controlo intersegmentar e configurar alertas para padrões anómalos."
+          "recommendation": "Ativar registo e análise de tráfego entre segmentos, com alertas simples para acessos anómalos ou inesperados."
         },
         {
-          "optionText": "Sem segmentação eficaz ou monitorização ativa.",
+          "optionText": "Monitorização e segmentação aplicadas de forma parcial ou inconsistente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever a política de segmentação e aplicar controlo de comunicações entre zonas, priorizando áreas críticas."
+        },
+        {
+          "optionText": "Sem segmentação eficaz e sem monitorização ativa da rede.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Adotar abordagem baseada em confiança mínima, separar os ambientes por função crítica e estabelecer supervisão contínua do tráfego com base em comportamentos."
+          "recommendation": "Separar ambientes por função (ex.: utilizadores, servidores, gestão), aplicar o princípio de confiança mínima e implementar monitorização básica com alertas."
         }
       ]
     },
@@ -881,29 +887,29 @@
       ]
     },
     {
-	  "questionText": "Com que frequência os sistemas críticos da organização recebem atualizações de segurança?",
-	  "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "questionText": "Qual o impacto para a organização caso sistemas críticos não recebam atualizações de segurança atempadamente?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
 	  "description": "Avalia a regularidade com que os sistemas recebem atualizações, o que influencia diretamente a exposição a vulnerabilidades conhecidas.",
-	  "options": [
-		{
-		  "optionText": "As atualizações são aplicadas regularmente e validadas antes da entrada em produção.",
-		  "optionType": "PROBABILITY",
-		  "optionLevel": "LOW"
-		},
-		{
-		  "optionText": "As atualizações são aplicadas de forma irregular ou sem testes consistentes.",
-		  "optionType": "PROBABILITY",
-		  "optionLevel": "MEDIUM",
-		  "recommendation": "Estabelecer calendário mensal para atualizações e validar previamente em ambiente de testes."
-		},
-		{
-		  "optionText": "A maioria dos sistemas não recebe atualizações de forma sistemática.",
-		  "optionType": "PROBABILITY",
-		  "optionLevel": "HIGH",
-		  "recommendation": "Priorizar sistemas desatualizados por criticidade e aplicar correções dentro de prazos definidos."
-		}
-	  ]
-	},
+    "options": [
+        {
+          "optionText": "Impacto mínimo devido a mecanismos de contenção adicionais (ex.: segmentação, backups).",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Possível comprometimento de serviços internos, com impacto moderado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Aplicar atualizações em janela controlada, priorizando sistemas críticos e documentando testes realizados."
+        },
+        {
+          "optionText": "Interrupção significativa de serviços ou exploração de falhas conhecidas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar procedimento de emergência para aplicação de patches críticos em menos de 72 horas e realizar simulações de falhas em produção."
+        }
+      ]
+    },
     {
       "questionText": "Existe um inventário atualizado de versões e patches aplicados aos sistemas da organização?",
       "categoryName": "Risco de Manutenção e Atualizações de Segurança",
@@ -975,7 +981,7 @@
       ]
     },
     {
-      "questionText": "Qual o impacto operacional e competitivo caso partes críticas do código-fonte sejam expostas?",
+      "questionText": "Qual o impacto operacional e competitivo caso partes críticas do Source-Code sejam expostas?",
       "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
       "options": [
         {
@@ -1113,8 +1119,9 @@
       ]
     },
     {
-      "questionText": "Qual o impacto operacional caso ocorra abuso de privilégios internos por um colaborador autorizado?",
+      "questionText": "Qual seria o impacto se um colaborador com acesso autorizado utilizasse os privilégios de forma indevida?",
       "categoryName": "Risco Interno e de Auditoria",
+      "description": "Avalia o risco associado ao uso indevido de acessos privilegiados por colaboradores autorizados, como administradores ou responsáveis por dados sensíveis. Por exemplo, um técnico de TI que acede a ficheiros confidenciais sem justificação pode comprometer a integridade ou confidencialidade da informação.",
       "options": [
         {
           "optionText": "Impacto reduzido, identificado e contido rapidamente.",
@@ -1134,9 +1141,9 @@
           "recommendation": "Suspender imediatamente os acessos, rever permissões e consolidar registos de sessões privilegiadas num sistema protegido."
         }
       ]
-    },
+    },    
     {
-      "questionText": "Qual seria o impacto financeiro e reputacional se dados fossem manipulados ou vazados por uso indevido de privilégios internos?",
+      "questionText": "Qual seria o impacto financeiro e reputacional se dados fossem manipulados ou divulgados por uso indevido de privilégios internos?",
       "categoryName": "Risco Interno e de Auditoria",
       "options": [
         {
@@ -1784,8 +1791,9 @@
       ]
     },
     {
-      "questionText": "A empresa consegue detetar ataques antes que causem danos significativos?",
+      "questionText": "A empresa consegue detetar tentativas de ataque comuns antes que causem danos significativos?",
       "categoryName": "Risco de Monitorização e Resposta",
+      "description": "Avalia a capacidade da organização em identificar ataques detetáveis — como acessos não autorizados, malware conhecido ou padrões anómalos — antes que provoquem impacto técnico ou financeiro.",
       "options": [
         {
           "optionText": "Sim, tem deteção rápida e atua antes do impacto.",
@@ -1805,7 +1813,7 @@
           "recommendation": "Reforçar o controlo de pontos críticos e sensibilizar colaboradores para sinais de ataque ou falha anómala."
         }
       ]
-    },
+    },    
 	{
 		"questionText": "Qual o impacto de não possuir visibilidade centralizada dos ativos tecnológicos?",
 		"categoryName": "Risco de Visibilidade e Reporting",
