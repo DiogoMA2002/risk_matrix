@@ -25,7 +25,7 @@
           
         </div>
         <div class="flex items-center space-x-2 text-white">
-          <img src="@/assets/logo.webp" alt="Logo" class="h-10" v-once>
+          <img src="@/assets/logoCCC.webp" alt="Logo" class="h-10" v-once>
           <span class="text-2xl font-bold" v-once>C-Network</span>
         </div>
       </div>
