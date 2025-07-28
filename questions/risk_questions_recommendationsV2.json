@@ -1121,7 +1121,7 @@
     {
       "questionText": "Qual seria o impacto se um colaborador com acesso autorizado utilizasse os privilégios de forma indevida?",
       "categoryName": "Risco Interno e de Auditoria",
-      "description": "Avalia o risco associado ao uso indevido de acessos privilegiados por colaboradores autorizados, como administradores ou responsáveis por dados sensíveis. Por exemplo, um técnico de TI que acede a ficheiros confidenciais sem justificação pode comprometer a integridade ou confidencialidade da informação.",
+      "description": "Avalia o risco associado ao uso indevido de acessos privilegiados por colaboradores autorizados. Por exemplo, um técnico de TI que acede a ficheiros confidenciais sem justificação pode comprometer a integridade ou confidencialidade da informação.",
       "options": [
         {
           "optionText": "Impacto reduzido, identificado e contido rapidamente.",
