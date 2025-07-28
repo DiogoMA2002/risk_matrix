@@ -232,7 +232,7 @@
       ]
     },
     {
-      "questionText": "A empresa possui mecanismos técnicos eficazes (anti-phishing, filtros de e-mail, etc.) para mitigar ataques sociais?",
+      "questionText": "A empresa possui mecanismos técnicos eficazes (anti-phishing, filtros de e-mail, etc.) para mitigar ataques de Engenharia Sociais?",
       "categoryName": "Risco de Comunicação e Engenharia Social",
       "options": [
         {
@@ -278,7 +278,7 @@
       ]
     },
     {
-      "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado?",
+      "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado (ex.: 1 Dia)?" ,
       "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
@@ -347,7 +347,7 @@
       ]
     },
     {
-      "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes da sua implantação?",
+      "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes da sua implementação?",
       "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {

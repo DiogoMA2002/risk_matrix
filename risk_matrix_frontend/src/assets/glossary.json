@@ -175,6 +175,10 @@
     "term": "Engenharia Reversa",
     "definition": "Processo de análise de software ou hardware para descobrir o seu funcionamento interno, geralmente sem acesso ao código-fonte."
   },
+    {
+    "term": "Serviços Críticos",
+    "definition": "Serviços essenciais para o funcionamento da organização, cuja interrupção causa impacto significativo nas operações, segurança, finanças ou conformidade legal. Exigem alta disponibilidade, redundância e planos de continuidade"
+  },
   {
     "term": "API",
     "definition": "Conjunto de interfaces que permite a comunicação entre diferentes sistemas, aplicações ou componentes de software."

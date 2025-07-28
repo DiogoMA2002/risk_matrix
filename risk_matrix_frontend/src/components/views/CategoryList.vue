@@ -87,7 +87,7 @@
             <button
               @click="submitAllAnswers"
               :disabled="isSubmitting"
-              class="action-btn bg-blue-600 hover:bg-blue-700 focus:ring-blue-400"
+              class="elegant-btn elegant-btn-primary"
               aria-label="Enviar Todas as Respostas"
             >
               <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -98,7 +98,7 @@
             </button>
             <button
               @click="exportToJSON()"
-              class="action-btn bg-green-600 hover:bg-green-700 focus:ring-green-400"
+              class="elegant-btn elegant-btn-success"
               aria-label="Exportar Progresso"
             >
               <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -108,7 +108,7 @@
             </button>
             <button
               @click="triggerImport"
-              class="action-btn bg-purple-600 hover:bg-purple-700 focus:ring-purple-400"
+              class="elegant-btn elegant-btn-purple"
               aria-label="Importar Progresso"
             >
               <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -569,9 +569,98 @@ select:focus-visible {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* New Elegant Button Styles */
+.elegant-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 2px solid;
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  cursor: pointer;
+  transform: translateY(0);
+}
+
+.elegant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.elegant-btn:active {
+  transform: translateY(0);
+}
+
+.elegant-btn:focus-visible {
+  outline: 2px solid;
+  outline-offset: 2px;
+}
+
+/* Primary Button (Submit) - Blue */
+.elegant-btn-primary {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.elegant-btn-primary:hover {
+  background: #2563eb;
+  color: white;
+}
+
+.elegant-btn-primary:focus-visible {
+  outline-color: #2563eb;
+}
+
+/* Success Button (Export) - Green */
+.elegant-btn-success {
+  border-color: #059669;
+  color: #059669;
+}
+
+.elegant-btn-success:hover {
+  background: #059669;
+  color: white;
+}
+
+.elegant-btn-success:focus-visible {
+  outline-color: #059669;
+}
+
+/* Purple Button (Import) - Purple */
+.elegant-btn-purple {
+  border-color: #7c3aed;
+  color: #7c3aed;
+}
+
+.elegant-btn-purple:hover {
+  background: #7c3aed;
+  color: white;
+}
+
+.elegant-btn-purple:focus-visible {
+  outline-color: #7c3aed;
+}
+
+.elegant-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.elegant-btn:disabled:hover {
+  transform: none;
+  background: white;
+}
 .loader {
-  border: 2px solid #fff;
-  border-top: 2px solid #3498db;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
   border-radius: 50%;
   width: 1rem;
   height: 1rem;
