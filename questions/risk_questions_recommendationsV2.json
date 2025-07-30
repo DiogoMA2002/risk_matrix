@@ -244,7 +244,7 @@
           "optionText": "Alguns mecanismos implementados, mas limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Ativar bloqueio de anexos suspeitos e filtragem de links perigosos no serviço de e-mail — preferencialmente usando funcionalidades nativas já disponíveis."
+          "recommendation": "Ativar bloqueio de anexos suspeitos e filtragem de links perigosos no serviço de e-mail, preferencialmente usando funcionalidades nativas já disponíveis."
         },
         {
           "optionText": "Sem mecanismos técnicos ou insuficientes.",
@@ -982,7 +982,7 @@
     },
     {
       "questionText": "Qual o impacto operacional e competitivo caso partes críticas do Source-Code sejam expostas?",
-      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Código Fonte",
       "options": [
         {
           "optionText": "Impacto limitado, informações não críticas expostas.",
@@ -1005,7 +1005,7 @@
     },
     {
       "questionText": "Qual seria o impacto financeiro e reputacional decorrente da exploração bem-sucedida de vulnerabilidades identificadas através de engenharia reversa?",
-      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Código Fonte",
       "options": [
         {
           "optionText": "Impacto reduzido, fácil mitigação e danos limitados.",
@@ -1028,7 +1028,7 @@
     },
     {
       "questionText": "A empresa utiliza mecanismos técnicos para dificultar ou impedir a engenharia reversa do código-fonte e software sensível (ex: ofuscação)?",
-      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Código Fonte",
       "options": [
         {
           "optionText": "Proteção robusta, amplamente implementada.",
@@ -1051,7 +1051,7 @@
     },
     {
       "questionText": "O código-fonte sensível é protegido por controlos de acesso e monitorização adequados?",
-      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Código Fonte",
       "options": [
         {
           "optionText": "Sim, com controlos de acesso restrito e registo de atividade.",
@@ -1074,7 +1074,7 @@
     },
     {
       "questionText": "Existe uma política formal para a proteção eficaz do código-fonte e propriedade intelectual, incluindo medidas contra engenharia reversa?",
-      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Código Fonte",
       "options": [
         {
           "optionText": "Política clara, documentada e amplamente aplicada.",
@@ -1097,7 +1097,7 @@
     },
     {
       "questionText": "São realizados testes ou auditorias para identificar riscos relacionados com a exposição do código-fonte?",
-      "categoryName": "Risco de Engenharia Reversa e Exploração de Codigo Fonte",
+      "categoryName": "Risco de Engenharia Reversa e Exploração de Código Fonte",
       "options": [
         {
           "optionText": "Sim, com auditorias periódicas e processos de validação.",
@@ -1352,7 +1352,7 @@
 	{
 	  "questionText": "A organização tem mecanismos eficazes de mitigação para lidar com falhas inesperadas em tecnologias críticas?",
 	  "categoryName": "Risco Físico e Tecnológico",
-	  "description": "Avalia se existem soluções implementadas — como redundância, failover automático ou backups — para minimizar os impactos operacionais de falhas tecnológicas súbitas.",
+	  "description": "Avalia se existem soluções implementadas, como redundância, failover automático ou backups para minimizar os impactos operacionais de falhas tecnológicas súbitas.",
 	  "options": [
 		{
 		  "optionText": "Sim, com mitigação eficaz (ex: redundância ativa, backups automáticos testados regularmente).",
@@ -1793,7 +1793,7 @@
     {
       "questionText": "A empresa consegue detetar tentativas de ataque comuns antes que causem danos significativos?",
       "categoryName": "Risco de Monitorização e Resposta",
-      "description": "Avalia a capacidade da organização em identificar ataques detetáveis — como acessos não autorizados, malware conhecido ou padrões anómalos — antes que provoquem impacto técnico ou financeiro.",
+      "description": "Avalia a capacidade da organização em identificar ataques detetáveis, como acessos não autorizados, malware conhecido ou padrões anómalos, antes que provoquem impacto técnico ou financeiro.",
       "options": [
         {
           "optionText": "Sim, tem deteção rápida e atua antes do impacto.",
