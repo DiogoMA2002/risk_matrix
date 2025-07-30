@@ -175,7 +175,7 @@
     "term": "Engenharia Reversa",
     "definition": "Processo de análise de software ou hardware para descobrir o seu funcionamento interno, geralmente sem acesso ao código-fonte."
   },
-    {
+  {
     "term": "Serviços Críticos",
     "definition": "Serviços essenciais para o funcionamento da organização, cuja interrupção causa impacto significativo nas operações, segurança, finanças ou conformidade legal. Exigem alta disponibilidade, redundância e planos de continuidade"
   },
@@ -186,6 +186,14 @@
   {
     "term": "NIS2",
     "definition": "Diretiva europeia que reforça os requisitos de cibersegurança para operadores de serviços essenciais e entidades digitais, impondo medidas técnicas, operacionais e de notificação de incidentes."
+  },
+  {
+    "term": "Força Bruta",
+    "definition": "Técnica de ataque utilizada para descobrir credenciais ou chaves criptográficas através da tentativa sistemática de todas as combinações possíveis até encontrar a correta. É eficaz mas geralmente demorada, dependendo da complexidade e tamanho do alvo."
+  },
+  {
+    "term": "Ad-hoc",
+    "definition": "Expressão usada para descrever algo feito de forma pontual, sem planeamento prévio ou estrutura definida. Em contexto de cibersegurança, refere-se a ações reativas ou informais, realizadas apenas quando surge uma necessidade imediata."
   },
   {
     "term": "RGPD",

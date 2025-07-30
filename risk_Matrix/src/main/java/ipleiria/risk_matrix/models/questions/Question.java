@@ -28,7 +28,7 @@ public class Question {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column()
+    @Column(length = 500)
     private String description; // Descrição opcional da pergunta
 
     // Remove the old ManyToOne relationship to Questionnaire
