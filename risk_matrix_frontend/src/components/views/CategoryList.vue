@@ -116,6 +116,16 @@
               </svg>
               Importar
             </button>
+            <button
+              @click="clearInvalidAnswers"
+              class="elegant-btn elegant-btn-warning"
+              aria-label="Limpar Respostas Inválidas"
+            >
+              <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Limpar
+            </button>
             <input 
               type="file" 
               ref="importFile" 
@@ -233,7 +243,7 @@ export default {
   },
   methods: {
     ...mapActions(["fetchQuestionnaires", "fetchQuestionnaireById"]),
-    showAlertDialog(title, message, type = "alert") {
+    showAlertDialog(title, message, type = "info") {
       this.alertTitle = title;
       this.alertMessage = message;
       this.alertType = type;
@@ -346,7 +356,7 @@ export default {
         }
 
         if (!payload.length) {
-          await this.showAlertDialog("Aviso", "Nenhuma resposta para enviar!");
+          await this.showAlertDialog("Aviso", "Nenhuma resposta para enviar!", "info");
           return;
         }
 
@@ -383,7 +393,7 @@ export default {
         }
 
         if (!allAnswersArray.length) {
-          await this.showAlertDialog("Aviso", "Nenhuma resposta para exportar!");
+          await this.showAlertDialog("Aviso", "Nenhuma resposta para exportar!", "info");
           return;
         }
 
@@ -403,7 +413,7 @@ export default {
         }
 
       } catch (error) {
-        await this.showAlertDialog("Erro", "Ocorreu um erro ao exportar o progresso.");
+        await this.showAlertDialog("Erro", "Ocorreu um erro ao exportar o progresso.", "error");
       }
     },
     triggerImport() {
@@ -425,22 +435,48 @@ export default {
             throw new Error('Formato de arquivo inválido.');
           }
 
-          // Merge answers
+          // Check if questionnaire is loaded
+          if (!this.selectedQuestionnaire || !this.selectedQuestionnaire.questions) {
+            console.warn('No questionnaire loaded or no questions found');
+            this.showAlertDialog("Erro", "Nenhum questionário carregado. Por favor, selecione um questionário primeiro.", "error");
+            this.$refs.importFile.value = null;
+            return;
+          }
+
+          // Create a mapping to match imported answers to current questionnaire questions
+          // We'll match by category and option text since the questions are the same content
           let mergedCount = 0;
           let skippedCount = 0;
+          let invalidCount = 0;
           const currentAnswers = JSON.parse(JSON.stringify(this.allAnswers));
 
           importedData.answers.forEach(answerSet => {
             const { category, questionId, selectedOption } = answerSet;
             if (category && questionId && selectedOption) {
-              if (!currentAnswers[category]) {
-                currentAnswers[category] = {};
+              // Find the matching question in current questionnaire by category and option text
+              let matchedQuestionId = null;
+              if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
+                const matchingQuestion = this.selectedQuestionnaire.questions.find(q => {
+                  const catString = (typeof q.category === "object" && q.category !== null)
+                    ? q.category.name
+                    : q.category;
+                  return catString === category && q.options && q.options.some(opt => opt.optionText === selectedOption);
+                });
+                matchedQuestionId = matchingQuestion ? matchingQuestion.id : null;
               }
-              if (!currentAnswers[category][questionId]) {
-                currentAnswers[category][questionId] = selectedOption;
-                mergedCount++;
+
+              if (matchedQuestionId) {
+                if (!currentAnswers[category]) {
+                  currentAnswers[category] = {};
+                }
+                if (!currentAnswers[category][matchedQuestionId]) {
+                  currentAnswers[category][matchedQuestionId] = selectedOption;
+                  mergedCount++;
+                } else {
+                  skippedCount++;
+                }
               } else {
-                skippedCount++;
+                invalidCount++;
               }
             }
           });
@@ -452,8 +488,11 @@ export default {
           if (skippedCount > 0) {
             message += ` ${skippedCount} respostas já existentes foram ignoradas.`;
           }
+          if (invalidCount > 0) {
+            message += `\n\n ATENÇÃO: ${invalidCount} respostas não puderam ser correspondidas ao questionário atual e foram ignoradas.`;
+          }
 
-          this.showAlertDialog("Importação Concluída", message, "success");
+          this.showAlertDialog("Importação Concluída", message, invalidCount > 0 ? "info" : "success");
           // Reset file input to allow importing the same file again
           this.$refs.importFile.value = null;
 
@@ -470,8 +509,27 @@ export default {
       this.$router.push("/feedback-form");
     },
     answeredCount(category) {
+      if (!this.selectedQuestionnaire || !this.selectedQuestionnaire.questions) {
+        return 0;
+      }
+
+      // Get question IDs for this category in the current questionnaire
+      const categoryQuestionIds = this.selectedQuestionnaire.questions
+        .filter(q => {
+          const catString = (typeof q.category === "object" && q.category !== null)
+            ? q.category.name
+            : q.category;
+          return catString === category;
+        })
+        .map(q => q.id);
+
       const answersForCategory = this.allAnswers[category] || {};
-      return Object.values(answersForCategory).filter(ans => typeof ans === 'string' && ans.trim() !== "").length;
+      
+      // Only count answers for questions that belong to the current questionnaire
+      return categoryQuestionIds.filter(questionId => {
+        const answer = answersForCategory[questionId];
+        return typeof answer === 'string' && answer.trim() !== "";
+      }).length;
     },
     totalCount(category) {
       if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
@@ -484,10 +542,44 @@ export default {
       }
       return 0;
     },
-    selectQuestionnaire(id) {
+    async selectQuestionnaire(id) {
       this.$store.commit("clearAllAnswers");
       this.$store.commit("setSelectedQuestionnaireId", id);
-      this.fetchQuestionnaireById(id);
+      await this.fetchQuestionnaireById(id);
+      // Clean up any answers that don't belong to the newly loaded questionnaire
+      this.clearInvalidAnswers();
+    },
+    clearInvalidAnswers() {
+      if (!this.selectedQuestionnaire || !this.selectedQuestionnaire.questions) {
+        return;
+      }
+
+      const currentQuestionIds = new Set(this.selectedQuestionnaire.questions.map(q => q.id));
+      const currentAnswers = JSON.parse(JSON.stringify(this.allAnswers));
+      let removedCount = 0;
+
+      // Remove answers that don't belong to the current questionnaire
+      for (const category in currentAnswers) {
+        for (const questionId in currentAnswers[category]) {
+          if (!currentQuestionIds.has(parseInt(questionId))) {
+            delete currentAnswers[category][questionId];
+            removedCount++;
+          }
+        }
+        // Remove empty categories
+        if (Object.keys(currentAnswers[category]).length === 0) {
+          delete currentAnswers[category];
+        }
+      }
+
+      if (removedCount > 0) {
+        this.$store.commit('setAllAnswers', currentAnswers);
+        this.showAlertDialog(
+          "Respostas Limpas", 
+          `${removedCount} respostas que não pertencem ao questionário atual foram removidas.`, 
+          "info"
+        );
+      }
     }
   }
 };
@@ -645,6 +737,21 @@ select:focus-visible {
 
 .elegant-btn-purple:focus-visible {
   outline-color: #7c3aed;
+}
+
+/* Warning Button (Clear) - Orange */
+.elegant-btn-warning {
+  border-color: #ea580c;
+  color: #ea580c;
+}
+
+.elegant-btn-warning:hover {
+  background: #ea580c;
+  color: white;
+}
+
+.elegant-btn-warning:focus-visible {
+  outline-color: #ea580c;
 }
 
 .elegant-btn:disabled {
