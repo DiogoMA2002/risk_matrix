@@ -117,15 +117,16 @@
               Importar
             </button>
             <button
-              @click="clearInvalidAnswers"
+              @click="clearAllAnswers"
               class="elegant-btn elegant-btn-warning"
-              aria-label="Limpar Respostas Inválidas"
+              aria-label="Limpar Todas as Respostas"
             >
               <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
               Limpar
             </button>
+
             <input 
               type="file" 
               ref="importFile" 
@@ -546,41 +547,32 @@ export default {
       this.$store.commit("clearAllAnswers");
       this.$store.commit("setSelectedQuestionnaireId", id);
       await this.fetchQuestionnaireById(id);
-      // Clean up any answers that don't belong to the newly loaded questionnaire
-      this.clearInvalidAnswers();
     },
-    clearInvalidAnswers() {
-      if (!this.selectedQuestionnaire || !this.selectedQuestionnaire.questions) {
+    async clearAllAnswers() {
+      // Count total answers to show in confirmation
+      const totalAnswers = Object.values(this.allAnswers).reduce((total, categoryAnswers) => {
+        return total + Object.values(categoryAnswers).filter(answer => 
+          typeof answer === 'string' && answer.trim() !== ""
+        ).length;
+      }, 0);
+
+      if (totalAnswers === 0) {
+        this.showAlertDialog("Aviso", "Não há respostas para limpar.", "info");
         return;
       }
 
-      const currentQuestionIds = new Set(this.selectedQuestionnaire.questions.map(q => q.id));
-      const currentAnswers = JSON.parse(JSON.stringify(this.allAnswers));
-      let removedCount = 0;
+      const proceed = await this.showAlertDialog(
+        "Confirmar Limpeza",
+        `Tem a certeza que deseja limpar todas as respostas?\n\nEsta ação não pode ser desfeita.`,
+        "confirm"
+      );
 
-      // Remove answers that don't belong to the current questionnaire
-      for (const category in currentAnswers) {
-        for (const questionId in currentAnswers[category]) {
-          if (!currentQuestionIds.has(parseInt(questionId))) {
-            delete currentAnswers[category][questionId];
-            removedCount++;
-          }
-        }
-        // Remove empty categories
-        if (Object.keys(currentAnswers[category]).length === 0) {
-          delete currentAnswers[category];
-        }
+      if (proceed) {
+        this.$store.commit("clearAllAnswers");
+        this.showAlertDialog("Sucesso", "Todas as respostas foram limpas com sucesso.", "success");
       }
+    },
 
-      if (removedCount > 0) {
-        this.$store.commit('setAllAnswers', currentAnswers);
-        this.showAlertDialog(
-          "Respostas Limpas", 
-          `${removedCount} respostas que não pertencem ao questionário atual foram removidas.`, 
-          "info"
-        );
-      }
-    }
   }
 };
 </script>

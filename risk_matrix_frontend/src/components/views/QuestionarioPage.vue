@@ -34,7 +34,7 @@
               <!-- Question Text + Description -->
               <div class="flex items-start mb-4">
                 <div
-                  class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium mr-3">
+                  class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium mr-3 flex-shrink-0 min-w-[2rem] min-h-[2rem]">
                   {{ index + 1 }}
                 </div>
                 <div>
@@ -62,7 +62,7 @@
             <!-- Skeleton for 3 questions -->
             <div v-for="i in 3" :key="i" class="mb-6 bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-md p-6">
               <div class="flex items-center mb-4">
-                <div class="w-8 h-8 rounded-full bg-blue-100 animate-pulse mr-3"></div>
+                <div class="w-8 h-8 rounded-full bg-blue-100 animate-pulse mr-3 flex-shrink-0 min-w-[2rem] min-h-[2rem]"></div>
                 <div class="h-6 bg-blue-100 rounded w-3/4 animate-pulse"></div>
               </div>
               <div class="pl-11 space-y-3">
@@ -89,19 +89,19 @@
       <div class="max-w-3xl mx-auto mt-10 px-4" v-once>
         <div class="flex items-center justify-between">
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">1
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium flex-shrink-0 min-w-[2rem] min-h-[2rem]">1
             </div>
             <div class="ml-2 text-white">Informações</div>
           </div>
           <div class="w-16 h-1 bg-blue-400"></div>
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">2
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium flex-shrink-0 min-w-[2rem] min-h-[2rem]">2
             </div>
             <div class="ml-2 text-white">Requisitos</div>
           </div>
           <div class="w-16 h-1 bg-blue-400"></div>
           <div class="flex items-center">
-            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">3
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium flex-shrink-0 min-w-[2rem] min-h-[2rem]">3
             </div>
             <div class="ml-2 text-white font-bold">Questionário</div>
           </div>

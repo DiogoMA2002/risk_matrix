@@ -71,7 +71,7 @@
       ]
     },
     {
-      "questionText": "A organização monitoriza tentativas de login suspeitas e falhas repetidas?",
+      "questionText": "A entidade monitoriza tentativas de login suspeitas e falhas repetidas?",
       "categoryName": "Risco de Acesso e Autenticação",
       "options": [
         {
@@ -204,12 +204,12 @@
           "optionText": "Sem formação ou formação raramente realizada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Realizar sessão anual obrigatória (presencial ou online), com registo de presenças e conteúdo adaptado à realidade da empresa. Incluir também no onboarding."
+          "recommendation": "Realizar sessão anual obrigatória (presencial ou online), com registo de presenças e conteúdo adaptado à realidade da entidade. Incluir também no onboarding."
         }
       ]
     },
     {
-      "questionText": "A empresa realiza testes frequentes de simulação de phishing e engenharia social para medir a consciencialização?",
+      "questionText": "A entidade realiza testes frequentes de simulação de phishing e engenharia social para medir a consciencialização?",
       "categoryName": "Risco de Comunicação e Engenharia Social",
       "options": [
         {
@@ -232,7 +232,7 @@
       ]
     },
     {
-      "questionText": "A empresa possui mecanismos técnicos eficazes (anti-phishing, filtros de e-mail, etc.) para mitigar ataques de Engenharia Sociais?",
+      "questionText": "A entidade possui mecanismos técnicos eficazes (anti-phishing, filtros de e-mail, etc.) para mitigar ataques de Engenharia Sociais?",
       "categoryName": "Risco de Comunicação e Engenharia Social",
       "options": [
         {
@@ -250,7 +250,7 @@
           "optionText": "Sem mecanismos técnicos ou insuficientes.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Ativar SPF, DKIM e DMARC no domínio da organização. Complementar com gateway de e-mail seguro, se a solução atual não suportar filtros robustos."
+          "recommendation": "Ativar SPF, DKIM e DMARC no domínio da entidade. Complementar com gateway de e-mail seguro, se a solução atual não suportar filtros robustos."
         }
       ]
     },
@@ -267,7 +267,7 @@
           "optionText": "Canal disponível, mas pouco conhecido ou com resposta lenta.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Criar endereço simples (ex: phishing@empresa.com) e promovê-lo de forma contínua via e-mails internos, formação e intranet."
+          "recommendation": "Criar endereço simples (ex: phishing@entidade.com) e promovê-lo de forma contínua via e-mails internos, formação e intranet."
         },
         {
           "optionText": "Sem canal formal definido ou amplamente desconhecido.",
@@ -278,7 +278,7 @@
       ]
     },
     {
-      "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado (ex.: 1 Dia)?",
+      "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na entidade ficasse indisponível durante um período prolongado (ex.: 1 Dia)?",
       "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
@@ -393,7 +393,7 @@
       ]
     },
     {
-      "questionText": "A empresa utiliza ferramentas automatizadas para identificação rápida de configurações inseguras ou inadequadas?",
+      "questionText": "A entidade utiliza ferramentas automatizadas para identificação rápida de configurações inseguras ou inadequadas?",
       "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
@@ -417,7 +417,7 @@
     },
 
     {
-      "questionText": "Qual o impacto para a empresa caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
+      "questionText": "Qual o impacto para a entidade caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
       "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
@@ -440,7 +440,7 @@
       ]
     },
     {
-      "questionText": "Qual seria o impacto financeiro caso ocorresse uma exposição indevida de dados confidenciais armazenados pela empresa?",
+      "questionText": "Qual seria o impacto financeiro caso ocorresse uma exposição indevida de dados confidenciais armazenados pela entidade?",
       "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
@@ -463,7 +463,7 @@
       ]
     },
     {
-      "questionText": "Com que frequência são realizados backups dos dados críticos armazenados pela empresa?",
+      "questionText": "Com que frequência são realizados backups dos dados críticos armazenados pela entidade?",
       "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
@@ -510,7 +510,7 @@
       ]
     },
     {
-      "questionText": "A empresa possui mecanismos eficazes de controlo de acesso e monitorização em tempo real dos dados sensíveis?",
+      "questionText": "A entidade possui mecanismos eficazes de controlo de acesso e monitorização em tempo real dos dados sensíveis?",
       "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
@@ -603,7 +603,7 @@
       ]
     },
     {
-      "questionText": "A infraestrutura de rede da empresa está protegida contra ameaças e ataques DoS?",
+      "questionText": "A infraestrutura de rede da entidade está protegida contra ameaças e ataques DoS?",
       "categoryName": "Risco de Rede e Disponibilidade",
       "options": [
         {
@@ -635,22 +635,16 @@
           "optionLevel": "LOW"
         },
         {
-          "optionText": "A rede está segmentada, mas não existe monitorização ativa.",
+          "optionText": "A rede está segmentada ou tem alguma monitorização, mas de forma parcial ou limitada, deixando pontos críticos sem cobertura.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Ativar registo e análise de tráfego entre segmentos, com alertas simples para acessos anómalos ou inesperados."
-        },
-        {
-          "optionText": "Monitorização e segmentação aplicadas de forma parcial ou inconsistente.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Rever a política de segmentação e aplicar controlo de comunicações entre zonas, priorizando áreas críticas."
+          "recommendation": "Ativar registo e análise de tráfego entre segmentos críticos e reforçar a segmentação aplicando o princípio de confiança mínima."
         },
         {
           "optionText": "Sem segmentação eficaz e sem monitorização ativa da rede.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Separar ambientes por função (ex.: utilizadores, servidores, gestão), aplicar o princípio de confiança mínima e implementar monitorização básica com alertas."
+          "recommendation": "Separar ambientes por função (ex.: utilizadores, servidores, gestão) e implementar pelo menos monitorização básica com alertas."
         }
       ]
     },
@@ -747,7 +741,7 @@
       ]
     },
     {
-      "questionText": "A empresa avalia regularmente os níveis de segurança e continuidade operacional dos fornecedores críticos?",
+      "questionText": "A entidade avalia regularmente os níveis de segurança e continuidade operacional dos fornecedores críticos?",
       "categoryName": "Risco de Terceiros e Infraestruturas Externas",
       "options": [
         {
@@ -780,10 +774,16 @@
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Alguns fornecedores têm documentação básica.",
+          "optionText": "Alguns fornecedores têm documentação formal.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
           "recommendation": "Pedir aos fornecedores um resumo dos seus procedimentos de segurança e continuidade, com prazos para melhoria se necessário."
+        },
+        {
+          "optionText": "Os fornecedores apresentam documentação formal, mas nunca foi verificada pela entidade.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Definir um processo de verificação periódica (ex.: auditorias ligeiras ou pedidos de evidência) para validar se os procedimentos descritos são efetivamente aplicados."
         },
         {
           "optionText": "Sem certificações ou não verificadas.",
@@ -817,7 +817,7 @@
       ]
     },
     {
-      "questionText": "A empresa monitoriza incidentes e falhas em fornecedores e serviços externos de forma contínua?",
+      "questionText": "A entidade monitoriza incidentes e falhas em fornecedores e serviços externos de forma contínua?",
       "categoryName": "Risco de Terceiros e Infraestruturas Externas",
       "options": [
         {
@@ -887,7 +887,7 @@
       ]
     },
     {
-      "questionText": "Qual o impacto para a organização caso sistemas críticos não recebam atualizações de segurança atempadamente?",
+      "questionText": "Qual o impacto para a entidade caso sistemas críticos não recebam atualizações de segurança atempadamente?",
       "categoryName": "Risco de Manutenção e Atualizações de Segurança",
       "description": "Avalia a regularidade com que os sistemas recebem atualizações, o que influencia diretamente a exposição a vulnerabilidades conhecidas.",
       "options": [
@@ -911,9 +911,9 @@
       ]
     },
     {
-      "questionText": "Existe um inventário atualizado de versões e patches aplicados aos sistemas da organização?",
+      "questionText": "Existe um inventário atualizado de versões e patches aplicados aos sistemas da entidade?",
       "categoryName": "Risco de Manutenção e Atualizações de Segurança",
-      "description": "Verifica se a organização mantém um registo atualizado do estado de cada sistema, essencial para planeamento de atualizações e resposta a incidentes.",
+      "description": "Verifica se a entidade mantém um registo atualizado do estado de cada sistema, essencial para planeamento de atualizações e resposta a incidentes.",
       "options": [
         {
           "optionText": "Inventário automatizado e atualizado em tempo real.",
@@ -1027,7 +1027,7 @@
       ]
     },
     {
-      "questionText": "A empresa utiliza mecanismos técnicos para dificultar ou impedir a engenharia reversa do código-fonte e software sensível (ex: ofuscação)?",
+      "questionText": "A entidade utiliza mecanismos técnicos para dificultar ou impedir a engenharia reversa do código-fonte e software sensível (ex: ofuscação)?",
       "categoryName": "Risco de Engenharia Reversa e Exploração de Source Code",
       "options": [
         {
@@ -1166,7 +1166,7 @@
       ]
     },
     {
-      "questionText": "A empresa monitoriza o uso de privilégios internos para identificar possíveis abusos ou falhas?",
+      "questionText": "A entidade monitoriza o uso de privilégios internos para identificar possíveis abusos ou falhas?",
       "categoryName": "Risco Interno e de Auditoria",
       "options": [
         {
@@ -1197,11 +1197,18 @@
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
+
         {
           "optionText": "Os critérios existem, mas não são aplicados de forma consistente.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
           "recommendation": "Rever acessos privilegiados trimestralmente e exigir aprovação dupla para novas permissões."
+        },
+        {
+          "optionText": "Existem práticas informais, mas sem critérios ou procedimentos formalizados.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Formalizar um processo documentado para atribuição e revisão de privilégios, incluindo responsáveis e periodicidade."
         },
         {
           "optionText": "Não existem critérios nem revisão de acessos.",
@@ -1235,7 +1242,7 @@
       ]
     },
     {
-      "questionText": "Os registos críticos da empresa estão protegidos contra alteração ou eliminação indevida?",
+      "questionText": "Os registos críticos da entidade estão protegidos contra alteração ou eliminação indevida?",
       "categoryName": "Risco Interno e de Auditoria",
       "options": [
         {
@@ -1304,7 +1311,7 @@
       ]
     },
     {
-      "questionText": "Existe segurança física adequada para proteger os equipamentos críticos da empresa?",
+      "questionText": "Existe segurança física adequada para proteger os equipamentos críticos da entidade?",
       "categoryName": "Risco Físico e Tecnológico",
       "options": [
         {
@@ -1353,7 +1360,7 @@
       ]
     },
     {
-      "questionText": "A organização tem mecanismos eficazes de mitigação para lidar com falhas inesperadas em tecnologias críticas?",
+      "questionText": "A entidade tem mecanismos eficazes de mitigação para lidar com falhas inesperadas em tecnologias críticas?",
       "categoryName": "Risco Físico e Tecnológico",
       "description": "Avalia se existem soluções implementadas, como redundância, failover automático ou backups para minimizar os impactos operacionais de falhas tecnológicas súbitas.",
       "options": [
@@ -1438,7 +1445,7 @@
           "recommendation": "Evitar exposição direta de dados através de filtragem ou anonimização e garantir uso de ligações seguras."
         },
         {
-          "optionText": "Impacto elevado, com sanções e danos à imagem da empresa.",
+          "optionText": "Impacto elevado, com sanções e danos à imagem da entidade.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
           "recommendation": "Ativar o plano de resposta a incidentes, notificar entidades competentes e reforçar os controlos de proteção de dados."
@@ -1538,7 +1545,7 @@
       ]
     },
     {
-      "questionText": "Qual seria o impacto financeiro e reputacional se a empresa fosse sancionada por não conformidade?",
+      "questionText": "Qual seria o impacto financeiro e reputacional se a entidade fosse sancionada por não conformidade?",
       "categoryName": "Risco Legal e de Conformidade",
       "description": "Avalia os danos que podem surgir de uma multa ou processo legal resultante do incumprimento de leis como o RGPD ou outras obrigações legais.",
       "options": [
@@ -1562,31 +1569,31 @@
       ]
     },
     {
-      "questionText": "Qual o impacto caso a organização não tenha um canal seguro e anónimo para denúncias legais ou éticas?",
+      "questionText": "Qual o impacto de não existir um canal seguro e anónimo para denúncias legais ou éticas?",
       "categoryName": "Risco Legal e de Conformidade",
-      "description": "Avalia os riscos de não existir uma forma eficaz para reportar violações internas de forma segura e confidencial.",
+      "description": "Avalia as potenciais consequências legais, reputacionais e organizacionais da ausência de um mecanismo eficaz para denúncias internas.",
       "options": [
         {
-          "optionText": "Canal eficaz implementado com garantias de anonimato.",
+          "optionText": "Impacto reduzido, a organização mantém elevada proximidade e transparência interna.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Canal disponível, mas pouco divulgado ou usado.",
+          "optionText": "Possível dificuldade em identificar problemas legais ou éticos a tempo, com risco moderado de sanções ou perda de confiança.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Reforçar comunicação sobre o canal e garantir anonimato técnico mínimo (ex.: email dedicado ou plataforma simples)."
+          "recommendation": "Implementar um canal simples de denúncia para garantir a deteção precoce de irregularidades."
         },
         {
-          "optionText": "Não existe canal de denúncia confiável.",
+          "optionText": "Elevado risco de incumprimento legal, danos reputacionais e falhas éticas graves não reportadas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Criar um canal seguro com processo formal de seguimento confidencial e medidas para proteger denunciantes."
+          "recommendation": "Estabelecer imediatamente um canal seguro, anónimo e formalizado para denúncias, com políticas claras de proteção a denunciantes."
         }
       ]
     },
     {
-      "questionText": "A organização está em conformidade com as principais leis e normas de proteção de dados (ex.: RGPD)?",
+      "questionText": "A entidade está em conformidade com as principais leis e normas de proteção de dados (ex.: RGPD)?",
       "categoryName": "Risco Legal e de Conformidade",
       "options": [
         {
@@ -1685,7 +1692,7 @@
       ]
     },
     {
-      "questionText": "Qual o impacto para a empresa se não detetar ou responder a tempo a um incidente de segurança?",
+      "questionText": "Qual o impacto para a entidade se não detetar ou responder a tempo a um incidente de segurança?",
       "categoryName": "Risco de Monitorização e Resposta",
       "options": [
         {
@@ -1731,7 +1738,7 @@
       ]
     },
     {
-      "questionText": "A organização possui capacidades de monitorização contínua dos sistemas críticos?",
+      "questionText": "A entidade possui capacidades de monitorização contínua dos sistemas críticos?",
       "categoryName": "Risco de Monitorização e Resposta",
       "options": [
         {
@@ -1801,9 +1808,9 @@
       ]
     },
     {
-      "questionText": "A empresa consegue detetar tentativas de ataque comuns (ex.: Phishing, DDoS, Brute-force) antes que causem danos significativos?",
+      "questionText": "A entidade consegue detetar tentativas de ataque comuns (ex.: Phishing, DDoS, Brute-force) antes que causem danos significativos?",
       "categoryName": "Risco de Monitorização e Resposta",
-      "description": "Avalia a probabilidade de falhas técnicas ou vulnerabilidades de segurança resultantes da ausência de avaliações formais às tecnologias utilizadas, incluindo compatibilidade entre sistemas e revisão periódica dos riscos associados.",
+      "description": "Avalia a probabilidade de incidentes passarem despercebidos devido à ausência de mecanismos eficazes de monitorização, alerta e resposta a tentativas de ataque comuns.",
       "options": [
         {
           "optionText": "Sim, tem deteção rápida e atua antes do impacto.",
@@ -1828,7 +1835,7 @@
       "questionText": "Qual o impacto de não possuir visibilidade centralizada dos ativos tecnológicos?",
       "categoryName": "Risco de Visibilidade e Reporting",
 
-      "description": "Avalia o impacto da ausência de uma visão centralizada e atualizada dos ativos tecnológicos da organização. A falta de visibilidade dificulta a gestão de riscos, a resposta a incidentes e a tomada de decisões informadas sobre segurança, manutenção e conformidade.",
+      "description": "Avalia o impacto da ausência de uma visão centralizada e atualizada dos ativos tecnológicos da entidade. A falta de visibilidade dificulta a gestão de riscos, a resposta a incidentes e a tomada de decisões informadas sobre segurança, manutenção e conformidade.",
       "options": [
         {
           "optionText": "Impacto reduzido, com alternativas manuais suficientes.",
@@ -1873,7 +1880,7 @@
       ]
     },
     {
-      "questionText": "A organização possui visibilidade centralizada sobre os ativos tecnológicos em uso?",
+      "questionText": "A entidade possui visibilidade centralizada sobre os ativos tecnológicos em uso?",
       "categoryName": "Risco de Visibilidade e Reporting",
       "options": [
         {
@@ -1920,7 +1927,7 @@
     },
 
     {
-      "questionText": "A empresa consegue reportar eventos de segurança à gestão e às autoridades, se necessário?",
+      "questionText": "A entidade consegue reportar eventos de segurança à gestão e às autoridades, se necessário?",
       "categoryName": "Risco de Visibilidade e Reporting",
       "options": [
         {
@@ -1943,7 +1950,7 @@
       ]
     },
     {
-      "questionText": "A empresa consegue identificar rapidamente ativos em risco ou fora de conformidade?",
+      "questionText": "A entidade consegue identificar rapidamente ativos em risco ou fora de conformidade?",
       "categoryName": "Risco de Visibilidade e Reporting",
       "options": [
         {
@@ -1966,22 +1973,22 @@
       ]
     },
     {
-      "questionText": "Qual é o impacto de a liderança da empresa não estar envolvida nas decisões de cibersegurança?",
+      "questionText": "Qual é o impacto de a liderança da entidade não estar envolvida nas decisões de cibersegurança?",
       "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
       "options": [
         {
-          "optionText": "A gestão está envolvida e acompanha as decisões e riscos de forma contínua.",
+          "optionText": "Impacto reduzido, a entidade tem processos técnicos fortes e independentes da gestão.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "O envolvimento é esporádico ou apenas reativo.",
+          "optionText": "Risco de decisões estratégicas pouco alinhadas com a segurança, causando falhas na priorização de investimentos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
           "recommendation": "Apresentar relatórios simples e regulares à gestão com prioridades de segurança."
         },
         {
-          "optionText": "Não há envolvimento visível da liderança.",
+          "optionText": "Elevada probabilidade de falhas graves não serem reconhecidas ou tratadas, levando a incidentes críticos ou incumprimento regulatório.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
           "recommendation": "Criar um grupo de trabalho com elementos da direção e responsáveis pela segurança da informação."
@@ -1993,18 +2000,18 @@
       "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
       "options": [
         {
-          "optionText": "Existe uma cultura clara de reporte e os colaboradores sentem-se seguros para reportar falhas ou incidentes.",
+          "optionText": "Impacto reduzido, os incidentes relevantes são detetados por mecanismos técnicos ou equipas dedicadas.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "O reporte ocorre apenas em casos mais graves ou quando solicitado.",
+          "optionText": "Risco de atrasos na deteção de incidentes, aumentando custos de resposta e probabilidade de propagação.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
           "recommendation": "Criar canais de reporte acessíveis e reforçar mensagens de não culpabilização no erro."
         },
         {
-          "optionText": "Colaboradores evitam reportar incidentes por receio ou desconhecimento.",
+          "optionText": "Falhas graves podem permanecer ocultas, aumentando a probabilidade de compromissos significativos e danos reputacionais.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
           "recommendation": "Implementar campanhas de sensibilização e definir políticas claras de reporte seguro e anónimo."
@@ -2012,7 +2019,7 @@
       ]
     },
     {
-      "questionText": "A empresa tem um canal para denúncia de comportamentos suspeitos ou violações de segurança?",
+      "questionText": "A entidade tem um canal para denúncia de comportamentos suspeitos ou violações de segurança?",
       "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
       "options": [
         {
@@ -2035,7 +2042,7 @@
       ]
     },
     {
-      "questionText": "A empresa fornece formação regular em cibersegurança a todos os colaboradores?",
+      "questionText": "A entidade fornece formação regular em cibersegurança a todos os colaboradores?",
       "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
       "options": [
         {
@@ -2050,7 +2057,7 @@
           "recommendation": "Implementar formação anual adaptada aos diferentes níveis de responsabilidade e exposição a riscos (ex.: administrativos, técnicos)."
         },
         {
-          "optionText": "A empresa não fornece formação formal em cibersegurança.",
+          "optionText": "A entidade não fornece formação formal em cibersegurança.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
           "recommendation": "Integrar formação prática com simulações de incidentes durante o onboarding e ao longo do ano."
@@ -2058,7 +2065,7 @@
       ]
     },
     {
-      "questionText": "Quão integrada está a cibersegurança na cultura organizacional da empresa?",
+      "questionText": "Quão integrada está a cibersegurança na cultura organizacional da entidade?",
       "categoryName": "Risco de Recursos Humanos e Cultura Organizacional",
       "options": [
         {
@@ -2105,54 +2112,54 @@
     },
 
     {
-      "questionText": "Qual o impacto de não realizar testes de segurança nos sistemas críticos (ex.: pentest, simulações)?",
-      "categoryName": "Risco Experimental ou Outros",
+      "questionText": "Qual o impacto para a entidade caso não sejam realizados testes de segurança nos sistemas críticos (ex.: pentest, simulações)?",
+      "categoryName": "Risco de Governança e Resiliência em Cibersegurança",
       "options": [
         {
-          "optionText": "Impacto reduzido, com validação indireta por outros mecanismos.",
+          "optionText": "Impacto reduzido, os sistemas em causa têm baixa criticidade e exposição limitada.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Algumas falhas podem passar despercebidas por falta de testes formais.",
+          "optionText": "Possibilidade de incidentes moderados que causem interrupções de serviço ou perdas de dados pontuais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Realizar um teste anual nos sistemas mais expostos ou críticos com apoio interno ou externo."
+          "recommendation": "Realizar testes de segurança anuais nos sistemas mais críticos ou expostos."
         },
         {
-          "optionText": "Exposição elevada a falhas graves ou desconhecidas.",
+          "optionText": "Incidentes graves com potenciais perdas financeiras, legais ou de reputação significativas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Agendar uma auditoria de segurança básica e elaborar um plano de correção com base nos resultados."
+          "recommendation": "Agendar auditorias de segurança regulares e definir um processo de correção de vulnerabilidades."
         }
       ]
     },
     {
-      "questionText": "Qual o impacto de não avaliar regularmente a maturidade em cibersegurança?",
-      "categoryName": "Risco Experimental ou Outros",
+      "questionText": "Qual o impacto para a entidade de não avaliar regularmente a sua maturidade em cibersegurança?",
+      "categoryName": "Risco de Governança e Resiliência em Cibersegurança",
       "options": [
         {
-          "optionText": "Impacto mínimo, com decisões baseadas na experiência da equipa.",
+          "optionText": "Impacto reduzido, a organização tem baixa exposição e processos simples.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Dificuldade em priorizar investimentos ou identificar lacunas.",
+          "optionText": "Risco moderado de falhas de priorização, investimentos mal direcionados ou dificuldades em identificar lacunas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Utilizar modelos simplificados como CIS Controls ou questionários do CNCS para autoavaliação anual."
+          "recommendation": "Adotar modelos simplificados (ex.: CIS Controls, questionários CNCS) para avaliação anual da maturidade."
         },
         {
-          "optionText": "Estratégia de segurança desatualizada ou ineficaz.",
+          "optionText": "Elevado risco de falhas de segurança graves, incumprimento regulatório ou perdas reputacionais significativas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Integrar uma avaliação anual com análise de progresso e planeamento de melhorias para o ano seguinte."
+          "recommendation": "Integrar avaliações anuais formais e usar os resultados para planeamento estratégico e melhoria contínua."
         }
       ]
     },
     {
-      "questionText": "A empresa realiza testes de segurança (como testes de intrusão ou simulações de ataque)?",
-      "categoryName": "Risco Experimental ou Outros",
+      "questionText": "A entidade realiza testes de segurança (como testes de intrusão ou simulações de ataque)?",
+      "categoryName": "Risco de Governança e Resiliência em Cibersegurança",
       "options": [
         {
           "optionText": "Sim, realiza testes básicos com apoio externo sempre que necessário.",
@@ -2163,7 +2170,7 @@
           "optionText": "Realiza apenas testes informais ou pontuais.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Considerar a contratação de um teste de segurança anual focado nos ativos mais críticos da empresa."
+          "recommendation": "Considerar a contratação de um teste de segurança anual focado nos ativos mais críticos da entidade."
         },
         {
           "optionText": "Nunca realizou qualquer teste de segurança.",
@@ -2175,8 +2182,8 @@
     },
 
     {
-      "questionText": "A empresa partilha ou recebe informação sobre ameaças (ex.: através de fóruns, newsletters ou CERTs)?",
-      "categoryName": "Risco Experimental ou Outros",
+      "questionText": "A entidade partilha ou recebe informação sobre ameaças (ex.: através de fóruns, newsletters ou CERTs)?",
+      "categoryName": "Risco de Governança e Resiliência em Cibersegurança",
       "options": [
         {
           "optionText": "Sim, está ligada a redes de partilha como o CERT.PT ou associações do setor.",
@@ -2187,7 +2194,7 @@
           "optionText": "Recebe informação ocasional sem fonte consistente ou validação.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Definir uma rotina para acompanhar alertas e atualizações críticas ligadas ao setor da empresa."
+          "recommendation": "Definir uma rotina para acompanhar alertas e atualizações críticas ligadas ao setor da entidade."
         },
         {
           "optionText": "Não possui qualquer canal ativo de obtenção de informação sobre ameaças.",
@@ -2198,8 +2205,8 @@
       ]
     },
     {
-      "questionText": "A empresa tem um plano de continuidade de negócio e recuperação de desastres? É testado?",
-      "categoryName": "Risco Experimental ou Outros",
+      "questionText": "A entidade tem um plano de continuidade de negócio e recuperação de desastres? É testado?",
+      "categoryName": "Risco de Governança e Resiliência em Cibersegurança",
       "options": [
         {
           "optionText": "Sim, tem um plano simples e realiza testes de forma periódica.",
@@ -2221,8 +2228,8 @@
       ]
     },
     {
-      "questionText": "A empresa tem alguma iniciativa de melhoria contínua ou inovação em segurança?",
-      "categoryName": "Risco Experimental ou Outros",
+      "questionText": "A entidade tem alguma iniciativa de melhoria contínua ou inovação em segurança?",
+      "categoryName": "Risco de Governança e Resiliência em Cibersegurança",
       "options": [
         {
           "optionText": "Sim, com pequenas melhorias implementadas de forma regular.",
