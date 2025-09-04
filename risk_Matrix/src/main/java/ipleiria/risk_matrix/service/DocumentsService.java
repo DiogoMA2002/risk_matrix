@@ -8,7 +8,18 @@ import ipleiria.risk_matrix.models.questions.Severity;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.util.Units;
+import org.apache.poi.xddf.usermodel.XDDFColor;
+import org.apache.poi.xddf.usermodel.XDDFSolidFillProperties;
+import org.apache.poi.xddf.usermodel.chart.*;
+import org.apache.poi.xddf.usermodel.PresetColor;
 import org.springframework.stereotype.Service;
+import org.openxmlformats.schemas.drawingml.x2006.chart.*;
+import org.openxmlformats.schemas.drawingml.x2006.main.*;
+// add these imports
+import org.openxmlformats.schemas.drawingml.x2006.chart.*;
+import org.openxmlformats.schemas.drawingml.x2006.main.*;
+import org.apache.poi.xwpf.usermodel.BreakType;
 
 import java.io.*;
 import java.util.*;
@@ -116,7 +127,18 @@ public class DocumentsService {
         textRun.setFontFamily("Verdana");
         textRun.setText("Este relatório apresenta os resultados da avaliação de risco realizada com base nas respostas submetidas. Foram analisadas várias áreas críticas de segurança da informação, como autenticação, backups, rede e acesso remoto. Abaixo apresenta-se um resumo das categorias avaliadas e os respetivos níveis de risco atribuídos:");
 
-        // Lista de categorias com severidade (já tens isto, mantém)
+        // Add pie chart
+        try {
+            addPieChart(document, severities);
+        } catch (IOException | org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
+            // Log error but continue with document generation
+            System.err.println("Error creating pie chart: " + e.getMessage());
+        }
+        addPageBreak(document);
+        // Lista de categorias com severidade
+        XWPFParagraph categoryListHeader = document.createParagraph();
+        XWPFRun headerRun = categoryListHeader.createRun();
+        
         severities.entrySet().stream()
                 .sorted(Map.Entry.<String, Severity>comparingByValue().reversed())
                 .forEach(entry -> {
@@ -124,7 +146,7 @@ public class DocumentsService {
                     XWPFRun categoryRun = p.createRun();
                     categoryRun.setText("- " + entry.getKey() + ": " + entry.getValue());
                     categoryRun.setFontSize(12);
-                    categoryRun.setFontFamily("Calibri");
+                    categoryRun.setFontFamily("Verdana");
 
                     switch (entry.getValue()) {
                         case CRITICAL -> categoryRun.setColor("8B0000");
@@ -141,6 +163,128 @@ public class DocumentsService {
         outroRun.setFontSize(11);
         outroRun.setFontFamily("Verdana");
         outroRun.setText("Recomenda-se a priorização das categorias com risco mais elevado. As recomendações específicas estão detalhadas por domínio no relatório abaixo, e visam mitigar vulnerabilidades identificadas com base em boas práticas de cibersegurança adaptadas.");
+        addPageBreak(document);
+    }
+
+    private void addPieChart(XWPFDocument doc, Map<String, Severity> severities)
+            throws IOException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
+
+        // Count per severity and compute percentages
+        Map<String, Long> counts = severities.values().stream()
+                .collect(Collectors.groupingBy(this::getSeverityDisplayName,
+                        LinkedHashMap::new, Collectors.counting()));
+        long total = Math.max(1, counts.values().stream().mapToLong(Long::longValue).sum());
+
+        // Labels with percentages for the legend
+        List<String> labels = new ArrayList<>(counts.keySet());
+        List<String> labelsWithPct = labels.stream()
+                .map(lbl -> {
+                    long c = counts.get(lbl);
+                    double pct = 100.0 * c / total;
+                    return String.format("%s (%.0f%%)", lbl, pct);
+                })
+                .toList();
+
+        Double[] values = counts.values().stream().map(Long::doubleValue).toArray(Double[]::new);
+
+        XWPFParagraph title = doc.createParagraph();
+        title.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun r = title.createRun();
+        r.setBold(true);
+        r.setFontFamily("Calibri");
+        r.setFontSize(14);
+        r.setText("Distribuição por Categoria");
+
+        // Size to practical full-page width: ~17.5 cm wide, 10.5 cm high
+        final int W = (int) (17.5 * Units.EMU_PER_CENTIMETER);
+        final int H = (int) (10.5 * Units.EMU_PER_CENTIMETER);
+        XWPFChart chart = doc.createChart(W, H);
+
+        // White background for chart and plot area
+        setChartBackgroundWhite(chart);
+
+        XDDFChartLegend legend = chart.getOrAddLegend();
+        legend.setPosition(LegendPosition.RIGHT);
+
+        XDDFDataSource<String> dsLabels = XDDFDataSourcesFactory.fromArray(labelsWithPct.toArray(String[]::new));
+        XDDFNumericalDataSource<Double> dsValues = XDDFDataSourcesFactory.fromArray(values);
+
+        XDDFPieChartData data = (XDDFPieChartData) chart.createData(ChartTypes.PIE, null, null);
+        XDDFPieChartData.Series series = (XDDFPieChartData.Series) data.addSeries(dsLabels, dsValues);
+        series.setShowLeaderLines(true);
+        data.setVaryColors(false); // we colour each slice ourselves
+        chart.plot(data);
+
+        // Data labels on slices: show percentages only
+        CTPieChart ctPie = chart.getCTChart().getPlotArea().getPieChartArray(0);
+        CTDLbls dLbls = ctPie.isSetDLbls() ? ctPie.getDLbls() : ctPie.addNewDLbls();
+        dLbls.addNewShowLegendKey().setVal(false);
+        dLbls.addNewShowVal().setVal(false);
+        dLbls.addNewShowCatName().setVal(false);
+        dLbls.addNewShowSerName().setVal(false);
+        dLbls.addNewShowPercent().setVal(true);
+
+        // Severity colours per slice (series index 0)
+        for (int i = 0; i < labels.size(); i++) {
+            int[] rgb = colourForSeverityLabel(labels.get(i)); // use base label to pick colour
+            setPieSliceRgb(chart, 0, i, rgb[0], rgb[1], rgb[2]);
+        }
+    }
+
+    // Solid fill helper for any shape properties
+    private void setSolidFillRgb(CTShapeProperties spPr, int r, int g, int b) {
+        CTSolidColorFillProperties solid = spPr.isSetSolidFill() ? spPr.getSolidFill() : spPr.addNewSolidFill();
+        CTSRgbColor rgb = solid.isSetSrgbClr() ? solid.getSrgbClr() : solid.addNewSrgbClr();
+        rgb.setVal(new byte[]{(byte) r, (byte) g, (byte) b});
+    }
+    // Map severity label -> colour
+    private int[] colourForSeverityLabel(String label) {
+        return switch (label) {
+            case "Crítico" -> new int[]{139, 0, 0};     // dark red
+            case "Alto"    -> new int[]{255, 0, 0};     // red
+            case "Médio"   -> new int[]{255, 165, 0};   // orange
+            case "Baixo"   -> new int[]{0, 128, 0};     // green
+            default        -> new int[]{128, 128, 128}; // grey
+        };
+    }
+    private void addPageBreak(XWPFDocument doc) {
+        XWPFParagraph p = doc.createParagraph();
+        p.setPageBreak(true);
+    }
+    // White background for chart and plot area
+    private void setChartBackgroundWhite(XWPFChart chart) {
+        // Chart space
+        CTChartSpace cs = chart.getCTChartSpace();
+        CTShapeProperties spPr = cs.isSetSpPr() ? cs.getSpPr() : cs.addNewSpPr();
+        setSolidFillRgb(spPr, 255, 255, 255);
+
+        // Plot area
+        CTPlotArea pa = chart.getCTChart().getPlotArea();
+        CTShapeProperties plotSpPr = pa.isSetSpPr() ? pa.getSpPr() : pa.addNewSpPr();
+        setSolidFillRgb(plotSpPr, 255, 255, 255);
+    }
+
+
+
+    private String getSeverityDisplayName(Severity severity) {
+        return switch (severity) {
+            case CRITICAL -> "Crítico";
+            case HIGH -> "Alto";
+            case MEDIUM -> "Médio";
+            case LOW -> "Baixo";
+            case UNKNOWN -> "Desconhecido";
+        };
+    }
+    private void setPieSliceRgb(XWPFChart chart, int seriesIdx, int pointIdx, int r, int g, int b) {
+        CTPieChart pie = chart.getCTChart().getPlotArea().getPieChartArray(0);
+        CTDPt dpt = pie.getSerArray(seriesIdx).addNewDPt();
+        dpt.addNewIdx().setVal(pointIdx);
+
+        CTShapeProperties spPr = dpt.isSetSpPr() ? dpt.getSpPr() : dpt.addNewSpPr();
+        CTSolidColorFillProperties solid = spPr.isSetSolidFill() ? spPr.getSolidFill() : spPr.addNewSolidFill();
+        CTSRgbColor rgb = CTSRgbColor.Factory.newInstance();
+        rgb.setVal(new byte[]{(byte) r, (byte) g, (byte) b});
+        if (solid.isSetSrgbClr()) solid.setSrgbClr(rgb); else solid.addNewSrgbClr().set(rgb);
     }
 
     private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory, Map<String, Severity> severities) {
