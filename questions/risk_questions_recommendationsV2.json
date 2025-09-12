@@ -2,7 +2,7 @@
   "title": "Avaliação de Riscos de Segurança",
   "questions": [
     {
-      "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
+      "questionText": "Qual o impacto caso credenciais genéricas comprometidas, sejam utilizadas para aceder a sistemas críticos?",
       "categoryName": "Risco de Acesso e Autenticação",
       "options": [
         {
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "questionText": "Se um atacante conseguir comprometer credenciais de administrador, qual seria o impacto?",
+      "questionText": "Se um atacante conseguir comprometer credenciais de administrador ou utilizadores priveligiados, qual seria o impacto?",
       "categoryName": "Risco de Acesso e Autenticação",
       "options": [
         {

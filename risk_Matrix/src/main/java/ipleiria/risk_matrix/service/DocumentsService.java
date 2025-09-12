@@ -9,17 +9,10 @@ import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.poi.util.Units;
-import org.apache.poi.xddf.usermodel.XDDFColor;
-import org.apache.poi.xddf.usermodel.XDDFSolidFillProperties;
 import org.apache.poi.xddf.usermodel.chart.*;
-import org.apache.poi.xddf.usermodel.PresetColor;
 import org.springframework.stereotype.Service;
 import org.openxmlformats.schemas.drawingml.x2006.chart.*;
 import org.openxmlformats.schemas.drawingml.x2006.main.*;
-// add these imports
-import org.openxmlformats.schemas.drawingml.x2006.chart.*;
-import org.openxmlformats.schemas.drawingml.x2006.main.*;
-import org.apache.poi.xwpf.usermodel.BreakType;
 
 import java.io.*;
 import java.util.*;
