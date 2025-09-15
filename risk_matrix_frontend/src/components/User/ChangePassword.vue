@@ -117,14 +117,27 @@ export default {
         this.newPassword = ''
         this.confirmPassword = ''
       } catch (error) {
-        const data = error.response?.data
-        if (data && data.message) {
-          this.message = formatValidationMessage(data.message)
-        } else {
-          this.message = "Erro ao alterar senha."
+          const data = error.response?.data
+
+          if (data) {
+            if (typeof data === 'string') {
+              this.message = data
+            } else if (data.validationErrors) {
+              // pega nos erros de validação
+              const errors = Object.values(data.validationErrors).flat()
+              this.message = errors.join(', ')
+            } else if (data.message) {
+              this.message = data.message
+            } else {
+              this.message = "Erro ao alterar senha."
+            }
+          } else {
+            this.message = "Erro ao alterar senha."
+          }
+
+          this.isError = true
         }
-        this.isError = true
-      }
+
     }
   }
 }

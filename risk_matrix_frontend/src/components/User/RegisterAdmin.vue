@@ -103,8 +103,16 @@
             this.email = ''
             this.password = ''
             } catch (error) {
-            this.message = error.response?.data || 'Erro ao registrar administrador.'
-            this.isError = true
+              if (error.response?.data?.validationErrors) {
+                // Vai buscar as mensagens de validação
+                const errors = Object.values(error.response.data.validationErrors).flat()
+                this.message = errors.join(', ') // Junta todas num só texto
+              } else if (error.response?.data?.message) {
+                this.message = error.response.data.message
+              } else {
+                this.message = 'Erro ao registrar administrador.'
+              }
+              this.isError = true
             }
         }
         }
