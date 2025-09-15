@@ -67,11 +67,9 @@
               <template v-else>
                 <div class="flex gap-2 justify-center">
                   <button @click="startEdit(entry)" class="btn-edit" title="Editar">
-                    <svg class="w-5 h-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6 6M3 17v4h4l10.293-10.293a1 1 0 00-1.414-1.414L3 17z"/></svg>
                     Editar
                   </button>
                   <button @click="confirmDelete(entry.id)" class="btn-delete" title="Eliminar">
-                    <svg class="w-5 h-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     Eliminar
                   </button>
                 </div>

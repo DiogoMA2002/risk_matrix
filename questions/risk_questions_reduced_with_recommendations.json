@@ -2,9 +2,9 @@
   "title": "Avaliação de Riscos de Segurança - Versão Reduzida",
   "questions": [
     {
-      "questionText": "Qual o impacto caso credenciais comprometidas sejam utilizadas para aceder a sistemas críticos?",
+      "questionText": "Qual o impacto caso credenciais genéricas comprometidas sejam utilizadas para aceder a sistemas críticos?",
       "categoryName": "Risco de Autenticação",
-	  "description": "Avalia o impacto potencial caso um atacante use credenciais roubadas para aceder a sistemas essenciais da organização. 'Credenciais comprometidas' referem-se a utilizadores ou senhas que caíram nas mãos de terceiros.",
+      "description": "Avalia o impacto potencial caso um atacante use credenciais roubadas para aceder a sistemas essenciais da organização. 'Credenciais comprometidas' referem-se a utilizadores ou senhas que caíram nas mãos de terceiros.",
       "options": [
         {
           "optionText": "Acesso limitado a dados não sensíveis.",
@@ -26,7 +26,7 @@
       ]
     },
     {
-      "questionText": "Se um atacante conseguir comprometer credenciais de administrador, qual seria o impacto?",
+      "questionText": "Se um atacante conseguir comprometer credenciais de administrador ou utilizadores priveligiados, qual seria o impacto?",
       "categoryName": "Risco de Autenticação",
       "options": [
         {
@@ -38,13 +38,13 @@
           "optionText": "Acesso significativo a sistemas internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente rotação automática de senhas de contas administrativas e restrinja os acessos com controlo centralizado, idealmente com uma solução leve de Privileged Access Management (PAM)."
+          "recommendation": "Aplicar modelo de menor privilégio, utilizar cofre de senhas para sessões privilegiadas e ativar logging centralizado com alertas para ações sensíveis."
         },
         {
           "optionText": "Controlo total sobre sistemas e dados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Desative imediatamente as credenciais comprometidas, revalide os acessos administrativos e restrinja o login a partir de IPs autorizados."
+          "recommendation": "Definir contas de emergência com MFA físico e regras específicas, validar procedimentos de isolamento de sistemas e rever eventos privilegiados em logs críticos."
         }
       ]
     },
@@ -74,7 +74,7 @@
     {
       "questionText": "A organização monitoriza tentativas de login suspeitas e falhas repetidas?",
       "categoryName": "Risco de Autenticação",
-	  "description": "Verifica se há mecanismos automáticos de deteção de acessos anómalos. Monitorizar falhas de login pode ajudar a identificar ataques em curso.",
+      "description": "Verifica se há mecanismos automáticos de deteção de acessos anómalos. Monitorizar falhas de login pode ajudar a identificar ataques em curso.",
       "options": [
         {
           "optionText": "Monitorização contínua com alertas.",
@@ -121,7 +121,7 @@
     {
       "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de senhas)?",
       "categoryName": "Risco de Autenticação",
-	  "description": "Verifica se as senhas são armazenadas com segurança, utilizando técnicas modernas como hashing forte. Um vault é uma solução segura para guardar credenciais.",
+      "description": "Verifica se as senhas são armazenadas com segurança, utilizando técnicas modernas como hashing forte. Um vault é uma solução segura para guardar credenciais.",
       "options": [
         {
           "optionText": "Armazenamento seguro com criptografia forte.",
@@ -132,20 +132,19 @@
           "optionText": "Proteção parcial das credenciais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Garanta que todas as senhas são armazenadas com hashes robustas (ex: bcrypt ou Argon2) e proteja acessos privilegiados com cofre de senhas seguro."
+          "recommendation": "Garanta que todas as senhas são armazenadas com hashes robustas e proteja acessos privilegiados com cofre de senhas seguro."
         },
         {
           "optionText": "Credenciais armazenadas sem proteção adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Elimine imediatamente qualquer armazenamento inseguro de senhas, aplique hashing robusto (ex: bcrypt, Argon2) e force a redefinição geral das credenciais. Realize formação básica sobre gestão segura de senhas."
+          "recommendation": "Elimine imediatamente qualquer armazenamento inseguro de senhas, aplique hashing robusto e force a redefinição geral das credenciais."
         }
       ]
     },
     {
-	  "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na empresa ficasse indisponível durante um período prolongado?\n",
-	  "categoryName": "Risco da Plataforma da Empresa",
-	  "description": "Avalia o impacto na continuidade operacional caso a plataforma essencial (ex: ERP, CRM ou sistema interno) fique inativa por muito tempo. 'Plataforma crítica' refere-se a sistemas cuja falha compromete diretamente as operações da empresa.",
+      "questionText": "Qual seria o impacto operacional caso a plataforma crítica mais utilizada na entidade ficasse indisponível durante um período prolongado (ex.: 1 Dia)?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
           "optionText": "Pouco impacto na operação diária.",
@@ -156,559 +155,19 @@
           "optionText": "Operações parcialmente afetadas, atraso moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente backups frequentes e teste regularmente a recuperação num ambiente de testes para minimizar interrupções."
+          "recommendation": "Definir plano de recuperação com ambiente secundário (mesmo que parcial/manual), testar recuperação periodicamente e documentar tempo máximo aceitável de paragem (RTO)."
         },
         {
           "optionText": "Paragem total ou significativa das operações",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Para evitar paragem total das operações devido à indisponibilidade da plataforma, provisione instâncias redundantes em uma zona de disponibilidade geograficamente distinta e assegure uma replicação com lag inferior a 60 segundos."
-        }
-      ]
-    },
-    {
-      "questionText": "Caso uma vulnerabilidade crítica numa plataforma não seja corrigida rapidamente, quais seriam os danos potenciais à reputação da empresa?",
-      "categoryName": "Risco da Plataforma da Empresa",
-      "options": [
-        {
-          "optionText": "Mínimo impacto reputacional.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Danos reputacionais moderados, recuperação possível.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Para minimizar danos reputacionais devido a vulnerabilidades não corrigidas, introduza balanceamento de carga ativo-ativo para os serviços web críticos e realize verificações mensais dos tempos de failover."
-        },
-        {
-          "optionText": "Graves danos reputacionais, recuperação difícil.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Crie instâncias redundantes em localizações alternativas (ex: segundo datacenter ou região cloud) e documente procedimentos manuais de failover previamente testados."
-        }
-      ]
-    },
-    {
-      "questionText": "Com que frequência são feitas auditorias às plataformas internas para identificar vulnerabilidades ou falhas de segurança?",
-      "categoryName": "Risco da Plataforma da Empresa",
-	  "description": "'Auditorias' incluem scans automáticos, testes de penetração ou revisões manuais.",
-      "options": [
-        {
-          "optionText": "Auditorias regulares (mínimo trimestral).",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Auditorias anuais ou esporádicas.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Mantenha backups fiáveis e valide periodicamente os scripts de recuperação num ambiente de testes controlado."
-        },
-        {
-          "optionText": "Não são realizadas auditorias ou são muito raras.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente scans automáticos de vulnerabilidades e políticas mínimas de hardening para reduzir o risco de falhas não detetadas."
-        }
-      ]
-    },
-    {
-      "questionText": "As equipas responsáveis pelas plataformas são treinadas regularmente sobre práticas seguras de administração e configuração?",
-      "categoryName": "Risco da Plataforma da Empresa",
-	  "description": "Configurações incorretas são uma causa comum de falhas de segurança, e o conhecimento atualizado é essencial.",
-      "options": [
-        {
-          "optionText": "Formação contínua e atualizada regularmente.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Formação ocasional (anual ou pontual).",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Dado que a formação das equipas é ocasional, implemente balanceamento ativo-ativo para os serviços web e crie rotinas de verificação mensal dos tempos de failover para reduzir a dependência do fator humano em crises."
-        },
-        {
-          "optionText": "Sem formação ou formação muito rara.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Priorize a alta disponibilidade de serviços críticos através de soluções com failover automático, como DNS com monitorização, e considere uma arquitetura multi-zona ou multi-região apenas onde o impacto da indisponibilidade justifique o investimento."
-        }
-      ]
-    },
-    {
-      "questionText": "Existem procedimentos claros para gestão rápida de incidentes relacionados com vulnerabilidades das plataformas críticas?",
-      "categoryName": "Risco da Plataforma da Empresa",
-      "options": [
-        {
-          "optionText": "Procedimentos formais claros e testados.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Procedimentos existentes, mas pouco claros.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Se os procedimentos de gestão de incidentes são pouco claros, reforce-os configurando backups transacionais e testando scripts de rebuild automático em ambiente de staging para garantir uma recuperação rápida."
-        },
-        {
-          "optionText": "Procedimentos inexistentes ou não documentados.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Na ausência de procedimentos de gestão de incidentes documentados, provisione instâncias redundantes em outra zona de disponibilidade e habilite uma replicação com lag inferior a 60 segundos como medida de contingência primária."
-        }
-      ]
-    },
-    {
-      "questionText": "As plataformas críticas são protegidas por mecanismos avançados de segurança, como firewalls, sistemas IDS/IPS ou proteção anti-malware?",
-      "categoryName": "Risco da Plataforma da Empresa",
-      "options": [
-        {
-          "optionText": "Mecanismos completos e atualizados.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Alguns mecanismos implementados, porém limitados.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Com mecanismos de segurança limitados, introduza balanceamento ativo-ativo para os serviços web como uma camada adicional de resiliência e verifique os tempos de failover mensalmente para assegurar a sua eficácia."
-        },
-        {
-          "optionText": "Sem mecanismos avançados ou insuficientes.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Se não existem mecanismos de segurança avançados, considere migrar os serviços críticos para uma arquitetura multi-região e ativar DNS de recuperação automática para aumentar a tolerância a falhas e ataques."
-        }
-      ]
-    },
-    {
-      "questionText": "Qual o impacto para a empresa caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
-      "categoryName": "Risco de Armazenamento de Dados",
-	  "description": "Avalia o impacto de uma falha grave nos sistemas de armazenamento, como avarias físicas ou erros de configuração, que resultem na perda irreversível de dados essenciais para o negócio.",
-      "options": [
-        {
-          "optionText": "Dados facilmente recuperáveis, baixo impacto operacional.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Dados parcialmente recuperáveis, impacto moderado.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Automatize snapshots incrementais com verificação de integridade (checksums) e mantenha uma política de retenção mínima de 30 dias para garantir recuperação fiável."
-        },
-        {
-          "optionText": "Perda irreversível de dados críticos, impacto operacional grave.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente backups automáticos fora do local (offsite), com testes regulares de recuperação, e use sistemas redundantes de armazenamento com replicação geográfica para evitar perda irreversível de dados críticos."
-        }
-      ]
-    },
-    {
-      "questionText": "Qual seria o impacto financeiro caso ocorresse uma exposição indevida de dados confidenciais armazenados pela empresa?",
-      "categoryName": "Risco de Armazenamento de Dados",
-	  "description": "Examina as possíveis consequências financeiras, incluindo multas legais ou perda de contratos, decorrentes da exposição de dados sensíveis como dados de clientes ou informação financeira.",
-      "options": [
-        {
-          "optionText": "Impacto financeiro mínimo, sem penalizações significativas.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Impacto financeiro moderado, multas ou custos controláveis.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Para controlar o impacto financeiro de uma exposição indevida de dados, implemente o princípio de menor privilégio, concedendo acesso só-leitura a partilhas de dados históricos e monitorizando ativamente acessos anómalos."
-        },
-        {
-          "optionText": "Impacto financeiro elevado, multas graves e custos legais significativos.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Para mitigar impactos financeiros elevados de exposição de dados, replique os dados críticos para um cold-site offline, garantindo um air-gap, e execute testes de restauração de prova semestralmente para validar a eficácia do processo."
-        }
-      ]
-    },
-    {
-      "questionText": "Com que frequência são realizados backups dos dados críticos armazenados pela empresa?",
-      "categoryName": "Risco de Armazenamento de Dados",
-	  "description": "Backups frequentes reduzem o risco de perda de dados em caso de falha técnica ou ataque.",
-      "options": [
-        {
-          "optionText": "Backups automáticos e diários.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Backups semanais ou esporádicos.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Considerando backups semanais ou esporádicos, implemente la automatização de snapshots incrementais diários, com verificação de checksum e uma política de retenção mínima de 30 dias para melhorar o RPO."
-        },
-        {
-          "optionText": "Backups raros, inexistentes ou não testados.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Se os backups são raros ou não testados, priorize a criptografia robusta de discos com AES-256, gestão segura de chaves com HSM e a implementação de DLP para proteger os dados em repouso e em trânsito, antes de otimizar os backups."
-        }
-      ]
-    },
-    {
-      "questionText": "As soluções de armazenamento utilizadas pela empresa são regularmente atualizadas e protegidas contra ameaças conhecidas?",
-      "categoryName": "Risco de Armazenamento de Dados",
-	  "description": "Verifica se os sistemas de armazenamento recebem atualizações de segurança e têm mecanismos de proteção ativos contra vulnerabilidades conhecidas, evitando que sejam alvos fáceis de ataques.",
-      "options": [
-        {
-          "optionText": "Atualizações regulares e gestão ativa de ameaças.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Atualizações ocasionais ou inconsistentes.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Com atualizações de armazenamento inconsistentes, reforce a segurança implementando acesso só-leitura para partilhas de dados históricos menos acedidos e configure o registo detalhado de acessos para deteção de anomalias."
-        },
-        {
-          "optionText": "Sem atualizações ou gestão inadequada das ameaças.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Na ausência de atualizações adequadas das soluções de armazenamento, garanta a resiliência dos dados replicando os dados críticos para um cold-site off-line e realizando testes de restauração semestrais."
-        }
-      ]
-    },
-    {
-      "questionText": "Existem mecanismos robustos de criptografia aplicados ao armazenamento de dados sensíveis?",
-      "categoryName": "Risco de Armazenamento de Dados",
-      "options": [
-        {
-          "optionText": "Criptografia forte implementada e testada.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Criptografia básica implementada parcialmente.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Se existe apenas criptografia básica, complemente-a automatizando snapshots incrementais com verificação de checksum e uma política de retenção de 30 dias para garantir a recuperabilidade dos dados."
-        },
-        {
-          "optionText": "Dados sensíveis sem criptografia ou com criptografia fraca.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Para dados sensíveis sem criptografia ou com criptografia fraca, é crucial criptografar todos os discos com AES-256, gerir as chaves de forma segura com HSM e implementar DLP para prevenir fugas de informação através dos canais de saída."
-        }
-      ]
-    },
-    {
-      "questionText": "Existe uma política clara para gestão do ciclo de vida e descarte seguro dos dados armazenados?",
-      "categoryName": "Risco de Armazenamento de Dados",
-      "options": [
-        {
-          "optionText": "Política formal documentada e implementada.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Política informal ou parcialmente implementada.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Defina prazos de retenção por tipo de dado e aplique regras automáticas de arquivamento e eliminação segura para dados antigos ou obsoletos."
-        },
-        {
-          "optionText": "Sem política definida ou inexistente.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente uma política formal de retenção e eliminação de dados, com procedimentos de destruição segura (ex: shredding digital ou sanitização) e registo de conformidade para dados sensíveis."
-        }
-      ]
-    },
-    {
-      "questionText": "Qual o impacto operacional caso a rede interna da empresa sofra uma interrupção significativa?",
-      "categoryName": "Risco da Rede Interna",
-      "options": [
-        {
-          "optionText": "Impacto reduzido, sistemas rapidamente recuperáveis.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Impacto moderado, recuperação parcial dos sistemas.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Implemente VLANs separadas por função e restrinja o tráfego desnecessário entre segmentos com regras de firewall ou ACLs simples."
-        },
-        {
-          "optionText": "Impacto elevado, paralisação das operações críticas.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente isolamento de ambientes críticos (produção, desenvolvimento, testes) e políticas de acesso mínimo, aplicando princípios de Zero Trust sempre que possível."
-        }
-      ]
-    },
-    {
-      "questionText": "Qual seria o impacto caso ocorresse uma invasão na rede interna com comprometimento de dados confidenciais?",
-      "categoryName": "Risco da Rede Interna",
-	  "description": "Examina as consequências de um ataque bem-sucedido dentro da rede da empresa, onde o atacante acede ou rouba dados sensíveis. Este cenário pode envolver malware, ransomware ou engenharia social.",
-      "options": [
-        {
-          "optionText": "Dados não críticos expostos, baixo impacto operacional.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Exposição de alguns dados críticos, impacto moderado.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Implemente controlo de acesso à rede com autenticação de dispositivos fiáveis e alerte ou bloqueie ligações não autorizadas."
-        },
-        {
-          "optionText": "Exposição generalizada de dados sensíveis, alto impacto operacional e legal.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente firewall com deteção de intrusão (IDS) e configure alertas para tráfego anómalo, como varrimentos de portas ou acessos fora do horário habitual. Restrinja o acesso aos dados mais sensíveis por função."
-        }
-      ]
-    },
-    {
-      "questionText": "A rede interna é regularmente monitorizada em tempo real para identificação de atividades suspeitas?",
-      "categoryName": "Risco da Rede Interna",
-	  "description": "Avalia se existem ferramentas e práticas para vigiar a rede em tempo real, identificando comportamentos anómalos ou sinais de ataque, como ligações suspeitas ou tentativas de acesso indevido.",
-      "options": [
-        {
-          "optionText": "Monitorização constante e automatizada.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Monitorização parcial ou periódica.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Ative logs detalhados em switches e firewalls e implemente alertas automáticos para eventos fora do padrão, mesmo que não haja monitorização contínua."
-        },
-        {
-          "optionText": "Monitorização inexistente ou muito limitada.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente uma solução IDS/IPS leve, como Zeek ou Suricata, e configure alertas básicos para detectar comportamentos suspeitos de rede em tempo real."
-        }
-      ]
-    },
-    {
-      "questionText": "Os dispositivos conectados à rede interna são regularmente atualizados e protegidos contra vulnerabilidades conhecidas?",
-      "categoryName": "Risco da Rede Interna",
-	  "description": "Verifica se os computadores, servidores, impressoras e outros equipamentos ligados à rede recebem atualizações de segurança para prevenir exploração de falhas conhecidas.",
-      "options": [
-        {
-          "optionText": "Atualizações regulares e automatizadas.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Atualizações esporádicas ou inconsistentes.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Face a atualizações esporádicas de dispositivos, implemente NAC baseado em certificação de dispositivo para garantir que apenas endpoints conformes e atualizados acedam à rede, expulsando automaticamente os que não cumprem os requisitos."
-        },
-        {
-          "optionText": "Sem atualizações ou muito raras.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Se os dispositivos na rede raramente são atualizados, compense implementando IDS/IPS inline com sandbox para análise de payloads suspeitos e configure mecanismos de resposta automática a beaconing para detetar e bloquear malware."
-        }
-      ]
-    },
-    {
-      "questionText": "Existem mecanismos eficazes de segmentação da rede interna para limitar a propagação de ameaças?",
-      "categoryName": "Risco da Rede Interna",
-	  "description": "Avalia se a rede está dividida em segmentos (ex: produção, backups, utilizadores) para impedir que uma ameaça se propague livremente. Técnicas como VLANs e ACLs ajudam a limitar o movimento lateral de atacantes.",
-      "options": [
-        {
-          "optionText": "Segmentação efetiva implementada e testada.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Segmentação parcial, não totalmente eficaz.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Melhore a segmentação com VLANs por função, aplique ACLs simples entre segmentos e bloqueie o tráfego lateral SMB para reduzir a propagação de ataques."
-        },
-        {
-          "optionText": "Rede não segmentada ou mal configurada.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente uma segmentação rigorosa com VLANs isoladas para ambientes críticos (produção, backups, administração) e restrinja o acesso com regras de firewall e autenticação por utilizador ou dispositivo."
-        }
-      ]
-    },
-    {
-      "questionText": "Existe uma política clara para gestão segura de acessos e autenticação dos dispositivos internos na rede?",
-      "categoryName": "Risco da Rede Interna",
-	  "description": "Analisa se existem regras formais sobre quem e o quê pode aceder à rede, incluindo controlo de dispositivos autorizados e autenticação dos utilizadores, de forma a evitar acessos indevidos.",
-      "options": [
-        {
-          "optionText": "Política formal implementada e monitorizada.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Política informal ou parcialmente aplicada.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Defina regras de acesso com base em grupos de dispositivos autorizados e autenticação por utilizador, e aplique bloqueio automático de dispositivos desconhecidos na rede."
-        },
-        {
-          "optionText": "Ausência de política ou controlo inadequado.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente controlos obrigatórios de autenticação por dispositivo e utilizador em todos os pontos de acesso à rede, e restrinja o acesso a serviços internos com base em perfis de risco."
-        }
-      ]
-    },
-    {
-      "questionText": "Qual o impacto operacional caso credenciais de acesso remoto sejam comprometidas por um atacante externo?",
-      "categoryName": "Risco de Acesso Remoto",
-      "options": [
-        {
-          "optionText": "Acesso limitado, impacto operacional mínimo.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Comprometimento parcial de serviços internos.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Para conter o risco de acesso remoto indevido, limite RDP e VPN a IPs corporativos autorizados e ative MFA com notificações push resistentes a phishing."
-        },
-        {
-          "optionText": "Comprometimento extenso, impacto operacional grave.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Bloqueie de imediato as credenciais comprometidas e reforce o sistema de MFA com nova inscrição obrigatória. Restrinja o acesso VPN a IPs autorizados, ative MFA resistente a phishing e desative contas inativas automaticamente."
-        }
-      ]
-    },
-    {
-      "questionText": "Qual o impacto financeiro e reputacional se ocorrer uma invasão bem-sucedida através de canais remotos?",
-      "categoryName": "Risco de Acesso Remoto",
-      "options": [
-        {
-          "optionText": "Baixo impacto financeiro e reputacional.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Impacto moderado, custos adicionais notáveis.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Audite semanalmente os logs de VPN para detetar acessos anómalos e revogue contas inativas há mais de 30 dias para reduzir o risco e os custos associados."
-        },
-        {
-          "optionText": "Impacto severo, custos financeiros elevados e danos reputacionais graves.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente autenticação forte (SSH com chaves + MFA) para todos os canais remotos e active alertas para acessos fora do padrão. Mantenha um plano de resposta a incidentes que inclua notificação a clientes e medidas de contenção imediatas."
-        }
-      ]
-    },
-    {
-      "questionText": "O acesso remoto dos colaboradores está protegido por autenticação multifator (MFA)?",
-      "categoryName": "Risco de Acesso Remoto",
-      "options": [
-        {
-          "optionText": "MFA obrigatório e implementado amplamente.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "MFA implementado parcialmente ou limitado.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Se o MFA é implementado parcialmente para acesso remoto, reforce a segurança limitando o acesso RDP/VPN a IPs corporativos validados e utilize notificações push resistentes a phishing como segundo fator de autenticação."
-        },
-        {
-          "optionText": "Sem utilização de MFA.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Na ausência de MFA para acesso remoto, e em caso de suspeita de brecha, bloqueie as credenciais potencialmente comprometidas, obrigue todos os utilizadores a reconfigurar o MFA e substitua as VPNs tradicionais por uma arquitetura ZTNA mais segura."
-        }
-      ]
-    },
-    {
-      "questionText": "A empresa realiza auditorias periódicas sobre acessos remotos ativos e tentativas suspeitas de conexão externa?",
-      "categoryName": "Risco de Acesso Remoto",
-      "options": [
-        {
-          "optionText": "Auditorias frequentes e automatizadas.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Auditorias ocasionais ou não automatizadas.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Implemente revisão semanal dos logs de VPN e automatize a revogação de acessos remotos inativos há mais de 30 dias para reduzir riscos não detetados."
-        },
-        {
-          "optionText": "Sem auditorias ou raramente realizadas.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente autenticação forte sem senha (ex: SSH com chave física ou MFA resistente a phishing) para todos os acessos remotos e crie um processo mensal de auditoria manual dos logs enquanto não for possível automatizar."
-        }
-      ]
-    },
-    {
-      "questionText": "Existem soluções técnicas robustas, como VPNs seguras, para proteção dos acessos remotos?",
-      "categoryName": "Risco de Acesso Remoto",
-      "options": [
-        {
-          "optionText": "Soluções seguras e amplamente utilizadas.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Soluções implementadas parcialmente.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Se a VPN estiver parcialmente implementada, restrinja RDP/VPN a IPs corporativos e reforce a autenticação com MFA por push notifications resistentes a phishing."
-        },
-        {
-          "optionText": "Sem soluções técnicas adequadas ou insuficientes.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Se as soluções técnicas forem insuficientes, bloqueie acessos suspeitos, force reinscrição em MFA e avalie a substituição das VPNs legadas por soluções de Zero Trust (ZTNA) para maior controlo e segmentação."
-        }
-      ]
-    },
-    {
-      "questionText": "Existe uma política formal para gestão segura dos acessos remotos (controlo, monitorização e revogação rápida)?",
-      "categoryName": "Risco de Acesso Remoto",
-      "options": [
-        {
-          "optionText": "Política formal, clara e rigorosamente aplicada.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Política informal ou parcialmente implementada.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Se a política de gestão de acesso remoto é informal, comece por auditar semanalmente os logs da VPN e revogar contas inativas há mais de 30 dias para reduzir a superfície de ataque."
-        },
-        {
-          "optionText": "Sem política definida ou inexistente.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Se não existe política formal de acesso remoto, implemente como medida de alta segurança o tunelamento SSH com chaves de hardware e a eliminação de autenticação baseada em senha para canais remotos."
+          "recommendation": "Estabelecer plano de continuidade com foco em restauro funcional mínimo (ex: backup ou sistema alternativo), plano de comunicação interna e estrutura simples para informar clientes ou parceiros prioritários."
         }
       ]
     },
     {
       "questionText": "Qual o impacto operacional caso um sistema crítico esteja mal configurado e seja explorado por atacantes?",
-      "categoryName": "Risco de Configuração Inadequada de Sistemas",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
           "optionText": "Impacto mínimo, incidente facilmente contido.",
@@ -719,65 +178,42 @@
           "optionText": "Impacto moderado, exploração parcial dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente validação automatizada das configurações de sistemas antes do deploy, usando benchmarks de segurança como os CIS Benchmarks, integrados no processo de mudança ou atualização."
+          "recommendation": "Aplicar práticas básicas de hardening (ex: CIS benchmarks) e manter checklist técnica com revisões periódicas das permissões e configurações essenciais."
         },
         {
           "optionText": "Impacto grave, comprometimento total dos sistemas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Desconecte imediatamente os sistemas afetados, aplique medidas de hardening com base em boas práticas como CIS ou STIG, e realize um teste de intrusão após a correção para validar a segurança."
+          "recommendation": "Definir um plano de restauro técnico com configuração segura documentada, mecanismos de isolamento manual e ações rápidas para limitar propagação (mesmo sem ferramentas avançadas)."
         }
       ]
     },
     {
-      "questionText": "Qual o impacto financeiro e reputacional decorrente da exposição de dados sensíveis por causa de configurações inadequadas?",
-      "categoryName": "Risco de Configuração Inadequada de Sistemas",
+      "questionText": "Com que frequência são feitas auditorias às plataformas internas para identificar vulnerabilidades ou falhas de segurança?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
-          "optionText": "Baixo impacto financeiro e reputacional.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Impacto moderado, danos gerenciáveis.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Use ferramentas gerir configurações como código e evitar alterações manuais que possam expor dados sensíveis."
-        },
-        {
-          "optionText": "Impacto alto, danos significativos e prolongados.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente o princípio do menor privilégio, audite regularmente as permissões em serviços críticos e utilize ferramentas de monitorização para detetar exposições indevidas de dados sensíveis em tempo útil."
-        }
-      ]
-    },
-    {
-      "questionText": "Os sistemas críticos têm suas configurações regularmente revistas e validadas para segurança?",
-      "categoryName": "Risco de Configuração Inadequada de Sistemas",
-      "options": [
-        {
-          "optionText": "Revisões frequentes e documentadas.",
+          "optionText": "Auditorias regulares (mínimo trimestral).",
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Revisões esporádicas ou informais.",
+          "optionText": "Auditorias anuais ou esporádicas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Face a revisões esporádicas de configuração, implemente um pipeline CI/CD com validação automática contra CIS Benchmarks para garantir que as configurações de segurança sejam verificadas continuamente antes do deploy."
+          "recommendation": "Agendar varreduras de vulnerabilidades com ferramentas gratuitas (ex: OpenVAS) e realizar uma simulação de intrusão pontual com apoio externo."
         },
         {
-          "optionText": "Sem revisão ou raramente realizadas.",
+          "optionText": "Não são realizadas auditorias ou são muito raras.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Se não há revisões de configuração, e um sistema crítico é comprometido, desconecte-o, aplique hardening STIG completo, e realize um pentest pós-correção antes de o reintegrar."
+          "recommendation": "Implementar scanner open-source com execução periódica e agendar uma auditoria externa básica pelo menos uma vez por ano."
         }
       ]
     },
     {
-      "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes de sua implantação?",
-      "categoryName": "Risco de Configuração Inadequada de Sistemas",
+      "questionText": "Existem procedimentos claros para a configuração segura de novos sistemas ou serviços antes da sua implementação?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
           "optionText": "Procedimentos formais e rigorosos.",
@@ -788,19 +224,42 @@
           "optionText": "Procedimentos informais ou parcialmente eficazes.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Com procedimentos informais de configuração, adote Ansible ou Terraform state para garantir a consistência e evitar a deriva de configuração, formalizando a gestão de alterações."
+          "recommendation": "Criar uma checklist básica de segurança (ex: firewall ativa, permissões mínimas, serviços desnecessários desativados) e validar antes do go-live."
         },
         {
           "optionText": "Procedimentos inexistentes ou inadequados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Se os procedimentos de configuração para novos sistemas são inadequados, defina um processo que inclua o restabelecimento a partir de uma imagem dourada em caso de falhas e a auditoria sistemática das permissões de serviço antes da entrada em produção."
+          "recommendation": "Criar modelo mínimo de configuração segura, promover a revisão entre pares antes da produção e guardar documentação de referência acessível à equipa."
         }
       ]
     },
     {
-      "questionText": "A empresa utiliza ferramentas automatizadas para identificação rápida de configurações inseguras ou inadequadas?",
-      "categoryName": "Risco de Configuração Inadequada de Sistemas",
+      "questionText": "As plataformas críticas são protegidas por mecanismos avançados de segurança, como firewalls, sistemas IDS/IPS ou proteção anti-malware?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
+      "options": [
+        {
+          "optionText": "Mecanismos completos e atualizados.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguns mecanismos implementados, porém limitados.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Reforçar firewalls existentes e ativar deteção de tráfego suspeito com soluções acessíveis como Suricata ou Snort. Rever regras com base em logs reais."
+        },
+        {
+          "optionText": "Sem mecanismos avançados ou insuficientes.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Instalar EDR gratuito ou económico (ex: Microsoft Defender Business), ativar logging na firewall e designar responsável para tratar alertas críticos de forma prioritária."
+        }
+      ]
+    },
+    {
+      "questionText": "A entidade utiliza ferramentas automatizadas para identificação rápida de configurações inseguras ou inadequadas?",
+      "categoryName": "Risco em Sistemas e Plataformas Críticas",
       "options": [
         {
           "optionText": "Uso regular e automatizado.",
@@ -811,174 +270,431 @@
           "optionText": "Uso ocasional ou parcial das ferramentas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Com uso ocasional de ferramentas de verificação, estabeleça um pipeline CI/CD com validação automática obrigatória de configurações contra os CIS Benchmarks antes de cada deploy."
+          "recommendation": "Incluir scripts de verificação como parte da manutenção mensal, usando ferramentas simples (ex: lynis, checklists validadas internamente)."
         },
         {
           "optionText": "Sem ferramentas ou uso inadequado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Na ausência de ferramentas automatizadas e em caso de exploração de má configuração, desconecte os sistemas afetados, aplique hardening STIG de forma integral e conduza um pentest pós-correção."
+          "recommendation": "Adotar verificação periódica com ferramenta open-source (manual ou automática), priorizando correção imediata das falhas com impacto elevado."
         }
       ]
     },
     {
-      "questionText": "Existe treino contínuo das equipas técnicas para aplicação correta das práticas de configuração segura?",
-      "categoryName": "Risco de Configuração Inadequada de Sistemas",
+      "questionText": "Qual o impacto para a entidade caso ocorra uma falha grave no armazenamento, levando à perda permanente dos dados?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
-          "optionText": "Treinos regulares e eficazes.",
+          "optionText": "Dados facilmente recuperáveis, baixo impacto operacional.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Treinos pontuais ou insuficientes.",
+          "optionText": "Dados parcialmente recuperáveis, impacto moderado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Estabeleça um ciclo básico de formação técnica anual sobre configuração segura e complemente com o uso de Ansible ou Terraform para aplicar padrões consistentes e reduzir erros humanos."
+          "recommendation": "Adotar backups incrementais frequentes (ex: 4h) e testar mensalmente a restauração de dados críticos para garantir recuperação parcial eficaz."
         },
         {
-          "optionText": "Sem treinos regulares ou raramente realizados.",
+          "optionText": "Perda irreversível de dados críticos, impacto operacional grave.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Após um incidente causado por configuração inadequada, restaure os sistemas a partir de uma configuração segura validada e promova formação técnica urgente para corrigir lacunas nas equipas operacionais."
+          "recommendation": "Estabelecer plano de proteção com cópia imutável em região separada e backup offline semanal (air-gap). Definir objetivos claros de RTO/RPO para os dados essenciais."
         }
       ]
     },
     {
-      "questionText": "Qual o impacto operacional caso uma vulnerabilidade crítica não seja corrigida a tempo e seja explorada por atacantes?",
-      "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
+      "questionText": "Qual seria o impacto financeiro caso ocorresse uma exposição indevida de dados confidenciais armazenados pela entidade?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
-          "optionText": "Impacto mínimo, facilmente contido.",
+          "optionText": "Impacto financeiro mínimo, sem penalizações significativas.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Impacto moderado, comprometimento parcial.",
+          "optionText": "Impacto financeiro moderado, multas ou custos controláveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Para lidar com o impacto moderado de vulnerabilidades não corrigidas, configure um servidor WSUS (Windows Server Update Services) ou um repositório local para centralizar a distribuição de patches, estabelecendo uma janela semanal de manutenção com testes automatizados pré-implementação."
+          "recommendation": "Implementar classificação básica de dados e aplicar políticas simples de prevenção de fuga de dados (DLP), mesmo que com ferramentas nativas da suite em uso."
         },
         {
-          "optionText": "Impacto grave, comprometimento significativo dos sistemas.",
+          "optionText": "Impacto financeiro elevado, multas graves e custos legais significativos.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Em caso de impacto grave por exploração de falhas de atualização, estabeleça um SLA para patching emergencial de vulnerabilidades com CVSS score ≥ 9 em menos de 24 horas e execute sempre uma varredura autenticada após a aplicação para confirmar a correção."
+          "recommendation": "Usar encriptação com gestão de chaves segura (ex: KMS com logs), tokenizar dados críticos e definir plano básico de resposta e comunicação em caso de incidente RGPD."
         }
       ]
     },
     {
-      "questionText": "Qual seria o impacto financeiro e reputacional se dados confidenciais fossem expostos devido a falhas em atualizações?",
-      "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
+      "questionText": "Com que frequência são realizados backups dos dados críticos armazenados pela entidade?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
-          "optionText": "Impacto financeiro e reputacional reduzido.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Impacto moderado, custos adicionais controláveis.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Teste atualizações de segurança em 1 ou 2 sistemas representativos antes da aplicação generalizada, e valide o comportamento funcional básico após o patch."
-        },
-        {
-          "optionText": "Alto impacto, custos elevados e danos reputacionais graves.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Para evitar danos reputacionais graves por falhas de atualização, isole imediatamente os serviços vulneráveis conhecidos atrás de um Web Application Firewall (WAF), aplicando regras de 'virtual patching' como medida de contenção temporária até que o patch definitivo seja aplicado e testado."
-        }
-      ]
-    },
-    {
-      "questionText": "Os sistemas recebem atualizações e patches críticos regularmente, de forma imediata e automatizada?",
-      "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
-      "options": [
-        {
-          "optionText": "Atualizações automáticas e imediatas.",
+          "optionText": "Backups automáticos e diários.",
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Atualizações manuais ou aplicadas parcialmente.",
+          "optionText": "Backups semanais ou esporádicos.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Se as atualizações são manuais, implemente WSUS ou um repositório local para automatizar a aplicação de patches críticos, definindo uma janela de manutenção semanal e testes automatizados para validar as atualizações."
+          "recommendation": "Migrar para backups automáticos diários com retenção mínima de 30 dias e alertas simples para falhas ou execuções incompletas."
         },
         {
-          "optionText": "Atualizações raras, demoradas ou não realizadas.",
+          "optionText": "Backups raros, inexistentes ou não testados.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Se as atualizações são raras ou demoradas, defina uma política de patching emergencial em 24h para vulnerabilidades críticas (CVSS≥9) e realize varreduras autenticadas pós-aplicação para verificar a eficácia."
+          "recommendation": "Implementar política de backup diário com verificação automática e testar mensalmente a recuperação de ficheiros críticos. Priorizar repositório externo ou cloud."
         }
       ]
     },
     {
-      "questionText": "A empresa monitoriza ativamente vulnerabilidades divulgadas e aplica patches relevantes rapidamente após lançamento?",
-      "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
+      "questionText": "Com que frequência são aplicadas práticas robustas de criptografia ao armazenamento de dados sensíveis?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
+      "description": "Avalia a consistência na aplicação de criptografia adequada para proteger dados confidenciais. A criptografia é uma das formas mais eficazes de evitar acessos não autorizados mesmo em caso de roubo de dados.",
       "options": [
         {
-          "optionText": "Monitorização ativa e reação rápida.",
+          "optionText": "Criptografia forte aplicada de forma sistemática e testada regularmente.",
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Monitorização ocasional, aplicação moderada.",
+          "optionText": "Criptografia básica aplicada em parte dos sistemas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Com monitorização ocasional de vulnerabilidades, implemente 'canary releases' para patches (em 5% dos hosts) para avaliar o impacto e detetar problemas antes do roll-out completo, minimizando riscos."
+          "recommendation": "Atualizar para criptografia AES-256 com rotação de chaves e monitorizar acessos ao cofre de chaves com alertas básicos de anomalia."
         },
         {
-          "optionText": "Sem monitorização formal ou aplicação atrasada.",
+          "optionText": "A maioria dos dados sensíveis não está protegida por criptografia adequada.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Se a aplicação de patches é atrasada, isole os serviços vulneráveis com um WAF e aplique regras de virtual patching para proteção imediata enquanto o patch oficial é testado e implementado."
+          "recommendation": "Bloquear novos carregamentos até aplicar criptografia adequada nos dados sensíveis e planear auditoria simples para verificar conformidade inicial."
         }
       ]
     },
     {
-      "questionText": "Existem ferramentas eficazes para garantir a aplicação automática e eficiente das atualizações de segurança necessárias?",
-      "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
+      "questionText": "A entidade possui mecanismos eficazes de controlo de acesso e monitorização em tempo real dos dados sensíveis?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
-          "optionText": "Ferramentas robustas e amplamente utilizadas.",
+          "optionText": "Controlo rigoroso e monitorização contínua.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Ferramentas básicas ou parcialmente eficazes.",
+          "optionText": "Controlos parciais ou monitorização limitada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Com ferramentas de patching básicas, melhore a gestão configurando WSUS/Repo local para patches, defina uma janela de manutenção semanal e incorpore testes automatizados para assegurar a estabilidade pós-patch."
+          "recommendation": "Reforçar permissões com base no princípio do menor privilégio e ativar alertas básicos (ex: acessos fora de horário) em serviços cloud com suporte nativo."
         },
         {
-          "optionText": "Sem ferramentas ou ferramentas inadequadas.",
+          "optionText": "Sem controlos eficazes ou monitorização adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Na ausência de ferramentas adequadas para patching, priorize o patching emergencial em 24h para vulnerabilidades CVSS≥9, mesmo que manual, e execute uma varredura autenticada após a aplicação para confirmação."
+          "recommendation": "Implementar autenticação multifator (MFA), ativar logging de acessos sensíveis e bloquear transferências de dados sem aprovação explícita quando aplicável."
         }
       ]
     },
     {
-      "questionText": "Existe um processo claro e documentado para validação, teste e aplicação rápida de patches e atualizações de segurança?",
-      "categoryName": "Risco de Falhas em Atualizações e Patches de Segurança",
+      "questionText": "Existe uma política clara para gestão do ciclo de vida e descarte seguro dos dados armazenados?",
+      "categoryName": "Risco de Proteção e Armazenamento de Dados",
       "options": [
         {
-          "optionText": "Processo formalizado, claro e eficaz.",
+          "optionText": "Política formal documentada e implementada.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Processo informal, parcialmente implementado.",
+          "optionText": "Política informal ou parcialmente implementada.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Formalize o processo testando os patches primeiro em sistemas não críticos e documentando os resultados antes de aplicar ao ambiente de produção."
+          "recommendation": "Consolidar a matriz de retenção com prazos e regras claras, definir rotina mensal para descarte digital e prever validação simples antes da eliminação de dados críticos."
         },
         {
-          "optionText": "Processo inexistente ou raramente aplicado.",
+          "optionText": "Sem política definida ou inexistente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente um WAF e active regras de virtual patching para mitigar vulnerabilidades conhecidas até que a aplicação dos patches seja possível."
+          "recommendation": "Elaborar uma política simples de ciclo de vida alinhada ao RGPD e adotar método prático de destruição segura de dados (ex: wipe de disco, shredder físico, log de descarte)."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto operacional caso a rede interna ou serviços críticos sofram uma interrupção significativa?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Impacto reduzido, sistemas rapidamente recuperáveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, serviços parcialmente afetados.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Assegurar redundância nos comutadores principais, limitar tráfego excessivo em horas de pico e definir tempo máximo de recuperação inferior a 4 horas."
+        },
+        {
+          "optionText": "Impacto elevado, interrupção prolongada dos serviços essenciais.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar defesa contínua contra ataques de negação de serviço, estabelecer ligações de reserva automáticas e documentar procedimentos de continuidade em guias de resposta rápida."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto de uma invasão à rede interna com exfiltração de dados ou interrupção por ataque DoS?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Dados não críticos expostos, impacto operacional mínimo.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Exposição de alguns dados críticos ou serviços temporariamente inacessíveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Activar segmentação interna da rede, reforçar controlo de tráfego entre zonas e garantir tolerância a falhas nos pontos críticos."
+        },
+        {
+          "optionText": "Exposição generalizada de dados sensíveis ou paralisação das operações.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Isolar segmentos comprometidos, aplicar medidas de contenção imediata e acionar o plano de notificação às autoridades competentes dentro dos prazos legais."
+        }
+      ]
+    },
+    {
+      "questionText": "A infraestrutura de rede da entidade está protegida contra ameaças e ataques DoS?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Proteção robusta e atualizada, com firewalls e filtros anti-DDoS.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Proteção parcial ou limitada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Garantir atualização de todos os equipamentos de segurança e estabelecer mecanismo externo de contenção de tráfego anómalo em colaboração com o fornecedor de serviços de internet."
+        },
+        {
+          "optionText": "Sem proteção adequada ou inexistente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Configurar rotas específicas para rejeição de tráfego malicioso e estabelecer acordo com fornecedor para ativação de mitigação sob ataque."
+        }
+      ]
+    },
+    {
+      "questionText": "A rede interna é monitorizada em tempo real e segmentada para mitigar a propagação de ameaças?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "A rede é segmentada e monitorizada em tempo real com alertas automáticos.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "A rede está segmentada ou tem alguma monitorização, mas de forma parcial ou limitada, deixando pontos críticos sem cobertura.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Ativar registo e análise de tráfego entre segmentos críticos e reforçar a segmentação aplicando o princípio de confiança mínima."
+        },
+        {
+          "optionText": "Sem segmentação eficaz e sem monitorização ativa da rede.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Separar ambientes por função (ex.: utilizadores, servidores, gestão) e implementar pelo menos monitorização básica com alertas."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um plano formal para resposta e mitigação rápida a incidentes de rede e ataques DoS?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Plano documentado e testado regularmente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Plano informal ou raramente testado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Realizar simulações semestrais de resposta a incidentes e manter documentação prática e acessível sobre os procedimentos a seguir."
+        },
+        {
+          "optionText": "Ausência de plano formal.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Desenvolver plano específico para ataques à rede, com lista de contactos de emergência, passos operacionais e responsabilidades bem definidas."
+        }
+      ]
+    },
+    {
+      "questionText": "Existem soluções técnicas implementadas para assegurar a resiliência e continuidade da rede?",
+      "categoryName": "Risco de Rede e Disponibilidade",
+      "options": [
+        {
+          "optionText": "Soluções robustas e totalmente implementadas (balanceamento, redundância, failover).",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Soluções parcialmente implementadas ou limitadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Adicionar mecanismos de distribuição de tráfego e monitorização automática do estado dos serviços com verificação ativa de disponibilidade."
+        },
+        {
+          "optionText": "Sem soluções técnicas adequadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Replicar serviços críticos em ambientes distintos e configurar alternância automática entre zonas geográficas em caso de falha."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto se um sistema crítico não for atualizado a tempo?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "description": "Avalia os efeitos de não aplicar atualizações de segurança a tempo em sistemas críticos, como exposição a vulnerabilidades e interrupções operacionais.",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, sistema isolado ou protegido por outras camadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, sistema com dados sensíveis mas com mitigação parcial.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever arquitetura para segmentar acesso e ativar monitorização contínua enquanto a atualização não for possível."
+        },
+        {
+          "optionText": "Impacto severo, sistema exposto e essencial à operação.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Aplicar mitigação temporária (ex: firewall, WAF), agendar janelas emergenciais e notificar equipas responsáveis."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um processo formal e documentado para a gestão de atualizações de segurança?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Sim, com processo definido, aplicado e revisto regularmente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "O processo existe, mas é informal ou aplicado de forma inconsistente.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Documentar procedimentos de atualização com responsabilidades definidas e prazos de aplicação por tipo de sistema."
+        },
+        {
+          "optionText": "Não há qualquer processo formal de atualização.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar política de gestão de atualizações com critérios de prioridade e calendário de execução regular."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto para a entidade caso sistemas críticos não recebam atualizações de segurança atempadamente?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "description": "Avalia a regularidade com que os sistemas recebem atualizações, o que influencia diretamente a exposição a vulnerabilidades conhecidas.",
+      "options": [
+        {
+          "optionText": "Impacto mínimo devido a mecanismos de contenção adicionais (ex.: segmentação, backups).",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Possível comprometimento de serviços internos, com impacto moderado.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Aplicar atualizações em janela controlada, priorizando sistemas críticos e documentando testes realizados."
+        },
+        {
+          "optionText": "Interrupção significativa de serviços ou exploração de falhas conhecidas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar procedimento de emergência para aplicação de patches críticos em menos de 72 horas e realizar simulações de falhas em produção."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe um inventário atualizado de versões e patches aplicados aos sistemas da entidade?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "description": "Verifica se a entidade mantém um registo atualizado do estado de cada sistema, essencial para planeamento de atualizações e resposta a incidentes.",
+      "options": [
+        {
+          "optionText": "Inventário automatizado e atualizado em tempo real.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Inventário parcial ou atualizado manualmente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever o inventário com frequência e associar cada ativo a um nível de criticidade."
+        },
+        {
+          "optionText": "Sem inventário ou desatualizado.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Criar e manter inventário mínimo de ativos e versões instaladas, com revisão periódica."
+        }
+      ]
+    },
+    {
+      "questionText": "Os sistemas legados recebem suporte adequado para atualizações de segurança?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Todos os sistemas legados são mantidos com suporte ativo ou mitigação.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Alguns sistemas legados carecem de suporte ou atualizações frequentes.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Isolar sistemas obsoletos em redes separadas e limitar o acesso até substituição completa."
+        },
+        {
+          "optionText": "Vários sistemas legados operam sem qualquer suporte.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Descontinuar sistemas obsoletos ou migrar urgentemente para versões suportadas."
+        }
+      ]
+    },
+    {
+      "questionText": "As atualizações de segurança são testadas antes de serem aplicadas em produção?",
+      "categoryName": "Risco de Manutenção e Atualizações de Segurança",
+      "options": [
+        {
+          "optionText": "Sim, todas as atualizações passam por ambiente de testes antes da produção.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Algumas atualizações são aplicadas diretamente em produção.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Criar ambiente de pré-produção representativo e definir critérios mínimos de validação técnica antes da aplicação."
+        },
+        {
+          "optionText": "As atualizações não são testadas previamente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Instituir ciclo de DevTest integrado ao CI/CD e criar rollback automatizado em caso de falha pós-update."
         }
       ]
     },
@@ -1122,279 +838,294 @@
     },
 
     {
-      "questionText": "Com que frequência são avaliados os riscos de segurança dos fornecedores que acedem a sistemas ou dados da empresa?",
-      "categoryName": "Risco de Terceiros e Fornecedores",
+      "questionText": "Qual o impacto operacional caso ocorra indisponibilidade prolongada de um provedor externo crítico (ex.: cloud, fornecedor de serviços)?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
       "options": [
         {
-          "optionText": "Avaliações regulares (mínimo anual) com critérios definidos.",
-          "optionType": "PROBABILITY",
+          "optionText": "Impacto mínimo, rapidamente mitigado.",
+          "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Avaliações ocasionais ou dependentes de incidentes.",
-          "optionType": "PROBABILITY",
+          "optionText": "Impacto moderado, solução parcial disponível.",
+          "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente um calendário de avaliações periódicas com critérios objetivos de risco, priorizando fornecedores com acesso a sistemas críticos ou dados sensíveis."
+          "recommendation": "Manter plano de contingência simples com alternativa de serviço e realizar testes semestrais para garantir continuidade."
         },
         {
-          "optionText": "Sem avaliações formais de risco a fornecedores.",
-          "optionType": "PROBABILITY",
+          "optionText": "Impacto grave, paralisação completa de operações críticas.",
+          "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Crie um processo formal de onboarding com avaliação de segurança mínima obrigatória antes de qualquer integração técnica com fornecedores."
+          "recommendation": "Avaliar possibilidade de fornecedor secundário ou serviço alternativo com capacidade de substituição em até 1 dia útil."
         }
       ]
     },
     {
-      "questionText": "Qual o grau de dependência de fornecedores externos para operações críticas da empresa?",
-      "categoryName": "Risco de Terceiros e Fornecedores",
+      "questionText": "Qual seria o impacto financeiro se dados confidenciais armazenados em infraestrutura externa fossem comprometidos?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
       "options": [
         {
-          "optionText": "Baixa dependência, com alternativas internas disponíveis.",
+          "optionText": "Impacto financeiro reduzido.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto financeiro moderado, custos adicionais gerenciáveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever se os dados externos estão devidamente protegidos e avaliar coberturas contratuais em caso de violação."
+        },
+        {
+          "optionText": "Impacto financeiro elevado, custos e penalidades significativas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Negociar cláusulas de responsabilidade com fornecedores e garantir plano interno de resposta a incidentes envolvendo terceiros."
+        }
+      ]
+    },
+    {
+      "questionText": "A entidade avalia regularmente os níveis de segurança e continuidade operacional dos fornecedores críticos?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
+      "options": [
+        {
+          "optionText": "Avaliações frequentes e estruturadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Dependência parcial em áreas específicas.",
+          "optionText": "Avaliações são feitas ocasionalmente ou de forma incompleta.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Estabeleça planos de contingência com fornecedores alternativos e mantenha um inventário atualizado dos serviços críticos subcontratados."
+          "recommendation": "Solicitar documentação básica de segurança e plano de recuperação de serviço pelo menos uma vez por ano.."
         },
         {
-          "optionText": "Alta dependência, sem alternativas claras.",
+          "optionText": "Sem avaliações regulares ou nunca realizadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Formalize contratos com SLAs de continuidade de negócio e requisitos mínimos de segurança, incluindo direito de auditoria a fornecedores críticos."
-        }
-      ]
-    },
-    {
-      "questionText": "Qual seria o impacto caso um fornecedor com acesso a sistemas da empresa fosse comprometido?",
-      "categoryName": "Risco de Terceiros e Fornecedores",
-      "options": [
-        {
-          "optionText": "Impacto mínimo, sem acesso a ativos críticos.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Impacto moderado, acesso limitado a dados internos.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Implemente segmentação de rede e controlo de permissões por fornecedor, com logs de auditoria ativos e revisão periódica dos acessos concedidos."
-        },
-        {
-          "optionText": "Impacto elevado, com acesso a sistemas críticos ou dados sensíveis.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Adote uma arquitetura Zero Trust para fornecedores, exigindo MFA, autenticação por certificado digital e segmentação rigorosa de acesso."
-        }
-      ]
-    },
-    {
-      "questionText": "Qual seria o impacto reputacional caso uma violação de dados fosse causada por um fornecedor externo?",
-      "categoryName": "Risco de Terceiros e Fornecedores",
-      "options": [
-        {
-          "optionText": "Impacto reputacional mínimo, com comunicação controlada.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Danos reputacionais moderados, com implicações contratuais.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Inclua cláusulas contratuais específicas para reporte rápido de incidentes e responsabilidade partilhada por danos reputacionais."
-        },
-        {
-          "optionText": "Graves danos reputacionais, com perda de confiança do mercado.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Exija a todos os fornecedores críticos uma certificação mínima (ex: ISO 27001) e o reporte obrigatório de incidentes em até 24h, com testes de resposta partilhados."
-        }
-      ]
-    },
-    {
-      "questionText": "Existem políticas formais para controlo de acessos de fornecedores a sistemas internos?",
-      "categoryName": "Risco de Terceiros e Fornecedores",
-      "options": [
-        {
-          "optionText": "Políticas formais aplicadas com controlo rigoroso de acessos.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Políticas parciais ou mal aplicadas.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Implemente sessões obrigatórias de onboarding de fornecedores com validação de identidade e acesso baseado em necessidade funcional documentada."
-        },
-        {
-          "optionText": "Sem políticas definidas ou acessos concedidos informalmente.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Estabeleça uma política obrigatória de onboarding técnico com MFA, logs ativos e revisão mensal de acessos atribuídos a fornecedores externos."
-        }
-      ]
-    },
-    {
-      "questionText": "A empresa avalia requisitos mínimos de segurança antes de contratar fornecedores com acesso a dados ou sistemas?",
-      "categoryName": "Risco de Terceiros e Fornecedores",
-      "options": [
-        {
-          "optionText": "Requisitos definidos e aplicados consistentemente.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Requisitos definidos mas aplicados parcialmente.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Estabeleça uma checklist mínima de segurança para contratação, incluindo política de gestão de incidentes, controlo de acessos e proteção de dados pessoais."
-        },
-        {
-          "optionText": "Sem avaliação de requisitos de segurança antes da contratação.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Torne obrigatória a verificação de práticas de segurança do fornecedor antes da contratação, incluindo histórico de incidentes e validação de controlos técnicos declarados."
+          "recommendation": "Criar uma checklist simples para avaliação de fornecedores críticos e exigir respostas antes de novas contratações."
         }
       ]
     },
 
     {
-      "questionText": "Com que frequência a empresa realiza avaliações de conformidade com regulamentações como o RGPD ou outras aplicáveis?",
-      "categoryName": "Risco Legal e Regulatório",
+      "questionText": "Os fornecedores críticos apresentam provas de boas práticas de segurança e continuidade?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
       "options": [
         {
-          "optionText": "Avaliações formais regulares (pelo menos anuais).",
+          "optionText": "Sim, com documentação ou garantias verificadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Avaliações esporádicas ou informais.",
+          "optionText": "Alguns fornecedores têm documentação formal.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente uma auditoria anual obrigatória de conformidade legal, com reporte à administração e plano de ação associado às lacunas identificadas."
+          "recommendation": "Pedir aos fornecedores um resumo dos seus procedimentos de segurança e continuidade, com prazos para melhoria se necessário."
         },
         {
-          "optionText": "Sem avaliações de conformidade documentadas.",
+          "optionText": "Os fornecedores apresentam documentação formal, mas nunca foi verificada pela entidade.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Definir um processo de verificação periódica (ex.: auditorias ligeiras ou pedidos de evidência) para validar se os procedimentos descritos são efetivamente aplicados."
+        },
+        {
+          "optionText": "Sem certificações ou não verificadas.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Estabeleça um processo formal de auditoria com recurso a consultoria jurídica externa para revisão da conformidade com RGPD, telecomunicações e obrigações contratuais."
+          "recommendation": "Considerar substituição progressiva por fornecedores com práticas de segurança demonstradas ou referenciadas."
         }
       ]
     },
     {
-      "questionText": "Com que frequência os contratos com fornecedores e parceiros são revistos para garantir cláusulas de conformidade legal e segurança?",
-      "categoryName": "Risco Legal e Regulatório",
+      "questionText": "Existe plano de backup ou solução alternativa caso um serviço externo essencial falhe?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
       "options": [
         {
-          "optionText": "Revisões contratuais formais e regulares (mínimo anual).",
+          "optionText": "Sim, com plano definido e testado periodicamente.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Plano existe, mas com algumas falhas ou sem testes recentes.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Documentar um plano simples com ações a seguir em caso de falha e testá-lo em simulações internas a cada 6 meses."
+        },
+        {
+          "optionText": "Não há plano alternativo definido.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Identificar serviços críticos e preparar forma manual ou provisória de operação durante falhas externas prolongadas."
+        }
+      ]
+    },
+    {
+      "questionText": "A entidade monitoriza incidentes e falhas em fornecedores e serviços externos de forma contínua?",
+      "categoryName": "Risco de Terceiros e Infraestruturas Externas",
+      "options": [
+        {
+          "optionText": "Sim, com alertas automáticos e acompanhamento ativo.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Monitorização básica ou apenas reativa.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Ativar alertas por email ou painel web fornecido pelos prestadores e designar um responsável para acompanhar incidentes."
+        },
+        {
+          "optionText": "Não existe monitorização ou só se repara em falhas após impacto.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Definir contacto de emergência com fornecedores e acompanhar indicadores básicos de serviço sempre que possível."
+        }
+      ]
+    },
+     {
+      "questionText": "Qual seria o impacto financeiro e reputacional se a entidade fosse sancionada por não conformidade?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "description": "Avalia os danos que podem surgir de uma multa ou processo legal resultante do incumprimento de leis como o RGPD ou outras obrigações legais.",
+      "options": [
+        {
+          "optionText": "Impacto reduzido e facilmente controlável.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com possíveis danos à imagem local.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Rever contratos e políticas internas com apoio de advogado e preparar modelo de comunicação preventiva."
+        },
+        {
+          "optionText": "Impacto grave, incluindo multas e danos de reputação significativos.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Reservar orçamento para apoio jurídico e criar um plano de resposta a incidentes legais ou reputacionais."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual o impacto de não existir um canal seguro e anónimo para denúncias legais ou éticas?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "description": "Avalia as potenciais consequências legais, reputacionais e organizacionais da ausência de um mecanismo eficaz para denúncias internas.",
+      "options": [
+        {
+          "optionText": "Impacto reduzido, a organização mantém elevada proximidade e transparência interna.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Possível dificuldade em identificar problemas legais ou éticos a tempo, com risco moderado de sanções ou perda de confiança.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Implementar um canal simples de denúncia para garantir a deteção precoce de irregularidades."
+        },
+        {
+          "optionText": "Elevado risco de incumprimento legal, danos reputacionais e falhas éticas graves não reportadas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Estabelecer imediatamente um canal seguro, anónimo e formalizado para denúncias, com políticas claras de proteção a denunciantes."
+        }
+      ]
+    },
+    {
+      "questionText": "A entidade está em conformidade com as principais leis e normas de proteção de dados (ex.: RGPD)?",
+      "categoryName": "Risco Legal e de Conformidade",
+      "options": [
+        {
+          "optionText": "Sim, com conformidade comprovada por auditoria ou parecer externo.",
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Revisões pontuais ou apenas na renovação contratual.",
+          "optionText": "Está parcialmente em conformidade, com algumas lacunas por resolver.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Defina um processo de revisão contratual anual focado em cláusulas de confidencialidade, notificação de incidentes e tratamento de dados pessoais."
+          "recommendation": "Conduzir uma autoavaliação com base nas obrigações legais e definir um plano de ações corretivas."
         },
         {
-          "optionText": "Contratos raramente revistos quanto à conformidade legal.",
+          "optionText": "Não está em conformidade nem realizou avaliação recente.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente um repositório central de contratos com revisão jurídica obrigatória em ciclos definidos e validação de cláusulas de segurança digital."
+          "recommendation": "Solicitar apoio externo para avaliação do cumprimento do RGPD e nomear um responsável interno (mesmo que não DPO)."
         }
       ]
     },
     {
-      "questionText": "Qual seria o impacto legal caso dados pessoais de clientes fossem expostos devido a um incidente de segurança?",
-      "categoryName": "Risco Legal e Regulatório",
+      "questionText": "Existe um processo definido para revisão e atualização das políticas de privacidade e conformidade?",
+      "categoryName": "Risco Legal e de Conformidade",
       "options": [
         {
-          "optionText": "Impacto legal mínimo, com notificações e medidas corretivas eficazes.",
-          "optionType": "IMPACT",
+          "optionText": "Sim, com revisão documentada e regular.",
+          "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Multas moderadas e exigência de medidas corretivas adicionais.",
-          "optionType": "IMPACT",
+          "optionText": "Há revisão ocasional ou informal das políticas.",
+          "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente políticas formais de Data Protection Impact Assessment (DPIA) para sistemas que tratem dados pessoais, com envolvimento do DPO e equipa técnica desde o design inicial."
+          "recommendation": "Definir um calendário anual de revisão e aprovar alterações com a direção e apoio legal, se necessário."
         },
         {
-          "optionText": "Multas elevadas, investigações legais e danos reputacionais graves.",
-          "optionType": "IMPACT",
+          "optionText": "Não existe qualquer processo de revisão.",
+          "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente controlos de acesso restrito a dados pessoais, logs de acesso auditáveis e encriptação end-to-end. Mantenha registos de todas as ações de conformidade para auditoria legal posterior."
+          "recommendation": "Atribuir a um responsável interno a tarefa de atualizar e validar anualmente as políticas com o apoio de recursos disponíveis."
         }
       ]
     },
     {
-      "questionText": "Qual seria o impacto financeiro e operacional caso a empresa falhe uma auditoria de conformidade legal (ex: RGPD, fiscal, sectorial)?",
-      "categoryName": "Risco Legal e Regulatório",
+      "questionText": "Os contratos com fornecedores incluem cláusulas de conformidade legal e regulatória?",
+      "categoryName": "Risco Legal e de Conformidade",
       "options": [
         {
-          "optionText": "Impacto mínimo, com correções rápidas e sem sanções.",
+          "optionText": "Sim, todos os contratos têm cláusulas claras e validadas.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Impacto moderado, com penalizações financeiras geríveis.",
+          "optionText": "Alguns contratos têm cláusulas genéricas, com validação jurídica.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Crie um plano de conformidade com nomeação de responsáveis por domínio legal (ex: privacidade, fiscal, sectorial) e registe as ações em andamento num sistema com alertas de não conformidade."
+          "recommendation": "Atualizar modelo de contrato com cláusulas mínimas de conformidade e solicitar validação jurídica externa ou institucional."
         },
         {
-          "optionText": "Impacto elevado, com paralisação de atividades ou litígios.",
+          "optionText": "Alguns contratos têm cláusulas genéricas, sem validação jurídica.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Atualizar modelo de contrato com cláusulas mínimas de conformidade e solicitar validação jurídica externa ou institucional."
+        },
+
+        {
+          "optionText": "Não há cláusulas específicas nem revisão contratual regular.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Implemente uma matriz de conformidade cruzando requisitos legais com áreas técnicas e operacionais, com relatórios mensais de progresso e escalonamento automático para a direção em caso de não conformidade crítica."
+          "recommendation": "Fazer levantamento dos contratos ativos e incluir cláusulas de proteção de dados e segurança na próxima renovação."
         }
       ]
     },
     {
-      "questionText": "A empresa mantém registos formais e atualizados de todas as finalidades de tratamento de dados pessoais?",
-      "categoryName": "Risco Legal e Regulatório",
+      "questionText": "Existe um canal seguro e anónimo para denúncias de irregularidades legais ou éticas?",
+      "categoryName": "Risco Legal e de Conformidade",
       "options": [
         {
-          "optionText": "Registos completos e atualizados, com processos validados.",
+          "optionText": "Sim, existe canal ativo, seguro e conhecido por todos.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Registos parciais ou desatualizados.",
+          "optionText": "O canal existe, mas é pouco utilizado ou divulgado.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Implemente uma solução técnica integrada com as bases de dados da empresa que permita atualizar automaticamente os registos de atividades de tratamento, com supervisão do DPO."
+          "recommendation": "Reforçar a comunicação sobre o canal existente e garantir anonimato técnico mesmo que com solução simples (ex.: email dedicado)."
         },
         {
-          "optionText": "Sem registo formal de atividades de tratamento.",
+          "optionText": "Não existe canal de denúncia com garantias.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Estabeleça uma política obrigatória de registo de atividades de tratamento antes da introdução de novos sistemas ou processos que envolvam dados pessoais, incluindo categorias, base legal e transferências internacionais."
-        }
-      ]
-    },
-    {
-      "questionText": "A empresa possui uma política formal de gestão de consentimento e direitos dos titulares de dados?",
-      "categoryName": "Risco Legal e Regulatório",
-      "options": [
-        {
-          "optionText": "Política documentada, acessível e operacional.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Política informal ou com aplicação inconsistente.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Desenvolva e publique uma política clara sobre o exercício de direitos dos titulares, com prazos, contactos e mecanismos técnicos de apoio ao processo (ex: portal de privacidade)."
-        },
-        {
-          "optionText": "Sem política clara de gestão de consentimentos e direitos.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Implemente uma solução técnica que permita registar e gerir o consentimento de forma granular, auditar o histórico e responder automaticamente a pedidos de acesso, retificação ou eliminação."
+          "recommendation": "Criar um canal interno simples, com garantias mínimas de anonimato, e definir processo de seguimento confidencial."
         }
       ]
     }

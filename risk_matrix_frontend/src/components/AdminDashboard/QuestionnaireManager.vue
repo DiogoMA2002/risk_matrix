@@ -93,18 +93,12 @@
             @click="$emit('edit-questionnaire', q.id)"
             class="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded hover:bg-blue-200 flex items-center"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13h3l8-8a2.828 2.828 0 00-4-4l-8 8v3z" />
-            </svg>
             {{ labels.edit }}
           </button>
           <button
             @click="$emit('delete-questionnaire', q.id)"
             class="px-3 py-1 text-sm bg-red-100 text-red-800 rounded hover:bg-red-200 flex items-center"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
             {{ labels.delete }}
           </button>
         </div>
