@@ -624,12 +624,12 @@
           "optionText": "Interrupção significativa de serviços ou exploração de falhas conhecidas.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Criar procedimento de emergência para aplicação de patches críticos em menos de 72 horas e realizar simulações de falhas em produção."
+          "recommendation": "Criar procedimento de emergência para aplicação de correções críticos em menos de 72 horas e realizar simulações de falhas em produção."
         }
       ]
     },
     {
-      "questionText": "Existe um inventário atualizado de versões e patches aplicados aos sistemas da entidade?",
+      "questionText": "Existe um inventário atualizado de versões e correções aplicadas aos sistemas da entidade?",
       "categoryName": "Risco de Manutenção e Atualizações de Segurança",
       "description": "Verifica se a entidade mantém um registo atualizado do estado de cada sistema, essencial para planeamento de atualizações e resposta a incidentes.",
       "options": [
