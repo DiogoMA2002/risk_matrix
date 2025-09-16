@@ -50,11 +50,26 @@ public class QuestionnaireService {
         return questionnaireRepository.findById(id);
     }
 
+    /**
+     * Delete a questionnaire, detach its questions, and remove any orphan questions
+     * that no longer belong to any questionnaire.
+     */
     public void deleteQuestionnaire(Long id) {
-        if (!questionnaireRepository.existsById(id)) {
-            throw new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id);
+        Questionnaire q = questionnaireRepository.findById(id)
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id));
+
+        // Detach questions from this questionnaire to respect ManyToMany
+        if (q.getQuestions() != null) {
+            q.getQuestions().forEach(question -> question.getQuestionnaires().remove(q));
         }
-        questionnaireRepository.deleteById(id);
+
+        questionnaireRepository.delete(q);
+
+        // Clean up orphan questions (no questionnaires reference)
+        List<Question> orphans = questionRepository.findAllByQuestionnairesIsEmpty();
+        if (!orphans.isEmpty()) {
+            questionRepository.deleteAll(orphans);
+        }
     }
 
     public List<Question> getAllQuestionsForQuestionnaire(Long id) {
@@ -78,6 +93,11 @@ public class QuestionnaireService {
     }
 
     @Transactional
+    /**
+     * Import a questionnaire from DTO, reusing existing questions matched by
+     * (questionText + category) to avoid duplicates. Creates questions if absent
+     * and ensures options and "Não Aplicável" are present.
+     */
     public Questionnaire importQuestionnaireDto(QuestionnaireDTO dto) {
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setTitle(dto.getTitle());
@@ -87,20 +107,27 @@ public class QuestionnaireService {
             Category category = resolveCategoryByName(qdto.getCategoryName());
             String questionText = validateQuestionText(qdto.getQuestionText());
 
-            // Always create a new Question, do not deduplicate by text
-            Question question = new Question();
-            question.setQuestionText(questionText);
-            question.setCategory(category);
+            // Reuse existing Question by text+category when possible to avoid duplicates
+            Question question = questionRepository
+                    .findByQuestionTextAndCategory_Id(questionText, category.getId())
+                    .orElseGet(() -> {
+                        Question nq = new Question();
+                        nq.setQuestionText(questionText);
+                        nq.setCategory(category);
+                        nq.setDescription(qdto.getDescription());
+                        List<QuestionOption> options = mapOptionsFromDTOs(qdto.getOptions(), nq);
+                        nq.setOptions(options);
+                        ensureNaoAplicavelOption(nq);
+                        return questionRepository.save(nq);
+                    });
 
-            question.setDescription(qdto.getDescription());
+            // Ensure options exist if reusing a question that had none (edge case)
+            if (question.getOptions() == null || question.getOptions().isEmpty()) {
+                List<QuestionOption> options = mapOptionsFromDTOs(qdto.getOptions(), question);
+                question.setOptions(options);
+            }
 
-
-            List<QuestionOption> options = mapOptionsFromDTOs(qdto.getOptions(), question);
-            question.setOptions(options);
-
-            ensureNaoAplicavelOption(question);
-
-            resolvedQuestions.add(questionRepository.save(question));
+            resolvedQuestions.add(question);
         }
 
         questionnaire.setQuestions(resolvedQuestions);

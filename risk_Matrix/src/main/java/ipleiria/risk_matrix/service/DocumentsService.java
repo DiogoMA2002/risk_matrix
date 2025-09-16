@@ -131,24 +131,35 @@ public class DocumentsService {
         // Lista de categorias com severidade
         XWPFParagraph categoryListHeader = document.createParagraph();
         XWPFRun headerRun = categoryListHeader.createRun();
-        
+
         severities.entrySet().stream()
                 .sorted(Map.Entry.<String, Severity>comparingByValue().reversed())
                 .forEach(entry -> {
                     XWPFParagraph p = document.createParagraph();
-                    XWPFRun categoryRun = p.createRun();
-                    categoryRun.setText("- " + entry.getKey() + ": " + entry.getValue());
-                    categoryRun.setFontSize(12);
-                    categoryRun.setFontFamily("Verdana");
+
+                    // run 1: category label (normal colour)
+                    XWPFRun catRun = p.createRun();
+                    catRun.setFontSize(12);
+                    catRun.setFontFamily("Verdana");
+                    catRun.setText("- " + entry.getKey() + ": ");
+
+                    // run 2: severity text in PT + coloured
+                    String sevPt = getSeverityDisplayName(entry.getValue()); // "Crítico", "Alto", ...
+                    XWPFRun sevRun = p.createRun();
+                    sevRun.setFontSize(12);
+                    sevRun.setFontFamily("Verdana");
+                    sevRun.setBold(true);
+                    sevRun.setText(sevPt);
 
                     switch (entry.getValue()) {
-                        case CRITICAL -> categoryRun.setColor("8B0000");
-                        case HIGH -> categoryRun.setColor("FF0000");
-                        case MEDIUM -> categoryRun.setColor("FFA500");
-                        case LOW -> categoryRun.setColor("008000");
-                        case UNKNOWN -> categoryRun.setColor("808080");
+                        case CRITICAL -> sevRun.setColor("8B0000");
+                        case HIGH     -> sevRun.setColor("FF0000");
+                        case MEDIUM   -> sevRun.setColor("FFA500");
+                        case LOW      -> sevRun.setColor("008000");
+                        case UNKNOWN  -> sevRun.setColor("808080");
                     }
                 });
+        ;
 
         // Conclusão
         XWPFParagraph outro = document.createParagraph();
@@ -157,6 +168,14 @@ public class DocumentsService {
         outroRun.setFontFamily("Verdana");
         outroRun.setText("Recomenda-se a priorização das categorias com risco mais elevado. As recomendações específicas estão detalhadas por domínio no relatório abaixo, e visam mitigar vulnerabilidades identificadas com base em boas práticas de cibersegurança adaptadas.");
         addPageBreak(document);
+    }
+    private String getOptionLevelDisplayName(OptionLevel level) {
+        if (level == null) return "-";
+        return switch (level) {
+            case HIGH   -> "ALTO";
+            case MEDIUM -> "MÉDIO";
+            case LOW    -> "BAIXO";
+        };
     }
 
     private void addPieChart(XWPFDocument doc, Map<String, Severity> severities)
@@ -341,7 +360,8 @@ public class DocumentsService {
                         
                         // Color the level cell based on the chosen level
                         XWPFTableCell levelCell = row.getCell(3);
-                        levelCell.setText(answer.getChosenLevel() != null ? answer.getChosenLevel().name() : "-");
+                        String nivelPt = getOptionLevelDisplayName(answer.getChosenLevel());
+                        levelCell.setText(nivelPt);
                         if (answer.getChosenLevel() != null) {
                             switch (answer.getChosenLevel()) {
                                 case OptionLevel.HIGH:

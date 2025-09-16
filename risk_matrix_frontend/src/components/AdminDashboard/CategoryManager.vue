@@ -199,11 +199,13 @@ export default {
     },
     async saveEdit() {
       if (!this.editName.trim()) {
+        this.$emit("show-alert", { title: "Erro", message: "Nome da categoria não pode ser vazio.", type: "error" });
         return;
       }
 
       const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
       if (forbidden.test(this.editName.trim())) {
+        this.$emit("show-alert", { title: "Erro", message: "Nome da categoria contém caracteres inválidos.", type: "error" });
         return;
       }
 
@@ -211,6 +213,7 @@ export default {
         cat.id !== this.editingCategory.id && 
         cat.name.toLowerCase() === this.editName.trim().toLowerCase()
       )) {
+        this.$emit("show-alert", { title: "Erro", message: `Já existe uma categoria com o nome '${this.editName.trim()}'.`, type: "error" });
         return;
       }
 
@@ -234,17 +237,20 @@ export default {
     },
     async createCategory() {
       if (!this.newCategory.trim()) {
+        this.$emit("show-alert", { title: "Erro", message: "Nome da categoria não pode ser vazio.", type: "error" });
         return;
       }
 
       const forbidden = /[^a-zA-Z0-9\sáàâãéèêíïóôõöúçÁÀÂÃÉÈÍÏÓÔÕÖÚÇ]/;
       if (forbidden.test(this.newCategory.trim())) {
+        this.$emit("show-alert", { title: "Erro", message: "Nome da categoria contém caracteres inválidos.", type: "error" });
         return;
       }
 
       if (this.categories.some(cat => 
         cat.name.toLowerCase() === this.newCategory.trim().toLowerCase()
       )) {
+        this.$emit("show-alert", { title: "Erro", message: `A categoria '${this.newCategory.trim()}' já existe.`, type: "error" });
         return;
       }
 

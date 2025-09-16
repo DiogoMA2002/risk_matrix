@@ -9,7 +9,8 @@
         @export-questionnaire="exportQuestionnaire" @edit-questionnaire="editQuestionnaire" />
 
       <CategoryManager :categories="categories" :loading="isLoadingCategories" @create-category="handleCreateCategory"
-        @edit-category="handleEditCategory" @delete-category="handleDeleteCategory" />
+        @edit-category="handleEditCategory" @delete-category="handleDeleteCategory" 
+        @show-alert="({ title, message, type }) => showAlertDialog(title, message, type || 'error')" />
 
       <QuestionForm :categories="categories" :questionnaires="questionnaires" :optionTypes="optionTypes"
         :optionLevels="optionLevels" @add-question="addQuestion" />
