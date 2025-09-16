@@ -653,22 +653,22 @@
       ]
     },
     {
-      "questionText": "Os sistemas legados recebem suporte adequado para atualizações de segurança?",
+      "questionText": "Os sistemas antigos recebem suporte adequado para atualizações de segurança?",
       "categoryName": "Risco de Manutenção e Atualizações de Segurança",
       "options": [
         {
-          "optionText": "Todos os sistemas legados são mantidos com suporte ativo ou mitigação.",
+          "optionText": "Todos os sistemas antigos são mantidos com suporte ativo ou mitigação.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Alguns sistemas legados carecem de suporte ou atualizações frequentes.",
+          "optionText": "Alguns sistemas antigos carecem de suporte ou atualizações frequentes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
           "recommendation": "Isolar sistemas obsoletos em redes separadas e limitar o acesso até substituição completa."
         },
         {
-          "optionText": "Vários sistemas legados operam sem qualquer suporte.",
+          "optionText": "Vários sistemas antigos operam sem qualquer suporte.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
           "recommendation": "Descontinuar sistemas obsoletos ou migrar urgentemente para versões suportadas."
@@ -698,7 +698,7 @@
         }
       ]
     },
-     {
+    {
       "questionText": "Qual seria o impacto se ocorrer dano físico em equipamentos críticos, como servidores ou dispositivos de rede?",
       "categoryName": "Risco Físico e Tecnológico",
       "options": [
@@ -1124,7 +1124,7 @@
         }
       ]
     },
-     {
+    {
       "questionText": "Qual seria o impacto financeiro e reputacional se a entidade fosse sancionada por não conformidade?",
       "categoryName": "Risco Legal e de Conformidade",
       "description": "Avalia os danos que podem surgir de uma multa ou processo legal resultante do incumprimento de leis como o RGPD ou outras obrigações legais.",
