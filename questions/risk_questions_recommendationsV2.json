@@ -336,7 +336,7 @@
           "optionText": "Auditorias anuais ou esporádicas.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Agendar varreduras de vulnerabilidades com ferramentas gratuitas (ex: OpenVAS) e realizar uma simulação de intrusão pontual com apoio externo."
+          "recommendation": "Agendar varreduras de vulnerabilidades com ferramentas gratuitas e realizar uma simulação de intrusão pontual com apoio externo."
         },
         {
           "optionText": "Não são realizadas auditorias ou são muito raras.",
@@ -405,7 +405,7 @@
           "optionText": "Uso ocasional ou parcial das ferramentas.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Incluir scripts de verificação como parte da manutenção mensal, usando ferramentas simples (ex: lynis, checklists validadas internamente)."
+          "recommendation": "Incluir scripts de verificação como parte da manutenção mensal, usando ferramentas simples (ex: checklists validadas internamente)."
         },
         {
           "optionText": "Sem ferramentas ou uso inadequado.",

@@ -432,7 +432,7 @@
           "optionText": "Impacto moderado, serviços parcialmente afetados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Assegurar redundância nos comutadores principais, limitar tráfego excessivo em horas de pico e definir tempo máximo de recuperação inferior a 4 horas."
+          "recommendation": "Assegurar redundância nos switches principais, limitar tráfego excessivo em horas de pico e definir tempo máximo de recuperação inferior a 4 horas."
         },
         {
           "optionText": "Impacto elevado, interrupção prolongada dos serviços essenciais.",
@@ -455,7 +455,7 @@
           "optionText": "Exposição de alguns dados críticos ou serviços temporariamente inacessíveis.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Activar segmentação interna da rede, reforçar controlo de tráfego entre zonas e garantir tolerância a falhas nos pontos críticos."
+          "recommendation": "Ativar segmentação interna da rede, reforçar controlo de tráfego entre zonas e garantir tolerância a falhas nos pontos críticos."
         },
         {
           "optionText": "Exposição generalizada de dados sensíveis ou paralisação das operações.",
