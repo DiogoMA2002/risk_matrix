@@ -698,6 +698,148 @@
         }
       ]
     },
+     {
+      "questionText": "Qual seria o impacto se ocorrer dano físico em equipamentos críticos, como servidores ou dispositivos de rede?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Impacto mínimo, com substituição rápida e sem interrupção significativa.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Impacto moderado, com paragem temporária e necessidade de intervenção técnica.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Manter algumas peças de reserva (como discos) e um guia rápido de reposição para acelerar a recuperação."
+        },
+        {
+          "optionText": "Impacto elevado, com paralisação prolongada e perdas operacionais.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Preparar soluções de contingência (como backups externos) e testar anualmente o processo de reposição física."
+        }
+      ]
+    },
+    {
+      "questionText": "Qual seria o impacto financeiro direto da substituição de equipamentos críticos em caso de dano ou roubo?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Custo baixo, facilmente suportado pelo orçamento.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Custo moderado, com impacto no orçamento mensal.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Negociar condições de reposição rápida com fornecedores e reservar verba de contingência anual."
+        },
+        {
+          "optionText": "Custo elevado, com grande impacto no orçamento.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Avaliar cobertura de seguros e criar fundo de reserva para emergências técnicas."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe segurança física adequada para proteger os equipamentos críticos da entidade?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Sim, com acesso controlado e proteção adequada contra intrusões.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Segurança básica ou aplicada apenas parcialmente.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Reforçar o acesso físico com fechaduras controladas e supervisão nas áreas de servidores e comunicações."
+        },
+        {
+          "optionText": "Não existe controlo de acesso ou vigilância adequada.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Proteger os equipamentos críticos em salas dedicadas com acesso restrito apenas a pessoas autorizadas."
+        }
+      ]
+    },
+    {
+      "questionText": "Com que regularidade são avaliados os riscos de segurança e a compatibilidade técnica das tecnologias utilizadas?",
+      "categoryName": "Risco Físico e Tecnológico",
+
+      "description": "Avalia a probabilidade de falhas técnicas ou vulnerabilidades de segurança resultantes da ausência de avaliações formais às tecnologias utilizadas. Inclui a análise da compatibilidade entre sistemas, software e hardware, bem como a revisão periódica de riscos associados à sua utilização.",
+
+      "options": [
+        {
+          "optionText": "Avaliações formais e documentadas são realizadas pelo menos uma vez por ano ou sempre que há mudanças relevantes.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "As avaliações são feitas de forma ad-hoc, sem periodicidade ou registo estruturado.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Definir um calendário semestral para revisão técnica e manter registos dos testes e verificações efetuadas."
+        },
+        {
+          "optionText": "Não são realizadas avaliações formais de risco ou compatibilidade nas tecnologias em uso.",
+          "optionType": "PROBABILITY",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar processos de validação técnica antes da adoção de tecnologias e agendar revisões anuais com base em criticidade."
+        }
+      ]
+    },
+    {
+      "questionText": "A entidade tem mecanismos eficazes de mitigação para lidar com falhas inesperadas em tecnologias críticas?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "description": "Avalia se existem soluções implementadas, como redundância, failover automático ou backups para minimizar os impactos operacionais de falhas tecnológicas súbitas.",
+      "options": [
+        {
+          "optionText": "Sim, com mitigação eficaz (ex: redundância ativa, backups automáticos testados regularmente).",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Parcialmente, com algumas medidas implementadas mas não totalmente fiáveis.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Documentar os procedimentos de contingência, testar regularmente os backups e configurar alertas para falhas em sistemas críticos."
+        },
+        {
+          "optionText": "Não, não existem mecanismos formais de mitigação para falhas tecnológicas críticas.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Implementar redundância ativa/passiva para tecnologias essenciais e definir um plano de resposta com tempos máximos de recuperação (RTO)."
+        }
+      ]
+    },
+    {
+      "questionText": "Existe uma equipa ou responsável para responder rapidamente a falhas técnicas críticas?",
+      "categoryName": "Risco Físico e Tecnológico",
+      "options": [
+        {
+          "optionText": "Sim, com formação e disponibilidade imediata.",
+          "optionType": "IMPACT",
+          "optionLevel": "LOW"
+        },
+        {
+          "optionText": "Existe alguém identificado, mas com limitações de tempo ou experiência.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Garantir que o responsável tem acesso a documentação técnica e formação básica para responder com eficácia."
+        },
+        {
+          "optionText": "Não existe responsável técnico claro ou com competências para reagir rapidamente.",
+          "optionType": "IMPACT",
+          "optionLevel": "HIGH",
+          "recommendation": "Estabelecer apoio técnico externo de confiança e criar um plano de contingência mínimo para falhas críticas."
+        }
+      ]
+    },
     {
       "questionText": "Com que frequência os colaboradores recebem formação em cibersegurança, incluindo phishing e engenharia social?",
       "categoryName": "Risco Humano e Engenharia Social",
