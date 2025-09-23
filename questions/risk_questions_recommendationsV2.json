@@ -598,7 +598,7 @@
           "optionText": "Exposição generalizada de dados sensíveis ou paralisação das operações.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Isolar segmentos comprometidos, aplicar medidas de contenção imediata e acionar o plano de notificação às autoridades competentes dentro dos prazos legais."
+          "recommendation": "Definir previamente um plano de resposta a incidentes e de continuidade de negócio, incluindo procedimentos para comunicação legal e recuperação a partir de backups seguros."
         }
       ]
     },
