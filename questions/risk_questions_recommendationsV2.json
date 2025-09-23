@@ -953,7 +953,7 @@
           "optionText": "Vários sistemas antigos operam sem qualquer suporte.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Descontinuar sistemas obsoletos ou migrar urgentemente para versões suportadas."
+          "recommendation": "Planear a substituição progressiva dos sistemas obsoletos. Enquanto não for possível, aplicar medidas de contenção (ex.: isolamento em rede separada, restrição de acessos e monitorização regular)."
         }
       ]
     },
@@ -1231,13 +1231,13 @@
           "optionText": "Impacto moderado, com limitações na reconstrução dos eventos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Guardar cópias dos registos críticos em local isolado e validar integridade dos logs com regularidade."
+          "recommendation": "Guardar cópias dos registos críticos em local isolado e validar a integridade dos logs com regularidade."
         },
         {
           "optionText": "Impacto elevado, sem possibilidade de rastrear a origem do incidente.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Isolar os sistemas afetados, recuperar logs de segurança a partir de backups protegidos e solicitar apoio externo se necessário."
+          "recommendation": "Implementar armazenamento imutável para logs críticos (ex.: envio automático para sistema externo ou armazenamento na cloud com controlo de versão) e definir responsabilidades claras para monitorização."
         }
       ]
     },
