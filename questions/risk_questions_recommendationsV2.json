@@ -845,21 +845,21 @@
       "description": "Avalia os efeitos de não aplicar atualizações de segurança a tempo em sistemas críticos, como exposição a vulnerabilidades e interrupções operacionais.",
       "options": [
         {
-          "optionText": "Impacto mínimo, sistema isolado ou protegido por outras camadas.",
+          "optionText": "Impacto mínimo, o sistema é isolado ou protegido por outras camadas de segurança.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Impacto moderado, sistema com dados sensíveis mas com mitigação parcial.",
+          "optionText": "Impacto moderado, sistema com dados sensíveis mas com algumas medidas de proteção adicionais.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Rever arquitetura para segmentar acesso e ativar monitorização contínua enquanto a atualização não for possível."
+          "recommendation": "Enquanto a atualização não for aplicada, limitar o acesso apenas a utilizadores essenciais e monitorizar registos de atividade para sinais de exploração."
         },
         {
-          "optionText": "Impacto severo, sistema exposto e essencial à operação.",
+          "optionText": "Impacto severo, sistema exposto e essencial para a operação da empresa.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Aplicar mitigação temporária (ex: firewall, WAF), agendar janelas emergenciais e notificar equipas responsáveis."
+          "recommendation": "Criar um plano simples de resposta a incidentes, incluindo passos para isolar o sistema afetado, aplicar rapidamente as correções e garantir que existem cópias de segurança atualizadas para recuperação."
         }
       ]
     },
@@ -962,7 +962,7 @@
       "categoryName": "Risco de Manutenção e Atualizações de Segurança",
       "options": [
         {
-          "optionText": "Sim, todas as atualizações passam por ambiente de testes antes da produção.",
+          "optionText": "Sim, todas as atualizações passam por um ambiente de testes antes de produção.",
           "optionType": "PROBABILITY",
           "optionLevel": "LOW"
         },
@@ -970,13 +970,13 @@
           "optionText": "Algumas atualizações são aplicadas diretamente em produção.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Criar ambiente de pré-produção representativo e definir critérios mínimos de validação técnica antes da aplicação."
+          "recommendation": "Definir um procedimento simples de teste em pelo menos um sistema de menor criticidade antes de aplicar as atualizações em todos os ambientes."
         },
         {
           "optionText": "As atualizações não são testadas previamente.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Instituir ciclo de DevTest integrado ao CI/CD e criar rollback automatizado em caso de falha pós-update."
+          "recommendation": "Agendar uma rotina de testes básicos em sistemas não críticos antes de atualizar os sistemas principais. Se não for possível, garantir que existem backups recentes para permitir recuperação rápida em caso de falha."
         }
       ]
     },
