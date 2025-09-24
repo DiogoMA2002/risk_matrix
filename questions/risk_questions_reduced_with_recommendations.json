@@ -349,30 +349,30 @@
         }
       ]
     },
+{
+  "questionText": "Com que frequência são aplicadas práticas robustas de criptografia ao armazenamento de dados sensíveis?",
+  "categoryName": "Risco de Proteção e Armazenamento de Dados",
+  "description": "Avalia a consistência na aplicação de criptografia adequada para proteger dados confidenciais. A criptografia é uma das formas mais eficazes de evitar acessos não autorizados mesmo em caso de roubo de dados.",
+  "options": [
     {
-      "questionText": "Com que frequência são aplicadas práticas robustas de criptografia ao armazenamento de dados sensíveis?",
-      "categoryName": "Risco de Proteção e Armazenamento de Dados",
-      "description": "Avalia a consistência na aplicação de criptografia adequada para proteger dados confidenciais. A criptografia é uma das formas mais eficazes de evitar acessos não autorizados mesmo em caso de roubo de dados.",
-      "options": [
-        {
-          "optionText": "Criptografia forte aplicada de forma sistemática e testada regularmente.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Criptografia básica aplicada em parte dos sistemas.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Atualizar para criptografia AES-256 com rotação de chaves e monitorizar acessos ao cofre de chaves com alertas básicos de anomalia."
-        },
-        {
-          "optionText": "A maioria dos dados sensíveis não está protegida por criptografia adequada.",
-          "optionType": "PROBABILITY",
-          "optionLevel": "HIGH",
-          "recommendation": "Bloquear novos carregamentos até aplicar criptografia adequada nos dados sensíveis e planear auditoria simples para verificar conformidade inicial."
-        }
-      ]
+      "optionText": "Criptografia forte aplicada de forma sistemática e testada regularmente.",
+      "optionType": "PROBABILITY",
+      "optionLevel": "LOW"
     },
+    {
+      "optionText": "Criptografia básica aplicada em parte dos sistemas.",
+      "optionType": "PROBABILITY",
+      "optionLevel": "MEDIUM",
+      "recommendation": "Garantir que os dados sensíveis são encriptados com algoritmos atuais (ex.: AES) e armazenar as chaves de forma separada e protegida. Rever periodicamente se todos os sistemas críticos aplicam a mesma política."
+    },
+    {
+      "optionText": "A maioria dos dados sensíveis não está protegida por criptografia adequada.",
+      "optionType": "PROBABILITY",
+      "optionLevel": "HIGH",
+      "recommendation": "Priorizar a encriptação imediata de dados sensíveis (ex.: bases de dados de clientes, informação financeira) e implementar uma revisão simples para confirmar que a proteção está ativa."
+    }
+  ]
+},
     {
       "questionText": "A entidade possui mecanismos eficazes de controlo de acesso e monitorização em tempo real dos dados sensíveis?",
       "categoryName": "Risco de Proteção e Armazenamento de Dados",
@@ -442,29 +442,29 @@
         }
       ]
     },
+{
+  "questionText": "Qual seria o impacto de uma invasão à rede interna com exfiltração de dados ou interrupção por ataque DoS?",
+  "categoryName": "Risco de Rede e Disponibilidade",
+  "options": [
     {
-      "questionText": "Qual seria o impacto de uma invasão à rede interna com exfiltração de dados ou interrupção por ataque DoS?",
-      "categoryName": "Risco de Rede e Disponibilidade",
-      "options": [
-        {
-          "optionText": "Dados não críticos expostos, impacto operacional mínimo.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Exposição de alguns dados críticos ou serviços temporariamente inacessíveis.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Ativar segmentação interna da rede, reforçar controlo de tráfego entre zonas e garantir tolerância a falhas nos pontos críticos."
-        },
-        {
-          "optionText": "Exposição generalizada de dados sensíveis ou paralisação das operações.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Isolar segmentos comprometidos, aplicar medidas de contenção imediata e acionar o plano de notificação às autoridades competentes dentro dos prazos legais."
-        }
-      ]
+      "optionText": "Impacto reduzido, sistemas internos com baixa criticidade e dados pouco sensíveis.",
+      "optionType": "IMPACT",
+      "optionLevel": "LOW"
     },
+    {
+      "optionText": "Impacto moderado, com interrupções parciais e exposição limitada de dados.",
+      "optionType": "IMPACT",
+      "optionLevel": "MEDIUM",
+      "recommendation": "Reforçar segmentação da rede e definir procedimentos básicos de deteção de tráfego anómalo para reduzir o risco de propagação e minimizar impacto."
+    },
+    {
+      "optionText": "Exposição generalizada de dados sensíveis ou paralisação das operações.",
+      "optionType": "IMPACT",
+      "optionLevel": "HIGH",
+      "recommendation": "Definir previamente um plano de continuidade e resposta a incidentes, incluindo contactos para apoio externo e procedimentos de comunicação legal, garantindo ainda a existência de backups atualizados."
+    }
+  ]
+},
     {
       "questionText": "A infraestrutura de rede da entidade está protegida contra ameaças e ataques DoS?",
       "categoryName": "Risco de Rede e Disponibilidade",
@@ -534,29 +534,29 @@
         }
       ]
     },
+{
+  "questionText": "Existem soluções técnicas implementadas para assegurar a resiliência e continuidade da rede?",
+  "categoryName": "Risco de Rede e Disponibilidade",
+  "options": [
     {
-      "questionText": "Existem soluções técnicas implementadas para assegurar a resiliência e continuidade da rede?",
-      "categoryName": "Risco de Rede e Disponibilidade",
-      "options": [
-        {
-          "optionText": "Soluções robustas e totalmente implementadas (balanceamento, redundância, failover).",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Soluções parcialmente implementadas ou limitadas.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Adicionar mecanismos de distribuição de tráfego e monitorização automática do estado dos serviços com verificação ativa de disponibilidade."
-        },
-        {
-          "optionText": "Sem soluções técnicas adequadas.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Replicar serviços críticos em ambientes distintos e configurar alternância automática entre zonas geográficas em caso de falha."
-        }
-      ]
+      "optionText": "Soluções robustas e totalmente implementadas (ex.: redundância de equipamentos críticos e backups de configuração).",
+      "optionType": "IMPACT",
+      "optionLevel": "LOW"
     },
+    {
+      "optionText": "Soluções parcialmente implementadas ou limitadas.",
+      "optionType": "IMPACT",
+      "optionLevel": "MEDIUM",
+      "recommendation": "Configurar pelo menos redundância básica em equipamentos críticos (ex.: router/firewall) e ativar alertas de indisponibilidade simples (ex.: monitorização por email ou ferramenta gratuita)."
+    },
+    {
+      "optionText": "Sem soluções técnicas adequadas.",
+      "optionType": "IMPACT",
+      "optionLevel": "HIGH",
+      "recommendation": "Identificar os serviços mais críticos para o negócio e garantir alternativas simples (ex.: ligação de backup à internet, equipamentos de substituição rápida, cópias de configuração guardadas em local seguro)."
+    }
+  ]
+},
     {
       "questionText": "Qual seria o impacto se um sistema crítico não for atualizado a tempo?",
       "categoryName": "Risco de Manutenção e Atualizações de Segurança",
@@ -859,7 +859,7 @@
           "optionText": "Sem formação estruturada em cibersegurança.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Na ausência de formação, agende imediatamente sessões de sensibilização com foco em ataques de engenharia social e distribua resumos visuais com boas práticas nos canais internos da empresa."
+          "recommendation": "Na ausência de formação, agende sessões de sensibilização com foco em ataques de engenharia social e distribua resumos visuais com boas práticas nos canais internos da empresa."
         }
       ]
     },
@@ -922,13 +922,13 @@
           "optionText": "Danos reputacionais moderados com impacto na confiança de clientes.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Prepare previamente um plano de resposta à comunicação externa, com mensagens orientadas à contenção de reputação em casos de incidentes humanos ou sociais."
+          "recommendation": "Preparar previamente um plano de resposta de comunicação externa, com mensagens orientadas à contenção de reputação em casos de incidentes humanos ou sociais."
         },
         {
           "optionText": "Grave perda de reputação e confiança do mercado.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Estabeleça uma equipa de resposta a incidentes com treino específico em engenharia social e defina procedimentos de comunicação imediata e contenção pública."
+          "recommendation": "Definir responsáveis internos para gerir comunicação de crise, preparar declarações oficiais e, se possível, identificar parceiros externos (consultoria ou assessoria de imprensa) que possam apoiar em incidentes desta natureza."
         }
       ]
     },
