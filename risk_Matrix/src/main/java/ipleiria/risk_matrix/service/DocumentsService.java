@@ -145,11 +145,17 @@ public class DocumentsService {
 
                     // run 2: severity text in PT + coloured
                     String sevPt = getSeverityDisplayName(entry.getValue()); // "Crítico", "Alto", ...
+                    int severityLevel = getSeverityLevel(entry.getValue());
                     XWPFRun sevRun = p.createRun();
                     sevRun.setFontSize(12);
                     sevRun.setFontFamily("Verdana");
                     sevRun.setBold(true);
-                    sevRun.setText(sevPt);
+                    // Only show level if it's not UNKNOWN (0)
+                    if (severityLevel > 0) {
+                        sevRun.setText(sevPt + " (" + severityLevel + ")");
+                    } else {
+                        sevRun.setText(sevPt);
+                    }
 
                     switch (entry.getValue()) {
                         case CRITICAL -> sevRun.setColor("8B0000");
@@ -159,7 +165,14 @@ public class DocumentsService {
                         case UNKNOWN  -> sevRun.setColor("808080");
                     }
                 });
-        ;
+
+        // Add explanatory text about severity levels
+        XWPFParagraph levelExplanation = document.createParagraph();
+        XWPFRun explanationRun = levelExplanation.createRun();
+        explanationRun.setFontSize(10);
+        explanationRun.setFontFamily("Verdana");
+        explanationRun.setItalic(true);
+        explanationRun.setText("Nota: Os níveis numéricos entre parênteses referem-se à criticidade do risco: (1) = Baixo, (2) = Médio, (3) = Alto, (4) = Crítico.");
 
         // Conclusão
         XWPFParagraph outro = document.createParagraph();
@@ -287,6 +300,20 @@ public class DocumentsService {
             case UNKNOWN -> "Desconhecido";
         };
     }
+
+    /**
+     * Get the numeric level (1-4) corresponding to the severity level.
+     * 1 = Baixo (LOW), 2 = Médio (MEDIUM), 3 = Alto (HIGH), 4 = Crítico (CRITICAL)
+     */
+    private int getSeverityLevel(Severity severity) {
+        return switch (severity) {
+            case CRITICAL -> 4;
+            case HIGH -> 3;
+            case MEDIUM -> 2;
+            case LOW -> 1;
+            case UNKNOWN -> 0;
+        };
+    }
     private void setPieSliceRgb(XWPFChart chart, int seriesIdx, int pointIdx, int r, int g, int b) {
         CTPieChart pie = chart.getCTChart().getPlotArea().getPieChartArray(0);
         CTDPt dpt = pie.getSerArray(seriesIdx).addNewDPt();
@@ -312,7 +339,14 @@ public class DocumentsService {
 
                     XWPFParagraph categoryHeader = document.createParagraph();
                     XWPFRun headerRun = categoryHeader.createRun();
-                    headerRun.setText("Categoria: " + category);
+                    String severityText = getSeverityDisplayName(categorySeverity);
+                    int severityLevel = getSeverityLevel(categorySeverity);
+                    // Format: "Categoria: Category Name - Severity (Level)"
+                    if (severityLevel > 0) {
+                        headerRun.setText("Categoria: " + category + " - " + severityText + " (" + severityLevel + ")");
+                    } else {
+                        headerRun.setText("Categoria: " + category + " - " + severityText);
+                    }
                     headerRun.setBold(true);
                     headerRun.setFontSize(14);
                     headerRun.setFontFamily("Calibri");
