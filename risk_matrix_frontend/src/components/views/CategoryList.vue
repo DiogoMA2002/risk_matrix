@@ -451,34 +451,47 @@ export default {
           let invalidCount = 0;
           const currentAnswers = JSON.parse(JSON.stringify(this.allAnswers));
 
+          // mapa rápido por ID
+          const questionsById = new Map(
+            (this.selectedQuestionnaire?.questions || []).map(q => [q.id, q])
+          );
+
           importedData.answers.forEach(answerSet => {
             const { category, questionId, selectedOption } = answerSet;
-            if (category && questionId && selectedOption) {
-              // Find the matching question in current questionnaire by category and option text
-              let matchedQuestionId = null;
-              if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
-                const matchingQuestion = this.selectedQuestionnaire.questions.find(q => {
-                  const catString = (typeof q.category === "object" && q.category !== null)
-                    ? q.category.name
-                    : q.category;
-                  return catString === category && q.options && q.options.some(opt => opt.optionText === selectedOption);
-                });
-                matchedQuestionId = matchingQuestion ? matchingQuestion.id : null;
-              }
 
-              if (matchedQuestionId) {
-                if (!currentAnswers[category]) {
-                  currentAnswers[category] = {};
-                }
-                if (!currentAnswers[category][matchedQuestionId]) {
-                  currentAnswers[category][matchedQuestionId] = selectedOption;
-                  mergedCount++;
-                } else {
-                  skippedCount++;
-                }
-              } else {
-                invalidCount++;
-              }
+            if (!category || !questionId || !selectedOption) {
+              invalidCount++;
+              return;
+            }
+
+            const question = questionsById.get(questionId);
+
+            if (!question) {
+              // se o ID já não existir neste questionário
+              invalidCount++;
+              return;
+            }
+
+            const catString = (typeof question.category === "object" && question.category !== null)
+              ? question.category.name
+              : question.category;
+
+            if (catString !== category) {
+              // categoria não bate certo → ignora
+              invalidCount++;
+              return;
+            }
+
+            if (!currentAnswers[category]) {
+              currentAnswers[category] = {};
+            }
+
+            // se quiseres sobrescrever respostas existentes, remove este if
+            if (!currentAnswers[category][questionId]) {
+              currentAnswers[category][questionId] = selectedOption;
+              mergedCount++;
+            } else {
+              skippedCount++;
             }
           });
 
