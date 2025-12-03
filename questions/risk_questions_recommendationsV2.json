@@ -37,7 +37,7 @@
           "optionText": "Acesso significativo a sistemas internos.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
-          "recommendation": "Aplicar modelo de menor privilégio, utilizar cofre de senhas para sessões privilegiadas e ativar logging centralizado com alertas para ações sensíveis."
+          "recommendation": "Aplicar modelo de menor privilégio, utilizar cofre de passwords para sessões privilegiadas e ativar logging centralizado com alertas para ações sensíveis."
         },
         {
           "optionText": "Controlo total sobre sistemas e dados.",
@@ -48,7 +48,7 @@
       ]
     },
     {
-      "questionText": "Com que frequência os utilizadores utilizam senhas fracas ou reutilizadas?",
+      "questionText": "Com que frequência os utilizadores utilizam passwords fracas ou reutilizadas?",
       "categoryName": "Risco de Acesso e Autenticação",
       "options": [
         {
@@ -60,13 +60,13 @@
           "optionText": "Casos isolados com impacto significativo.",
           "optionType": "PROBABILITY",
           "optionLevel": "MEDIUM",
-          "recommendation": "Verificar senhas contra listas expostas (ex: HaveIBeenPwned), forçar mudança em contas vulneráveis e sensibilizar para boas práticas."
+          "recommendation": "Verificar passwords contra listas expostas (ex: HaveIBeenPwned), forçar mudança em contas vulneráveis e sensibilizar para boas práticas."
         },
         {
           "optionText": "A prática é comum e representa um risco elevado.",
           "optionType": "PROBABILITY",
           "optionLevel": "HIGH",
-          "recommendation": "Tornar MFA obrigatório, ativar políticas de complexidade mínima e impedir reutilização de senhas com validação contínua ou controlo nativo da solução usada."
+          "recommendation": "Tornar MFA obrigatório, ativar políticas de complexidade mínima e impedir reutilização de passwords com validação contínua ou controlo nativo da solução usada."
         }
       ]
     },
@@ -117,7 +117,7 @@
       ]
     },
     {
-      "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de senhas)?",
+      "questionText": "As credenciais dos utilizadores são armazenadas de forma segura (ex: hashes robustas, vault de passwords)?",
       "categoryName": "Risco de Acesso e Autenticação",
       "options": [
         {
@@ -135,33 +135,56 @@
           "optionText": "Credenciais armazenadas sem proteção adequada.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Migrar credenciais para um cofre com encriptação forte (KMS ou HSM) e forçar redefinição de senha para todos os utilizadores após transição."
+          "recommendation": "Migrar credenciais para um cofre com encriptação forte (KMS ou HSM) e forçar redefinição de password para todos os utilizadores após transição."
         }
       ]
     },
     {
-      "questionText": "Qual seria o impacto operacional caso ocorra um ataque bem-sucedido de phishing direcionado a funcionários?",
-      "categoryName": "Risco de Comunicação e Engenharia Social",
-      "options": [
-        {
-          "optionText": "Impacto mínimo, incidente rapidamente contido.",
-          "optionType": "IMPACT",
-          "optionLevel": "LOW"
-        },
-        {
-          "optionText": "Impacto moderado, comprometimento limitado.",
-          "optionType": "IMPACT",
-          "optionLevel": "MEDIUM",
-          "recommendation": "Estabelecer processo mínimo de contenção para ataques de phishing: reset de senha, encerramento de sessões, análise de mensagens recebidas e registo de incidente."
-        },
-        {
-          "optionText": "Impacto grave, grande comprometimento operacional.",
-          "optionType": "IMPACT",
-          "optionLevel": "HIGH",
-          "recommendation": "Criar plano interno simplificado para resposta a phishing com medidas de contenção rápida, isolamento manual e comunicação a partes afetadas. Treinar equipas para ativação imediata quando necessário."
-        }
-      ]
+  "questionText": "Qual seria o impacto operacional caso um funcionário genérico seja alvo de um ataque bem-sucedido de phishing?",
+  "categoryName": "Risco de Comunicação e Engenharia Social",
+  "options": [
+    {
+      "optionText": "Impacto mínimo, incidente rapidamente contido.",
+      "optionType": "IMPACT",
+      "optionLevel": "LOW"
     },
+    {
+      "optionText": "Impacto moderado, comprometimento limitado.",
+      "optionType": "IMPACT",
+      "optionLevel": "MEDIUM",
+      "recommendation": "Estabelecer processo mínimo de contenção aplicável a contas de funcionários genéricos: reset de password, encerramento de sessões, análise de mensagens recebidas e registo de incidente."
+    },
+    {
+      "optionText": "Impacto grave, grande comprometimento operacional.",
+      "optionType": "IMPACT",
+      "optionLevel": "HIGH",
+      "recommendation": "Criar plano interno simplificado para reduzir o impacto de phishing em funcionários genéricos, incluindo medidas padrão de contenção rápida, isolamento manual e comunicação pré-definida às partes responsáveis."
+    }
+  ]
+},{
+  "questionText": "Qual seria o impacto operacional caso um funcionário administrativo seja alvo de um ataque bem-sucedido de phishing?",
+  "categoryName": "Risco de Comunicação e Engenharia Social",
+  "options": [
+    {
+      "optionText": "Impacto mínimo, incidente rapidamente contido.",
+      "optionType": "IMPACT",
+      "optionLevel": "LOW"
+    },
+    {
+      "optionText": "Impacto moderado, possível acesso limitado a dados administrativos.",
+      "optionType": "IMPACT",
+      "optionLevel": "MEDIUM",
+      "recommendation": "Estabelecer processo mínimo de contenção específico para contas administrativas: reset de password reforçado, revisão de permissões ativas, análise de mensagens suspeitas e registo detalhado do incidente."
+    },
+    {
+      "optionText": "Impacto grave, grande comprometimento de processos administrativos ou dados sensíveis.",
+      "optionType": "IMPACT",
+      "optionLevel": "HIGH",
+      "recommendation": "Criar plano interno estruturado para mitigar compromissos administrativos causados por phishing, com diretrizes para contenção rápida, isolamento de acessos privilegiados e comunicação interna a equipas críticas antes que ocorram danos significativos."
+    }
+  ]
+}
+,
     {
       "questionText": "Qual o impacto financeiro e reputacional caso dados sensíveis sejam comprometidos através de engenharia social?",
       "categoryName": "Risco de Comunicação e Engenharia Social",
