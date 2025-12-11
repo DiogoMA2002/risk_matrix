@@ -25,7 +25,7 @@
       ]
     },
     {
-      "questionText": "Se um atacante conseguir comprometer credenciais de administrador ou utilizadores priveligiados, qual seria o impacto?",
+      "questionText": "Se um atacante conseguir comprometer credenciais de administrador ou utilizadores privilegiados, qual seria o impacto?",
       "categoryName": "Risco de Acesso e Autenticação",
       "options": [
         {
