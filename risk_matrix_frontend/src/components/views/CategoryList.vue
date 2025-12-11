@@ -444,54 +444,69 @@ export default {
             return;
           }
 
-          // Create a mapping to match imported answers to current questionnaire questions
-          // We'll match by category and option text since the questions are the same content
+          // Normalize helper to be resilient to case/accents/spacing
+          const normalize = (text = "") =>
+            text
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .toLocaleLowerCase("pt-PT")
+              .trim();
+
+          // Precompute normalized questionnaire data for fast lookups
+          const normalizedQuestions = (this.selectedQuestionnaire?.questions || []).map(q => {
+            const catString = (typeof q.category === "object" && q.category !== null)
+              ? q.category.name
+              : q.category;
+            const normCat = normalize(catString);
+            const optionMap = {};
+            (q.options || []).forEach(opt => {
+              optionMap[normalize(opt.optionText)] = true;
+            });
+            return { id: q.id, category: catString, normCategory: normCat, optionMap };
+          });
+
+          // Fast lookup by ID (fallback path)
+          const questionsById = new Map(normalizedQuestions.map(q => [q.id, q]));
+
           let mergedCount = 0;
-          let skippedCount = 0;
+          let overwrittenCount = 0;
           let invalidCount = 0;
           const currentAnswers = JSON.parse(JSON.stringify(this.allAnswers));
 
-          // mapa rápido por ID
-          const questionsById = new Map(
-            (this.selectedQuestionnaire?.questions || []).map(q => [q.id, q])
-          );
-
           importedData.answers.forEach(answerSet => {
             const { category, questionId, selectedOption } = answerSet;
-
-            if (!category || !questionId || !selectedOption) {
+            if (!category || !selectedOption) {
               invalidCount++;
               return;
             }
 
-            const question = questionsById.get(questionId);
+            const normCat = normalize(category);
+            const normOpt = normalize(selectedOption);
 
-            if (!question) {
-              // se o ID já não existir neste questionário
-              invalidCount++;
-              return;
+            // 1) Try match by normalized category + option text
+            let matched = normalizedQuestions.find(q => q.normCategory === normCat && q.optionMap[normOpt]);
+
+            // 2) Fallback: match by questionId if it exists in current questionnaire
+            if (!matched && questionId) {
+              const qMatch = questionsById.get(parseInt(questionId));
+              if (qMatch && qMatch.normCategory === normCat) {
+                matched = qMatch;
+              }
             }
 
-            const catString = (typeof question.category === "object" && question.category !== null)
-              ? question.category.name
-              : question.category;
-
-            if (catString !== category) {
-              // categoria não bate certo → ignora
-              invalidCount++;
-              return;
-            }
-
-            if (!currentAnswers[category]) {
-              currentAnswers[category] = {};
-            }
-
-            // se quiseres sobrescrever respostas existentes, remove este if
-            if (!currentAnswers[category][questionId]) {
-              currentAnswers[category][questionId] = selectedOption;
-              mergedCount++;
+            if (matched) {
+              const targetCategory = matched.category;
+              if (!currentAnswers[targetCategory]) {
+                currentAnswers[targetCategory] = {};
+              }
+              if (currentAnswers[targetCategory][matched.id]) {
+                overwrittenCount++;
+              } else {
+                mergedCount++;
+              }
+              currentAnswers[targetCategory][matched.id] = selectedOption;
             } else {
-              skippedCount++;
+              invalidCount++;
             }
           });
 
@@ -499,11 +514,11 @@ export default {
           this.$store.commit('setAllAnswers', currentAnswers);
 
           let message = `Progresso importado com sucesso. ${mergedCount} respostas foram adicionadas.`;
-          if (skippedCount > 0) {
-            message += ` ${skippedCount} respostas já existentes foram ignoradas.`;
+          if (overwrittenCount > 0) {
+            message += ` ${overwrittenCount} respostas existentes foram sobrescritas.`;
           }
           if (invalidCount > 0) {
-            message += `\n\n ATENÇÃO: ${invalidCount} respostas não puderam ser correspondidas ao questionário atual e foram ignoradas.`;
+            message += `\n\nATENÇÃO: ${invalidCount} respostas não puderam ser correspondidas ao questionário atual e foram ignoradas. Verifique se está a importar para o questionário correto.`;
           }
 
           this.showAlertDialog("Importação Concluída", message, invalidCount > 0 ? "info" : "success");
