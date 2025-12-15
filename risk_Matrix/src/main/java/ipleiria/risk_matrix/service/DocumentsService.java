@@ -252,15 +252,15 @@ public class DocumentsService {
         // Severity colours per slice (series index 0)
         for (int i = 0; i < labels.size(); i++) {
             int[] rgb = colourForSeverityLabel(labels.get(i)); // use base label to pick colour
-            setPieSliceRgb(chart, 0, i, rgb[0], rgb[1], rgb[2]);
+            setPieSliceRgb(chart, i, rgb[0], rgb[1], rgb[2]);
         }
     }
 
     // Solid fill helper for any shape properties
-    private void setSolidFillRgb(CTShapeProperties spPr, int r, int g, int b) {
+    private void setSolidFillRgb(CTShapeProperties spPr) {
         CTSolidColorFillProperties solid = spPr.isSetSolidFill() ? spPr.getSolidFill() : spPr.addNewSolidFill();
         CTSRgbColor rgb = solid.isSetSrgbClr() ? solid.getSrgbClr() : solid.addNewSrgbClr();
-        rgb.setVal(new byte[]{(byte) r, (byte) g, (byte) b});
+        rgb.setVal(new byte[]{(byte) 255, (byte) 255, (byte) 255});
     }
     // Map severity label -> colour
     private int[] colourForSeverityLabel(String label) {
@@ -281,12 +281,12 @@ public class DocumentsService {
         // Chart space
         CTChartSpace cs = chart.getCTChartSpace();
         CTShapeProperties spPr = cs.isSetSpPr() ? cs.getSpPr() : cs.addNewSpPr();
-        setSolidFillRgb(spPr, 255, 255, 255);
+        setSolidFillRgb(spPr);
 
         // Plot area
         CTPlotArea pa = chart.getCTChart().getPlotArea();
         CTShapeProperties plotSpPr = pa.isSetSpPr() ? pa.getSpPr() : pa.addNewSpPr();
-        setSolidFillRgb(plotSpPr, 255, 255, 255);
+        setSolidFillRgb(plotSpPr);
     }
 
 
@@ -314,9 +314,9 @@ public class DocumentsService {
             case UNKNOWN -> 0;
         };
     }
-    private void setPieSliceRgb(XWPFChart chart, int seriesIdx, int pointIdx, int r, int g, int b) {
+    private void setPieSliceRgb(XWPFChart chart, int pointIdx, int r, int g, int b) {
         CTPieChart pie = chart.getCTChart().getPlotArea().getPieChartArray(0);
-        CTDPt dpt = pie.getSerArray(seriesIdx).addNewDPt();
+        CTDPt dpt = pie.getSerArray(0).addNewDPt();
         dpt.addNewIdx().setVal(pointIdx);
 
         CTShapeProperties spPr = dpt.isSetSpPr() ? dpt.getSpPr() : dpt.addNewSpPr();
@@ -327,12 +327,20 @@ public class DocumentsService {
     }
 
     private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory, Map<String, Severity> severities) {
+        final boolean[] first = { true };
+
         answersByCategory.entrySet().stream()
                 .sorted(Comparator.comparing(
                         (Map.Entry<String, List<Answer>> e) ->
                                 Objects.requireNonNullElse(severities.get(e.getKey()), Severity.LOW)
                 ).reversed())
                 .forEach(entry -> {
+                    // Force each category to start on a new page
+                    if (!first[0]) {
+                        XWPFParagraph pageBreak = document.createParagraph();
+                        pageBreak.setPageBreak(true);
+                    }
+                    first[0] = false;
                     String category = entry.getKey();
                     List<Answer> answers = entry.getValue();
                     Severity categorySeverity = severities.get(category);
