@@ -205,7 +205,7 @@ export default {
       showAlert: false,
       alertTitle: "",
       alertMessage: "",
-      alertType: "alert",
+      alertType: "info",
       alertResolve: null,
       loading: true,
       isSubmitting: false,
@@ -333,7 +333,7 @@ export default {
         }
         
         const payload = [];
-        const userEmail = localStorage.getItem("userEmail");
+        const userEmail = sessionStorage.getItem("userEmail");
         const submissionId = uuidv4();
         const selectedQuestionIds = this.selectedQuestionnaire && this.selectedQuestionnaire.questions
           ? this.selectedQuestionnaire.questions.map(q => q.id)
@@ -374,12 +374,14 @@ export default {
     },
     async exportToJSON(shouldClearAfterExport = true) {
       try {
-        const proceed = await this.showAlertDialog(
-          "Exportar Progresso",
-          "Deseja exportar o progresso? Isso irá limpar o progresso salvo localmente.",
-          "confirm"
-        );
-        if (!proceed) return;
+        if (shouldClearAfterExport) {
+          const proceed = await this.showAlertDialog(
+            "Exportar Progresso",
+            "Deseja exportar o progresso? Isso irá limpar o progresso salvo localmente.",
+            "confirm"
+          );
+          if (!proceed) return;
+        }
 
         const allAnswersArray = [];
 

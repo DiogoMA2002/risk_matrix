@@ -197,7 +197,7 @@ const isLoading = ref(false)
 async function accept() {
   try {
     isLoading.value = true
-    localStorage.setItem('completedRequirements', 'true')
+    sessionStorage.setItem('completedRequirements', 'true')
     await router.push('/category')
   } catch (error) {
     console.error('Navigation error:', error)

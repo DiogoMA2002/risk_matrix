@@ -2,12 +2,13 @@ package ipleiria.risk_matrix.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import ipleiria.risk_matrix.utils.RoleConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,109 +16,95 @@ import java.util.UUID;
 
 @Component
 public class JwtUtil {
+
     @Value("${app.jwt.secret}")
     private String jwtSecret;
 
     @Value("${app.jwt.expirationMs}")
     private long jwtExpirationMs;
 
-    @Value("${app.jwt.public.expirationMs:7200000}") // 2 hours default for public tokens
+    @Value("${app.jwt.public.expirationMs:7200000}")
     private long publicTokenExpirationMs;
 
-    @Value("${app.jwt.refresh.expirationMs:604800000}") // 7 days default for refresh tokens
+    @Value("${app.jwt.refresh.expirationMs:604800000}")
     private long refreshTokenExpirationMs;
+
+    private SecretKey signingKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .claim("role", "admin")
-                .claim("type", "access")
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256)
+                .subject(userDetails.getUsername())
+                .claim("role", RoleConstants.ADMIN)
+                .claim("type", RoleConstants.TOKEN_TYPE_ACCESS)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(signingKey())
                 .compact();
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .claim("role", "admin")
-                .claim("type", "refresh")
-                .claim("jti", UUID.randomUUID().toString())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))
-                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256)
+                .subject(userDetails.getUsername())
+                .claim("role", RoleConstants.ADMIN)
+                .claim("type", RoleConstants.TOKEN_TYPE_REFRESH)
+                .id(UUID.randomUUID().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))
+                .signWith(signingKey())
                 .compact();
     }
 
     public String generatePublicToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", "public");
+        claims.put("role", RoleConstants.PUBLIC);
         claims.put("email", email);
-        claims.put("type", "access");
+        claims.put("type", RoleConstants.TOKEN_TYPE_ACCESS);
 
         return Jwts.builder()
-                .setSubject(email)
-                .setClaims(claims)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + publicTokenExpirationMs))
-                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256)
+                .subject(email)
+                .claims(claims)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + publicTokenExpirationMs))
+                .signWith(signingKey())
                 .compact();
     }
 
     public String generatePublicRefreshToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", "public");
+        claims.put("role", RoleConstants.PUBLIC);
         claims.put("email", email);
-        claims.put("type", "refresh");
-        claims.put("jti", UUID.randomUUID().toString());
+        claims.put("type", RoleConstants.TOKEN_TYPE_REFRESH);
 
         return Jwts.builder()
-                .setSubject(email)
-                .setClaims(claims)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))
-                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256)
+                .subject(email)
+                .claims(claims)
+                .id(UUID.randomUUID().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + refreshTokenExpirationMs))
+                .signWith(signingKey())
                 .compact();
     }
 
     public String extractUsername(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return parseClaims(token).getSubject();
     }
 
     public String extractEmail(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.get("email", String.class);
+        return parseClaims(token).get("email", String.class);
     }
 
     public String extractRole(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.get("role", String.class);
+        return parseClaims(token).get("role", String.class);
     }
 
     public String extractTokenType(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return parseClaims(token).get("type", String.class);
+    }
 
-        return claims.get("type", String.class);
+    public String extractJti(String token) {
+        return parseClaims(token).getId();
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -134,21 +121,26 @@ public class JwtUtil {
 
     public boolean isRefreshToken(String token) {
         try {
-            String tokenType = extractTokenType(token);
-            return "refresh".equals(tokenType);
+            return RoleConstants.TOKEN_TYPE_REFRESH.equals(extractTokenType(token));
         } catch (Exception e) {
             return false;
         }
     }
 
     private boolean isTokenExpired(String token) {
-        Date expiration = Jwts.parserBuilder()
-                .setSigningKey(jwtSecret.getBytes())
+        return parseClaims(token).getExpiration().before(new Date());
+    }
+
+    private Claims parseClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(signingKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration();
-        return expiration.before(new Date());
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public long getAdminTokenExpirationMs() {
+        return jwtExpirationMs;
     }
 
     public long getPublicTokenExpirationMs() {

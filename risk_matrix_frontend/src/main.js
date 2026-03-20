@@ -7,8 +7,12 @@ import './assets/styles.css'
 import axios from 'axios'
 import { setupAxiosInterceptors } from './utils/tokenManager'
 
-// Setup axios interceptors for automatic token handling
-setupAxiosInterceptors(axios)
+// Send cookies with every request (tokens are stored in HttpOnly cookies)
+axios.defaults.withCredentials = true
+
+// Setup 401 auto-refresh interceptor — pass router.push so tokenManager
+// doesn't need to import the router (avoids circular dependency).
+setupAxiosInterceptors(axios, (path) => router.push(path))
 
 createApp(App)
   .use(router)

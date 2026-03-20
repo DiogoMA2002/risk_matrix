@@ -232,13 +232,6 @@ export default {
       this.isSaving = true;
       this.saveError = null;
 
-      const token = localStorage.getItem("jwt");
-      if (!token) {
-        this.saveError = "Erro de autenticação. Faça login novamente.";
-        this.isSaving = false;
-        return;
-      }
-
       const finalCategory = this.question.categoryName?.trim();
       if (!finalCategory) {
         this.saveError = "Por favor selecione uma categoria válida.";
@@ -262,15 +255,13 @@ export default {
           id: this.question.id,
           questionText: this.question.questionText,
           categoryName: finalCategory,
-          description: this.question.description || "", 
+          description: this.question.description || "",
           options: this.question.options.map(opt => ({
             optionText: opt.optionText,
             optionLevel: opt.optionLevel,
             optionType: opt.optionType || OptionLevelType.IMPACT
           })),
           questionnaireIds: this.associatedQuestionnaireIds
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
         });
 
         this.showSuccessDialog = true;

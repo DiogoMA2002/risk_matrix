@@ -190,11 +190,8 @@ showDeleteDialog: false
   this.isSaving = true;
 
   try {
-    const token = localStorage.getItem('jwt');
     await axios.put(`/api/questionnaires/${this.questionnaireId}`, {
       title: this.questionnaire.title.trim()
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
     });
 
     this.showSuccessDialog = true;
@@ -243,15 +240,12 @@ showDeleteDialog: false
 
 async performDelete() {
   try {
-    const token = localStorage.getItem('jwt');
     const question = await axios.get(`/api/questions/${this.confirmDeleteId}`);
     const updatedIds = question.data.questionnaireIds.filter(id => id != this.questionnaireId);
 
     await axios.put(`/api/questions/${this.confirmDeleteId}`, {
       ...question.data,
       questionnaireIds: updatedIds
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
     });
 
     await this.fetchQuestionnaireDetails();

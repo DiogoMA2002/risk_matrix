@@ -56,12 +56,7 @@ public class FeedbackService {
 
 
     public List<Feedback> filterFeedback(String email, FeedbackType type, LocalDateTime startDate, LocalDateTime endDate) {
-        return feedbackRepository.findAll().stream()
-                .filter(fb -> email == null || fb.getEmail().equalsIgnoreCase(email))
-                .filter(fb -> type == null || fb.getFeedbackType() == type)
-                .filter(fb -> startDate == null || !fb.getCreatedAt().isBefore(startDate))
-                .filter(fb -> endDate == null || !fb.getCreatedAt().isAfter(endDate))
-                .toList();
+        return feedbackRepository.filterFeedback(email, type, startDate, endDate);
     }
 
 }

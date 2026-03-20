@@ -5,7 +5,6 @@ import ipleiria.risk_matrix.models.feedback.Feedback;
 import ipleiria.risk_matrix.models.feedback.FeedbackType;
 import ipleiria.risk_matrix.service.FeedbackService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +19,6 @@ public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
-    @Autowired
     public FeedbackController(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;
     }

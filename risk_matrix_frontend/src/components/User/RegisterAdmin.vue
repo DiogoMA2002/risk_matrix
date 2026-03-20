@@ -80,22 +80,11 @@
             return
             }
 
-            const token = localStorage.getItem('jwt')
-            if (!token) {
-            this.message = 'Você não está autenticado.'
-            this.isError = true
-            return
-            }
-
             try {
             const response = await axios.post('/api/auth/register', {
                 username: this.username,
                 email: this.email,
                 password: this.password
-            }, {
-                headers: {
-                Authorization: `Bearer ${token}`
-                }
             })
 
             this.message = 'Administrador criado com sucesso!'

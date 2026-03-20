@@ -124,7 +124,7 @@ async function proceed() {
     const tokenData = await response.json()
     
     // Store email and tokens
-    localStorage.setItem('userEmail', email.value)
+    sessionStorage.setItem('userEmail', email.value)
     localStorage.setItem('publicToken', tokenData.token)
     localStorage.setItem('publicRefreshToken', tokenData.refreshToken)
     localStorage.setItem('tokenExpiresAt', tokenData.expiresAt.toString())

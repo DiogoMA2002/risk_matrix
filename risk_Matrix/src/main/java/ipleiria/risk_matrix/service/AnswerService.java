@@ -8,6 +8,10 @@ import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questions.*;
 import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,6 +24,9 @@ import static ipleiria.risk_matrix.utils.RiskUtils.computeCategorySeverity;
 
 @Service
 public class AnswerService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AnswerService.class);
+    private static final int MAX_PAGE_SIZE = 500;
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
@@ -58,8 +65,7 @@ public class AnswerService {
         answer.setChosenLevel(selectedOption.getOptionLevel());
         answer.setSubmissionId(Optional.ofNullable(answerDTO.getSubmissionId())
                 .orElse(UUID.randomUUID().toString()));
-        answer.setQuestionOptionId(selectedOption.getId()); // ✅ novo campo
-
+        answer.setQuestionOptionId(selectedOption.getId());
 
         answerRepository.save(answer);
         return new AnswerDTO(answer);
@@ -71,9 +77,9 @@ public class AnswerService {
                 .collect(Collectors.toList());
     }
 
-
-    public List<AnswerDTO> getAllAnswers() {
-        return answerRepository.findAll().stream()
+    public List<AnswerDTO> getAllAnswers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, Math.min(size, MAX_PAGE_SIZE));
+        return answerRepository.findAll(pageable).getContent().stream()
                 .map(AnswerDTO::new)
                 .collect(Collectors.toList());
     }
@@ -92,21 +98,24 @@ public class AnswerService {
                 }).toList();
     }
 
-
-
     public List<UserAnswersDTO> getUserSubmissionsWithSeverities(String email) {
         List<AnswerDTO> answers = getAnswersByEmail(email);
         return processSubmissions(answers);
     }
 
-    public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail() {
-        List<AnswerDTO> allAnswers = getAllAnswers();
+    public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail(int page, int size) {
+        List<AnswerDTO> allAnswers = getAllAnswers(page, size);
         return processSubmissions(allAnswers);
     }
 
-    public List<UserAnswersDTO> getAnswersByDateRange(String startDate, String endDate) {
-        LocalDateTime start = LocalDate.parse(startDate).atStartOfDay();
-        LocalDateTime end = LocalDate.parse(endDate).atTime(23, 59, 59);
+    public List<UserAnswersDTO> getAnswersByDateRange(LocalDate startDate, LocalDate endDate) {
+        if (endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("End date must not be before start date.");
+        }
+
+        LocalDateTime start = startDate.atStartOfDay();
+        LocalDateTime end   = endDate.atTime(23, 59, 59);
+
         List<AnswerDTO> answersInRange = answerRepository.findByCreatedAtBetween(start, end).stream()
                 .map(AnswerDTO::new)
                 .toList();
@@ -152,7 +161,7 @@ public class AnswerService {
         for (AnswerDTO ans : answers) {
             Question q = questionMap.get(ans.getQuestionId());
             if (q == null || q.getCategory() == null) {
-                System.err.println("Missing question or category for ID: " + ans.getQuestionId() + " [Submission: " + submissionId + "]");
+                logger.warn("Missing question or category for ID: {} [Submission: {}]", ans.getQuestionId(), submissionId);
                 continue;
             }
             String categoryName = q.getCategory().getName();
@@ -165,5 +174,4 @@ public class AnswerService {
         return groupedAnswers.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> computeCategorySeverity(e.getValue())));
     }
-
 }

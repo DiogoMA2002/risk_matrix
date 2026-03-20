@@ -143,14 +143,8 @@ export default {
 
       this.isLoadingCategories = true;
       try {
-        const token = localStorage.getItem("jwt");
         const response = await axios.post("/api/categories",
-          { name: newCategoryName.trim() },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
+          { name: newCategoryName.trim() }
         );
 
         // Refresh categories list
@@ -182,14 +176,8 @@ export default {
       }
 
       try {
-        const token = localStorage.getItem("jwt");
         await axios.put(`/api/categories/${id}`,
-          { name: trimmedName },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
+          { name: trimmedName }
         );
 
         // ✅ Refresh categories from Vuex store
@@ -205,16 +193,8 @@ export default {
     ,
     async downloadSubmissionDocx(submissionId) {
       try {
-        const token = localStorage.getItem("jwt");
-        if (!token) {
-          await this.showAlertDialog("Erro", "Token JWT não encontrado.", "error");
-          return;
-        }
         const response = await axios.get(`/api/answers/export-submission/${submissionId}`, {
-          responseType: 'blob',
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          responseType: 'blob'
         });
 
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -243,12 +223,7 @@ export default {
       if (!proceed) return;
 
       try {
-        const token = localStorage.getItem("jwt");
-        await axios.delete(`/api/categories/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+        await axios.delete(`/api/categories/${id}`);
 
         await this.showAlertDialog("Sucesso", "Categoria eliminada com sucesso!");
         await this.$store.dispatch("fetchCategories"); // Refresh categories via Vuex
@@ -273,7 +248,6 @@ export default {
 
       this.isLoading = true;
       try {
-        const token = localStorage.getItem("jwt");
         const payload = {
           questionText: questionData.newQuestion,
           description: questionData.description || null,
@@ -282,9 +256,7 @@ export default {
           questionnaireIds: questionData.selectedQuestionnaires,
         };
 
-        await axios.post("/api/questions", payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.post("/api/questions", payload);
 
         await Promise.all([
           this.$store.dispatch("fetchQuestions"),
@@ -308,10 +280,7 @@ export default {
       if (!proceed) return;
 
       try {
-        const token = localStorage.getItem("jwt");
-        await axios.delete(`/api/questions/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.delete(`/api/questions/${id}`);
         await this.$store.dispatch("fetchQuestions");
         await this.showAlertDialog("Sucesso", "Questão eliminada com sucesso!", "success");
       } catch (error) {
@@ -327,10 +296,7 @@ export default {
 
       this.isLoading = true;
       try {
-        const token = localStorage.getItem("jwt");
-        await axios.post("/api/questionnaires/create", { title: newTitle }, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.post("/api/questionnaires/create", { title: newTitle });
         await this.$store.dispatch("fetchQuestionnairesForAdmin");
         await this.showAlertDialog("Sucesso", "Questionário criado com sucesso!", "success");
       } catch (error) {
@@ -349,10 +315,7 @@ export default {
       if (!proceed) return;
 
       try {
-        const token = localStorage.getItem("jwt");
-        const response = await axios.delete(`/api/questionnaires/delete/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.delete(`/api/questionnaires/delete/${id}`);
 
         if ([200, 204].includes(response.status)) {
           await Promise.all([
@@ -372,12 +335,8 @@ export default {
       if (!jsonData) return;
 
       try {
-        const token = localStorage.getItem("jwt");
         await axios.post("/api/questionnaires/import", jsonData, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
+          headers: { "Content-Type": "application/json" },
         });
 
         await Promise.all([
@@ -393,9 +352,7 @@ export default {
     },
     async exportQuestionnaire(id) {
       try {
-        const token = localStorage.getItem("jwt");
         const response = await axios.get(`/api/questionnaires/${id}/export`, {
-          headers: { Authorization: `Bearer ${token}` },
           responseType: "json",
         });
 
@@ -418,7 +375,6 @@ export default {
     async fetchFeedback(filters = {}) {
       this.isLoading = true;
       try {
-        const token = localStorage.getItem("jwt");
         let url = "/api/feedback";
 
         const query = [];
@@ -438,9 +394,7 @@ export default {
           url = `/api/feedback/filter?${query.join("&")}`;
         }
 
-        const response = await axios.get(url, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await axios.get(url);
 
         this.feedbacks = response.data;
       } catch (error) {

@@ -5,6 +5,7 @@ import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.service.AnswerService;
 import ipleiria.risk_matrix.service.DocumentsService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -41,18 +43,17 @@ public class AnswerController {
 
     @GetMapping("/get-all-submissions")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail() {
-        return answerService.getAllSubmissionsWithSeverityAndEmail();
+    public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
+        return answerService.getAllSubmissionsWithSeverityAndEmail(page, size);
     }
 
     @GetMapping("/by-date-range")
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserAnswersDTO> getAnswersByDateRange(
-            @RequestParam String startDate,
-            @RequestParam String endDate) {
-        if (startDate == null || endDate == null || startDate.isBlank() || endDate.isBlank()) {
-            throw new IllegalArgumentException("Start and end dates must be provided.");
-        }
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return answerService.getAnswersByDateRange(startDate, endDate);
     }
 

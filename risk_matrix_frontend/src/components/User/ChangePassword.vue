@@ -101,15 +101,10 @@ export default {
       }
 
       try {
-        const token = localStorage.getItem('jwt')
         await axios.post('/api/auth/change-password', {
           oldPassword: this.oldPassword,
           newPassword: this.newPassword,
           confirmNewPassword: this.confirmPassword
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
         })
 
         this.message = 'Senha alterada com sucesso!'

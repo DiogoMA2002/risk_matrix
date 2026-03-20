@@ -54,6 +54,7 @@ public class QuestionnaireService {
      * Delete a questionnaire, detach its questions, and remove any orphan questions
      * that no longer belong to any questionnaire.
      */
+    @Transactional
     public void deleteQuestionnaire(Long id) {
         Questionnaire q = questionnaireRepository.findById(id)
                 .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id));
@@ -76,6 +77,15 @@ public class QuestionnaireService {
         Questionnaire questionnaire = questionnaireRepository.findById(id)
                 .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id));
         return questionnaire.getQuestions();
+    }
+
+    public List<Question> getQuestionsByCategory(Long questionnaireId, String categoryName) {
+        Questionnaire q = questionnaireRepository.findById(questionnaireId)
+                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + questionnaireId));
+        return q.getQuestions().stream()
+                .filter(question -> question.getCategory() != null &&
+                        question.getCategory().getName().equalsIgnoreCase(categoryName))
+                .toList();
     }
 
     public List<Questionnaire> searchQuestionnaires(String title) {

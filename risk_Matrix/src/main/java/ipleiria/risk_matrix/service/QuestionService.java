@@ -5,7 +5,7 @@ import ipleiria.risk_matrix.dto.QuestionOptionDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidCategoryException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionNotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
-import ipleiria.risk_matrix.exceptions.exception.handleDuplicateException;
+import ipleiria.risk_matrix.exceptions.exception.DuplicateException;
 import ipleiria.risk_matrix.models.category.Category;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.OptionLevel;
@@ -41,7 +41,9 @@ public class QuestionService {
     public QuestionDTO createQuestion(QuestionDTO questionDTO) {
         Objects.requireNonNull(questionDTO, "QuestionDTO must not be null");
 
-        Question question = questionRepository.findByQuestionText(questionDTO.getQuestionText())
+        // Duplicate check: same text AND same category
+        Question question = questionRepository
+                .findByQuestionTextAndCategory_Name(questionDTO.getQuestionText(), questionDTO.getCategoryName())
                 .orElseGet(() -> buildNewQuestionFromDTO(questionDTO));
 
         associateQuestionWithQuestionnaires(question, questionDTO.getQuestionnaireIds());
@@ -125,11 +127,7 @@ public class QuestionService {
 
     public List<Question> getQuestionsByCategory(String categoryName) {
         if (categoryName == null || categoryName.trim().isEmpty()) return Collections.emptyList();
-
-        return questionRepository.findAll().stream()
-                .filter(q -> q.getCategory() != null &&
-                        q.getCategory().getName().equalsIgnoreCase(categoryName))
-                .collect(Collectors.toList());
+        return questionRepository.findByCategoryNameIgnoreCase(categoryName.trim());
     }
 
     public Question getQuestionById(Long id) {
@@ -159,7 +157,7 @@ public class QuestionService {
         questionRepository.findByQuestionText(dto.getQuestionText())
                 .filter(q -> !q.getId().equals(id)) // allow if it's the same question
                 .ifPresent(_ -> {
-                    throw new handleDuplicateException("Já existe uma pergunta com esse texto.");
+                    throw new DuplicateException("Já existe uma pergunta com esse texto nessa categoria.");
                 });
 
         Question existing = getQuestionById(id);

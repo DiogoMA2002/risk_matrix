@@ -25,4 +25,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
      * Useful to cleanup orphan questions after deleting a questionnaire.
      */
     List<Question> findAllByQuestionnairesIsEmpty();
+
+    List<Question> findByCategoryNameIgnoreCase(String categoryName);
+
+    Optional<Question> findByQuestionTextAndCategory_Name(String questionText, String categoryName);
 }

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { TokenManager } from '@/utils/tokenManager'
 
+
 const routes = [
   { path: '/', component: () => import('@/components/views/HomePage.vue') },
   { path: '/risk-info', component: () => import('@/components/views/RiskMatrixInfo.vue') },
@@ -41,12 +42,12 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const completedRiskInfo = localStorage.getItem('completedRiskInfo') === 'true';
-  const completedRequirements = localStorage.getItem('completedRequirements') === 'true';
+  const completedRiskInfo = sessionStorage.getItem('completedRiskInfo') === 'true';
+  const completedRequirements = sessionStorage.getItem('completedRequirements') === 'true';
 
   const isAdminRoute = to.meta.requiresAdmin === true;
 
-  const email = localStorage.getItem('userEmail');
+  const email = sessionStorage.getItem('userEmail');
 
   const requiresEmail = ['/risk-info', '/requirements', '/category'].includes(to.path) ||
     to.name === 'Questionary';
@@ -55,9 +56,8 @@ router.beforeEach((to, from, next) => {
   }
 
   if (isAdminRoute && !TokenManager.hasAdminToken()) {
-    TokenManager.clearTokens();
-    console.log('Admin token invalid, redirecting to login.');
-    return next('/login');
+    TokenManager.clearAuth()
+    return next('/login')
   }
 
   if (to.path === '/requirements' && !completedRiskInfo) {

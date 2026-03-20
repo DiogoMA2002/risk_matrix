@@ -36,8 +36,7 @@ public class AnswerDTO {
 
     private LocalDateTime createdAt;
 
-    // New field: submissionId
-    @NotBlank(message = "Submission ID é obrigatório")
+    // Optional — the service assigns a UUID when absent
     private String submissionId;
 
     public AnswerDTO(Answer answer) {

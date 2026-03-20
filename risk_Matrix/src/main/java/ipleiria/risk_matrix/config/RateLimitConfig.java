@@ -25,6 +25,9 @@ public class RateLimitConfig {
     // Default rate limit for unmatched endpoints
     public static final RateLimitRule DEFAULT_RATE_LIMIT = new RateLimitRule(50, Duration.ofMinutes(1));
 
+    /** Maximum distinct client IDs tracked per endpoint before oldest-idle entries are evicted. */
+    private static final int MAX_CLIENTS_PER_ENDPOINT = 10_000;
+
     // Bucket storage with TTL tracking
     private final Map<String, Map<String, BucketInfo>> bucketStorage = new ConcurrentHashMap<>();
 
@@ -33,7 +36,7 @@ public class RateLimitConfig {
         
         // Authentication endpoints - strict limits
         rules.put("/api/auth/login", new RateLimitRule(5, Duration.ofMinutes(1)));
-        rules.put("/api/auth/request-token", new RateLimitRule(3, Duration.ofMinutes(1)));
+        rules.put("/api/auth/request-token", new RateLimitRule(10, Duration.ofMinutes(1)));
         rules.put("/api/auth/refresh", new RateLimitRule(10, Duration.ofMinutes(1)));
         rules.put("/api/auth/register", new RateLimitRule(2, Duration.ofMinutes(5)));
         rules.put("/api/auth/change-password", new RateLimitRule(5, Duration.ofMinutes(5)));
@@ -83,18 +86,24 @@ public class RateLimitConfig {
 
     public BucketInfo getBucketInfo(String endpoint, String clientId) {
         Map<String, BucketInfo> clientBuckets = bucketStorage.computeIfAbsent(
-            endpoint,
-                _ -> new ConcurrentHashMap<>()
+            endpoint, _ -> new ConcurrentHashMap<>()
         );
-        
+
+        // Evict the least-recently-used entry when the map is at capacity
+        if (!clientBuckets.containsKey(clientId) && clientBuckets.size() >= MAX_CLIENTS_PER_ENDPOINT) {
+            clientBuckets.entrySet().stream()
+                    .min(java.util.Comparator.comparingLong(e -> e.getValue().getLastAccessTime()))
+                    .map(Map.Entry::getKey)
+                    .ifPresent(clientBuckets::remove);
+        }
+
         BucketInfo bucketInfo = clientBuckets.computeIfAbsent(
-            clientId,
-                _ -> {
+            clientId, _ -> {
                 RateLimitRule rule = getRateLimitRule(endpoint);
                 return new BucketInfo(rule.createBucket(), rule, System.currentTimeMillis());
             }
         );
-        
+
         // Update last access time
         bucketInfo.setLastAccessTime(System.currentTimeMillis());
         return bucketInfo;

@@ -72,7 +72,8 @@
   
   <script>
 import axios from 'axios'
-  
+import { TokenManager } from '@/utils/tokenManager'
+
   export default {
     name: 'AdminLogin',
     data() {
@@ -85,15 +86,15 @@ import axios from 'axios'
     methods: {
       async login() {
         try {
-          const res = await axios.post('/api/auth/login', {
+          await axios.post('/api/auth/login', {
             username: this.username,
             password: this.password
           })
 
-          localStorage.setItem('jwt', res.data.token)
-          localStorage.setItem('adminRefreshToken', res.data.refreshToken)
-          localStorage.setItem('adminRefreshExpiresAt', (Date.now() + res.data.expiresIn).toString())
-          this.$router.push('/admin') // redirect on success
+          // JWTs are now stored in HttpOnly cookies by the server.
+          // We only store a non-sensitive role flag for client-side routing.
+          TokenManager.setAdmin()
+          this.$router.push('/admin')
         } catch (err) {
           this.error = 'Credenciais inválidas'
         }

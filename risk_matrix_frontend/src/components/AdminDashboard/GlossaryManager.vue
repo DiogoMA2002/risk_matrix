@@ -163,10 +163,7 @@ export default {
   methods: {
     async fetchGlossary() {
       try {
-        const token = localStorage.getItem('jwt');
-        const res = await axios.get('/api/glossary', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await axios.get('/api/glossary');
         this.glossary = res.data;
       } catch (e) {
         this.error = 'Erro ao carregar o glossário.';
@@ -178,12 +175,9 @@ export default {
         return;
       }
       try {
-        const token = localStorage.getItem('jwt');
         const res = await axios.post('/api/glossary', {
           term: this.newTerm,
           definition: this.newDefinition
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
         });
         this.glossary.push(res.data);
         this.newTerm = '';
@@ -207,12 +201,9 @@ export default {
         return;
       }
       try {
-        const token = localStorage.getItem('jwt');
         const res = await axios.put(`/api/glossary/${id}`, {
           term: this.editTerm,
           definition: this.editDefinition
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
         });
         const idx = this.glossary.findIndex(e => e.id === id);
         if (idx !== -1) this.glossary[idx] = res.data;
@@ -252,10 +243,7 @@ export default {
     },
     async deleteEntry(id) {
       try {
-        const token = localStorage.getItem('jwt');
-        await axios.delete(`/api/glossary/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.delete(`/api/glossary/${id}`);
         this.glossary = this.glossary.filter(e => e.id !== id);
         this.success = 'Termo eliminado!';
         this.error = '';
@@ -274,10 +262,7 @@ export default {
         try {
           const imported = JSON.parse(e.target.result);
           if (!Array.isArray(imported)) throw new Error('Formato inválido.');
-          const token = localStorage.getItem('jwt');
-          const res = await axios.post('/api/glossary/import', imported, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
+          const res = await axios.post('/api/glossary/import', imported);
           this.glossary = res.data;
           this.success = 'Glossário importado!';
           this.error = '';
@@ -289,10 +274,7 @@ export default {
     },
     async exportGlossary() {
       try {
-        const token = localStorage.getItem('jwt');
-        const res = await axios.get('/api/glossary/export', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await axios.get('/api/glossary/export');
         const data = JSON.stringify(res.data, null, 2);
         const blob = new Blob([data], { type: 'application/json' });
         const link = document.createElement('a');

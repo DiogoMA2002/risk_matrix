@@ -10,7 +10,6 @@ import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
-import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import ipleiria.risk_matrix.service.QuestionnaireService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -28,11 +27,11 @@ import java.util.stream.Collectors;
 public class QuestionnaireController {
 
     private final QuestionnaireService questionnaireService;
-    private final QuestionnaireRepository questionnaireRepository;
+    private final ObjectMapper objectMapper;
 
-    public QuestionnaireController(QuestionnaireService questionnaireService, QuestionnaireRepository questionnaireRepository) {
+    public QuestionnaireController(QuestionnaireService questionnaireService, ObjectMapper objectMapper) {
         this.questionnaireService = questionnaireService;
-        this.questionnaireRepository = questionnaireRepository;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/create")
@@ -44,7 +43,7 @@ public class QuestionnaireController {
 
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setTitle(questionnaireDTO.getTitle().trim());
-        questionnaire.setQuestions(List.of()); // Ensure non-null
+        questionnaire.setQuestions(List.of());
 
         Questionnaire saved = questionnaireService.createQuestionnaire(questionnaire);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
@@ -81,14 +80,8 @@ public class QuestionnaireController {
     @GetMapping("/{questionnaireId}/category/{categoryName}")
     public List<QuestionUserDTO> getQuestionsByQuestionnaireAndCategory(
             @PathVariable Long questionnaireId,
-            @PathVariable String categoryName
-    ) {
-        Questionnaire q = questionnaireRepository.findById(questionnaireId)
-                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found with ID: " + questionnaireId));
-
-        return q.getQuestions().stream()
-                .filter(question -> question.getCategory() != null &&
-                        question.getCategory().getName().equalsIgnoreCase(categoryName))
+            @PathVariable String categoryName) {
+        return questionnaireService.getQuestionsByCategory(questionnaireId, categoryName).stream()
                 .map(QuestionUserDTO::new)
                 .collect(Collectors.toList());
     }
@@ -97,23 +90,15 @@ public class QuestionnaireController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<Question> getQuestionsByQuestionnaireAndCategoryForAdmin(
             @PathVariable Long questionnaireId,
-            @PathVariable String categoryName
-    ) {
-        Questionnaire q = questionnaireRepository.findById(questionnaireId)
-                .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found with ID: " + questionnaireId));
-
-        return q.getQuestions().stream()
-                .filter(question -> question.getCategory() != null &&
-                        question.getCategory().getName().equalsIgnoreCase(categoryName))
-                .collect(Collectors.toList());
+            @PathVariable String categoryName) {
+        return questionnaireService.getQuestionsByCategory(questionnaireId, categoryName);
     }
 
     @PostMapping("/{id}/add-question")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Question> addQuestionToQuestionnaire(
             @PathVariable Long id,
-            @RequestBody @Valid QuestionDTO dto
-    ) {
+            @RequestBody @Valid QuestionDTO dto) {
         if (dto.getQuestionText() == null || dto.getQuestionText().trim().isEmpty()) {
             throw new IllegalArgumentException("Question text must not be empty.");
         }
@@ -138,8 +123,9 @@ public class QuestionnaireController {
         Questionnaire questionnaire = questionnaireService.getQuestionnaireById(id)
                 .orElseThrow(() -> new NotFoundException("Questionnaire not found for ID: " + id));
 
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(questionnaire);
+        // Serialize via DTO to avoid lazy-load issues and control the output shape
+        QuestionnaireDTO dto = new QuestionnaireDTO(questionnaire);
+        String json = objectMapper.writeValueAsString(dto);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=\"questionnaire_" + id + ".json\"");
@@ -150,18 +136,18 @@ public class QuestionnaireController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Questionnaire updateQuestionnaire(@PathVariable Long id, @RequestBody @Valid Questionnaire updatedQuestionnaire) {
-        if (updatedQuestionnaire.getTitle() == null || updatedQuestionnaire.getTitle().trim().isEmpty()) {
+    public Questionnaire updateQuestionnaire(@PathVariable Long id, @RequestBody @Valid QuestionnaireDTO dto) {
+        if (dto.getTitle() == null || dto.getTitle().trim().isEmpty()) {
             throw new IllegalArgumentException("Updated title must not be empty.");
         }
-
-        return questionnaireService.updateQuestionnaire(id, updatedQuestionnaire);
+        Questionnaire toUpdate = new Questionnaire();
+        toUpdate.setTitle(dto.getTitle().trim());
+        return questionnaireService.updateQuestionnaire(id, toUpdate);
     }
 
     @GetMapping("/{id}/questions")
     public List<QuestionUserDTO> getAllQuestionsForQuestionnaire(@PathVariable Long id) {
-        return questionnaireService.getAllQuestionsForQuestionnaire(id)
-                .stream()
+        return questionnaireService.getAllQuestionsForQuestionnaire(id).stream()
                 .map(QuestionUserDTO::new)
                 .collect(Collectors.toList());
     }
@@ -174,8 +160,7 @@ public class QuestionnaireController {
 
     @GetMapping("/search")
     public List<QuestionnaireUserDTO> searchQuestionnaires(@RequestParam(required = false) String title) {
-        return questionnaireService.searchQuestionnaires(title)
-                .stream()
+        return questionnaireService.searchQuestionnaires(title).stream()
                 .map(QuestionnaireUserDTO::new)
                 .collect(Collectors.toList());
     }
@@ -183,8 +168,7 @@ public class QuestionnaireController {
     @GetMapping("/search/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public List<QuestionnaireDTO> searchQuestionnairesForAdmin(@RequestParam(required = false) String title) {
-        return questionnaireService.searchQuestionnaires(title)
-                .stream()
+        return questionnaireService.searchQuestionnaires(title).stream()
                 .map(QuestionnaireDTO::new)
                 .collect(Collectors.toList());
     }

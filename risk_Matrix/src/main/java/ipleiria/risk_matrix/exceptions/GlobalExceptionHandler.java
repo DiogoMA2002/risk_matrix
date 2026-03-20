@@ -23,9 +23,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +125,19 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request) {
+        return buildError(HttpStatus.NOT_FOUND, "Resource not found", "NOT_FOUND", request);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+        log.warn("Invalid request argument: {}", ex.getMessage());
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage(), "INVALID_ARGUMENT", request);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
@@ -172,7 +183,7 @@ public class GlobalExceptionHandler {
                 new ErrorResponse(
                         HttpStatus.METHOD_NOT_ALLOWED.value(),
                         HttpStatus.METHOD_NOT_ALLOWED,
-                        "Method not allowed: " + ex.getMethod(),
+                        "Method not allowed",
                         "METHOD_NOT_ALLOWED",
                         request.getRequestURI(),
                         null
@@ -192,21 +203,21 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
         log.warn("Constraint violation: {}", ex.getMessage());
-        return buildError(HttpStatus.BAD_REQUEST, "Constraint violation: " + ex.getMessage(), "CONSTRAINT_VIOLATION", request);
+        return buildError(HttpStatus.BAD_REQUEST, "Request data violates a database constraint", "CONSTRAINT_VIOLATION", request);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpServletRequest request) {
         log.warn("Missing request parameter: {}", ex.getMessage());
-        return buildError(HttpStatus.BAD_REQUEST, "Missing request parameter: " + ex.getParameterName(), "MISSING_REQUEST_PARAMETER", request);
+        return buildError(HttpStatus.BAD_REQUEST, "A required request parameter is missing", "MISSING_REQUEST_PARAMETER", request);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
         log.warn("Type mismatch: {}", ex.getMessage());
-        return buildError(HttpStatus.BAD_REQUEST, "Type mismatch for parameter: " + ex.getName(), "TYPE_MISMATCH", request);
+        return buildError(HttpStatus.BAD_REQUEST, "Invalid value for a request parameter", "TYPE_MISMATCH", request);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)

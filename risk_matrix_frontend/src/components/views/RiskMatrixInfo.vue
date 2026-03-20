@@ -179,7 +179,7 @@
   async function proceed() {
     try {
       isLoading.value = true
-      localStorage.setItem('completedRiskInfo', 'true')
+      sessionStorage.setItem('completedRiskInfo', 'true')
       await router.push('/requirements')
     } catch (error) {
       console.error('Navigation error:', error)
