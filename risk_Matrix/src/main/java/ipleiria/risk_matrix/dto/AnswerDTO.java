@@ -39,6 +39,8 @@ public class AnswerDTO {
     // Optional — the service assigns a UUID when absent
     private String submissionId;
 
+    private Long questionOptionId;
+
     public AnswerDTO(Answer answer) {
         this.id = answer.getId();
         this.questionId = answer.getQuestionId();
@@ -49,6 +51,7 @@ public class AnswerDTO {
         this.email = answer.getEmail();
         this.createdAt = answer.getCreatedAt();
         this.submissionId = answer.getSubmissionId();
+        this.questionOptionId = answer.getQuestionOptionId();
     }
 
     public AnswerDTO() {

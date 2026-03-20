@@ -62,40 +62,42 @@ export default createStore({
         commit('setQuestions', response.data);
         commit('clearError');
       } catch (error) {
-        commit('setError', 'Erro ao buscar perguntas.');
+        commit('setError', error.response?.data?.message || 'Erro ao buscar perguntas.');
       }
     },
-    async fetchQuestionnaires({ commit }) {
+    async fetchQuestionnaires({ commit, state }) {
       try {
         const response = await axios.get('/api/questionnaires');
         commit('setQuestionnaires', response.data);
-        if (response.data.length > 0) {
+        // Only auto-select when nothing is already selected so we don't clobber the user's choice.
+        if (response.data.length > 0 && !state.selectedQuestionnaire) {
           commit('setSelectedQuestionnaire', response.data[0]);
         }
         commit('clearError');
       } catch (error) {
-        commit('setError', 'Erro ao buscar questionários.');
+        commit('setError', error.response?.data?.message || 'Erro ao buscar questionários.');
       }
     },
-    async fetchQuestionnairesForAdmin({ commit }) {
+    async fetchQuestionnairesForAdmin({ commit, state }) {
       try {
         const response = await axios.get('/api/questionnaires/admin');
         commit('setQuestionnaires', response.data);
-        if (response.data.length > 0) {
+        // Only auto-select when nothing is already selected so we don't clobber the user's choice.
+        if (response.data.length > 0 && !state.selectedQuestionnaire) {
           commit('setSelectedQuestionnaire', response.data[0]);
         }
         commit('clearError');
       } catch (error) {
-        commit('setError', 'Erro ao buscar questionários para admin.');
+        commit('setError', error.response?.data?.message || 'Erro ao buscar questionários para admin.');
       }
     },
-    async fetchCategories({ commit }) {                
+    async fetchCategories({ commit }) {
       try {
         const response = await axios.get('/api/categories');
         commit('setCategories', response.data.filter(cat => cat.name));
         commit('clearError');
       } catch (error) {
-        commit('setError', 'Erro ao buscar categorias.');
+        commit('setError', error.response?.data?.message || 'Erro ao buscar categorias.');
       }
     },
     async fetchQuestionnaireById({ commit }, id) {
@@ -104,7 +106,7 @@ export default createStore({
         commit('setSelectedQuestionnaire', response.data);
         commit('clearError');
       } catch (error) {
-        commit('setError', 'Erro ao buscar questionário.');
+        commit('setError', error.response?.data?.message || 'Erro ao buscar questionário.');
       }
     },
     async fetchQuestionnaireByIdForAdmin({ commit }, id) {
@@ -113,7 +115,7 @@ export default createStore({
         commit('setSelectedQuestionnaire', response.data);
         commit('clearError');
       } catch (error) {
-        commit('setError', 'Erro ao buscar questionário para admin.');
+        commit('setError', error.response?.data?.message || 'Erro ao buscar questionário para admin.');
       }
     },
     async fetchUserAnswersByEmail({ commit }, email) {
@@ -149,11 +151,13 @@ export default createStore({
         const response = await axios.get("/api/answers/get-all-submissions", {
           validateStatus: _status => true,
         });
-        
+
         if (response.status === 401) {
           throw new Error("Você não está autorizado.");
+        } else if (response.status >= 200 && response.status < 300) {
+          commit('setUserAnswers', Array.isArray(response.data) ? response.data : []);
         } else {
-          commit('setUserAnswers', response.data);
+          throw new Error(response.data?.message || `Erro ${response.status} ao buscar todas as respostas.`);
         }
         commit('clearError');
       } catch (error) {
@@ -179,7 +183,7 @@ export default createStore({
         commit('clearError');
       } catch (error) {
         commit('setUserAnswers', []);
-        commit('setError', error.message || 'Erro ao filtrar respostas por data.');
+        commit('setError', error.response?.data?.message || error.message || 'Erro ao filtrar respostas por data.');
         throw error;
       } finally {
         commit('setLoadingAnswers', false);

@@ -477,23 +477,29 @@ export default {
 
           importedData.answers.forEach(answerSet => {
             const { category, questionId, selectedOption } = answerSet;
-            if (!category || !selectedOption) {
+            if (!category) {
               invalidCount++;
               return;
+            }
+            if (!selectedOption) {
+              return; // silently skip unanswered questions — not unmatched
             }
 
             const normCat = normalize(category);
             const normOpt = normalize(selectedOption);
 
-            // 1) Try match by normalized category + option text
-            let matched = normalizedQuestions.find(q => q.normCategory === normCat && q.optionMap[normOpt]);
-
-            // 2) Fallback: match by questionId if it exists in current questionnaire
-            if (!matched && questionId) {
+            // 1) Try match by questionId (primary — IDs are stable in file-based H2)
+            let matched = null;
+            if (questionId) {
               const qMatch = questionsById.get(parseInt(questionId));
               if (qMatch && qMatch.normCategory === normCat) {
                 matched = qMatch;
               }
+            }
+
+            // 2) Fallback: match by normalized category + option text (for export files without questionId)
+            if (!matched) {
+              matched = normalizedQuestions.find(q => q.normCategory === normCat && q.optionMap[normOpt]);
             }
 
             if (matched) {

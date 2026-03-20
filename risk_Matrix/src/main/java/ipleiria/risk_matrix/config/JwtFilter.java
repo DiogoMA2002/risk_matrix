@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Locale;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -43,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
                 String role = jwtUtil.extractRole(jwt);
-                if (!RoleConstants.ADMIN.equals(role)) {
+                if (!isAdminRoleClaim(role)) {
                     filterChain.doFilter(request, response);
                     return;
                 }
@@ -95,5 +96,18 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * Accept legacy and current role claim formats:
+     * - admin / ADMIN
+     * - ROLE_ADMIN
+     */
+    private boolean isAdminRoleClaim(String roleClaim) {
+        if (roleClaim == null || roleClaim.isBlank()) {
+            return false;
+        }
+        String normalized = roleClaim.toUpperCase(Locale.ROOT);
+        return "ADMIN".equals(normalized) || "ROLE_ADMIN".equals(normalized);
     }
 }

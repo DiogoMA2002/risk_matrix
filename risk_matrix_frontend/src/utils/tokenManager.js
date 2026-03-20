@@ -7,6 +7,11 @@
  * synchronous navigation decisions.  All actual authentication is
  * enforced by the backend on every request.
  */
+// Module-level promise used to deduplicate concurrent refresh attempts.
+// If multiple requests fail with 401 simultaneously, only one refresh call
+// is made; all callers wait for the same result.
+let _refreshPromise = null
+
 export const TokenManager = {
   setAdmin() {
     localStorage.setItem('authRole', 'admin')
@@ -33,24 +38,36 @@ export const TokenManager = {
   },
 
   // Refresh by calling the backend; cookies are sent automatically.
+  // All concurrent callers share the same in-flight request so only one
+  // refresh call is made regardless of how many 401s arrive together.
   async refreshToken() {
-    try {
-      const response = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        credentials: 'include', // send HttpOnly cookies
-        headers: { 'Content-Type': 'application/json' }
-      })
-
-      if (response.ok) {
-        return true // new cookies have been set by the server
-      }
-
-      this.clearAuth()
-      return false
-    } catch {
-      this.clearAuth()
-      return false
+    if (_refreshPromise) {
+      return _refreshPromise
     }
+
+    _refreshPromise = (async () => {
+      try {
+        const response = await fetch('/api/auth/refresh', {
+          method: 'POST',
+          credentials: 'include', // send HttpOnly cookies
+          headers: { 'Content-Type': 'application/json' }
+        })
+
+        if (response.ok) {
+          return true // new cookies have been set by the server
+        }
+
+        this.clearAuth()
+        return false
+      } catch {
+        this.clearAuth()
+        return false
+      } finally {
+        _refreshPromise = null
+      }
+    })()
+
+    return _refreshPromise
   },
 
   async logout() {
@@ -76,8 +93,17 @@ export function setupAxiosInterceptors(axios, navigate) {
     (response) => response,
     async (error) => {
       const originalRequest = error.config
+      const status = error.response?.status
 
-      if (error.response?.status === 401 && !originalRequest._retry) {
+      // 401: server explicitly says unauthenticated — try refresh.
+      // 403 + hasAdminToken: the localStorage flag says we're admin but the
+      // server disagrees, which means the access token silently expired and
+      // a stale public cookie produced a 403 instead of a 401. Try refresh.
+      const shouldRefresh =
+        !originalRequest._retry &&
+        (status === 401 || (status === 403 && TokenManager.hasAdminToken()))
+
+      if (shouldRefresh) {
         originalRequest._retry = true
 
         const refreshed = await TokenManager.refreshToken()

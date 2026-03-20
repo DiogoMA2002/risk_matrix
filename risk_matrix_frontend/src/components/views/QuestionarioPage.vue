@@ -174,7 +174,6 @@ export default {
       alertMessage: "",
       alertType: "alert",
       alertResolve: null,
-      loading: true,
       showGlossary: false
     };
   },

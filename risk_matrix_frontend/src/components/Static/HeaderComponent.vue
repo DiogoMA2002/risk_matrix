@@ -51,6 +51,8 @@
   </template>
   
   <script>
+  import { TokenManager } from '@/utils/tokenManager'
+
   export default {
     name: "HeaderComponent",
     props: {
@@ -77,12 +79,12 @@
       }
     },
     methods: {
-      logout() {
-        localStorage.removeItem("jwt")
+      async logout() {
+        await TokenManager.logout()
         this.showLogoutMessage = true
         setTimeout(() => {
           this.showLogoutMessage = false
-          this.$router.push("/")
+          this.$router.push("/login")
         }, 500)
       }
     }

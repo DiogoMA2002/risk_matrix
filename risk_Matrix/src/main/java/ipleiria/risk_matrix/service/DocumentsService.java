@@ -10,6 +10,8 @@ import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.poi.util.Units;
 import org.apache.poi.xddf.usermodel.chart.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.openxmlformats.schemas.drawingml.x2006.chart.*;
 import org.openxmlformats.schemas.drawingml.x2006.main.*;
@@ -22,6 +24,8 @@ import static ipleiria.risk_matrix.utils.RiskUtils.computeCategorySeverity;
 
 @Service
 public class DocumentsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DocumentsService.class);
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
@@ -38,14 +42,19 @@ public class DocumentsService {
             throw new IllegalArgumentException("No answers found for submission ID: " + submissionId);
         }
 
-        // Store email for later deletion
+        // Pre-fetch all referenced questions in one query to avoid N+1 per-answer lookups.
+        Set<Long> questionIds = answers.stream()
+                .map(Answer::getQuestionId)
+                .collect(Collectors.toSet());
+        Map<Long, Question> questionMap = questionRepository.findAllById(questionIds).stream()
+                .collect(Collectors.toMap(Question::getId, q -> q));
 
         Map<String, List<Answer>> answersByCategory = new HashMap<>();
         for (Answer ans : answers) {
-            Optional<Question> questionOpt = questionRepository.findById(ans.getQuestionId());
-            if (questionOpt.isEmpty() || questionOpt.get().getCategory() == null) continue;
+            Question q = questionMap.get(ans.getQuestionId());
+            if (q == null || q.getCategory() == null) continue;
 
-            String category = questionOpt.get().getCategory().getName();
+            String category = q.getCategory().getName();
             answersByCategory.computeIfAbsent(category, _ -> new ArrayList<>()).add(ans);
         }
 
@@ -73,7 +82,7 @@ public class DocumentsService {
 
             replacePlaceholders(document, vars);
             addSummarySection(document, severities);
-            addAnswersTable(document, answersByCategory,severities);
+            addAnswersTable(document, answersByCategory, severities, questionMap);
 
             document.write(out);
             byte[] result = out.toByteArray();
@@ -125,7 +134,7 @@ public class DocumentsService {
             addPieChart(document, severities);
         } catch (IOException | org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
             // Log error but continue with document generation
-            System.err.println("Error creating pie chart: " + e.getMessage());
+            logger.warn("Error creating pie chart: {}", e.getMessage());
         }
         addPageBreak(document);
         // Lista de categorias com severidade
@@ -326,7 +335,8 @@ public class DocumentsService {
         if (solid.isSetSrgbClr()) solid.setSrgbClr(rgb); else solid.addNewSrgbClr().set(rgb);
     }
 
-    private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory, Map<String, Severity> severities) {
+    private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory,
+                                 Map<String, Severity> severities, Map<Long, Question> questionMap) {
         final boolean[] first = { true };
 
         answersByCategory.entrySet().stream()
@@ -420,9 +430,9 @@ public class DocumentsService {
                         
                         String recommendation = "-";
                         if (answer.getQuestionOptionId() != null) {
-                            Optional<Question> questionOpt = questionRepository.findById(answer.getQuestionId());
-                            if (questionOpt.isPresent()) {
-                                recommendation = questionOpt.get().getOptions().stream()
+                            Question q = questionMap.get(answer.getQuestionId());
+                            if (q != null) {
+                                recommendation = q.getOptions().stream()
                                         .filter(opt -> opt.getId().equals(answer.getQuestionOptionId()))
                                         .map(opt -> opt.getRecommendation() != null ? opt.getRecommendation() : "-")
                                         .findFirst()

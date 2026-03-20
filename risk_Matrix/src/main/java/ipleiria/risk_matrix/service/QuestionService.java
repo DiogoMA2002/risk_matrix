@@ -153,9 +153,9 @@ public class QuestionService {
 
     @Transactional
     public QuestionDTO updateQuestion(Long id, QuestionDTO dto) {
-        // Defensive: check for duplicates before making changes
-        questionRepository.findByQuestionText(dto.getQuestionText())
-                .filter(q -> !q.getId().equals(id)) // allow if it's the same question
+        // Duplicate check: same text AND same category, excluding the question being updated.
+        questionRepository.findByQuestionTextAndCategory_Name(dto.getQuestionText(), dto.getCategoryName())
+                .filter(q -> !q.getId().equals(id))
                 .ifPresent(_ -> {
                     throw new DuplicateException("Já existe uma pergunta com esse texto nessa categoria.");
                 });

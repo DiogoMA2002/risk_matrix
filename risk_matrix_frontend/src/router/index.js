@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { TokenManager } from '@/utils/tokenManager'
+import store from '@/store/index'
 
 
 const routes = [
@@ -42,6 +43,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  // Clear any stale global error state so it doesn't bleed across pages.
+  store.commit('clearError');
+
   const completedRiskInfo = sessionStorage.getItem('completedRiskInfo') === 'true';
   const completedRequirements = sessionStorage.getItem('completedRequirements') === 'true';
 

@@ -32,7 +32,7 @@ public class FeedbackService {
 
         int wordCount = feedbackText.trim().split("\\s+").length;
         if (wordCount > MAX_WORDS) {
-            throw new FeedbackTooLongException("Feedback não pode  exceder " + MAX_WORDS + " palavras.");
+            throw new FeedbackTooLongException("Feedback não pode exceder " + MAX_WORDS + " palavras.");
         }
         FeedbackType type = feedback.getFeedbackType();
         if (type == null) {

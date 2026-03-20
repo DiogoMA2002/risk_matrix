@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,8 +30,19 @@ public class JwtUtil {
     @Value("${app.jwt.refresh.expirationMs:604800000}")
     private long refreshTokenExpirationMs;
 
+    private SecretKey cachedSigningKey;
+
+    @PostConstruct
+    public void init() {
+        if (jwtSecret == null || jwtSecret.isBlank()) {
+            throw new IllegalStateException(
+                "JWT_SECRET environment variable is not set. The application cannot start without a signing key.");
+        }
+        this.cachedSigningKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
+
     private SecretKey signingKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        return cachedSigningKey;
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -38,6 +50,7 @@ public class JwtUtil {
                 .subject(userDetails.getUsername())
                 .claim("role", RoleConstants.ADMIN)
                 .claim("type", RoleConstants.TOKEN_TYPE_ACCESS)
+                .id(UUID.randomUUID().toString())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(signingKey())
@@ -65,6 +78,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .subject(email)
                 .claims(claims)
+                .id(UUID.randomUUID().toString())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + publicTokenExpirationMs))
                 .signWith(signingKey())

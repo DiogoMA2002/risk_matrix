@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -84,6 +85,7 @@ public class AnswerService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public List<AnswerDTO> submitMultipleAnswers(List<AnswerDTO> answers) {
         if (answers == null || answers.isEmpty()) {
             throw new IllegalArgumentException("A lista de respostas não pode estar vazia.");

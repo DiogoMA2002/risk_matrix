@@ -50,15 +50,19 @@ public class RateLimitConfig {
         rules.put("/api/questions", new RateLimitRule(100, Duration.ofMinutes(1)));
         rules.put("/api/categories", new RateLimitRule(100, Duration.ofMinutes(1)));
         
-        // Admin endpoints - moderate limits
+        // Admin endpoints - moderate limits.
+        // Keys must match the normalised path returned by RateLimitInterceptor.getEndpointPath().
         rules.put("/api/admin", new RateLimitRule(50, Duration.ofMinutes(1)));
+        // POST /api/questionnaires/create  → exact path
         rules.put("/api/questionnaires/create", new RateLimitRule(20, Duration.ofMinutes(1)));
+        // POST /api/questionnaires/import  → exact path
         rules.put("/api/questionnaires/import", new RateLimitRule(10, Duration.ofMinutes(1)));
-        rules.put("/api/questionnaires/delete", new RateLimitRule(20, Duration.ofMinutes(1)));
-        rules.put("/api/questions/create", new RateLimitRule(30, Duration.ofMinutes(1)));
-        rules.put("/api/questions/delete", new RateLimitRule(30, Duration.ofMinutes(1)));
-        rules.put("/api/categories/create", new RateLimitRule(20, Duration.ofMinutes(1)));
-        rules.put("/api/categories/delete", new RateLimitRule(20, Duration.ofMinutes(1)));
+        // DELETE /api/questionnaires/delete/{id} → normalised by interceptor to /api/questionnaires/{id}
+        rules.put("/api/questionnaires/{id}", new RateLimitRule(20, Duration.ofMinutes(1)));
+        // POST /api/questions   → exact path (no /create suffix in the actual mapping)
+        rules.put("/api/questions", new RateLimitRule(30, Duration.ofMinutes(1)));
+        // POST /api/categories  → exact path (no /create suffix in the actual mapping)
+        rules.put("/api/categories", new RateLimitRule(20, Duration.ofMinutes(1)));
         
         return rules;
     }

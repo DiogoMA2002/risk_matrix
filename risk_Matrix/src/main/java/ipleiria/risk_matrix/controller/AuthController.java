@@ -75,6 +75,7 @@ public class AuthController {
             String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
             setAdminCookies(response, accessToken, refreshToken);
+            clearPublicCookies(response);
 
             return ResponseEntity.ok(Map.of(
                     "role", RoleConstants.ADMIN,
@@ -166,15 +167,21 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        // Revoke any refresh tokens found in cookies
+        // Blocklist both access and refresh tokens found in cookies.
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 String name = cookie.getName();
-                if ("admin_refresh_token".equals(name) || "public_refresh_token".equals(name)) {
+                boolean isAccess  = "admin_access_token".equals(name)  || "public_access_token".equals(name);
+                boolean isRefresh = "admin_refresh_token".equals(name) || "public_refresh_token".equals(name);
+                if (isAccess || isRefresh) {
                     try {
                         String jti = jwtUtil.extractJti(cookie.getValue());
                         if (jti != null) {
-                            tokenBlocklistService.block(jti, System.currentTimeMillis() + jwtUtil.getRefreshTokenExpirationMs());
+                            // Access tokens expire sooner; refresh tokens after 7 days.
+                            long ttlMs = isRefresh
+                                    ? jwtUtil.getRefreshTokenExpirationMs()
+                                    : jwtUtil.getAdminTokenExpirationMs();
+                            tokenBlocklistService.block(jti, System.currentTimeMillis() + ttlMs);
                         }
                     } catch (Exception ignored) { }
                 }
@@ -201,13 +208,23 @@ public class AuthController {
         admin.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         adminRepo.save(admin);
+
+        // Seed password history so the registration password is included in reuse checks.
+        PasswordHistory initial = new PasswordHistory();
+        initial.setAdmin(admin);
+        initial.setPasswordHash(admin.getPassword());
+        initial.setChangedAt(LocalDateTime.now());
+        passwordHistoryRepo.save(initial);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Admin criado com sucesso");
     }
 
     @PostMapping("/change-password")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequestDTO request,
-                                            Authentication authentication) {
+                                            Authentication authentication,
+                                            HttpServletRequest httpRequest,
+                                            HttpServletResponse httpResponse) {
         String username = authentication.getName();
         AdminUser admin = adminRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Admin não encontrado"));
@@ -239,6 +256,28 @@ public class AuthController {
             passwordHistoryRepo.deleteAll(allEntries.subList(5, allEntries.size()));
         }
 
+        // Revoke the current session's access and refresh tokens so the stolen-token window
+        // closes immediately after a password change.
+        if (httpRequest.getCookies() != null) {
+            for (Cookie cookie : httpRequest.getCookies()) {
+                String name = cookie.getName();
+                boolean isAccess  = "admin_access_token".equals(name);
+                boolean isRefresh = "admin_refresh_token".equals(name);
+                if (isAccess || isRefresh) {
+                    try {
+                        String jti = jwtUtil.extractJti(cookie.getValue());
+                        if (jti != null) {
+                            long ttlMs = isRefresh
+                                    ? jwtUtil.getRefreshTokenExpirationMs()
+                                    : jwtUtil.getAdminTokenExpirationMs();
+                            tokenBlocklistService.block(jti, System.currentTimeMillis() + ttlMs);
+                        }
+                    } catch (Exception ignored) { }
+                }
+            }
+        }
+        clearCookies(httpResponse);
+
         return ResponseEntity.ok("Password alterada com sucesso!");
     }
 
@@ -265,6 +304,12 @@ public class AuthController {
         }
     }
 
+    private void clearPublicCookies(HttpServletResponse response) {
+        for (String name : List.of("public_access_token", "public_refresh_token")) {
+            response.addHeader("Set-Cookie", buildCookie(name, "", 0));
+        }
+    }
+
     private String buildCookie(String name, String value, int maxAge) {
         return ResponseCookie.from(name, value)
                 .httpOnly(true)
@@ -277,20 +322,36 @@ public class AuthController {
     }
 
     private String resolveRefreshToken(HttpServletRequest request, RefreshTokenRequestDTO body) {
-        // Prefer cookie
+        // Read both named cookies independently so we never accidentally use the wrong role's token.
+        String adminRefresh = null;
+        String publicRefresh = null;
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
-                if ("admin_refresh_token".equals(cookie.getName()) ||
-                    "public_refresh_token".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
+                if ("admin_refresh_token".equals(cookie.getName()))  adminRefresh  = cookie.getValue();
+                if ("public_refresh_token".equals(cookie.getName())) publicRefresh = cookie.getValue();
             }
         }
-        // Fall back to request body
+
+        // Prefer the admin cookie when present and its embedded role claim confirms it is admin.
+        // Fall back to the public cookie, then to the request body.
+        if (adminRefresh != null && RoleConstants.ADMIN.equals(safeExtractRole(adminRefresh))) {
+            return adminRefresh;
+        }
+        if (publicRefresh != null && RoleConstants.PUBLIC.equals(safeExtractRole(publicRefresh))) {
+            return publicRefresh;
+        }
         if (body != null) {
             return body.getRefreshToken();
         }
         return null;
+    }
+
+    private String safeExtractRole(String token) {
+        try {
+            return jwtUtil.extractRole(token);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private String safeExtractJti(String token) {

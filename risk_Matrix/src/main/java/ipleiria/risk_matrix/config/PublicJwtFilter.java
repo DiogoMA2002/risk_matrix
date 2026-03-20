@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import ipleiria.risk_matrix.service.TokenBlocklistService;
 import ipleiria.risk_matrix.utils.RoleConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,11 @@ public class PublicJwtFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(PublicJwtFilter.class);
 
     private final JwtUtil jwtUtil;
+    private final TokenBlocklistService tokenBlocklistService;
 
-    public PublicJwtFilter(JwtUtil jwtUtil) {
+    public PublicJwtFilter(JwtUtil jwtUtil, TokenBlocklistService tokenBlocklistService) {
         this.jwtUtil = jwtUtil;
+        this.tokenBlocklistService = tokenBlocklistService;
     }
 
     @Override
@@ -42,6 +45,13 @@ public class PublicJwtFilter extends OncePerRequestFilter {
                     String role = jwtUtil.extractRole(jwt);
 
                     if (RoleConstants.PUBLIC.equals(role)) {
+                        // Reject revoked access tokens
+                        String jti = safeExtractJti(jwt);
+                        if (jti != null && tokenBlocklistService.isBlocked(jti)) {
+                            filterChain.doFilter(request, response);
+                            return;
+                        }
+
                         String email = jwtUtil.extractEmail(jwt);
 
                         UserDetails userDetails = User.builder()
@@ -61,6 +71,14 @@ public class PublicJwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String safeExtractJti(String jwt) {
+        try {
+            return jwtUtil.extractJti(jwt);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /** Prefer HttpOnly cookie; fall back to Authorization header. */
