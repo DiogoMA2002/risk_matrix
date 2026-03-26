@@ -37,9 +37,11 @@ A comprehensive web platform for identifying, assessing, and managing business r
 
 ### Prerequisites
 
-- Java 23 or higher
+- **JDK 23** (e.g. [Eclipse Temurin 23](https://adoptium.net/)) — Java 24+ will cause a Lombok `TypeTag :: UNKNOWN` compile error
 - Node.js and npm
 - Maven
+
+> **IntelliJ IDEA users:** make sure both *File → Project Structure → Project → SDK* and the run configuration JRE are set to JDK 23. Using a newer JDK (e.g. 26) picked up from the system PATH will break compilation.
 
 ### Installation
 
@@ -90,7 +92,6 @@ A comprehensive web platform for identifying, assessing, and managing business r
    ```
 
    The frontend development server will start on `http://localhost:8081`
-
 
 ## Contributing
 
