@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ipleiria.risk_matrix.dto.CategoryDTO;
 import ipleiria.risk_matrix.models.category.Category;
 import ipleiria.risk_matrix.service.CategoryService;
 import jakarta.validation.Valid;
@@ -29,8 +30,10 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "List all categories")
-    public List<Category> getAllCategories() {
-        return categoryService.getAllCategories();
+    public List<CategoryDTO> getAllCategories() {
+        return categoryService.getAllCategories().stream()
+                .map(CategoryDTO::new)
+                .toList();
     }
 
     @PostMapping
@@ -38,9 +41,9 @@ public class CategoryController {
     @Operation(summary = "Create a category", description = "Creates a new question category. Requires ADMIN role.")
     @ApiResponse(responseCode = "201", description = "Category created")
     @ApiResponse(responseCode = "409", description = "Category name already exists")
-    public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category) {
-        Category createdCategory = categoryService.createCategory(category);
-        return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDto) {
+        Category createdCategory = categoryService.createCategory(categoryDto.toEntity());
+        return new ResponseEntity<>(new CategoryDTO(createdCategory), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -49,11 +52,11 @@ public class CategoryController {
     @ApiResponse(responseCode = "200", description = "Category updated")
     @ApiResponse(responseCode = "404", description = "Category not found")
     @ApiResponse(responseCode = "409", description = "Category name already exists")
-    public ResponseEntity<Category> updateCategory(
+    public ResponseEntity<CategoryDTO> updateCategory(
             @Parameter(description = "Category ID") @PathVariable Long id,
-            @Valid @RequestBody Category categoryDetails) {
-        Category updatedCategory = categoryService.updateCategory(id, categoryDetails);
-        return ResponseEntity.ok(updatedCategory);
+            @Valid @RequestBody CategoryDTO categoryDetails) {
+        Category updatedCategory = categoryService.updateCategory(id, categoryDetails.toEntity());
+        return ResponseEntity.ok(new CategoryDTO(updatedCategory));
     }
 
     @DeleteMapping("/{id}")

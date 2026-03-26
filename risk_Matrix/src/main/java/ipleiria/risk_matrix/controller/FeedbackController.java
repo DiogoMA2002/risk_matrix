@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ipleiria.risk_matrix.dto.FeedbackDTO;
 import ipleiria.risk_matrix.dto.FeedbackRequestDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidFeedbackTypeException;
 import ipleiria.risk_matrix.models.feedback.Feedback;
@@ -34,23 +35,23 @@ public class FeedbackController {
     @Operation(summary = "Submit feedback", description = "Submits user feedback (suggestion or help request). Accessible by ADMIN and PUBLIC roles.")
     @ApiResponse(responseCode = "200", description = "Feedback saved")
     @ApiResponse(responseCode = "400", description = "Invalid feedback data")
-    public ResponseEntity<Feedback> createFeedback(@Valid @RequestBody FeedbackRequestDTO dto) {
-        return ResponseEntity.ok(feedbackService.saveFeedback(dto));
+    public ResponseEntity<FeedbackDTO> createFeedback(@Valid @RequestBody FeedbackRequestDTO dto) {
+        return ResponseEntity.ok(new FeedbackDTO(feedbackService.saveFeedback(dto)));
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "List all feedback (paginated)", description = "Returns all feedback entries sorted by creation date descending. Requires ADMIN role.")
-    public ResponseEntity<Page<Feedback>> getAllFeedback(
+    public ResponseEntity<Page<FeedbackDTO>> getAllFeedback(
             @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Page size (max 200)") @RequestParam(defaultValue = "50") int size) {
-        return ResponseEntity.ok(feedbackService.getAllFeedback(page, size));
+        return ResponseEntity.ok(feedbackService.getAllFeedback(page, size).map(FeedbackDTO::new));
     }
 
     @GetMapping("/filter")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Filter feedback", description = "Filters feedback by email, type, and/or date range. Requires ADMIN role.")
-    public ResponseEntity<List<Feedback>> filterFeedback(
+    public ResponseEntity<List<FeedbackDTO>> filterFeedback(
             @Parameter(description = "Email filter") @RequestParam(required = false) String email,
             @Parameter(description = "Feedback type (SUGGESTION, HELP)") @RequestParam(required = false) String type,
             @Parameter(description = "Start date (ISO date-time)") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -61,7 +62,10 @@ public class FeedbackController {
             feedbackType = parseFeedbackType(type);
         }
 
-        return ResponseEntity.ok(feedbackService.filterFeedback(email, feedbackType, startDate, endDate));
+        return ResponseEntity.ok(feedbackService.filterFeedback(email, feedbackType, startDate, endDate)
+                .stream()
+                .map(FeedbackDTO::new)
+                .toList());
     }
 
     private FeedbackType parseFeedbackType(String type) {

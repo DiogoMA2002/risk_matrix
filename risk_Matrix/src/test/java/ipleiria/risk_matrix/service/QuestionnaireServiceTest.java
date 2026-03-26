@@ -1,7 +1,12 @@
 package ipleiria.risk_matrix.service;
 
+import ipleiria.risk_matrix.dto.QuestionDTO;
+import ipleiria.risk_matrix.dto.QuestionOptionDTO;
+import ipleiria.risk_matrix.dto.QuestionnaireDTO;
 import ipleiria.risk_matrix.exceptions.exception.QuestionnaireNotFoundException;
 import ipleiria.risk_matrix.models.category.Category;
+import ipleiria.risk_matrix.models.questions.OptionLevel;
+import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import ipleiria.risk_matrix.models.questions.Question;
 import ipleiria.risk_matrix.repository.CategoryRepository;
@@ -21,6 +26,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -230,5 +236,111 @@ class QuestionnaireServiceTest {
 
         assertThatThrownBy(() -> questionnaireService.updateQuestionnaire(99L, updated))
                 .isInstanceOf(QuestionnaireNotFoundException.class);
+    }
+
+    @Test
+    void importQuestionnaireDto_reusesExistingQuestionAndSavesQuestionnaire() {
+        QuestionOptionDTO optionDTO = new QuestionOptionDTO();
+        optionDTO.setOptionText("Yes");
+        optionDTO.setOptionType(OptionLevelType.IMPACT);
+        optionDTO.setOptionLevel(OptionLevel.HIGH);
+        optionDTO.setRecommendation("Enable MFA");
+
+        QuestionDTO questionDTO = new QuestionDTO();
+        questionDTO.setQuestionText("Do you enforce MFA?");
+        questionDTO.setCategoryName("Network");
+        questionDTO.setOptions(List.of(optionDTO));
+
+        QuestionnaireDTO dto = new QuestionnaireDTO();
+        dto.setTitle("Imported Questionnaire");
+        dto.setQuestions(List.of(questionDTO));
+
+        Question existing = new Question();
+        existing.setId(10L);
+        existing.setQuestionText("Do you enforce MFA?");
+        existing.setCategory(category);
+        existing.setOptions(new ArrayList<>());
+
+        when(categoryRepository.findByName("Network")).thenReturn(Optional.of(category));
+        when(questionRepository.findByQuestionTextAndCategory_Id("Do you enforce MFA?", 1L))
+                .thenReturn(Optional.of(existing));
+        when(questionnaireRepository.save(any(Questionnaire.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Questionnaire result = questionnaireService.importQuestionnaireDto(dto);
+
+        assertThat(result.getTitle()).isEqualTo("Imported Questionnaire");
+        assertThat(result.getQuestions()).hasSize(1);
+        verify(questionRepository, never()).save(any(Question.class));
+        verify(questionnaireRepository).save(any(Questionnaire.class));
+    }
+
+    @Test
+    void importQuestionnaireDto_createsCategoryWhenMissing() {
+        QuestionOptionDTO optionDTO = new QuestionOptionDTO();
+        optionDTO.setOptionText("Yes");
+        optionDTO.setOptionType(OptionLevelType.IMPACT);
+        optionDTO.setOptionLevel(OptionLevel.HIGH);
+
+        QuestionDTO questionDTO = new QuestionDTO();
+        questionDTO.setQuestionText("Is endpoint protection enabled?");
+        questionDTO.setCategoryName("Endpoint");
+        questionDTO.setOptions(List.of(optionDTO));
+
+        QuestionnaireDTO dto = new QuestionnaireDTO();
+        dto.setTitle("Q");
+        dto.setQuestions(List.of(questionDTO));
+
+        Category newCategory = new Category();
+        newCategory.setId(77L);
+        newCategory.setName("Endpoint");
+
+        when(categoryRepository.findByName("Endpoint")).thenReturn(Optional.empty());
+        when(categoryRepository.save(any(Category.class))).thenReturn(newCategory);
+        when(questionRepository.findByQuestionTextAndCategory_Id(eq("Is endpoint protection enabled?"), eq(77L)))
+                .thenReturn(Optional.empty());
+        when(questionRepository.save(any(Question.class))).thenAnswer(inv -> {
+            Question q = inv.getArgument(0);
+            q.setId(100L);
+            return q;
+        });
+        when(questionnaireRepository.save(any(Questionnaire.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Questionnaire result = questionnaireService.importQuestionnaireDto(dto);
+
+        assertThat(result.getQuestions()).hasSize(1);
+        verify(categoryRepository).save(any(Category.class));
+        verify(questionRepository).save(any(Question.class));
+    }
+
+    @Test
+    void addQuestionDtoToQuestionnaire_blankQuestionText_throwsIllegalArgument() {
+        QuestionDTO dto = new QuestionDTO();
+        dto.setQuestionText("   ");
+        dto.setCategoryName("Network");
+
+        when(questionnaireRepository.findById(1L)).thenReturn(Optional.of(questionnaire));
+
+        assertThatThrownBy(() -> questionnaireService.addQuestionDtoToQuestionnaire(1L, dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Question text cannot be empty");
+    }
+
+    @Test
+    void addQuestionDtoToQuestionnaire_blankCategoryName_throwsIllegalArgument() {
+        QuestionOptionDTO optionDTO = new QuestionOptionDTO();
+        optionDTO.setOptionText("Yes");
+        optionDTO.setOptionType(OptionLevelType.IMPACT);
+        optionDTO.setOptionLevel(OptionLevel.HIGH);
+
+        QuestionDTO dto = new QuestionDTO();
+        dto.setQuestionText("Question");
+        dto.setCategoryName("   ");
+        dto.setOptions(List.of(optionDTO));
+
+        when(questionnaireRepository.findById(1L)).thenReturn(Optional.of(questionnaire));
+
+        assertThatThrownBy(() -> questionnaireService.addQuestionDtoToQuestionnaire(1L, dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Category name cannot be empty");
     }
 }

@@ -5,9 +5,7 @@ import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Duration;
@@ -16,7 +14,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
-@EnableScheduling
 public class RateLimitConfig {
 
     // Rate limit configurations for different endpoint types
@@ -65,11 +62,6 @@ public class RateLimitConfig {
         rules.put("/api/categories", new RateLimitRule(20, Duration.ofMinutes(1)));
         
         return rules;
-    }
-
-    @Bean
-    public Map<String, Map<String, Bucket>> rateLimitBuckets() {
-        return new ConcurrentHashMap<>();
     }
 
     // Cleanup expired buckets every 10 minutes

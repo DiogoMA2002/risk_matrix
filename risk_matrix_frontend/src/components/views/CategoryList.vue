@@ -534,7 +534,6 @@ export default {
     },
     async selectQuestionnaire(id) {
       this.$store.commit("clearAllAnswers");
-      this.$store.commit("setSelectedQuestionnaireId", id);
       await this.fetchQuestionnaireById(id);
     },
     async clearAllAnswers() {

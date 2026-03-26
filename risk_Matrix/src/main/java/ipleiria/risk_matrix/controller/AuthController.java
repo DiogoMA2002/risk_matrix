@@ -8,6 +8,7 @@ import ipleiria.risk_matrix.dto.ChangePasswordRequestDTO;
 import ipleiria.risk_matrix.dto.EmailTokenRequestDTO;
 import ipleiria.risk_matrix.dto.RefreshTokenRequestDTO;
 import ipleiria.risk_matrix.exceptions.exception.ConflictException;
+import ipleiria.risk_matrix.responses.ErrorResponse;
 import ipleiria.risk_matrix.service.AdminUserDetailsService;
 import ipleiria.risk_matrix.service.AdminUserService;
 import ipleiria.risk_matrix.service.TokenBlocklistService;
@@ -25,6 +26,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,7 +64,7 @@ public class AuthController {
     @Operation(summary = "Admin login", description = "Authenticates an admin user and sets JWT cookies (access + refresh)")
     @ApiResponse(responseCode = "200", description = "Login successful")
     @ApiResponse(responseCode = "401", description = "Invalid credentials")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDTO request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDTO request, HttpServletResponse response, HttpServletRequest httpRequest) {
         try {
             authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -79,7 +81,7 @@ public class AuthController {
                     "expiresIn", jwtUtil.getAdminTokenExpirationMs()
             ));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return buildError(HttpStatus.UNAUTHORIZED, "Invalid credentials", "AUTHENTICATION_ERROR", httpRequest);
         }
     }
 
@@ -111,18 +113,18 @@ public class AuthController {
         String refreshToken = resolveRefreshToken(request, body);
 
         if (refreshToken == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No refresh token provided");
+            return buildError(HttpStatus.UNAUTHORIZED, "No refresh token provided", "MISSING_REFRESH_TOKEN", request);
         }
 
         try {
             if (!jwtUtil.validateToken(refreshToken) || !jwtUtil.isRefreshToken(refreshToken)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+                return buildError(HttpStatus.UNAUTHORIZED, "Invalid refresh token", "INVALID_REFRESH_TOKEN", request);
             }
 
             // Reject revoked refresh tokens
             String jti = safeExtractJti(refreshToken);
             if (jti != null && tokenBlocklistService.isBlocked(jti)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token has been revoked");
+                return buildError(HttpStatus.UNAUTHORIZED, "Refresh token has been revoked", "REVOKED_REFRESH_TOKEN", request);
             }
 
             String role = jwtUtil.extractRole(refreshToken);
@@ -160,10 +162,10 @@ public class AuthController {
                         "refreshExpiresAt", refreshExpiresAt
                 ));
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token role");
+                return buildError(HttpStatus.UNAUTHORIZED, "Invalid token role", "INVALID_TOKEN_ROLE", request);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token refresh failed");
+            return buildError(HttpStatus.UNAUTHORIZED, "Token refresh failed", "TOKEN_REFRESH_FAILED", request);
         }
     }
 
@@ -201,12 +203,12 @@ public class AuthController {
     @Operation(summary = "Register a new admin", description = "Creates a new admin user. Requires ADMIN role.")
     @ApiResponse(responseCode = "201", description = "Admin created")
     @ApiResponse(responseCode = "409", description = "Username or email already exists")
-    public ResponseEntity<?> register(@Valid @RequestBody AdminRegisterDTO dto) {
+    public ResponseEntity<?> register(@Valid @RequestBody AdminRegisterDTO dto, HttpServletRequest request) {
         try {
             adminUserService.register(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Admin criado com sucesso");
         } catch (ConflictException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return buildError(HttpStatus.CONFLICT, e.getMessage(), "RESOURCE_CONFLICT", request);
         }
     }
 
@@ -220,20 +222,32 @@ public class AuthController {
                                             Authentication authentication,
                                             HttpServletRequest httpRequest,
                                             HttpServletResponse httpResponse) {
+        if (authentication == null) {
+            return buildError(HttpStatus.UNAUTHORIZED, "Authentication required", "AUTHENTICATION_REQUIRED", httpRequest);
+        }
         try {
             adminUserService.changePassword(authentication.getName(), request);
         } catch (IllegalArgumentException e) {
             String msg = e.getMessage();
             if (msg.contains("incorreta")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(msg);
+                return buildError(HttpStatus.UNAUTHORIZED, msg, "INVALID_OLD_PASSWORD", httpRequest);
             }
-            return ResponseEntity.badRequest().body(msg);
+            return buildError(HttpStatus.BAD_REQUEST, msg, "INVALID_ARGUMENT", httpRequest);
+        } catch (UsernameNotFoundException e) {
+            return buildError(HttpStatus.NOT_FOUND, e.getMessage(), "USER_NOT_FOUND", httpRequest);
         }
 
         revokeAdminCookies(httpRequest);
         clearCookies(httpResponse);
 
         return ResponseEntity.ok("Password alterada com sucesso!");
+    }
+
+    private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message, String errorCode, HttpServletRequest request) {
+        return new ResponseEntity<>(
+                new ErrorResponse(status.value(), status, message, errorCode, request.getRequestURI(), null),
+                status
+        );
     }
 
     private void revokeAdminCookies(HttpServletRequest httpRequest) {

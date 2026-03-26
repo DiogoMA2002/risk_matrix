@@ -19,8 +19,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT q FROM Question q")
     List<Question> findAllWithDetails();
 
-    Optional<Question> findByQuestionText(String questionText);
-
     boolean existsByCategoryId(Long id);
 
     /**

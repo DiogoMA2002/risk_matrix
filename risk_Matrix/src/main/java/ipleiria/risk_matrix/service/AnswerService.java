@@ -78,13 +78,6 @@ public class AnswerService {
                 .collect(Collectors.toList());
     }
 
-    public List<AnswerDTO> getAllAnswers(int page, int size) {
-        Pageable pageable = PageRequest.of(page, Math.min(size, MAX_PAGE_SIZE));
-        return answerRepository.findAll(pageable).getContent().stream()
-                .map(AnswerDTO::new)
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public List<AnswerDTO> submitMultipleAnswers(List<AnswerDTO> answers) {
         if (answers == null || answers.isEmpty()) {
@@ -106,8 +99,24 @@ public class AnswerService {
     }
 
     public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail(int page, int size) {
-        List<AnswerDTO> allAnswers = getAllAnswers(page, size);
-        return processSubmissions(allAnswers);
+        Pageable pageable = PageRequest.of(page, Math.min(size, MAX_PAGE_SIZE));
+        List<String> submissionIdsPage = answerRepository.findSubmissionIdsOrderByLatestAnswer(pageable).getContent();
+        if (submissionIdsPage.isEmpty()) {
+            return List.of();
+        }
+
+        List<AnswerDTO> allAnswers = answerRepository.findBySubmissionIdIn(submissionIdsPage).stream()
+                .map(AnswerDTO::new)
+                .toList();
+
+        List<UserAnswersDTO> processed = processSubmissions(allAnswers);
+        Map<String, Integer> pageOrder = new HashMap<>();
+        for (int i = 0; i < submissionIdsPage.size(); i++) {
+            pageOrder.put(submissionIdsPage.get(i), i);
+        }
+
+        processed.sort(Comparator.comparingInt(dto -> pageOrder.getOrDefault(dto.getSubmissionId(), Integer.MAX_VALUE)));
+        return processed;
     }
 
     public List<UserAnswersDTO> getAnswersByDateRange(LocalDate startDate, LocalDate endDate) {

@@ -54,24 +54,6 @@
  /* eslint-disable */
 import axios from 'axios'
 
-// Apenas limpa o prefixo da mensagem de erro do Spring
-function formatValidationMessage(message) {
-  if (message.startsWith("Validation failed:")) {
-    const cleaned = message.replace("Validation failed:", "").trim();
-    return cleaned
-      .split(";")
-      .map(m => {
-        const trimmed = m.trim();
-        const spaceIndex = trimmed.indexOf(" ");
-        return spaceIndex !== -1 ? trimmed.slice(spaceIndex + 1) : trimmed;
-      })
-      .filter(Boolean)
-      .join(" | ");
-  }
-
-  return message;
-}
-
 export default {
   name: "ChangePassword",
   data() {

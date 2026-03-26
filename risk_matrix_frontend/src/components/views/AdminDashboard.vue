@@ -380,8 +380,8 @@ export default {
         }
 
         const response = await axios.get(url);
-
-        this.feedbacks = response.data;
+        // `/api/feedback` is paginated, while `/api/feedback/filter` returns a plain list.
+        this.feedbacks = Array.isArray(response.data) ? response.data : (response.data?.content || []);
       } catch (error) {
         console.error("Erro ao buscar feedbacks:", error);
         this.feedbacks = [];

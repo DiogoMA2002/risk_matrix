@@ -24,7 +24,6 @@
             <div class="relative">
               <input
                 id="email"
-                ref="emailInput"
                 v-model="email"
                 type="email"
                 placeholder="email@email.com"
@@ -84,11 +83,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import axios from 'axios'
+import { TokenManager } from '@/utils/tokenManager'
 
 const router = useRouter()
 const route = useRoute()
 
-const emailInput = ref(null)
 const email = ref('')
 const emailError = ref('')
 const isLoading = ref(false)
@@ -99,7 +99,9 @@ function isValidEmail(email) {
 }
 
 async function proceed() {
-  if (!email.value || !isValidEmail(email.value)) {
+  const normalizedEmail = email.value.trim().toLowerCase()
+
+  if (!normalizedEmail || !isValidEmail(normalizedEmail)) {
     emailError.value = 'Informe um email válido'
     return
   }
@@ -108,33 +110,29 @@ async function proceed() {
     isLoading.value = true
     emailError.value = ''
     
-    // Request token from backend
-    const response = await fetch('/api/auth/request-token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: email.value })
+    // Request public auth cookies from backend.
+    await axios.post('/api/auth/request-token', {
+      email: normalizedEmail
     })
-
-    if (!response.ok) {
-      throw new Error('Failed to get token')
-    }
-
-    const tokenData = await response.json()
     
-    // Store email and tokens
-    sessionStorage.setItem('userEmail', email.value)
-    localStorage.setItem('publicToken', tokenData.token)
-    localStorage.setItem('publicRefreshToken', tokenData.refreshToken)
-    localStorage.setItem('tokenExpiresAt', tokenData.expiresAt.toString())
-    localStorage.setItem('publicRefreshExpiresAt', tokenData.refreshExpiresAt.toString())
-    
+    // Keep only client-side non-sensitive flow state.
+    email.value = normalizedEmail
+    sessionStorage.setItem('userEmail', normalizedEmail)
+    TokenManager.setPublic()
     if (route.path !== '/risk-info') {
       await router.push('/risk-info')
     }
   } catch (error) {
+    const status = error?.response?.status
+    const backendMessage = error?.response?.data?.message
+
+    if (status === 429) {
+      emailError.value = 'Muitas tentativas. Aguarde alguns segundos e tente novamente.'
+    } else if (backendMessage) {
+      emailError.value = backendMessage
+    } else {
     emailError.value = 'Ocorreu um erro ao prosseguir. Tente novamente.'
+    }
     console.error('Navigation error:', error)
   } finally {
     isLoading.value = false

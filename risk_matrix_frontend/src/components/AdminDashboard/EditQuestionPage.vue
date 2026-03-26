@@ -156,11 +156,6 @@ import axios from 'axios';
 import SkeletonLoader from '@/components/Static/SkeletonLoader.vue';
 import AlertDialog from '@/components/Static/AlertDialog.vue';
 
-const OptionLevel = {
-  LOW: 'LOW',
-  MEDIUM: 'MEDIUM',
-  HIGH: 'HIGH',
-};
 const OptionLevelType = {
   IMPACT: 'IMPACT',
   PROBABILITY: 'PROBABILITY',
@@ -209,7 +204,7 @@ export default {
         this.question = {
           id: data.id,
           questionText: data.questionText,
-          categoryName: data.category?.name || '',
+          categoryName: data.categoryName || data.category?.name || '',
           description: data.description || '', 
           options: data.options.map(opt => ({
             optionText: opt.optionText,
@@ -270,14 +265,6 @@ export default {
       } finally {
         this.isSaving = false;
       }
-    },
-
-    addOption() {
-      this.question.options.push({
-        optionText: '',
-        optionLevel: OptionLevel.LOW,
-        optionType: OptionLevelType.IMPACT
-      });
     },
 
     removeOption(index) {

@@ -398,18 +398,6 @@ button:not(:disabled):active {
   transform: translateY(0);
 }
 
-/* Add toast animation styles */
-.toast-enter-active,
-.toast-leave-active {
-  transition: all 0.3s ease;
-}
-
-.toast-enter-from,
-.toast-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
 /* Add keyboard shortcut styles */
 kbd {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;

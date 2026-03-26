@@ -7,8 +7,7 @@ export default createStore({
     questionnaires: [],
     selectedQuestionnaire: null,
     allAnswers: {},
-    categories: [],          
-    selectedQuestionnaireId: null,
+    categories: [],
     userAnswers: [],
     isLoadingAnswers: false,
     error: null, // global error state
@@ -25,9 +24,6 @@ export default createStore({
     },
     setSelectedQuestionnaire(state, questionnaire) {
       state.selectedQuestionnaire = questionnaire
-    },
-    setSelectedQuestionnaireId(state, id) {
-      state.selectedQuestionnaireId = id;
     },
     setAllAnswers(state, answers) {
       state.allAnswers = answers;

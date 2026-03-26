@@ -93,7 +93,7 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(authRequest)))
                 .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid credentials"));
+                .andExpect(jsonPath("$.message", is("Invalid credentials")));
     }
 
     @Test
@@ -116,7 +116,7 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(status().isUnauthorized())
-                .andExpect(content().string("No refresh token provided"));
+                .andExpect(jsonPath("$.message", is("No refresh token provided")));
     }
 
     @Test

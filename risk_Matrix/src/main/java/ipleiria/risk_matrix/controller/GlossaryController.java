@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ipleiria.risk_matrix.dto.GlossaryEntryDTO;
 import ipleiria.risk_matrix.models.glossary.GlossaryEntry;
 import ipleiria.risk_matrix.service.GlossaryService;
 import org.springframework.http.HttpStatus;
@@ -25,25 +26,25 @@ public class GlossaryController {
 
     @GetMapping
     @Operation(summary = "List all glossary entries")
-    public List<GlossaryEntry> getAllEntries() {
-        return glossaryService.getAllEntries();
+    public List<GlossaryEntryDTO> getAllEntries() {
+        return glossaryService.getAllEntries().stream().map(GlossaryEntryDTO::new).toList();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Add a glossary entry", description = "Creates a new glossary term. Requires ADMIN role.")
     @ApiResponse(responseCode = "201", description = "Entry created")
-    public ResponseEntity<GlossaryEntry> addEntry(@RequestBody GlossaryEntry entry) {
-        return new ResponseEntity<>(glossaryService.addEntry(entry), HttpStatus.CREATED);
+    public ResponseEntity<GlossaryEntryDTO> addEntry(@RequestBody GlossaryEntryDTO entryDto) {
+        return new ResponseEntity<>(new GlossaryEntryDTO(glossaryService.addEntry(entryDto.toEntity())), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update a glossary entry", description = "Updates an existing glossary term. Requires ADMIN role.")
-    public ResponseEntity<GlossaryEntry> updateEntry(
+    public ResponseEntity<GlossaryEntryDTO> updateEntry(
             @Parameter(description = "Entry ID") @PathVariable Long id,
-            @RequestBody GlossaryEntry entry) {
-        return ResponseEntity.ok(glossaryService.updateEntry(id, entry));
+            @RequestBody GlossaryEntryDTO entryDto) {
+        return ResponseEntity.ok(new GlossaryEntryDTO(glossaryService.updateEntry(id, entryDto.toEntity())));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -58,14 +59,15 @@ public class GlossaryController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/import")
     @Operation(summary = "Import glossary entries", description = "Bulk-imports glossary entries. Existing terms are updated, new terms are created. Requires ADMIN role.")
-    public ResponseEntity<List<GlossaryEntry>> importEntries(@RequestBody List<GlossaryEntry> entries) {
-        return ResponseEntity.ok(glossaryService.importEntries(entries));
+    public ResponseEntity<List<GlossaryEntryDTO>> importEntries(@RequestBody List<GlossaryEntryDTO> entries) {
+        List<GlossaryEntry> imported = glossaryService.importEntries(entries.stream().map(GlossaryEntryDTO::toEntity).toList());
+        return ResponseEntity.ok(imported.stream().map(GlossaryEntryDTO::new).toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/export")
     @Operation(summary = "Export all glossary entries", description = "Returns all glossary entries for export. Requires ADMIN role.")
-    public ResponseEntity<List<GlossaryEntry>> exportEntries() {
-        return ResponseEntity.ok(glossaryService.exportEntries());
+    public ResponseEntity<List<GlossaryEntryDTO>> exportEntries() {
+        return ResponseEntity.ok(glossaryService.exportEntries().stream().map(GlossaryEntryDTO::new).toList());
     }
 } 
