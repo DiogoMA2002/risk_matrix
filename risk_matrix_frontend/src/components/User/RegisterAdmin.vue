@@ -24,9 +24,11 @@
           <input
             v-model="email"
             type="email"
+            required
             placeholder="email@exemplo.com"
             class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
           />
+          <p v-if="email && !isEmailValid" class="text-red-500 text-xs mt-1">Formato de email invalido.</p>
         </div>
   
         <div>
@@ -34,9 +36,25 @@
           <input
             v-model="password"
             type="password"
+            required
+            minlength="8"
             placeholder="••••••••"
             class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
           />
+          <div v-if="password" class="mt-2">
+            <div class="flex gap-1 mb-1">
+              <div v-for="i in 4" :key="i" class="h-1.5 flex-1 rounded-full transition-all duration-300"
+                :class="i <= passwordStrength ? strengthColors[passwordStrength] : 'bg-gray-200'"></div>
+            </div>
+            <p class="text-xs" :class="strengthTextColors[passwordStrength]">{{ strengthLabel }}</p>
+            <ul class="text-xs text-gray-500 mt-1 space-y-0.5">
+              <li :class="password.length >= 8 ? 'text-green-600' : ''">Min. 8 caracteres</li>
+              <li :class="/[A-Z]/.test(password) ? 'text-green-600' : ''">Uma letra maiuscula</li>
+              <li :class="/[a-z]/.test(password) ? 'text-green-600' : ''">Uma letra minuscula</li>
+              <li :class="/[0-9]/.test(password) ? 'text-green-600' : ''">Um digito</li>
+              <li :class="/[^A-Za-z0-9]/.test(password) ? 'text-green-600' : ''">Um caractere especial</li>
+            </ul>
+          </div>
         </div>
   
         <button
@@ -67,6 +85,32 @@
         password: '',
         message: '',
         isError: false,
+        strengthColors: { 1: 'bg-red-500', 2: 'bg-orange-400', 3: 'bg-yellow-400', 4: 'bg-green-500' },
+        strengthTextColors: { 1: 'text-red-600', 2: 'text-orange-500', 3: 'text-yellow-600', 4: 'text-green-600' },
+      }
+    },
+    computed: {
+      isEmailValid() {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email);
+      },
+      passwordStrength() {
+        let score = 0;
+        if (this.password.length >= 8) score++;
+        if (/[A-Z]/.test(this.password) && /[a-z]/.test(this.password)) score++;
+        if (/[0-9]/.test(this.password)) score++;
+        if (/[^A-Za-z0-9]/.test(this.password)) score++;
+        return score;
+      },
+      strengthLabel() {
+        const labels = { 0: '', 1: 'Fraca', 2: 'Razoavel', 3: 'Boa', 4: 'Forte' };
+        return labels[this.passwordStrength];
+      },
+      isPasswordValid() {
+        return this.password.length >= 8 &&
+          /[A-Z]/.test(this.password) &&
+          /[a-z]/.test(this.password) &&
+          /[0-9]/.test(this.password) &&
+          /[^A-Za-z0-9]/.test(this.password);
       }
     },
     methods: {
@@ -75,9 +119,21 @@
             this.isError = false
 
             if (!this.username || !this.email || !this.password) {
-            this.message = 'Preencha todos os campos.'
-            this.isError = true
-            return
+              this.message = 'Preencha todos os campos.'
+              this.isError = true
+              return
+            }
+
+            if (!this.isEmailValid) {
+              this.message = 'Formato de email invalido.'
+              this.isError = true
+              return
+            }
+
+            if (!this.isPasswordValid) {
+              this.message = 'A senha deve ter no minimo 8 caracteres, incluindo maiuscula, minuscula, digito e caractere especial.'
+              this.isError = true
+              return
             }
 
             try {

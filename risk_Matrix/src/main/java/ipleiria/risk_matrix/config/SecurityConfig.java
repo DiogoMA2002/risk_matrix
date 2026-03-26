@@ -50,7 +50,13 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index.html", "/favicon.ico",
                                 "/js/**", "/css/**", "/img/**", "/assets/**").permitAll()
 
-                        .requestMatchers("/api/auth/**").permitAll()
+                        // Swagger / OpenAPI
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**",
+                                "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
+
+                        .requestMatchers("/api/auth/login", "/api/auth/logout",
+                                "/api/auth/refresh", "/api/auth/request-token").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/change-password").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/api/glossary/**").hasAnyRole("ADMIN", "PUBLIC")
                         .requestMatchers(HttpMethod.POST, "/api/feedback/**").hasAnyRole("ADMIN", "PUBLIC")

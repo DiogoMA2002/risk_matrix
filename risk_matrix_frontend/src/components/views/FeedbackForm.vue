@@ -44,7 +44,7 @@
             class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
             rows="4"
           ></textarea>
-          <p class="text-xs text-gray-400 mt-1">{{ feedbackWordCount }}/250 palavras</p>
+          <p class="text-xs text-gray-400 mt-1">{{ feedbackCharCount }}/1000 caracteres</p>
         </div>
 
         <p v-if="error" class="text-red-600 text-sm">{{ error }}</p>
@@ -74,7 +74,7 @@ import axios from "axios";
 import ConfirmDialog from "../Static/ConfirmDialogue.vue";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_WORDS = 250;
+const MAX_CHARS = 1000;
 
 export default {
   name: "FeedbackForm",
@@ -92,8 +92,8 @@ export default {
     };
   },
   computed: {
-    feedbackWordCount() {
-      return this.userFeedback.trim().split(/\s+/).filter(Boolean).length;
+    feedbackCharCount() {
+      return this.userFeedback.length;
     },
   },
   methods: {
@@ -116,9 +116,9 @@ export default {
         return;
       }
 
-      // Word count validation
-      if (this.feedbackWordCount > MAX_WORDS) {
-        this.error = `A sua mensagem excede o limite de ${MAX_WORDS} palavras.`;
+      // Character count validation (aligned with backend DTO/entity)
+      if (this.feedbackCharCount > MAX_CHARS) {
+        this.error = `A sua mensagem excede o limite de ${MAX_CHARS} caracteres.`;
         return;
       }
 

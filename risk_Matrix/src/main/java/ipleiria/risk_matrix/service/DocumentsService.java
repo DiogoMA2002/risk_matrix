@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.openxmlformats.schemas.drawingml.x2006.chart.*;
 import org.openxmlformats.schemas.drawingml.x2006.main.*;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +38,7 @@ public class DocumentsService {
 
     }
 
+    @Transactional(readOnly = true)
     public byte[] generateEnhancedDocx(String submissionId) throws IOException {
         List<Answer> answers = answerRepository.findBySubmissionId(submissionId);
         if (answers == null || answers.isEmpty()) {
@@ -85,12 +88,7 @@ public class DocumentsService {
             addAnswersTable(document, answersByCategory, severities, questionMap);
 
             document.write(out);
-            byte[] result = out.toByteArray();
-
-            // Delete all answers for this email after generating the document
-            answerRepository.deleteAll(answers);
-
-            return result;
+            return out.toByteArray();
         }
     }
 

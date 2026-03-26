@@ -11,7 +11,11 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Entity
-@Table(name = "answers")
+@Table(name = "answers", indexes = {
+        @Index(name = "idx_answer_email", columnList = "email"),
+        @Index(name = "idx_answer_submission_id", columnList = "submissionId"),
+        @Index(name = "idx_answer_created_at", columnList = "createdAt")
+})
 public class Answer {
 
     // Getters and Setters

@@ -4,6 +4,7 @@ import ipleiria.risk_matrix.models.questions.Question;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Questionnaire {
     @Column(nullable = false, unique = true)
     private String title;
 
+    @BatchSize(size = 20)
     @ManyToMany
     @JoinTable(
             name = "questionnaire_questions",

@@ -14,7 +14,14 @@ axios.defaults.withCredentials = true
 // doesn't need to import the router (avoids circular dependency).
 setupAxiosInterceptors(axios, (path) => router.push(path))
 
-createApp(App)
+const app = createApp(App)
+
+app.config.errorHandler = (err, instance, info) => {
+  console.error(`[Vue Error] ${info}:`, err);
+  store.commit('setError', err.message || 'Ocorreu um erro inesperado.');
+};
+
+app
   .use(router)
-  .use(store)  // <- register it
+  .use(store)
   .mount('#app')

@@ -158,9 +158,14 @@
 import axios from "axios";
 import AlertDialog from "@/components/Static/AlertDialog.vue";
 import GlossaryDrawer from '@/components/Static/GlossaryDrawer.vue';
+import { formatCategoryName } from '@/utils/formatters';
+import { useAlertDialog } from '@/composables/useAlertDialog';
 
 export default {
   name: "QuestionarioPage",
+  setup() {
+    return useAlertDialog();
+  },
   components: { 
     AlertDialog,
     GlossaryDrawer
@@ -169,25 +174,12 @@ export default {
     return {
       questions: [],
       isLoading: true,
-      showAlert: false,
-      alertTitle: "",
-      alertMessage: "",
-      alertType: "alert",
-      alertResolve: null,
       showGlossary: false
     };
   },
   computed: {
     formattedCategory() {
-      const raw = this.$route.params.category || "";
-      return raw.replace(/_/g, ' ')
-        .split(' ')
-        .map(word => {
-          if (!word) return '';
-          return word.charAt(0).toLocaleUpperCase('pt-PT') +
-            word.slice(1).toLocaleLowerCase('pt-PT');
-        })
-        .join(' ');
+      return formatCategoryName(this.$route.params.category || "");
     },
     answers() {
       const category = this.$route.params.category;
@@ -217,29 +209,6 @@ export default {
         this.questions = [];
       } finally {
         this.isLoading = false;
-      }
-    },
-    showAlertDialog(title, message, type = "alert") {
-      this.alertTitle = title;
-      this.alertMessage = message;
-      this.alertType = type;
-      this.showAlert = true;
-      return new Promise((resolve) => {
-        this.alertResolve = resolve;
-      });
-    },
-    handleAlertConfirm() {
-      this.showAlert = false;
-      if (this.alertResolve) {
-        this.alertResolve(true);
-        this.alertResolve = null;
-      }
-    },
-    handleAlertCancel() {
-      this.showAlert = false;
-      if (this.alertResolve) {
-        this.alertResolve(false);
-        this.alertResolve = null;
       }
     },
     updateAnswer(questionId, value) {

@@ -126,9 +126,9 @@
     </div>
 
     <!-- Result List -->
-    <div v-else-if="userAnswers && userAnswers.length > 0" class="border rounded-lg overflow-hidden">
+    <div v-else-if="sortedUserAnswers && sortedUserAnswers.length > 0" class="border rounded-lg overflow-hidden">
       <ul class="divide-y divide-gray-200">
-        <li v-for="response in userAnswers" :key="response.submissionId" class="p-4 hover:bg-gray-50 transition-colors">
+        <li v-for="response in sortedUserAnswers" :key="response.submissionId" class="p-4 hover:bg-gray-50 transition-colors">
           <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
             <div>
               <h3 class="font-medium text-gray-900">
@@ -222,7 +222,14 @@ export default {
     ...mapState({
       userAnswers: state => state.userAnswers,
       isLoading: state => state.isLoadingAnswers
-    })
+    }),
+    sortedUserAnswers() {
+      return [...(this.userAnswers || [])].sort((a, b) => {
+        const aTime = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const bTime = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return bTime - aTime;
+      });
+    }
   },
   mounted() {
     this.fetchAllResponses();

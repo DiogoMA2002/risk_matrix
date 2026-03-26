@@ -61,8 +61,8 @@
                   v-for="cat in categories"
                   :key="cat"
                   :category="cat"
-                  :answered-count="answeredCount(cat)"
-                  :total-count="totalCount(cat)"
+                  :answered-count="(categoryStats[cat] || {}).answered || 0"
+                  :total-count="(categoryStats[cat] || {}).total || 0"
                   @click="goToCategory(cat)"
                   class="w-full transform transition-all duration-300 hover:scale-105"
                 />
@@ -191,9 +191,14 @@ import ProgressStep from "@/components/Static/Progress.vue";
 import AlertDialog from "@/components/Static/AlertDialog.vue";
 import GlossaryDrawer from '@/components/Static/GlossaryDrawer.vue';
 import { v4 as uuidv4 } from 'uuid';
+import { formatCategoryName } from '@/utils/formatters';
+import { useAlertDialog } from '@/composables/useAlertDialog';
 
 export default {
   name: "CategoryList",
+  setup() {
+    return useAlertDialog();
+  },
   components: { 
     CategoryCard,
     ProgressStep,
@@ -202,11 +207,6 @@ export default {
   },
   data() {
     return {
-      showAlert: false,
-      alertTitle: "",
-      alertMessage: "",
-      alertType: "info",
-      alertResolve: null,
       loading: true,
       isSubmitting: false,
       showGlossary: false
@@ -228,6 +228,27 @@ export default {
         ];
       }
       return [];
+    },
+    categoryStats() {
+      if (!this.selectedQuestionnaire || !this.selectedQuestionnaire.questions) {
+        return {};
+      }
+      const stats = {};
+      for (const q of this.selectedQuestionnaire.questions) {
+        const cat = (typeof q.category === "object" && q.category !== null)
+          ? q.category.name
+          : q.category;
+        if (!stats[cat]) {
+          stats[cat] = { answered: 0, total: 0 };
+        }
+        stats[cat].total++;
+        const answersForCategory = this.allAnswers[cat] || {};
+        const answer = answersForCategory[q.id];
+        if (typeof answer === 'string' && answer.trim() !== "") {
+          stats[cat].answered++;
+        }
+      }
+      return stats;
     }
   },
   async created() {
@@ -244,41 +265,7 @@ export default {
   },
   methods: {
     ...mapActions(["fetchQuestionnaires", "fetchQuestionnaireById"]),
-    showAlertDialog(title, message, type = "info") {
-      this.alertTitle = title;
-      this.alertMessage = message;
-      this.alertType = type;
-      this.showAlert = true;
-      return new Promise((resolve) => {
-        this.alertResolve = resolve;
-      });
-    },
-    handleAlertConfirm() {
-      this.showAlert = false;
-      if (this.alertResolve) {
-        this.alertResolve(true);
-        this.alertResolve = null;
-      }
-    },
-    handleAlertCancel() {
-      this.showAlert = false;
-      if (this.alertResolve) {
-        this.alertResolve(false);
-        this.alertResolve = null;
-      }
-    },
-    formatCategoryName(rawEnum) {
-      if (!rawEnum) return "";
-      
-      return rawEnum.replace(/_/g, " ")
-                   .split(' ')
-                   .map(word => {
-                     if (!word) return '';
-                     return word.charAt(0).toLocaleUpperCase('pt-PT') + 
-                            word.slice(1).toLocaleLowerCase('pt-PT');
-                   })
-                   .join(' ');
-    },
+    formatCategoryName,
     goToCategory(category) {
       this.$router.push({
         name: "Questionary",
@@ -544,40 +531,6 @@ export default {
     },
     goToFeedbackForm() {
       this.$router.push("/feedback-form");
-    },
-    answeredCount(category) {
-      if (!this.selectedQuestionnaire || !this.selectedQuestionnaire.questions) {
-        return 0;
-      }
-
-      // Get question IDs for this category in the current questionnaire
-      const categoryQuestionIds = this.selectedQuestionnaire.questions
-        .filter(q => {
-          const catString = (typeof q.category === "object" && q.category !== null)
-            ? q.category.name
-            : q.category;
-          return catString === category;
-        })
-        .map(q => q.id);
-
-      const answersForCategory = this.allAnswers[category] || {};
-      
-      // Only count answers for questions that belong to the current questionnaire
-      return categoryQuestionIds.filter(questionId => {
-        const answer = answersForCategory[questionId];
-        return typeof answer === 'string' && answer.trim() !== "";
-      }).length;
-    },
-    totalCount(category) {
-      if (this.selectedQuestionnaire && this.selectedQuestionnaire.questions) {
-        return this.selectedQuestionnaire.questions.filter(q => {
-          const catString = (typeof q.category === "object" && q.category !== null)
-            ? q.category.name
-            : q.category;
-          return catString === category;
-        }).length;
-      }
-      return 0;
     },
     async selectQuestionnaire(id) {
       this.$store.commit("clearAllAnswers");

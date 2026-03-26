@@ -958,25 +958,25 @@
       ]
     },
     {
-      "questionText": "Os sistemas antigos recebem suporte adequado para atualizações de segurança?",
+      "questionText": "Os sistemas antigos recebem suporte de segurança adequado ou encontram-se devidamente isolados?",
       "categoryName": "Risco de Manutenção e Atualizações de Segurança",
       "options": [
         {
-          "optionText": "Todos os sistemas antigos são mantidos com suporte ativo ou mitigação.",
+          "optionText": "Todos os sistemas antigos têm suporte ativo de segurança ou estão devidamente isolados com controlos eficazes.",
           "optionType": "IMPACT",
           "optionLevel": "LOW"
         },
         {
-          "optionText": "Alguns sistemas antigos carecem de suporte ou atualizações frequentes.",
+          "optionText": "Alguns sistemas antigos não têm suporte regular, mas encontram-se parcialmente isolados ou com controlos limitados.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
           "recommendation": "Isolar sistemas obsoletos em redes separadas e limitar o acesso até substituição completa."
         },
         {
-          "optionText": "Vários sistemas antigos operam sem qualquer suporte.",
+          "optionText": "Vários sistemas antigos não têm suporte e não estão devidamente isolados.",
           "optionType": "IMPACT",
           "optionLevel": "HIGH",
-          "recommendation": "Planear a substituição progressiva dos sistemas obsoletos. Enquanto não for possível, aplicar medidas de contenção (ex.: isolamento em rede separada, restrição de acessos e monitorização regular)."
+          "recommendation": "Definir plano de substituição prioritário. Até lá, implementar isolamento rigoroso, restrição de acessos e monitorização contínua."
         }
       ]
     },

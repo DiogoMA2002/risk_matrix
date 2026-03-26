@@ -43,11 +43,11 @@ public class QuestionnaireService {
     }
 
     public List<Questionnaire> getAllQuestionnaires() {
-        return questionnaireRepository.findAll();
+        return questionnaireRepository.findAllWithDetails();
     }
 
     public Optional<Questionnaire> getQuestionnaireById(Long id) {
-        return questionnaireRepository.findById(id);
+        return questionnaireRepository.findByIdWithDetails(id);
     }
 
     /**
@@ -74,13 +74,13 @@ public class QuestionnaireService {
     }
 
     public List<Question> getAllQuestionsForQuestionnaire(Long id) {
-        Questionnaire questionnaire = questionnaireRepository.findById(id)
+        Questionnaire questionnaire = questionnaireRepository.findByIdWithDetails(id)
                 .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + id));
         return questionnaire.getQuestions();
     }
 
     public List<Question> getQuestionsByCategory(Long questionnaireId, String categoryName) {
-        Questionnaire q = questionnaireRepository.findById(questionnaireId)
+        Questionnaire q = questionnaireRepository.findByIdWithDetails(questionnaireId)
                 .orElseThrow(() -> new QuestionnaireNotFoundException("Questionnaire not found for ID: " + questionnaireId));
         return q.getQuestions().stream()
                 .filter(question -> question.getCategory() != null &&

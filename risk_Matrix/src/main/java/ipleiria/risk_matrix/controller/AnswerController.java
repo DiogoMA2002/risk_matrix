@@ -1,5 +1,9 @@
 package ipleiria.risk_matrix.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.service.AnswerService;
@@ -18,11 +22,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/answers")
+@Tag(name = "Answers", description = "Submit and query risk assessment answers")
 public class AnswerController {
 
     private final AnswerService answerService;
     private final DocumentsService documentsService;
-
 
     public AnswerController(AnswerService answerService, DocumentsService documentsService) {
         this.answerService = answerService;
@@ -30,36 +34,46 @@ public class AnswerController {
     }
 
     @PostMapping("/submit-multiple")
+    @Operation(summary = "Submit multiple answers", description = "Submits a batch of answers for a single submission session. A shared submission ID is generated automatically.")
+    @ApiResponse(responseCode = "200", description = "Answers submitted")
+    @ApiResponse(responseCode = "400", description = "Invalid answer data")
     public List<AnswerDTO> submitMultipleAnswers(@Valid @RequestBody List<@Valid AnswerDTO> answers) {
         return answerService.submitMultipleAnswers(answers);
     }
 
-
     @GetMapping("/by-email-with-severity/{email}")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserAnswersDTO> getUserSubmissionsWithSeverities(@PathVariable String email) {
+    @Operation(summary = "Get submissions by email with severity", description = "Returns all submissions for a user email with computed severity per category. Requires ADMIN role.")
+    public List<UserAnswersDTO> getUserSubmissionsWithSeverities(
+            @Parameter(description = "User email") @PathVariable String email) {
         return answerService.getUserSubmissionsWithSeverities(email);
     }
 
     @GetMapping("/get-all-submissions")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get all submissions (paginated)", description = "Returns all submissions with severity information. Requires ADMIN role.")
     public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size) {
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size (max 500)") @RequestParam(defaultValue = "100") int size) {
         return answerService.getAllSubmissionsWithSeverityAndEmail(page, size);
     }
 
     @GetMapping("/by-date-range")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get submissions by date range", description = "Returns submissions within the specified date range. Requires ADMIN role.")
     public List<UserAnswersDTO> getAnswersByDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @Parameter(description = "Start date (ISO date)") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @Parameter(description = "End date (ISO date)") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return answerService.getAnswersByDateRange(startDate, endDate);
     }
 
     @GetMapping("/export-submission/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<byte[]> exportSubmission(@PathVariable String id) throws IOException {
+    @Operation(summary = "Export submission as DOCX", description = "Generates and downloads an enhanced DOCX report for a submission. Requires ADMIN role.")
+    @ApiResponse(responseCode = "200", description = "DOCX file downloaded")
+    @ApiResponse(responseCode = "404", description = "Submission not found")
+    public ResponseEntity<byte[]> exportSubmission(
+            @Parameter(description = "Submission ID") @PathVariable String id) throws IOException {
         byte[] docBytes = documentsService.generateEnhancedDocx(id);
 
         HttpHeaders headers = new HttpHeaders();
@@ -69,5 +83,16 @@ public class AnswerController {
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(docBytes);
+    }
+
+    @DeleteMapping("/submission/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Delete a submission", description = "Permanently deletes all answers for the given submission ID. Requires ADMIN role.")
+    @ApiResponse(responseCode = "204", description = "Submission deleted")
+    @ApiResponse(responseCode = "404", description = "Submission not found")
+    public ResponseEntity<Void> deleteSubmission(
+            @Parameter(description = "Submission ID") @PathVariable String id) {
+        answerService.deleteSubmission(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -16,4 +16,6 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
 
     List<Answer> findBySubmissionId(String submissionId);
+
+    void deleteBySubmissionId(String submissionId);
 }

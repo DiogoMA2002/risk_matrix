@@ -176,4 +176,13 @@ public class AnswerService {
         return groupedAnswers.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> computeCategorySeverity(e.getValue())));
     }
+
+    @Transactional
+    public void deleteSubmission(String submissionId) {
+        List<Answer> answers = answerRepository.findBySubmissionId(submissionId);
+        if (answers.isEmpty()) {
+            throw new NotFoundException("No answers found for submission ID: " + submissionId);
+        }
+        answerRepository.deleteBySubmissionId(submissionId);
+    }
 }

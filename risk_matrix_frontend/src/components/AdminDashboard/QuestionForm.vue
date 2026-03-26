@@ -210,6 +210,8 @@
 </template>
 
 <script>
+import { formatCategoryName } from '@/utils/formatters';
+
 export default {
   name: "QuestionForm",
   props: {
@@ -302,14 +304,7 @@ export default {
         document.getElementById('question-text').focus();
       }
     },
-    formatCategoryName(name) {
-      if (!name || typeof name !== 'string') return '';
-      return name
-        .replace(/_/g, " ")
-        .split(" ")
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-        .join(" ");
-    },
+    formatCategoryName,
     addOption() {
       this.newOptions.push(this.createDefaultOption());
     },

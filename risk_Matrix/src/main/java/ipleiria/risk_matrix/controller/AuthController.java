@@ -7,11 +7,9 @@ import ipleiria.risk_matrix.dto.AuthRequestDTO;
 import ipleiria.risk_matrix.dto.ChangePasswordRequestDTO;
 import ipleiria.risk_matrix.dto.EmailTokenRequestDTO;
 import ipleiria.risk_matrix.dto.RefreshTokenRequestDTO;
-import ipleiria.risk_matrix.models.users.AdminUser;
-import ipleiria.risk_matrix.models.users.PasswordHistory;
-import ipleiria.risk_matrix.repository.AdminUserRepository;
-import ipleiria.risk_matrix.repository.PasswordHistoryRepository;
+import ipleiria.risk_matrix.exceptions.exception.ConflictException;
 import ipleiria.risk_matrix.service.AdminUserDetailsService;
+import ipleiria.risk_matrix.service.AdminUserService;
 import ipleiria.risk_matrix.service.TokenBlocklistService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,24 +25,23 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Login, logout, token management, registration, and password changes")
 public class AuthController {
 
     private final AuthenticationManager authManager;
     private final JwtUtil jwtUtil;
     private final AdminUserDetailsService userDetailsService;
-    private final AdminUserRepository adminRepo;
-    private final PasswordEncoder passwordEncoder;
-    private final PasswordHistoryRepository passwordHistoryRepo;
+    private final AdminUserService adminUserService;
     private final TokenBlocklistService tokenBlocklistService;
 
     @Value("${app.cookie.secure:false}")
@@ -52,19 +49,19 @@ public class AuthController {
 
     public AuthController(AuthenticationManager authManager, JwtUtil jwtUtil,
                           AdminUserDetailsService userDetailsService,
-                          AdminUserRepository adminRepo, PasswordEncoder passwordEncoder,
-                          PasswordHistoryRepository passwordHistoryRepo,
+                          AdminUserService adminUserService,
                           TokenBlocklistService tokenBlocklistService) {
         this.authManager = authManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
-        this.adminRepo = adminRepo;
-        this.passwordEncoder = passwordEncoder;
-        this.passwordHistoryRepo = passwordHistoryRepo;
+        this.adminUserService = adminUserService;
         this.tokenBlocklistService = tokenBlocklistService;
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Admin login", description = "Authenticates an admin user and sets JWT cookies (access + refresh)")
+    @ApiResponse(responseCode = "200", description = "Login successful")
+    @ApiResponse(responseCode = "401", description = "Invalid credentials")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequestDTO request, HttpServletResponse response) {
         try {
             authManager.authenticate(
@@ -87,6 +84,8 @@ public class AuthController {
     }
 
     @PostMapping("/request-token")
+    @Operation(summary = "Request public token", description = "Issues a public JWT for anonymous users identified by email")
+    @ApiResponse(responseCode = "200", description = "Token issued")
     public ResponseEntity<?> requestToken(@Valid @RequestBody EmailTokenRequestDTO request, HttpServletResponse response) {
         String accessToken = jwtUtil.generatePublicToken(request.getEmail());
         String refreshToken = jwtUtil.generatePublicRefreshToken(request.getEmail());
@@ -104,6 +103,9 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
+    @Operation(summary = "Refresh token", description = "Rotates JWT access and refresh tokens. Old refresh token is revoked.")
+    @ApiResponse(responseCode = "200", description = "Tokens refreshed")
+    @ApiResponse(responseCode = "401", description = "Invalid or missing refresh token")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response,
                                           @RequestBody(required = false) RefreshTokenRequestDTO body) {
         String refreshToken = resolveRefreshToken(request, body);
@@ -166,6 +168,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "Logout", description = "Revokes all JWT cookies and blocklists the current tokens")
+    @ApiResponse(responseCode = "200", description = "Logged out successfully")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         // Blocklist both access and refresh tokens found in cookies.
         if (request.getCookies() != null) {
@@ -194,70 +198,45 @@ public class AuthController {
 
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Register a new admin", description = "Creates a new admin user. Requires ADMIN role.")
+    @ApiResponse(responseCode = "201", description = "Admin created")
+    @ApiResponse(responseCode = "409", description = "Username or email already exists")
     public ResponseEntity<?> register(@Valid @RequestBody AdminRegisterDTO dto) {
-        if (adminRepo.findByUsername(dto.getUsername()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username já existe");
+        try {
+            adminUserService.register(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Admin criado com sucesso");
+        } catch (ConflictException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
-        if (adminRepo.findByEmail(dto.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já existe");
-        }
-
-        AdminUser admin = new AdminUser();
-        admin.setUsername(dto.getUsername());
-        admin.setEmail(dto.getEmail());
-        admin.setPassword(passwordEncoder.encode(dto.getPassword()));
-
-        adminRepo.save(admin);
-
-        // Seed password history so the registration password is included in reuse checks.
-        PasswordHistory initial = new PasswordHistory();
-        initial.setAdmin(admin);
-        initial.setPasswordHash(admin.getPassword());
-        initial.setChangedAt(LocalDateTime.now());
-        passwordHistoryRepo.save(initial);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Admin criado com sucesso");
     }
 
     @PostMapping("/change-password")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Change password", description = "Changes the authenticated admin's password. Revokes current session tokens. Requires ADMIN role.")
+    @ApiResponse(responseCode = "200", description = "Password changed")
+    @ApiResponse(responseCode = "400", description = "New password recently used")
+    @ApiResponse(responseCode = "401", description = "Old password incorrect")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequestDTO request,
                                             Authentication authentication,
                                             HttpServletRequest httpRequest,
                                             HttpServletResponse httpResponse) {
-        String username = authentication.getName();
-        AdminUser admin = adminRepo.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Admin não encontrado"));
-
-        if (!passwordEncoder.matches(request.getOldPassword(), admin.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Password antiga é incorreta");
-        }
-
-        // Check against last 5 passwords
-        List<PasswordHistory> history = passwordHistoryRepo.findTop5ByAdminOrderByChangedAtDesc(admin);
-        for (PasswordHistory past : history) {
-            if (passwordEncoder.matches(request.getNewPassword(), past.getPasswordHash())) {
-                return ResponseEntity.badRequest().body("A nova password foi recentemente utilizada, escolha outra nova password");
+        try {
+            adminUserService.changePassword(authentication.getName(), request);
+        } catch (IllegalArgumentException e) {
+            String msg = e.getMessage();
+            if (msg.contains("incorreta")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(msg);
             }
+            return ResponseEntity.badRequest().body(msg);
         }
 
-        admin.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        adminRepo.save(admin);
+        revokeAdminCookies(httpRequest);
+        clearCookies(httpResponse);
 
-        PasswordHistory entry = new PasswordHistory();
-        entry.setAdmin(admin);
-        entry.setPasswordHash(admin.getPassword());
-        entry.setChangedAt(LocalDateTime.now());
-        passwordHistoryRepo.save(entry);
+        return ResponseEntity.ok("Password alterada com sucesso!");
+    }
 
-        // Keep only last 5 history entries
-        List<PasswordHistory> allEntries = passwordHistoryRepo.findByAdminOrderByChangedAtDesc(admin);
-        if (allEntries.size() > 5) {
-            passwordHistoryRepo.deleteAll(allEntries.subList(5, allEntries.size()));
-        }
-
-        // Revoke the current session's access and refresh tokens so the stolen-token window
-        // closes immediately after a password change.
+    private void revokeAdminCookies(HttpServletRequest httpRequest) {
         if (httpRequest.getCookies() != null) {
             for (Cookie cookie : httpRequest.getCookies()) {
                 String name = cookie.getName();
@@ -276,9 +255,6 @@ public class AuthController {
                 }
             }
         }
-        clearCookies(httpResponse);
-
-        return ResponseEntity.ok("Password alterada com sucesso!");
     }
 
     // --- Cookie helpers ---

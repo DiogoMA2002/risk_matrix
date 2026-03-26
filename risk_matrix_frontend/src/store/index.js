@@ -109,15 +109,6 @@ export default createStore({
         commit('setError', error.response?.data?.message || 'Erro ao buscar questionário.');
       }
     },
-    async fetchQuestionnaireByIdForAdmin({ commit }, id) {
-      try {
-        const response = await axios.get(`/api/questionnaires/${id}`);
-        commit('setSelectedQuestionnaire', response.data);
-        commit('clearError');
-      } catch (error) {
-        commit('setError', error.response?.data?.message || 'Erro ao buscar questionário para admin.');
-      }
-    },
     async fetchUserAnswersByEmail({ commit }, email) {
       commit('setLoadingAnswers', true);
       try {
@@ -149,6 +140,7 @@ export default createStore({
       commit('setLoadingAnswers', true);
       try {
         const response = await axios.get("/api/answers/get-all-submissions", {
+          params: { page: 0, size: 500 },
           validateStatus: _status => true,
         });
 

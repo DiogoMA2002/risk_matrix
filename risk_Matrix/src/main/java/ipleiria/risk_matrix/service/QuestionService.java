@@ -16,7 +16,7 @@ import ipleiria.risk_matrix.repository.CategoryRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import ipleiria.risk_matrix.repository.QuestionnaireRepository;
 import ipleiria.risk_matrix.utils.QuestionUtils;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -122,7 +122,7 @@ public class QuestionService {
     }
 
     public List<Question> getAllQuestions() {
-        return questionRepository.findAll();
+        return questionRepository.findAllWithDetails();
     }
 
     public List<Question> getQuestionsByCategory(String categoryName) {

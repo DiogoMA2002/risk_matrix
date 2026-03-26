@@ -6,6 +6,7 @@ import ipleiria.risk_matrix.models.questionnaire.Questionnaire;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class Question {
     @JsonIgnore
     private List<Questionnaire> questionnaires = new ArrayList<>();
 
+    @BatchSize(size = 30)
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionOption> options = new ArrayList<>();
 

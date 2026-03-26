@@ -43,9 +43,13 @@ import FeedbackList from "@/components/AdminDashboard/FeedbackList.vue";
 import UserAnswersList from "@/components/AdminDashboard/UserAnswersList.vue";
 import AlertDialog from "@/components/Static/AlertDialog.vue";
 import GlossaryManager from "@/components/AdminDashboard/GlossaryManager.vue";
+import { useAlertDialog } from '@/composables/useAlertDialog';
 
 export default {
   name: "AdminDashboard",
+  setup() {
+    return useAlertDialog();
+  },
   components: {
     HeaderComponent,
     QuestionnaireManager,
@@ -67,11 +71,6 @@ export default {
       isLoadingCategories: false,
       optionTypes: ["IMPACT", "PROBABILITY"],
       optionLevels: ["LOW", "MEDIUM", "HIGH"],
-      showAlert: false,
-      alertTitle: "",
-      alertMessage: "",
-      alertType: "info",
-      alertResolve: null,
     };
   },
   async created() {
@@ -83,29 +82,6 @@ export default {
     ]);
   },
   methods: {
-    async showAlertDialog(title, message, type = "info") {
-      this.alertTitle = title;
-      this.alertMessage = message;
-      this.alertType = type;
-      this.showAlert = true;
-      return new Promise((resolve) => {
-        this.alertResolve = resolve;
-      });
-    },
-    handleAlertConfirm() {
-      this.showAlert = false;
-      if (this.alertResolve) {
-        this.alertResolve(true);
-        this.alertResolve = null;
-      }
-    },
-    handleAlertCancel() {
-      this.showAlert = false;
-      if (this.alertResolve) {
-        this.alertResolve(false);
-        this.alertResolve = null;
-      }
-    },
     async filterQuestionsByCategory(category) {
       this.isLoading = true;
       try {
@@ -206,7 +182,16 @@ export default {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
 
-        // Refresh the answers list after download
+        // Delete submission answers after a successful export/download.
+        await axios.delete(`/api/answers/submission/${submissionId}`);
+
+        await this.showAlertDialog(
+          "Sucesso",
+          "Relatório descarregado e submissão removida com sucesso.",
+          "success"
+        );
+
+        // Refresh the answers list after download+deletion
         await this.$store.dispatch("fetchAllUserAnswers");
       } catch (error) {
         console.error("Erro ao descarregar relatório:", error);
@@ -260,7 +245,7 @@ export default {
 
         await Promise.all([
           this.$store.dispatch("fetchQuestions"),
-          this.$store.dispatch("fetchQuestionnaireByIdForAdmin", questionData.selectedQuestionnaires[0])
+          this.$store.dispatch("fetchQuestionnaireById", questionData.selectedQuestionnaires[0])
         ]);
 
         await this.showAlertDialog("Sucesso", "Questão adicionada com sucesso!", "success");
