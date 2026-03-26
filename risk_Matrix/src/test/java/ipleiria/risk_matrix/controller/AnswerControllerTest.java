@@ -7,6 +7,8 @@ import ipleiria.risk_matrix.models.questions.OptionLevel;
 import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.service.AnswerService;
 import ipleiria.risk_matrix.service.DocumentsService;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -93,6 +96,48 @@ class AnswerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, containsString("report_sub-1.docx")))
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM));
+    }
+
+    @Test
+    void getAnswersByDateRange_returnsPaginatedResponse() throws Exception {
+        UserAnswersDTO dto = new UserAnswersDTO();
+        dto.setSubmissionId("sub-1");
+        dto.setEmail("user@example.com");
+        dto.setAnswers(List.of(answerDTO));
+        dto.setSeveritiesByCategory(Map.of());
+
+        var page = new PageImpl<>(List.of(dto), PageRequest.of(0, 20), 15);
+        when(answerService.getAnswersByDateRange(any(), any(), eq(0), eq(20))).thenReturn(page);
+
+        mockMvc.perform(get("/api/answers/by-date-range")
+                        .param("startDate", "2025-01-01")
+                        .param("endDate", "2025-12-31")
+                        .param("page", "0")
+                        .param("size", "20"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.totalElements").value(15))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.content[0].submissionId").value("sub-1"));
+    }
+
+    @Test
+    void getAllSubmissions_returnsPaginatedResponse() throws Exception {
+        UserAnswersDTO dto = new UserAnswersDTO();
+        dto.setSubmissionId("sub-1");
+        dto.setEmail("user@example.com");
+        dto.setAnswers(List.of(answerDTO));
+        dto.setSeveritiesByCategory(Map.of());
+
+        var page = new PageImpl<>(List.of(dto), PageRequest.of(0, 20), 42);
+        when(answerService.getAllSubmissionsWithSeverityAndEmail(0, 20)).thenReturn(page);
+
+        mockMvc.perform(get("/api/answers/get-all-submissions").param("page", "0").param("size", "20"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.totalElements").value(42))
+                .andExpect(jsonPath("$.totalPages").value(3))
+                .andExpect(jsonPath("$.content[0].submissionId").value("sub-1"));
     }
 
     @Test

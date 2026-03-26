@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -51,20 +53,22 @@ public class AnswerController {
 
     @GetMapping("/get-all-submissions")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Get all submissions (paginated)", description = "Returns all submissions with severity information. Requires ADMIN role.")
-    public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail(
+    @Operation(summary = "Get all submissions (paginated)", description = "Returns a page of submissions with severity information. Includes totalElements and totalPages for pagination. Requires ADMIN role.")
+    public Page<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail(
             @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Page size (max 500)") @RequestParam(defaultValue = "100") int size) {
+            @Parameter(description = "Page size (max 500)") @RequestParam(defaultValue = "20") int size) {
         return answerService.getAllSubmissionsWithSeverityAndEmail(page, size);
     }
 
     @GetMapping("/by-date-range")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Get submissions by date range", description = "Returns submissions within the specified date range. Requires ADMIN role.")
-    public List<UserAnswersDTO> getAnswersByDateRange(
+    @Operation(summary = "Get submissions by date range (paginated)", description = "Returns a page of submissions within the specified date range. Includes totalElements and totalPages for pagination. Requires ADMIN role.")
+    public Page<UserAnswersDTO> getAnswersByDateRange(
             @Parameter(description = "Start date (ISO date)") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @Parameter(description = "End date (ISO date)") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return answerService.getAnswersByDateRange(startDate, endDate);
+            @Parameter(description = "End date (ISO date)") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size (max 500)") @RequestParam(defaultValue = "20") int size) {
+        return answerService.getAnswersByDateRange(startDate, endDate, page, size);
     }
 
     @GetMapping("/export-submission/{id}")

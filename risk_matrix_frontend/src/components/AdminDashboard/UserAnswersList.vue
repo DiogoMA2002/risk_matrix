@@ -183,8 +183,45 @@
       </ul>
     </div>
 
+    <!-- Pagination -->
+    <div v-if="!isLoading && pagination.totalPages > 1"
+      class="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-4 border-t border-gray-200">
+      <p class="text-sm text-gray-500">
+        A mostrar
+        <span class="font-medium text-gray-700">{{ pagination.currentPage * pagination.pageSize + 1 }}</span>–<span class="font-medium text-gray-700">{{ Math.min((pagination.currentPage + 1) * pagination.pageSize, pagination.totalElements) }}</span>
+        de <span class="font-medium text-gray-700">{{ pagination.totalElements }}</span> submissões
+      </p>
+      <div class="flex items-center gap-2">
+        <button
+          @click="goToPage(pagination.currentPage - 1)"
+          :disabled="pagination.currentPage === 0 || isLoading"
+          class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          aria-label="Página anterior"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Anterior
+        </button>
+        <span class="px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg">
+          {{ pagination.currentPage + 1 }} / {{ pagination.totalPages }}
+        </span>
+        <button
+          @click="goToPage(pagination.currentPage + 1)"
+          :disabled="pagination.currentPage >= pagination.totalPages - 1 || isLoading"
+          class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          aria-label="Próxima página"
+        >
+          Próxima
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <!-- Empty State -->
-    <div v-else class="py-8 text-center bg-gray-50 rounded-lg">
+    <div v-else-if="!isLoading && (!sortedUserAnswers || sortedUserAnswers.length === 0)" class="py-8 text-center bg-gray-50 rounded-lg">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24"
         stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -208,6 +245,8 @@ export default {
         startDate: "",
         endDate: ""
       },
+      filterMode: 'all', // 'all' | 'email' | 'date'
+      activeDateFilter: { startDate: "", endDate: "" },
       showAnswers: {},
       pollInterval: null,
       toast: {
@@ -221,7 +260,8 @@ export default {
   computed: {
     ...mapState({
       userAnswers: state => state.userAnswers,
-      isLoading: state => state.isLoadingAnswers
+      isLoading: state => state.isLoadingAnswers,
+      pagination: state => state.submissionsPagination,
     }),
     sortedUserAnswers() {
       return [...(this.userAnswers || [])].sort((a, b) => {
@@ -249,15 +289,13 @@ export default {
       'filterAnswersByDate'
     ]),
     startPolling() {
-      // Clear any existing interval
       this.stopPolling();
-      // Set new interval to fetch answers every 30 seconds
       this.pollInterval = setInterval(() => {
         if (!this.filters.email && !this.filters.startDate) {
-          // Only auto-refresh if no filters are applied
-          this.fetchAllResponses();
+          // Refresh the current page silently (no toast for auto-refresh)
+          this.fetchAllUserAnswers(this.pagination.currentPage).catch(() => {});
         }
-      }, 30000); // 30 seconds
+      }, 30000);
     },
     stopPolling() {
       if (this.pollInterval) {
@@ -317,6 +355,7 @@ export default {
         return;
       }
       try {
+        this.filterMode = 'email';
         await this.fetchUserAnswersByEmail(this.filters.email);
         this.stopPolling();
         this.showToast("Resultados atualizados com sucesso");
@@ -326,11 +365,23 @@ export default {
     },
     async fetchAllResponses() {
       try {
-        await this.fetchAllUserAnswers();
+        this.filterMode = 'all';
+        await this.fetchAllUserAnswers(0);
         this.startPolling();
         this.showToast("Lista atualizada com sucesso");
       } catch (error) {
         this.showToast(error.message || "Erro ao carregar respostas", "error");
+      }
+    },
+    async goToPage(page) {
+      try {
+        if (this.filterMode === 'date') {
+          await this.filterAnswersByDate({ ...this.activeDateFilter, page });
+        } else {
+          await this.fetchAllUserAnswers(page);
+        }
+      } catch (error) {
+        this.showToast(error.message || "Erro ao carregar página", "error");
       }
     },
     async applyDateFilter() {
@@ -339,10 +390,9 @@ export default {
         return;
       }
       try {
-        await this.filterAnswersByDate({
-          startDate: this.filters.startDate,
-          endDate: this.filters.endDate
-        });
+        this.filterMode = 'date';
+        this.activeDateFilter = { startDate: this.filters.startDate, endDate: this.filters.endDate };
+        await this.filterAnswersByDate({ ...this.activeDateFilter, page: 0 });
         this.stopPolling();
         this.showToast("Filtro aplicado com sucesso");
       } catch (error) {

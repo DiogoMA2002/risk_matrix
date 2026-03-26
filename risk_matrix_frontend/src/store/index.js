@@ -11,6 +11,12 @@ export default createStore({
     userAnswers: [],
     isLoadingAnswers: false,
     error: null, // global error state
+    submissionsPagination: {
+      currentPage: 0,
+      totalPages: 0,
+      totalElements: 0,
+      pageSize: 20,
+    },
   },
   mutations: {
     setQuestions(state, questions) {
@@ -43,6 +49,9 @@ export default createStore({
     },
     setLoadingAnswers(state, isLoading) {
       state.isLoadingAnswers = isLoading;
+    },
+    setSubmissionsPagination(state, { currentPage, totalPages, totalElements, pageSize }) {
+      state.submissionsPagination = { currentPage, totalPages, totalElements, pageSize };
     },
     setError(state, error) {
       state.error = error;
@@ -132,18 +141,26 @@ export default createStore({
         commit('setLoadingAnswers', false);
       }
     },
-    async fetchAllUserAnswers({ commit }) {
+    async fetchAllUserAnswers({ commit, state }, page = 0) {
       commit('setLoadingAnswers', true);
       try {
+        const size = state.submissionsPagination.pageSize;
         const response = await axios.get("/api/answers/get-all-submissions", {
-          params: { page: 0, size: 500 },
+          params: { page, size },
           validateStatus: _status => true,
         });
 
         if (response.status === 401) {
           throw new Error("Você não está autorizado.");
         } else if (response.status >= 200 && response.status < 300) {
-          commit('setUserAnswers', Array.isArray(response.data) ? response.data : []);
+          const data = response.data;
+          commit('setUserAnswers', Array.isArray(data.content) ? data.content : []);
+          commit('setSubmissionsPagination', {
+            currentPage: data.number ?? page,
+            totalPages: data.totalPages ?? 1,
+            totalElements: data.totalElements ?? 0,
+            pageSize: data.size ?? size,
+          });
         } else {
           throw new Error(response.data?.message || `Erro ${response.status} ao buscar todas as respostas.`);
         }
@@ -156,18 +173,26 @@ export default createStore({
         commit('setLoadingAnswers', false);
       }
     },
-    async filterAnswersByDate({ commit }, { startDate, endDate }) {
+    async filterAnswersByDate({ commit, state }, { startDate, endDate, page = 0 }) {
       if (!startDate || !endDate) {
         commit('setError', 'Por favor, selecione ambas as datas.');
         throw new Error("Por favor, selecione ambas as datas.");
       }
-      
+
       commit('setLoadingAnswers', true);
       try {
+        const size = state.submissionsPagination.pageSize;
         const response = await axios.get("/api/answers/by-date-range", {
-          params: { startDate, endDate },
+          params: { startDate, endDate, page, size },
         });
-        commit('setUserAnswers', response.data);
+        const data = response.data;
+        commit('setUserAnswers', Array.isArray(data.content) ? data.content : []);
+        commit('setSubmissionsPagination', {
+          currentPage: data.number ?? page,
+          totalPages: data.totalPages ?? 1,
+          totalElements: data.totalElements ?? 0,
+          pageSize: data.size ?? size,
+        });
         commit('clearError');
       } catch (error) {
         commit('setUserAnswers', []);

@@ -19,7 +19,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
@@ -166,14 +168,51 @@ class AnswerServiceTest {
     }
 
     @Test
-    void getAllAnswers_capsPageSizeAt500() {
-        when(answerRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of()));
+    void getAllSubmissionsWithSeverityAndEmail_capsPageSizeAt500() {
+        when(answerRepository.findSubmissionIdsOrderByLatestAnswer(any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of()));
 
-        answerService.getAllAnswers(0, 999);
+        answerService.getAllSubmissionsWithSeverityAndEmail(0, 999);
 
         ArgumentCaptor<Pageable> captor = ArgumentCaptor.forClass(Pageable.class);
-        verify(answerRepository).findAll(captor.capture());
+        verify(answerRepository).findSubmissionIdsOrderByLatestAnswer(captor.capture());
         assertThat(captor.getValue().getPageSize()).isEqualTo(500);
+    }
+
+    @Test
+    void getAllSubmissionsWithSeverityAndEmail_returnsPageWithCorrectTotals() {
+        Answer a = new Answer();
+        a.setId(1L);
+        a.setQuestionId(10L);
+        a.setQuestionText("Do you have a firewall?");
+        a.setUserResponse("Yes");
+        a.setQuestionType(OptionLevelType.IMPACT);
+        a.setChosenLevel(OptionLevel.LOW);
+        a.setEmail("user@example.com");
+        a.setSubmissionId("sub-1");
+        a.setCreatedAt(LocalDateTime.now());
+
+        PageImpl<String> submissionIdPage = new PageImpl<>(List.of("sub-1"), PageRequest.of(0, 20), 42);
+        when(answerRepository.findSubmissionIdsOrderByLatestAnswer(any(Pageable.class))).thenReturn(submissionIdPage);
+        when(answerRepository.findBySubmissionIdIn(List.of("sub-1"))).thenReturn(List.of(a));
+        when(questionRepository.findAllById(any())).thenReturn(List.of(question));
+
+        Page<UserAnswersDTO> result = answerService.getAllSubmissionsWithSeverityAndEmail(0, 20);
+
+        assertThat(result.getTotalElements()).isEqualTo(42);
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().getFirst().getSubmissionId()).isEqualTo("sub-1");
+    }
+
+    @Test
+    void getAllSubmissionsWithSeverityAndEmail_emptyPage_returnsEmptyPage() {
+        when(answerRepository.findSubmissionIdsOrderByLatestAnswer(any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of()));
+
+        Page<UserAnswersDTO> result = answerService.getAllSubmissionsWithSeverityAndEmail(0, 20);
+
+        assertThat(result.getContent()).isEmpty();
+        assertThat(result.getTotalElements()).isZero();
     }
 
     @Test
@@ -181,9 +220,51 @@ class AnswerServiceTest {
         LocalDate start = LocalDate.of(2025, 5, 10);
         LocalDate end = LocalDate.of(2025, 5, 9);
 
-        assertThatThrownBy(() -> answerService.getAnswersByDateRange(start, end))
+        assertThatThrownBy(() -> answerService.getAnswersByDateRange(start, end, 0, 20))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("End date must not be before start date");
+    }
+
+    @Test
+    void getAnswersByDateRange_returnsPageWithCorrectTotals() {
+        LocalDate start = LocalDate.of(2025, 1, 1);
+        LocalDate end = LocalDate.of(2025, 12, 31);
+
+        Answer a = new Answer();
+        a.setId(1L);
+        a.setQuestionId(10L);
+        a.setQuestionText("Do you have a firewall?");
+        a.setUserResponse("Yes");
+        a.setQuestionType(OptionLevelType.IMPACT);
+        a.setChosenLevel(OptionLevel.LOW);
+        a.setEmail("user@example.com");
+        a.setSubmissionId("sub-1");
+        a.setCreatedAt(LocalDateTime.of(2025, 6, 1, 10, 0));
+
+        PageImpl<String> submissionIdPage = new PageImpl<>(List.of("sub-1"), PageRequest.of(0, 20), 7);
+        when(answerRepository.findSubmissionIdsByDateRange(any(), any(), any(Pageable.class))).thenReturn(submissionIdPage);
+        when(answerRepository.findBySubmissionIdIn(List.of("sub-1"))).thenReturn(List.of(a));
+        when(questionRepository.findAllById(any())).thenReturn(List.of(question));
+
+        Page<UserAnswersDTO> result = answerService.getAnswersByDateRange(start, end, 0, 20);
+
+        assertThat(result.getTotalElements()).isEqualTo(7);
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent().getFirst().getSubmissionId()).isEqualTo("sub-1");
+    }
+
+    @Test
+    void getAnswersByDateRange_emptyRange_returnsEmptyPage() {
+        LocalDate start = LocalDate.of(2025, 1, 1);
+        LocalDate end = LocalDate.of(2025, 1, 31);
+
+        when(answerRepository.findSubmissionIdsByDateRange(any(), any(), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of()));
+
+        Page<UserAnswersDTO> result = answerService.getAnswersByDateRange(start, end, 0, 20);
+
+        assertThat(result.getContent()).isEmpty();
+        assertThat(result.getTotalElements()).isZero();
     }
 
     @Test

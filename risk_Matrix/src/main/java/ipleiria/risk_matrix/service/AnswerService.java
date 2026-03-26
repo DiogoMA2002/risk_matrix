@@ -10,6 +10,8 @@ import ipleiria.risk_matrix.repository.AnswerRepository;
 import ipleiria.risk_matrix.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -98,11 +100,12 @@ public class AnswerService {
         return processSubmissions(answers);
     }
 
-    public List<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail(int page, int size) {
+    public Page<UserAnswersDTO> getAllSubmissionsWithSeverityAndEmail(int page, int size) {
         Pageable pageable = PageRequest.of(page, Math.min(size, MAX_PAGE_SIZE));
-        List<String> submissionIdsPage = answerRepository.findSubmissionIdsOrderByLatestAnswer(pageable).getContent();
+        Page<String> submissionPage = answerRepository.findSubmissionIdsOrderByLatestAnswer(pageable);
+        List<String> submissionIdsPage = submissionPage.getContent();
         if (submissionIdsPage.isEmpty()) {
-            return List.of();
+            return Page.empty(pageable);
         }
 
         List<AnswerDTO> allAnswers = answerRepository.findBySubmissionIdIn(submissionIdsPage).stream()
@@ -116,10 +119,10 @@ public class AnswerService {
         }
 
         processed.sort(Comparator.comparingInt(dto -> pageOrder.getOrDefault(dto.getSubmissionId(), Integer.MAX_VALUE)));
-        return processed;
+        return new PageImpl<>(processed, pageable, submissionPage.getTotalElements());
     }
 
-    public List<UserAnswersDTO> getAnswersByDateRange(LocalDate startDate, LocalDate endDate) {
+    public Page<UserAnswersDTO> getAnswersByDateRange(LocalDate startDate, LocalDate endDate, int page, int size) {
         if (endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("End date must not be before start date.");
         }
@@ -127,11 +130,25 @@ public class AnswerService {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end   = endDate.atTime(23, 59, 59);
 
-        List<AnswerDTO> answersInRange = answerRepository.findByCreatedAtBetween(start, end).stream()
+        Pageable pageable = PageRequest.of(page, Math.min(size, MAX_PAGE_SIZE));
+        Page<String> submissionPage = answerRepository.findSubmissionIdsByDateRange(start, end, pageable);
+        List<String> submissionIds = submissionPage.getContent();
+        if (submissionIds.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        List<AnswerDTO> answers = answerRepository.findBySubmissionIdIn(submissionIds).stream()
                 .map(AnswerDTO::new)
                 .toList();
 
-        return processSubmissions(answersInRange);
+        List<UserAnswersDTO> processed = processSubmissions(answers);
+        Map<String, Integer> pageOrder = new HashMap<>();
+        for (int i = 0; i < submissionIds.size(); i++) {
+            pageOrder.put(submissionIds.get(i), i);
+        }
+        processed.sort(Comparator.comparingInt(dto -> pageOrder.getOrDefault(dto.getSubmissionId(), Integer.MAX_VALUE)));
+
+        return new PageImpl<>(processed, pageable, submissionPage.getTotalElements());
     }
 
     private List<UserAnswersDTO> processSubmissions(List<AnswerDTO> answers) {
