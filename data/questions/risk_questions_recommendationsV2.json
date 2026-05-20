@@ -103,6 +103,12 @@
           "optionLevel": "LOW"
         },
         {
+          "optionText": "MFA ativado apenas para plataformas que  suportam nativamente.",
+          "optionType": "IMPACT",
+          "optionLevel": "MEDIUM",
+          "recommendation": "Ativar e configurar MFA em todas as plataformas críticas com suporte nativo. Para plataformas sem suporte nativo, avaliar integração via solução de cobertura transversal."
+        },
+        {
           "optionText": "MFA ativado apenas para alguns utilizadores.",
           "optionType": "IMPACT",
           "optionLevel": "MEDIUM",
