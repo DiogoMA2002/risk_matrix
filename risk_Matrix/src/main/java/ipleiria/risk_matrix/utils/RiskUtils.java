@@ -74,5 +74,26 @@ public class RiskUtils {
         return computeSeverity(medianImpact, medianProbability);
     }
 
+    // Returns the raw numeric score (1–9) as median_impact × median_probability.
+    // Returns 0 when either dimension has no valid answers (maps to UNKNOWN severity).
+    public static int computeCategoryScore(List<AnswerDTO> answers) {
+        List<AnswerDTO> filtered = answers.stream()
+                .filter(a -> !"Não Aplicável".equalsIgnoreCase(a.getUserResponse()))
+                .toList();
+        if (filtered.isEmpty()) return 0;
+
+        OptionLevel impact = medianLevel(filtered.stream()
+                .filter(a -> a.getQuestionType() == OptionLevelType.IMPACT)
+                .map(AnswerDTO::getChosenLevel)
+                .toList());
+        OptionLevel probability = medianLevel(filtered.stream()
+                .filter(a -> a.getQuestionType() == OptionLevelType.PROBABILITY)
+                .map(AnswerDTO::getChosenLevel)
+                .toList());
+
+        if (impact == null || probability == null) return 0;
+        return impact.getValue() * probability.getValue();
+    }
+
     private RiskUtils() {}
 }

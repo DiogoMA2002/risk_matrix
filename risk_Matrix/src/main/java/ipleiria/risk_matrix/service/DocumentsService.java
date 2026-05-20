@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static ipleiria.risk_matrix.utils.RiskUtils.computeCategorySeverity;
+import static ipleiria.risk_matrix.utils.RiskUtils.computeCategoryScore;
 
 @Service
 public class DocumentsService {
@@ -35,7 +36,6 @@ public class DocumentsService {
     public DocumentsService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
-
     }
 
     @Transactional(readOnly = true)
@@ -56,18 +56,26 @@ public class DocumentsService {
         for (Answer ans : answers) {
             Question q = questionMap.get(ans.getQuestionId());
             if (q == null || q.getCategory() == null) continue;
-
             String category = q.getCategory().getName();
             answersByCategory.computeIfAbsent(category, _ -> new ArrayList<>()).add(ans);
         }
 
         Map<String, Severity> severities = new HashMap<>();
+        Map<String, Integer> categoryScores = new HashMap<>();
         for (Map.Entry<String, List<Answer>> entry : answersByCategory.entrySet()) {
             List<AnswerDTO> dtos = entry.getValue().stream()
                     .map(AnswerDTO::new)
                     .collect(Collectors.toList());
             severities.put(entry.getKey(), computeCategorySeverity(dtos));
+            categoryScores.put(entry.getKey(), computeCategoryScore(dtos));
         }
+
+        // Global risk index: average of per-category normalized scores (0–100), excluding UNKNOWN categories.
+        double globalIndex = categoryScores.values().stream()
+                .filter(s -> s > 0)
+                .mapToDouble(s -> (s - 1.0) / 8.0 * 100.0)
+                .average()
+                .orElse(0.0);
 
         try (InputStream template = getClass().getClassLoader().getResourceAsStream("template/template.docx");
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -77,14 +85,17 @@ public class DocumentsService {
             }
 
             XWPFDocument document = new XWPFDocument(template);
-            Map<String, String> vars = new HashMap<>();
             Answer firstAnswer = answers.getFirst();
-            vars.put("submissionId", submissionId);
-            vars.put("email", firstAnswer.getEmail());
-            vars.put("date", firstAnswer.getCreatedAt().toLocalDate().toString());
+            Map<String, String> vars = Map.of(
+                    "submissionId", submissionId,
+                    "email", firstAnswer.getEmail(),
+                    "date", firstAnswer.getCreatedAt().toLocalDate().toString()
+            );
 
             replacePlaceholders(document, vars);
             addSummarySection(document, severities);
+            addQuantitativeSection(document, categoryScores, globalIndex, severities);
+            addPageBreak(document);
             addAnswersTable(document, answersByCategory, severities, questionMap);
 
             document.write(out);
@@ -92,88 +103,82 @@ public class DocumentsService {
         }
     }
 
+    // Replaces ${key} placeholders in template paragraphs while preserving run formatting.
+    // Only paragraphs that actually contain a placeholder are modified.
     private void replacePlaceholders(XWPFDocument doc, Map<String, String> replacements) {
         for (XWPFParagraph paragraph : doc.getParagraphs()) {
+            List<XWPFRun> runs = paragraph.getRuns();
+            if (runs.isEmpty()) continue;
+
             StringBuilder fullText = new StringBuilder();
-            for (XWPFRun run : paragraph.getRuns()) {
+            for (XWPFRun run : runs) {
                 String text = run.getText(0);
-                if (text != null) {
-                    fullText.append(text);
-                }
+                if (text != null) fullText.append(text);
             }
 
-            String replaced = fullText.toString();
+            String original = fullText.toString();
+            String replaced = original;
             for (Map.Entry<String, String> entry : replacements.entrySet()) {
                 replaced = replaced.replace("${" + entry.getKey() + "}", entry.getValue());
             }
 
-            // Clear and replace text
-            for (int i = paragraph.getRuns().size() - 1; i >= 0; i--) {
+            if (original.equals(replaced)) continue;
+
+            // Preserve the first run's formatting; set new text on it; remove remaining runs.
+            runs.get(0).setText(replaced, 0);
+            for (int i = runs.size() - 1; i >= 1; i--) {
                 paragraph.removeRun(i);
             }
-
-            XWPFRun newRun = paragraph.createRun();
-            newRun.setText(replaced);
-            newRun.setFontFamily("Verdana");
         }
     }
 
     private void addSummarySection(XWPFDocument document, Map<String, Severity> severities) {
-
-        // Texto base
         XWPFParagraph summary = document.createParagraph();
         XWPFRun textRun = summary.createRun();
         textRun.setFontSize(11);
         textRun.setFontFamily("Verdana");
         textRun.setText("Este relatório apresenta os resultados da avaliação de risco realizada com base nas respostas submetidas. Foram analisadas várias áreas críticas de segurança da informação, como autenticação, backups, rede e acesso remoto. Abaixo apresenta-se um resumo das categorias avaliadas e os respetivos níveis de risco atribuídos:");
 
-        // Add pie chart
         try {
             addPieChart(document, severities);
         } catch (IOException | org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
-            // Log error but continue with document generation
             logger.warn("Error creating pie chart: {}", e.getMessage());
+            XWPFParagraph note = document.createParagraph();
+            XWPFRun noteRun = note.createRun();
+            noteRun.setFontFamily("Verdana");
+            noteRun.setFontSize(10);
+            noteRun.setItalic(true);
+            noteRun.setColor("FF0000");
+            noteRun.setText("[Nota: O gráfico de distribuição não pôde ser gerado.]");
         }
-        addPageBreak(document);
-        // Lista de categorias com severidade
-        XWPFParagraph categoryListHeader = document.createParagraph();
-        XWPFRun headerRun = categoryListHeader.createRun();
 
+        addPageBreak(document);
+
+        // Sort by severity level descending (CRITICAL=4 first, UNKNOWN=0 last).
         severities.entrySet().stream()
-                .sorted(Map.Entry.<String, Severity>comparingByValue().reversed())
+                .sorted(Comparator.<Map.Entry<String, Severity>>comparingInt(e -> getSeverityLevel(e.getValue()))
+                        .reversed())
                 .forEach(entry -> {
                     XWPFParagraph p = document.createParagraph();
 
-                    // run 1: category label (normal colour)
                     XWPFRun catRun = p.createRun();
                     catRun.setFontSize(12);
                     catRun.setFontFamily("Verdana");
                     catRun.setText("- " + entry.getKey() + ": ");
 
-                    // run 2: severity text in PT + coloured
-                    String sevPt = getSeverityDisplayName(entry.getValue()); // "Crítico", "Alto", ...
                     int severityLevel = getSeverityLevel(entry.getValue());
                     XWPFRun sevRun = p.createRun();
                     sevRun.setFontSize(12);
                     sevRun.setFontFamily("Verdana");
                     sevRun.setBold(true);
-                    // Only show level if it's not UNKNOWN (0)
+                    sevRun.setColor(severityColorHex(entry.getValue()));
                     if (severityLevel > 0) {
-                        sevRun.setText(sevPt + " (" + severityLevel + ")");
+                        sevRun.setText(getSeverityDisplayName(entry.getValue()) + " (" + severityLevel + ")");
                     } else {
-                        sevRun.setText(sevPt);
-                    }
-
-                    switch (entry.getValue()) {
-                        case CRITICAL -> sevRun.setColor("8B0000");
-                        case HIGH     -> sevRun.setColor("FF0000");
-                        case MEDIUM   -> sevRun.setColor("FFA500");
-                        case LOW      -> sevRun.setColor("008000");
-                        case UNKNOWN  -> sevRun.setColor("808080");
+                        sevRun.setText(getSeverityDisplayName(entry.getValue()));
                     }
                 });
 
-        // Add explanatory text about severity levels
         XWPFParagraph levelExplanation = document.createParagraph();
         XWPFRun explanationRun = levelExplanation.createRun();
         explanationRun.setFontSize(10);
@@ -181,14 +186,89 @@ public class DocumentsService {
         explanationRun.setItalic(true);
         explanationRun.setText("Nota: Os níveis numéricos entre parênteses referem-se à criticidade do risco: (1) = Baixo, (2) = Médio, (3) = Alto, (4) = Crítico.");
 
-        // Conclusão
         XWPFParagraph outro = document.createParagraph();
         XWPFRun outroRun = outro.createRun();
         outroRun.setFontSize(11);
         outroRun.setFontFamily("Verdana");
         outroRun.setText("Recomenda-se a priorização das categorias com risco mais elevado. As recomendações específicas estão detalhadas por domínio no relatório abaixo, e visam mitigar vulnerabilidades identificadas com base em boas práticas de cibersegurança adaptadas.");
+
         addPageBreak(document);
     }
+
+    private void addQuantitativeSection(XWPFDocument document, Map<String, Integer> categoryScores,
+                                        double globalIndex, Map<String, Severity> severities) {
+        XWPFParagraph titlePara = document.createParagraph();
+        XWPFRun titleRun = titlePara.createRun();
+        titleRun.setBold(true);
+        titleRun.setFontSize(14);
+        titleRun.setFontFamily("Calibri");
+        titleRun.setText("Análise Quantitativa");
+
+        boolean hasValidScores = categoryScores.values().stream().anyMatch(s -> s > 0);
+
+        XWPFParagraph indexPara = document.createParagraph();
+        XWPFRun labelRun = indexPara.createRun();
+        labelRun.setFontSize(12);
+        labelRun.setFontFamily("Verdana");
+        labelRun.setText("Índice de Risco Global: ");
+
+        XWPFRun indexRun = indexPara.createRun();
+        indexRun.setBold(true);
+        indexRun.setFontSize(12);
+        indexRun.setFontFamily("Verdana");
+        if (hasValidScores) {
+            indexRun.setText(String.format("%.0f / 100", globalIndex));
+            indexRun.setColor(indexColorHex(globalIndex));
+        } else {
+            indexRun.setText("N/D");
+            indexRun.setColor("808080");
+        }
+
+        XWPFParagraph notePara = document.createParagraph();
+        XWPFRun noteRun = notePara.createRun();
+        noteRun.setFontSize(9);
+        noteRun.setFontFamily("Verdana");
+        noteRun.setItalic(true);
+        noteRun.setText("Nota: A pontuação por categoria (1–9) é o produto das medianas de impacto e probabilidade. O índice global (0–100) é a média normalizada das pontuações válidas, categorias sem dados suficientes são excluídas do cálculo (DESCONHECIDO).");
+
+        document.createParagraph();
+
+        XWPFTable table = document.createTable();
+        XWPFTableRow header = table.getRow(0);
+        header.getCell(0).setText("Categoria");
+        header.addNewTableCell().setText("Pontuação (1–9)");
+        header.addNewTableCell().setText("Índice (%)");
+        header.addNewTableCell().setText("Severidade");
+
+        categoryScores.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .forEach(entry -> {
+                    String category = entry.getKey();
+                    int score = entry.getValue();
+                    Severity severity = severities.getOrDefault(category, Severity.UNKNOWN);
+
+                    XWPFTableRow row = table.createRow();
+                    row.getCell(0).setText(category);
+
+                    XWPFTableCell scoreCell = row.getCell(1);
+                    XWPFTableCell indexCell = row.getCell(2);
+                    if (score > 0) {
+                        scoreCell.setText(String.valueOf(score));
+                        scoreCell.setColor(scoreColorHex(score));
+                        double pct = (score - 1.0) / 8.0 * 100.0;
+                        indexCell.setText(String.format("%.0f%%", pct));
+                        indexCell.setColor(scoreColorHex(score));
+                    } else {
+                        scoreCell.setText("-");
+                        indexCell.setText("-");
+                    }
+
+                    XWPFTableCell severityCell = row.getCell(3);
+                    severityCell.setText(getSeverityDisplayName(severity));
+                    severityCell.setColor(severityColorHex(severity));
+                });
+    }
+
     private String getOptionLevelDisplayName(OptionLevel level) {
         if (level == null) return "-";
         return switch (level) {
@@ -201,23 +281,22 @@ public class DocumentsService {
     private void addPieChart(XWPFDocument doc, Map<String, Severity> severities)
             throws IOException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
 
-        // Count per severity and compute percentages
-        Map<String, Long> counts = severities.values().stream()
-                .collect(Collectors.groupingBy(this::getSeverityDisplayName,
-                        LinkedHashMap::new, Collectors.counting()));
-        long total = Math.max(1, counts.values().stream().mapToLong(Long::longValue).sum());
+        // Group by Severity enum to keep colour mapping type-safe.
+        Map<Severity, Long> countsBySeverity = severities.values().stream()
+                .collect(Collectors.groupingBy(s -> s, LinkedHashMap::new, Collectors.counting()));
+        long total = Math.max(1, countsBySeverity.values().stream().mapToLong(Long::longValue).sum());
 
-        // Labels with percentages for the legend
-        List<String> labels = new ArrayList<>(counts.keySet());
-        List<String> labelsWithPct = labels.stream()
-                .map(lbl -> {
-                    long c = counts.get(lbl);
+        List<Severity> severityKeys = new ArrayList<>(countsBySeverity.keySet());
+        List<String> labelsWithPct = severityKeys.stream()
+                .map(s -> {
+                    long c = countsBySeverity.get(s);
                     double pct = 100.0 * c / total;
-                    return String.format("%s (%.0f%%)", lbl, pct);
+                    return String.format("%s (%.0f%%)", getSeverityDisplayName(s), pct);
                 })
                 .toList();
-
-        Double[] values = counts.values().stream().map(Long::doubleValue).toArray(Double[]::new);
+        Double[] values = severityKeys.stream()
+                .map(s -> countsBySeverity.get(s).doubleValue())
+                .toArray(Double[]::new);
 
         XWPFParagraph title = doc.createParagraph();
         title.setAlignment(ParagraphAlignment.CENTER);
@@ -227,12 +306,9 @@ public class DocumentsService {
         r.setFontSize(14);
         r.setText("Distribuição por Categoria");
 
-        // Size to practical full-page width: ~17.5 cm wide, 10.5 cm high
         final int W = (int) (17.5 * Units.EMU_PER_CENTIMETER);
         final int H = (int) (10.5 * Units.EMU_PER_CENTIMETER);
         XWPFChart chart = doc.createChart(W, H);
-
-        // White background for chart and plot area
         setChartBackgroundWhite(chart);
 
         XDDFChartLegend legend = chart.getOrAddLegend();
@@ -244,10 +320,9 @@ public class DocumentsService {
         XDDFPieChartData data = (XDDFPieChartData) chart.createData(ChartTypes.PIE, null, null);
         XDDFPieChartData.Series series = (XDDFPieChartData.Series) data.addSeries(dsLabels, dsValues);
         series.setShowLeaderLines(true);
-        data.setVaryColors(false); // we colour each slice ourselves
+        data.setVaryColors(false);
         chart.plot(data);
 
-        // Data labels on slices: show percentages only
         CTPieChart ctPie = chart.getCTChart().getPlotArea().getPieChartArray(0);
         CTDLbls dLbls = ctPie.isSetDLbls() ? ctPie.getDLbls() : ctPie.addNewDLbls();
         dLbls.addNewShowLegendKey().setVal(false);
@@ -256,71 +331,87 @@ public class DocumentsService {
         dLbls.addNewShowSerName().setVal(false);
         dLbls.addNewShowPercent().setVal(true);
 
-        // Severity colours per slice (series index 0)
-        for (int i = 0; i < labels.size(); i++) {
-            int[] rgb = colourForSeverityLabel(labels.get(i)); // use base label to pick colour
+        for (int i = 0; i < severityKeys.size(); i++) {
+            int[] rgb = colourForSeverity(severityKeys.get(i));
             setPieSliceRgb(chart, i, rgb[0], rgb[1], rgb[2]);
         }
     }
 
-    // Solid fill helper for any shape properties
     private void setSolidFillRgb(CTShapeProperties spPr) {
         CTSolidColorFillProperties solid = spPr.isSetSolidFill() ? spPr.getSolidFill() : spPr.addNewSolidFill();
         CTSRgbColor rgb = solid.isSetSrgbClr() ? solid.getSrgbClr() : solid.addNewSrgbClr();
         rgb.setVal(new byte[]{(byte) 255, (byte) 255, (byte) 255});
     }
-    // Map severity label -> colour
-    private int[] colourForSeverityLabel(String label) {
-        return switch (label) {
-            case "Crítico" -> new int[]{139, 0, 0};     // dark red
-            case "Alto"    -> new int[]{255, 0, 0};     // red
-            case "Médio"   -> new int[]{255, 165, 0};   // orange
-            case "Baixo"   -> new int[]{0, 128, 0};     // green
-            default        -> new int[]{128, 128, 128}; // grey
+
+    private int[] colourForSeverity(Severity severity) {
+        return switch (severity) {
+            case CRITICAL -> new int[]{139, 0, 0};
+            case HIGH     -> new int[]{255, 0, 0};
+            case MEDIUM   -> new int[]{255, 165, 0};
+            case LOW      -> new int[]{0, 128, 0};
+            case UNKNOWN  -> new int[]{128, 128, 128};
         };
     }
+
+    private String severityColorHex(Severity severity) {
+        return switch (severity) {
+            case CRITICAL -> "8B0000";
+            case HIGH     -> "FF0000";
+            case MEDIUM   -> "FFA500";
+            case LOW      -> "008000";
+            case UNKNOWN  -> "808080";
+        };
+    }
+
+    private String scoreColorHex(int score) {
+        if (score <= 2) return "008000";   // green  — LOW range
+        if (score <= 4) return "FFA500";   // orange — MEDIUM range
+        if (score <= 6) return "FF0000";   // red    — HIGH range
+        return "8B0000";                   // dark red — CRITICAL range (score 9)
+    }
+
+    private String indexColorHex(double index) {
+        if (index >= 88) return "8B0000";
+        if (index >= 63) return "FF0000";
+        if (index >= 38) return "FFA500";
+        return "008000";
+    }
+
     private void addPageBreak(XWPFDocument doc) {
         XWPFParagraph p = doc.createParagraph();
         p.setPageBreak(true);
     }
-    // White background for chart and plot area
+
     private void setChartBackgroundWhite(XWPFChart chart) {
-        // Chart space
         CTChartSpace cs = chart.getCTChartSpace();
         CTShapeProperties spPr = cs.isSetSpPr() ? cs.getSpPr() : cs.addNewSpPr();
         setSolidFillRgb(spPr);
 
-        // Plot area
         CTPlotArea pa = chart.getCTChart().getPlotArea();
         CTShapeProperties plotSpPr = pa.isSetSpPr() ? pa.getSpPr() : pa.addNewSpPr();
         setSolidFillRgb(plotSpPr);
     }
 
-
-
     private String getSeverityDisplayName(Severity severity) {
         return switch (severity) {
             case CRITICAL -> "Crítico";
-            case HIGH -> "Alto";
-            case MEDIUM -> "Médio";
-            case LOW -> "Baixo";
-            case UNKNOWN -> "Desconhecido";
+            case HIGH     -> "Alto";
+            case MEDIUM   -> "Médio";
+            case LOW      -> "Baixo";
+            case UNKNOWN  -> "Desconhecido";
         };
     }
 
-    /**
-     * Get the numeric level (1-4) corresponding to the severity level.
-     * 1 = Baixo (LOW), 2 = Médio (MEDIUM), 3 = Alto (HIGH), 4 = Crítico (CRITICAL)
-     */
     private int getSeverityLevel(Severity severity) {
         return switch (severity) {
             case CRITICAL -> 4;
-            case HIGH -> 3;
-            case MEDIUM -> 2;
-            case LOW -> 1;
-            case UNKNOWN -> 0;
+            case HIGH     -> 3;
+            case MEDIUM   -> 2;
+            case LOW      -> 1;
+            case UNKNOWN  -> 0;
         };
     }
+
     private void setPieSliceRgb(XWPFChart chart, int pointIdx, int r, int g, int b) {
         CTPieChart pie = chart.getCTChart().getPlotArea().getPieChartArray(0);
         CTDPt dpt = pie.getSerArray(0).addNewDPt();
@@ -335,58 +426,33 @@ public class DocumentsService {
 
     private void addAnswersTable(XWPFDocument document, Map<String, List<Answer>> answersByCategory,
                                  Map<String, Severity> severities, Map<Long, Question> questionMap) {
-        final boolean[] first = { true };
+        final boolean[] first = {true};
 
         answersByCategory.entrySet().stream()
-                .sorted(Comparator.comparing(
-                        (Map.Entry<String, List<Answer>> e) ->
-                                Objects.requireNonNullElse(severities.get(e.getKey()), Severity.LOW)
-                ).reversed())
+                .sorted(Comparator.<Map.Entry<String, List<Answer>>>comparingInt(e ->
+                        getSeverityLevel(severities.getOrDefault(e.getKey(), Severity.UNKNOWN)))
+                        .reversed())
                 .forEach(entry -> {
-                    // Force each category to start on a new page
                     if (!first[0]) {
-                        XWPFParagraph pageBreak = document.createParagraph();
-                        pageBreak.setPageBreak(true);
+                        document.createParagraph().setPageBreak(true);
                     }
                     first[0] = false;
+
                     String category = entry.getKey();
                     List<Answer> answers = entry.getValue();
-                    Severity categorySeverity = severities.get(category);
+                    Severity categorySeverity = severities.getOrDefault(category, Severity.UNKNOWN);
 
                     XWPFParagraph categoryHeader = document.createParagraph();
                     XWPFRun headerRun = categoryHeader.createRun();
-                    String severityText = getSeverityDisplayName(categorySeverity);
                     int severityLevel = getSeverityLevel(categorySeverity);
-                    // Format: "Categoria: Category Name - Severity (Level)"
-                    if (severityLevel > 0) {
-                        headerRun.setText("Categoria: " + category + " - " + severityText + " (" + severityLevel + ")");
-                    } else {
-                        headerRun.setText("Categoria: " + category + " - " + severityText);
-                    }
+                    String severityText = getSeverityDisplayName(categorySeverity);
+                    headerRun.setText(severityLevel > 0
+                            ? "Categoria: " + category + " - " + severityText + " (" + severityLevel + ")"
+                            : "Categoria: " + category + " - " + severityText);
                     headerRun.setBold(true);
                     headerRun.setFontSize(14);
                     headerRun.setFontFamily("Calibri");
-                    
-                    // Color the category header based on severity
-                    switch (categorySeverity) {
-                        case Severity.CRITICAL:
-                            headerRun.setColor("8B0000"); // Dark Red
-                            break;
-                        case Severity.HIGH:
-                            headerRun.setColor("FF0000"); // Red
-                            break;
-                        case Severity.MEDIUM:
-                            headerRun.setColor("FFA500"); // Orange
-                            break;
-                        case Severity.LOW:
-                            headerRun.setColor("008000"); // Green
-                            break;
-                        case Severity.UNKNOWN:
-                            headerRun.setColor("808080"); // Gray
-                            break;
-                        default:
-                            headerRun.setColor("000000"); // Black
-                    }
+                    headerRun.setColor(severityColorHex(categorySeverity));
 
                     XWPFTable table = document.createTable();
                     XWPFTableRow header = table.getRow(0);
@@ -396,49 +462,40 @@ public class DocumentsService {
                     header.addNewTableCell().setText("Nível");
                     header.addNewTableCell().setText("Recomendação");
 
-                    for (Answer answer : answers.stream()
+                    answers.stream()
                             .sorted(Comparator.comparing(
                                     a -> Optional.ofNullable(a.getChosenLevel()).orElse(OptionLevel.LOW),
-                                    Comparator.reverseOrder()
-                            ))
-                            .toList()) {
+                                    Comparator.reverseOrder()))
+                            .forEach(answer -> {
+                                XWPFTableRow row = table.createRow();
+                                row.getCell(0).setText(answer.getQuestionText());
+                                row.getCell(1).setText(answer.getUserResponse());
+                                row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
 
-                        XWPFTableRow row = table.createRow();
-                        row.getCell(0).setText(answer.getQuestionText());
-                        row.getCell(1).setText(answer.getUserResponse());
-                        row.getCell(2).setText(answer.getQuestionType() != null ? answer.getQuestionType().name() : "-");
-                        
-                        // Color the level cell based on the chosen level
-                        XWPFTableCell levelCell = row.getCell(3);
-                        String nivelPt = getOptionLevelDisplayName(answer.getChosenLevel());
-                        levelCell.setText(nivelPt);
-                        if (answer.getChosenLevel() != null) {
-                            switch (answer.getChosenLevel()) {
-                                case OptionLevel.HIGH:
-                                    levelCell.setColor("FF0000"); // Red
-                                    break;
-                                case OptionLevel.MEDIUM:
-                                    levelCell.setColor("FFA500"); // Orange
-                                    break;
-                                case OptionLevel.LOW:
-                                    levelCell.setColor("008000"); // Green
-                                    break;
-                            }
-                        }
-                        
-                        String recommendation = "-";
-                        if (answer.getQuestionOptionId() != null) {
-                            Question q = questionMap.get(answer.getQuestionId());
-                            if (q != null) {
-                                recommendation = q.getOptions().stream()
-                                        .filter(opt -> opt.getId().equals(answer.getQuestionOptionId()))
-                                        .map(opt -> opt.getRecommendation() != null ? opt.getRecommendation() : "-")
-                                        .findFirst()
-                                        .orElse("-");
-                            }
-                        }
-                        row.getCell(4).setText(recommendation);
-                    }
+                                XWPFTableCell levelCell = row.getCell(3);
+                                levelCell.setText(getOptionLevelDisplayName(answer.getChosenLevel()));
+                                if (answer.getChosenLevel() != null) {
+                                    levelCell.setColor(switch (answer.getChosenLevel()) {
+                                        case HIGH   -> "FF0000";
+                                        case MEDIUM -> "FFA500";
+                                        case LOW    -> "008000";
+                                    });
+                                }
+
+                                String recommendation = "-";
+                                if (answer.getQuestionOptionId() != null) {
+                                    Question q = questionMap.get(answer.getQuestionId());
+                                    if (q != null) {
+                                        recommendation = q.getOptions().stream()
+                                                .filter(opt -> opt.getId().equals(answer.getQuestionOptionId()))
+                                                .map(opt -> opt.getRecommendation() != null ? opt.getRecommendation() : "-")
+                                                .findFirst()
+                                                .orElse("-");
+                                    }
+                                }
+                                row.getCell(4).setText(recommendation);
+                            });
+
                     document.createParagraph();
                 });
     }
