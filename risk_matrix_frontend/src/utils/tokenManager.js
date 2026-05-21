@@ -106,6 +106,7 @@ export function setupAxiosInterceptors(axios, navigate) {
       if (shouldRefresh) {
         originalRequest._retry = true
 
+        const wasAdmin = TokenManager.hasAdminToken()
         const refreshed = await TokenManager.refreshToken()
 
         if (refreshed) {
@@ -113,8 +114,12 @@ export function setupAxiosInterceptors(axios, navigate) {
         } else {
           TokenManager.clearAuth()
           const path = window.location.pathname
-          if (path !== '/login' && path !== '/') {
-            navigate('/login')
+          if (wasAdmin) {
+            if (path !== '/login' && path !== '/') {
+              navigate('/login')
+            }
+          } else if (path !== '/') {
+            navigate('/')
           }
         }
       }

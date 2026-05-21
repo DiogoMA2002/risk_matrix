@@ -37,11 +37,11 @@ A comprehensive web platform for identifying, assessing, and managing business r
 
 ### Prerequisites
 
-- **JDK 23** (e.g. [Eclipse Temurin 23](https://adoptium.net/)) — Java 24+ will cause a Lombok `TypeTag :: UNKNOWN` compile error
+- **JDK 21 or newer** (JDK 23 recommended; tested with Temurin 23)
 - Node.js and npm
 - Maven
 
-> **IntelliJ IDEA users:** make sure both *File → Project Structure → Project → SDK* and the run configuration JRE are set to JDK 23. Using a newer JDK (e.g. 26) picked up from the system PATH will break compilation.
+> **Note:** Lombok 1.18.38+ is required for JDK 24+. If compilation fails with a `TypeTag :: UNKNOWN` error, upgrade your JDK or ensure Maven resolves Lombok 1.18.38+.
 
 ### Installation
 
@@ -70,6 +70,7 @@ A comprehensive web platform for identifying, assessing, and managing business r
    ADMIN_PASSWORD=your_secure_password
    COOKIE_SECURE=false
    TRUSTED_PROXIES=127.0.0.1,::1
+   SWAGGER_ENABLED=true
    ```
 
    **Important**: Never commit your `.env` file to version control!

@@ -5,6 +5,9 @@ public final class RoleConstants {
     public static final String ADMIN = "admin";
     public static final String PUBLIC = "public";
 
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_PUBLIC = "ROLE_PUBLIC";
+
     public static final String TOKEN_TYPE_ACCESS  = "access";
     public static final String TOKEN_TYPE_REFRESH = "refresh";
 

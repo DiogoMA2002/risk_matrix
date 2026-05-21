@@ -53,10 +53,20 @@ router.beforeEach((to, from, next) => {
 
   const email = sessionStorage.getItem('userEmail');
 
-  const requiresEmail = ['/risk-info', '/requirements', '/category'].includes(to.path) ||
+  const requiresPublicSession = ['/risk-info', '/requirements', '/category'].includes(to.path) ||
     to.name === 'Questionary';
-  if (requiresEmail && (!email || email.trim() === '')) {
-    return next('/');
+
+  const requiresAuthenticatedSession = requiresPublicSession || to.path === '/feedback-form';
+
+  if (requiresAuthenticatedSession) {
+    if (!email || email.trim() === '') {
+      return next('/');
+    }
+    const hasSessionToken = TokenManager.hasPublicToken() || TokenManager.hasAdminToken();
+    if (!hasSessionToken) {
+      TokenManager.clearAuth();
+      return next('/');
+    }
   }
 
   if (isAdminRoute && !TokenManager.hasAdminToken()) {

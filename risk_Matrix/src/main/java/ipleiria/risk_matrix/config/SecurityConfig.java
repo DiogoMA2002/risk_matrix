@@ -67,9 +67,9 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index.html", "/favicon.ico",
                                 "/js/**", "/css/**", "/img/**", "/assets/**").permitAll()
 
-                        // Swagger / OpenAPI
+                        // Swagger / OpenAPI (admin only)
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**",
-                                "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
+                                "/v3/api-docs/**", "/v3/api-docs.yaml").hasRole("ADMIN")
 
                         .requestMatchers("/api/auth/login", "/api/auth/logout",
                                 "/api/auth/refresh", "/api/auth/request-token").permitAll()

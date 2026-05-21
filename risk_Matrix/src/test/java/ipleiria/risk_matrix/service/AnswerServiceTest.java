@@ -44,6 +44,9 @@ class AnswerServiceTest {
     @Mock
     private QuestionRepository questionRepository;
 
+    @Mock
+    private DocumentsService documentsService;
+
     @InjectMocks
     private AnswerService answerService;
 

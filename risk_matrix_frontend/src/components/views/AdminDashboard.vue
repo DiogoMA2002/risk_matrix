@@ -182,16 +182,12 @@ export default {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
 
-        // Delete submission answers after a successful export/download.
-        await axios.delete(`/api/answers/submission/${submissionId}`);
-
         await this.showAlertDialog(
           "Sucesso",
           "Relatório descarregado e submissão removida com sucesso.",
           "success"
         );
 
-        // Refresh the answers list after download+deletion
         await this.$store.dispatch("fetchAllUserAnswers");
       } catch (error) {
         console.error("Erro ao descarregar relatório:", error);

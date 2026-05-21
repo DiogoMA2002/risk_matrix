@@ -34,7 +34,8 @@ public class QuestionController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all questions", description = "Returns all questions with their categories and options")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get all questions", description = "Returns all questions with full admin detail. Requires ADMIN role.")
     public List<QuestionDTO> getAll() {
         return questionService.getAllQuestions().stream()
                 .map(QuestionDTO::new)
@@ -42,7 +43,8 @@ public class QuestionController {
     }
 
     @GetMapping("/category/{categoryName}")
-    @Operation(summary = "Get questions by category", description = "Returns all questions belonging to the specified category")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get questions by category", description = "Returns all questions belonging to the specified category. Requires ADMIN role.")
     public List<QuestionDTO> getByCategory(
             @Parameter(description = "Category name") @PathVariable String categoryName) {
         return questionService.getQuestionsByCategory(categoryName).stream()
@@ -51,7 +53,8 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get question by ID", description = "Returns a single question by its ID")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get question by ID", description = "Returns a single question by its ID. Requires ADMIN role.")
     @ApiResponse(responseCode = "200", description = "Question found")
     @ApiResponse(responseCode = "404", description = "Question not found")
     public QuestionDTO getById(@Parameter(description = "Question ID") @PathVariable Long id) {

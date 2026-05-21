@@ -4,6 +4,9 @@ import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.exceptions.exception.InvalidOptionException;
 import ipleiria.risk_matrix.exceptions.exception.NotFoundException;
+import ipleiria.risk_matrix.utils.AuthUtils;
+import org.springframework.security.access.AccessDeniedException;
+import java.io.IOException;
 import ipleiria.risk_matrix.models.answers.Answer;
 import ipleiria.risk_matrix.models.questions.*;
 import ipleiria.risk_matrix.repository.AnswerRepository;
@@ -33,10 +36,14 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
+    private final DocumentsService documentsService;
 
-    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+    public AnswerService(AnswerRepository answerRepository,
+                         QuestionRepository questionRepository,
+                         DocumentsService documentsService) {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
+        this.documentsService = documentsService;
     }
 
     public AnswerDTO submitAnswer(AnswerDTO answerDTO) {
@@ -86,6 +93,8 @@ public class AnswerService {
             throw new IllegalArgumentException("A lista de respostas não pode estar vazia.");
         }
 
+        bindAnswersToAuthenticatedPublicUser(answers);
+
         String submissionId = UUID.randomUUID().toString();
 
         return answers.stream()
@@ -93,6 +102,29 @@ public class AnswerService {
                     ans.setSubmissionId(submissionId);
                     return submitAnswer(ans);
                 }).toList();
+    }
+
+    /**
+     * Public users must submit under the email embedded in their JWT.
+     * Admin callers are unchanged and may set the email explicitly.
+     */
+    private void bindAnswersToAuthenticatedPublicUser(List<AnswerDTO> answers) {
+        AuthUtils.getPublicUserEmail().ifPresent(authenticatedEmail -> {
+            for (AnswerDTO answer : answers) {
+                if (answer.getEmail() != null
+                        && !AuthUtils.normalizeEmail(answer.getEmail()).equals(authenticatedEmail)) {
+                    throw new AccessDeniedException("Email in request does not match authenticated user.");
+                }
+                answer.setEmail(authenticatedEmail);
+            }
+        });
+    }
+
+    @Transactional
+    public byte[] exportAndDeleteSubmission(String submissionId) throws IOException {
+        byte[] docBytes = documentsService.generateEnhancedDocx(submissionId);
+        answerRepository.deleteBySubmissionId(submissionId);
+        return docBytes;
     }
 
     public List<UserAnswersDTO> getUserSubmissionsWithSeverities(String email) {

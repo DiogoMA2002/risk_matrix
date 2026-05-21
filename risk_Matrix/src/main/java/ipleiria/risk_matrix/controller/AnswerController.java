@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import ipleiria.risk_matrix.dto.AnswerDTO;
 import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.service.AnswerService;
-import ipleiria.risk_matrix.service.DocumentsService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
@@ -28,11 +27,9 @@ import java.util.List;
 public class AnswerController {
 
     private final AnswerService answerService;
-    private final DocumentsService documentsService;
 
-    public AnswerController(AnswerService answerService, DocumentsService documentsService) {
+    public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
-        this.documentsService = documentsService;
     }
 
     @PostMapping("/submit-multiple")
@@ -73,12 +70,12 @@ public class AnswerController {
 
     @GetMapping("/export-submission/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Export submission as DOCX", description = "Generates and downloads an enhanced DOCX report for a submission. Requires ADMIN role.")
+    @Operation(summary = "Export submission as DOCX", description = "Generates an enhanced DOCX report and deletes the submission atomically. Requires ADMIN role.")
     @ApiResponse(responseCode = "200", description = "DOCX file downloaded")
     @ApiResponse(responseCode = "404", description = "Submission not found")
     public ResponseEntity<byte[]> exportSubmission(
             @Parameter(description = "Submission ID") @PathVariable String id) throws IOException {
-        byte[] docBytes = documentsService.generateEnhancedDocx(id);
+        byte[] docBytes = answerService.exportAndDeleteSubmission(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"report_" + id + ".docx\"");

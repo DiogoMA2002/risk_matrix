@@ -6,7 +6,6 @@ import ipleiria.risk_matrix.dto.UserAnswersDTO;
 import ipleiria.risk_matrix.models.questions.OptionLevel;
 import ipleiria.risk_matrix.models.questions.OptionLevelType;
 import ipleiria.risk_matrix.service.AnswerService;
-import ipleiria.risk_matrix.service.DocumentsService;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,9 +43,6 @@ class AnswerControllerTest {
 
     @MockitoBean
     private AnswerService answerService;
-
-    @MockitoBean
-    private DocumentsService documentsService;
 
     private AnswerDTO answerDTO;
 
@@ -90,7 +86,7 @@ class AnswerControllerTest {
 
     @Test
     void exportSubmission_returnsAttachment() throws Exception {
-        when(documentsService.generateEnhancedDocx("sub-1")).thenReturn("doc".getBytes());
+        when(answerService.exportAndDeleteSubmission("sub-1")).thenReturn("doc".getBytes());
 
         mockMvc.perform(get("/api/answers/export-submission/sub-1"))
                 .andExpect(status().isOk())

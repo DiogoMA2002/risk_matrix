@@ -2,6 +2,7 @@ package ipleiria.risk_matrix.controller;
 
 import ipleiria.risk_matrix.config.JwtUtil;
 import ipleiria.risk_matrix.utils.RoleConstants;
+import ipleiria.risk_matrix.utils.AuthUtils;
 import ipleiria.risk_matrix.dto.AdminRegisterDTO;
 import ipleiria.risk_matrix.dto.AuthRequestDTO;
 import ipleiria.risk_matrix.dto.ChangePasswordRequestDTO;
@@ -89,8 +90,9 @@ public class AuthController {
     @Operation(summary = "Request public token", description = "Issues a public JWT for anonymous users identified by email")
     @ApiResponse(responseCode = "200", description = "Token issued")
     public ResponseEntity<?> requestToken(@Valid @RequestBody EmailTokenRequestDTO request, HttpServletResponse response) {
-        String accessToken = jwtUtil.generatePublicToken(request.getEmail());
-        String refreshToken = jwtUtil.generatePublicRefreshToken(request.getEmail());
+        String email = AuthUtils.normalizeEmail(request.getEmail());
+        String accessToken = jwtUtil.generatePublicToken(email);
+        String refreshToken = jwtUtil.generatePublicRefreshToken(email);
         long expiresAt = System.currentTimeMillis() + jwtUtil.getPublicTokenExpirationMs();
         long refreshExpiresAt = System.currentTimeMillis() + jwtUtil.getRefreshTokenExpirationMs();
 
@@ -98,7 +100,7 @@ public class AuthController {
 
         return ResponseEntity.ok(Map.of(
                 "role", RoleConstants.PUBLIC,
-                "email", request.getEmail(),
+                "email", email,
                 "expiresAt", expiresAt,
                 "refreshExpiresAt", refreshExpiresAt
         ));
