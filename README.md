@@ -4,19 +4,26 @@ A comprehensive web platform for identifying, assessing, and managing business r
 
 ## Features
 
-### Risk Management
+### Public Risk Assessment
 
-- Create and manage risks with custom attributes
-- Assign probability and consequence values to risks
-- Automatically compute and position risks on a matrix
-- Risk categorisation and prioritisation
-- Risk recommendations
+- Request a session token via email — no account required
+- Step-by-step guided questionnaire across multiple risk categories
+- Per-category severity computed automatically from answers
+- Optional feedback submission after completing an assessment
 
-### User Interface
+### Admin Dashboard
 
-- Intuitive and responsive design
-- Interactive risk assessment tools
-- Real-time updates and modifications
+- Manage questionnaires, questions, categories, and glossary entries
+- Review and filter all submitted assessments
+- Export individual submissions as formatted DOCX reports
+- Manage admin user accounts and rotate credentials
+
+### Security
+
+- JWT authentication via HttpOnly cookies (separate flows for public and admin)
+- Token refresh and revocation with blocklist
+- Rate limiting on sensitive endpoints
+- CORS and CSP controls
 
 ## Tech Stack
 
@@ -107,7 +114,7 @@ This project is licensed under the terms of the license included in the [LICENSE
 - [DiogoMA2002](https://github.com/DiogoMA2002)
 - [WhyN0t101](https://github.com/WhyN0t101)
 
-## Security
+## Security Policy
 
 For security concerns, please refer to our [SECURITY.md](SECURITY.md) file.
 
