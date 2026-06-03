@@ -6,7 +6,7 @@ A comprehensive web platform for identifying, assessing, and managing business r
 
 ### Public Risk Assessment
 
-- Request a session token via email — no account required
+- Request a session token via email, no account required
 - Step-by-step guided questionnaire across multiple risk categories
 - Per-category severity computed automatically from answers
 - Optional feedback submission after completing an assessment
