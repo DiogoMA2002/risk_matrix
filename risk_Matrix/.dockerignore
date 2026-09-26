@@ -1,0 +1,6 @@
+target/
+src/DB/
+.env
+*.log
+.idea/
+.git/
